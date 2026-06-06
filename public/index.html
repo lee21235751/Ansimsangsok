@@ -516,12 +516,17 @@
       box-shadow: 0 0 0 5px rgba(245,200,109,.34), 0 0 0 2px rgba(255,255,255,.62), 0 14px 28px rgba(0,0,0,.22);
       background: #FFFBEF;
     }
-    .field { display: grid; gap: 8px; }
+    .field { display: grid; gap: 10px; }
     .field label {
       color: #FFE4A3;
       font-weight: 950;
       font-size: 14px;
       letter-spacing: -.02em;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+      line-height: 1.35;
     }
     .field label .required {
       color: #071B14;
@@ -1391,9 +1396,12 @@
     @media (max-width: 680px) {
       .lead-form { padding: 18px 14px 20px; border-radius: 22px; }
       .lead-form h3 { font-size: 25px; line-height: 1.28; }
-      .field label { font-size: 17px; }
-      .field input, .field textarea { min-height: 54px; font-size: 18px; }
-      .field-hint { font-size: 14px; line-height: 1.5; }
+      .field { gap: 11px; margin-bottom: 2px; }
+      .field label { font-size: 18px; line-height: 1.4; margin-bottom: 2px; }
+      .field label .required { font-size: 12px; padding: 3px 8px; margin-left: 0; }
+      .field input, .field textarea { min-height: 58px; font-size: 18px; }
+      .field-hint { font-size: 14px; line-height: 1.55; }
+      .field-hint.input-hint { display: none; }
       .prepay-checks.consent-box { padding: 15px; border-radius: 18px; }
       .prepay-check { font-size: 15px; }
       #saveLead { width: 100%; min-height: 56px; font-size: 18px; }
@@ -1536,9 +1544,9 @@
             <h3>여기에 알림 받을 정보를 입력해주세요</h3>
             <p style="margin:0;color:rgba(255,255,255,.78);line-height:1.55">이름, 연락처, 이메일을 남겨주시면 선택하신 리포트가 준비될 때 안내드립니다.</p>
             <div class="inputs">
-              <div class="field" id="nameField"><label for="leadName">이름 <span class="required">필수</span></label><input id="leadName" lang="ko-KR" inputmode="text" placeholder="예: 홍길동" autocomplete="name" autocapitalize="off" spellcheck="false" /><small class="field-hint" id="nameHint">성함을 한글로 입력해주세요.</small></div>
+              <div class="field" id="nameField"><label for="leadName">이름 <span class="required">필수</span></label><input id="leadName" lang="ko-KR" inputmode="text" placeholder="예: 홍길동" autocomplete="name" autocapitalize="off" spellcheck="false" /><small class="field-hint input-hint" id="nameHint">성함을 한글로 입력해주세요.</small></div>
               <div class="field"><label for="leadPhone">연락처 <span class="required">필수</span></label><input id="leadPhone" type="tel" inputmode="tel" placeholder="예: 010-1234-5678" autocomplete="tel" /></div>
-              <div class="field" id="emailField"><label for="leadEmail">이메일</label><input id="leadEmail" class="email-mode" type="email" lang="en" inputmode="email" placeholder="예: name@example.com" autocomplete="email" autocapitalize="none" autocorrect="off" spellcheck="false" /><small class="field-hint" id="emailHint">이메일은 영문 주소 형식으로 입력해주세요.</small></div>
+              <div class="field" id="emailField"><label for="leadEmail">이메일</label><input id="leadEmail" class="email-mode" type="email" lang="en" inputmode="email" placeholder="예: name@example.com" autocomplete="email" autocapitalize="none" autocorrect="off" spellcheck="false" /><small class="field-hint input-hint" id="emailHint">이메일은 영문 주소 형식으로 입력해주세요.</small></div>
               <div class="field full"><label for="leadMemo">메모</label><textarea id="leadMemo" placeholder="예: 부동산이 많음, 재혼가정, 특정 자녀에게 더 주고 싶음"></textarea></div>
               <div class="field full"><div class="report-cue">선택하신 리포트는 법률 판단이 아니라 위험 신호와 준비자료를 쉽게 정리하는 정보성 자료입니다.</div></div><div class="field full"><label>관심 있는 안내 <span class="required">선택</span></label><div class="product-options"><button type="button" class="product-chip selected" data-product="easy_report">쉬운 2026 유류분 리포트</button><button type="button" class="product-chip" data-product="notary_prep">공증 전 유언 준비자료</button><button type="button" class="product-chip" data-product="international">국제상속 추가 진단</button><button type="button" class="product-chip" data-product="expert_list">전문가 목록 보기</button></div><small class="field-hint">전문가 목록에는 광고 또는 제휴 프로필이 포함될 수 있으며, 상담 및 선임 여부는 고객님이 직접 결정합니다.</small></div>
             </div>
