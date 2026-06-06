@@ -1601,7 +1601,7 @@
     </section>
   </main>
   <footer class="site-footer">안심상속은 법률자문·세무자문·유언장 작성 대행·전문가 추천을 제공하지 않습니다. 무료 진단 단계에서는 민감 자료를 요구하지 않습니다.</footer>
-  <section class="admin" id="admin"><div class="admin-card"><h2>로컬 관리자</h2><p>브라우저 백업 리드와 상품별 관심도를 확인합니다. 운영용 리드 조회는 인증된 관리자 화면으로 분리합니다.</p><div class="admin-status" id="adminStatus"></div><div class="ops-admin-note"><b>관리자 운영 원칙</b><ul><li>공개 랜딩페이지는 리드 저장 중심으로 운영합니다.</li><li>운영 리드 조회는 인증된 관리자 화면에서만 처리합니다.</li><li>상품 관심도 통계는 개인정보와 분리해 관리합니다.</li></ul></div><div class="admin-metrics" id="adminMetrics"></div><div class="admin-product-table" id="adminProductStats"></div><div class="inputs"><input id="adminKey" placeholder="관리자 진입키" /><button class="btn btn-primary" id="unlockAdmin">확인</button><button class="btn btn-secondary" id="downloadCsv">CSV 다운로드</button></div><div class="list" id="leadList"></div></div></section>
+
 
   <script>
     const CONFIG = window.__ANSIM_CONFIG__ || {};
@@ -1826,7 +1826,7 @@
     async function saveLead(){
       const selectedProducts = [...document.querySelectorAll('.product-chip.selected')].map(btn => btn.dataset.product);
       const leadAnswers = { ...answers, interest_products: selectedProducts, engagement: {...engagement}, consents: { scope: Boolean($('scopeConsent')?.checked), refund: Boolean($('refundNotice')?.checked), privacy: Boolean($('privacyConsent')?.checked), marketing: Boolean($('marketingConsent')?.checked) } };
-      const lead = { name:$('leadName').value.trim(), phone:$('leadPhone').value.trim(), email:$('leadEmail').value.trim(), memo:$('leadMemo').value.trim(), score:score(), answers: leadAnswers, created_at:new Date().toISOString(), page_url:location.href, app_version:'0.7.3-admin-demand-stats'  };
+      const lead = { name:$('leadName').value.trim(), phone:$('leadPhone').value.trim(), email:$('leadEmail').value.trim(), memo:$('leadMemo').value.trim(), score:score(), answers: leadAnswers, created_at:new Date().toISOString(), page_url:location.href, app_version:'0.8.7-public-cleanup'  };
       if(!lead.name || !lead.phone){ showSaveStatus(false, '이름과 연락처를 입력해주세요.', '필수 입력칸은 노란색 테두리로 표시되어 있습니다.'); return; }
       if(!$('scopeConsent')?.checked || !$('refundNotice')?.checked || !$('privacyConsent')?.checked){ showSaveStatus(false, '필수 확인과 개인정보 동의를 완료해주세요.', '제공 범위와 개인정보 수집·이용 동의를 확인해야 저장됩니다. 마케팅 수신은 선택입니다.'); return; }
       if(lead.email && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(lead.email)){ showSaveStatus(false, '이메일 형식을 확인해주세요.', '예: name@example.com'); return; }
@@ -1847,9 +1847,8 @@
       }
       const saved = {...lead, storage: serverOk?'supabase+local':'local', server_ok: serverOk, server_message: serverMessage};
       const stored = JSON.parse(localStorage.getItem('ansim_leads') || '[]'); stored.unshift(saved); localStorage.setItem('ansim_leads', JSON.stringify(stored));
-      if(serverOk) showSaveStatus(true, '신청이 저장되었습니다.', `서버 저장 성공 · ${formatKst(lead.created_at)}`);
-      else showSaveStatus(false, '신청은 이 브라우저에 임시 저장되었습니다.', serverMessage || 'Supabase 설정을 확인해주세요.');
-      renderAdmin();
+      if(serverOk) showSaveStatus(true, '신청이 저장되었습니다.', `접수 시각 · ${formatKst(lead.created_at)}`);
+      else showSaveStatus(false, '저장을 완료하지 못했습니다.', '네트워크 상태를 확인한 뒤 잠시 후 다시 시도해주세요.');
     }
 
     function selectProductFromOffer(product){
@@ -1876,54 +1875,6 @@
 
     document.querySelectorAll('.product-chip').forEach(btn => btn.addEventListener('click', () => btn.classList.toggle('selected')));
     $('saveLead').addEventListener('click', saveLead);
-    const productLabels = { easy_report:'쉬운 2026 유류분 리포트', notary_prep:'공증 전 유언 준비자료', international:'국제상속 추가 진단', expert_list:'전문가 목록 보기' };
-    const waitlistLabels = { payment_open:'리포트 준비 알림', sample_first:'샘플 PDF 후 알림' };
-    function renderAdmin(){
-      const leads = JSON.parse(localStorage.getItem('ansim_leads') || '[]');
-      const hasSupabaseConfig = Boolean(CONFIG.VITE_SUPABASE_URL && CONFIG.VITE_SUPABASE_ANON_KEY);
-      const okCount = leads.filter(l=>l.server_ok).length;
-      const localOnlyCount = leads.filter(l=>!l.server_ok).length;
-      const sampleClickCount = leads.filter(l=>l.answers?.engagement?.sample_pdf_clicked).length;
-      const waitlistCount = leads.filter(l=>l.answers?.engagement?.waitlist_intent).length;
-      const highScoreCount = leads.filter(l=>Number(l.score || 0) >= 70).length;
-      const internationalCount = leads.filter(l=>((l.answers?.interest_products || []).includes('international')) || (l.answers?.overseas && l.answers.overseas !== 'none')).length;
-      const productCounts = Object.keys(productLabels).reduce((acc,key)=>{ acc[key]=0; return acc; },{});
-      const productSampleCounts = Object.keys(productLabels).reduce((acc,key)=>{ acc[key]=0; return acc; },{});
-      leads.forEach(l=>{
-        const products = l.answers?.interest_products || [];
-        products.forEach(p=>{ if(productCounts[p] !== undefined) productCounts[p] += 1; if(l.answers?.engagement?.sample_pdf_clicked && productSampleCounts[p] !== undefined) productSampleCounts[p] += 1; });
-      });
-      const statusEl = $('adminStatus');
-      if(statusEl){
-        statusEl.innerHTML = `Supabase 설정: <b>${hasSupabaseConfig ? '입력됨' : '미입력'}</b><br/>서버 저장 성공: <b>${okCount}</b>건 · 로컬 백업만 저장: <b>${localOnlyCount}</b>건<br/><small>※ 이 관리자 화면은 현재 브라우저 백업 기준입니다. 운영 배포 시에는 인증된 서버 관리자 화면으로 분리해야 합니다.</small>`;
-      }
-      const metricsEl = $('adminMetrics');
-      if(metricsEl){
-        metricsEl.innerHTML = [
-          [`${leads.length}`, '전체 로컬 리드'],
-          [`${waitlistCount}`, '리포트 알림 신청'],
-          [`${sampleClickCount}`, '샘플 PDF 클릭 리드'],
-          [`${internationalCount}`, '국제상속 관련 신호']
-        ].map(([n,label])=>`<div class="admin-metric"><b>${n}</b><span>${label}</span></div>`).join('');
-      }
-      const productStatsEl = $('adminProductStats');
-      if(productStatsEl){
-        productStatsEl.innerHTML = `<div class="admin-product-row"><b>관심 상품</b><b>선택</b><b>샘플 클릭</b></div>` + Object.entries(productLabels).map(([key,label])=>`<div class="admin-product-row"><span>${label}</span><b>${productCounts[key] || 0}</b><b>${productSampleCounts[key] || 0}</b></div>`).join('');
-      }
-      $('leadList').innerHTML = leads.length ? leads.map(l=>{
-        const products = (l.answers?.interest_products || []).map(p=>productLabels[p] || p);
-        const badges = [
-          l.answers?.engagement?.waitlist_intent ? (waitlistLabels[l.answers.engagement.waitlist_intent] || l.answers.engagement.waitlist_intent) : '',
-          l.answers?.engagement?.sample_pdf_clicked ? '샘플 PDF 클릭' : '',
-          Number(l.score || 0) >= 70 ? '고위험 점수' : '',
-          (l.answers?.overseas && l.answers.overseas !== 'none') ? '해외 요소' : ''
-        ].filter(Boolean).map(v=>`<span class="admin-badge">${v}</span>`).join('');
-        return `<div class="lead-item"><b>${l.name}</b> · ${l.phone} · ${l.email || '-'}<br/>점수 ${l.score} · ${formatKst(l.created_at)}<br/><small>관심상품: ${products.join(', ') || '-'} · ${l.server_ok ? 'Supabase 저장 성공' : '로컬 백업 저장'}${l.server_message ? ' · ' + l.server_message : ''}</small>${badges ? `<div class="admin-badges">${badges}</div>` : ''}</div>`;
-      }).join('') : '<div class="lead-item">저장된 로컬 리드가 없습니다.</div>';
-    }
-    if(location.hash === '#admin'){ document.getElementById('app').style.display='none'; $('admin').classList.add('show'); renderAdmin(); }
-    $('unlockAdmin')?.addEventListener('click',()=>{ if($('adminKey').value === (CONFIG.VITE_ADMIN_ACCESS_KEY || 'ansim-local-admin')) renderAdmin(); else alert('진입키가 다릅니다.'); });
-    $('downloadCsv')?.addEventListener('click',()=>{ const leads=JSON.parse(localStorage.getItem('ansim_leads')||'[]'); const rows=[['created_at_kst','created_at_utc','name','phone','email','score','memo','interest_products','waitlist_intent','sample_pdf_clicked','server_ok','server_message'], ...leads.map(l=>[formatKst(l.created_at),l.created_at,l.name,l.phone,l.email,l.score,l.memo,((l.answers && l.answers.interest_products) || []).join('|'),l.answers?.engagement?.waitlist_intent || '',l.answers?.engagement?.sample_pdf_clicked || false,l.server_ok,l.server_message])]; const csv=rows.map(r=>r.map(v=>'"'+String(v??'').replaceAll('"','""')+'"').join(',')).join('\n'); const blob=new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='ansimsangsok-leads.csv'; a.click(); });
     setupInputLanguageHelpers();
     renderQuestion();
   </script>
