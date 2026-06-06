@@ -1,7 +1,6 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="ko">
 <head>
-  <meta name="naver-site-verification" content="90d464bde6cca02edc48e48a417cec9e09df5b3" />
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>안심상속 | 2026 유류분 변화 반영 상속분쟁 위험도 2분 진단</title>
@@ -941,6 +940,238 @@
       .delivery-flow, .delivery-preview-box { grid-template-columns: 1fr; }
     }
 
+
+    /* v0.8.3: mobile web conversion optimization only. No PWA/app install features. */
+    @media (max-width: 680px) {
+      html { scroll-padding-top: 10px; }
+      body::before { display: none; }
+      .topbar {
+        padding: 12px 14px 0;
+        min-height: 44px;
+      }
+      .brand { font-size: 16px; }
+      .seal { width: 30px; height: 30px; font-size: 14px; }
+      .hero {
+        padding: 22px 14px 16px;
+        gap: 16px;
+      }
+      .eyebrow {
+        margin-bottom: 12px;
+        padding: 7px 10px;
+        font-size: 12px;
+        line-height: 1.35;
+        max-width: 100%;
+      }
+      h1 {
+        font-size: clamp(34px, 10vw, 42px);
+        line-height: 1.08;
+        letter-spacing: -.055em;
+      }
+      .lead {
+        margin-top: 14px;
+        font-size: 16px;
+        line-height: 1.52;
+        max-width: 100%;
+      }
+      .legal-update {
+        margin-top: 14px;
+        padding: 11px 12px;
+        border-radius: 14px;
+        max-width: 100%;
+      }
+      .legal-update strong { font-size: 13px; }
+      .legal-update span { font-size: 12px; line-height: 1.45; }
+      .trust-row {
+        margin-top: 14px;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 7px;
+      }
+      .trust {
+        text-align: center;
+        padding: 7px 6px;
+        font-size: 12px;
+        white-space: nowrap;
+      }
+      .cta-row { margin-top: 18px; gap: 9px; }
+      .btn {
+        min-height: 50px;
+        border-radius: 13px;
+        font-size: 16px;
+        padding: 0 16px;
+      }
+      .micro { width: 100%; font-size: 12px; text-align: center; }
+      .hero-card { display: none; }
+      .section {
+        padding: 14px 12px 44px;
+      }
+      .diagnosis {
+        border-radius: 22px;
+        box-shadow: 0 18px 46px rgba(0,0,0,.28);
+      }
+      .diag-head {
+        padding: 18px 14px 14px;
+        gap: 12px;
+      }
+      .diag-head h2 { font-size: 22px; }
+      .diag-head p { font-size: 13px; line-height: 1.45; }
+      .progress { font-size: 13px; }
+      .bar { height: 8px; }
+      .question {
+        padding: 20px 14px 18px;
+        gap: 15px;
+      }
+      .question h3 {
+        font-size: 21px;
+        line-height: 1.32;
+      }
+      .question-hint {
+        font-size: 13px;
+        line-height: 1.45;
+        margin-top: -3px;
+      }
+      .choices { gap: 9px; }
+      .choice {
+        min-height: 52px;
+        border-radius: 14px;
+        padding: 13px 13px;
+        font-size: 15px;
+        line-height: 1.35;
+      }
+      .subquestion {
+        padding: 13px;
+        border-radius: 15px;
+      }
+      .subquestion-title { font-size: 14px; }
+      .subchoices { grid-template-columns: 1fr 1fr; gap: 8px; }
+      .subchoice { min-height: 44px; font-size: 14px; }
+      .nav {
+        position: sticky;
+        bottom: 0;
+        z-index: 10;
+        padding: 10px 12px 12px;
+        background: linear-gradient(180deg, rgba(6,33,22,.36), rgba(3,16,11,.96) 34%);
+        backdrop-filter: blur(8px);
+        border-top: 1px solid rgba(245,200,109,.2);
+      }
+      .nav .btn { min-height: 48px; }
+      .result { padding: 18px 14px 22px; gap: 16px; }
+      .result-top { gap: 14px; }
+      .meter { width: 142px; height: 142px; }
+      .meter-inner { width: 108px; height: 108px; }
+      .meter-inner strong { font-size: 34px; }
+      .result h2 { font-size: 24px; line-height: 1.25; }
+      .result p { font-size: 14px; line-height: 1.55; }
+      .result-grid {
+        grid-template-columns: 1fr;
+        padding: 9px;
+        gap: 9px;
+      }
+      .result-box { padding: 14px; border-radius: 15px; }
+      .report-preview,
+      .payment-offers,
+      .waitlist-conversion,
+      .delivery-hub,
+      .policy-section {
+        padding: 16px;
+        border-radius: 20px;
+        gap: 12px;
+      }
+      .report-preview h3,
+      .payment-offers h3,
+      .waitlist-conversion h3,
+      .delivery-hub h3,
+      .policy-section h3 {
+        font-size: 22px;
+        line-height: 1.25;
+      }
+      .report-preview p,
+      .payment-offers p,
+      .waitlist-conversion p,
+      .delivery-hub p,
+      .policy-section p {
+        font-size: 13px;
+        line-height: 1.5;
+      }
+      .report-preview-head { gap: 10px; }
+      .report-badge { min-height: 30px; font-size: 12px; }
+      .sample-report-actions { display: grid; gap: 8px; }
+      .sample-report-link { width: 100%; justify-content: center; min-height: 48px; }
+      .sample-report-caption { font-size: 12px; line-height: 1.45; text-align: center; }
+      .revenue-ladder,
+      .report-pages,
+      .policy-grid,
+      .policy-detail-grid,
+      .delivery-flow,
+      .delivery-preview-box,
+      .offer-grid,
+      .waitlist-grid {
+        grid-template-columns: 1fr !important;
+      }
+      .offer-card {
+        min-height: auto;
+        padding: 14px;
+        border-radius: 17px;
+      }
+      .offer-title { font-size: 17px; }
+      .offer-price { font-size: 25px; }
+      .offer-button { min-height: 46px; font-size: 15px; }
+      .payment-safety-note,
+      .policy-warning,
+      .delivery-note,
+      .report-safe-note {
+        font-size: 12px;
+        line-height: 1.5;
+        padding: 12px;
+        border-radius: 14px;
+      }
+      .lead-form {
+        padding: 18px 14px 16px;
+        border-radius: 20px;
+      }
+      .lead-form::before { left: 14px; }
+      .lead-form h3 { font-size: 22px; }
+      .lead-form p { font-size: 13px; line-height: 1.5; }
+      .inputs { gap: 11px; }
+      .field label { font-size: 13px; }
+      input, textarea {
+        min-height: 52px;
+        font-size: 16px;
+        border-width: 2px;
+        padding: 13px 12px;
+        border-radius: 13px;
+      }
+      textarea { min-height: 88px; }
+      .product-options { gap: 8px; }
+      .product-chip {
+        min-height: 46px;
+        font-size: 14px;
+        padding: 10px 11px;
+      }
+      .prepay-check {
+        font-size: 12px;
+        line-height: 1.45;
+      }
+      .save-panel { font-size: 13px; }
+      .admin { padding: 18px 12px 44px; }
+      .admin-card { padding: 16px; border-radius: 18px; }
+      .admin-metrics { grid-template-columns: 1fr 1fr; gap: 8px; }
+      .admin-product-row { grid-template-columns: 1fr; gap: 4px; }
+      .site-footer {
+        padding: 0 14px 42px;
+        font-size: 12px;
+        line-height: 1.55;
+      }
+    }
+
+    @media (max-width: 390px) {
+      .trust-row { grid-template-columns: 1fr; }
+      .subchoices { grid-template-columns: 1fr; }
+      h1 { font-size: 34px; }
+      .question h3 { font-size: 20px; }
+      .btn { font-size: 15px; }
+    }
+
   </style>
 </head>
 <body>
@@ -1552,4 +1783,3 @@
   </script>
 </body>
 </html>
-
