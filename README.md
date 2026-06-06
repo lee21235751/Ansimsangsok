@@ -50,3 +50,12 @@ VITE_ADMIN_ACCESS_KEY
 ## 배포 원칙
 
 공개 사이트는 Supabase에 리드 insert만 수행합니다. 운영용 리드 전체 조회는 공개 프론트엔드에 열지 않고, 추후 인증된 서버 API 또는 Supabase Edge Function으로 분리합니다.
+
+
+## v0.8.2 검색/광고 전 안전점검 반영
+
+- SEO title/description/canonical/OG/Twitter meta 추가
+- robots.txt, sitemap.xml 추가
+- OG 공유 이미지 SVG 추가
+- 검색/광고 공개 전 체크리스트 문서 추가
+- 법률자문·전문가 추천 오인 방지 문구 유지
