@@ -2,17 +2,113 @@
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "cleanUrls": false,
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "ansimsangsok.com"
+        }
+      ],
+      "destination": "https://www.ansimsangsok.com/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "ansimsangsok.co.kr"
+        }
+      ],
+      "destination": "https://www.ansimsangsok.com/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.ansimsangsok.co.kr"
+        }
+      ],
+      "destination": "https://www.ansimsangsok.com/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "ansimsangsok.kr"
+        }
+      ],
+      "destination": "https://www.ansimsangsok.com/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.ansimsangsok.kr"
+        }
+      ],
+      "destination": "https://www.ansimsangsok.com/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "xn--hg4bqo16a96d.kr"
+        }
+      ],
+      "destination": "https://www.ansimsangsok.com/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.xn--hg4bqo16a96d.kr"
+        }
+      ],
+      "destination": "https://www.ansimsangsok.com/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "ansimsangsok.vercel.app"
+        }
+      ],
+      "destination": "https://www.ansimsangsok.com/:path*",
+      "permanent": true
+    }
+  ],
   "headers": [
     {
       "source": "/config.js",
       "headers": [
-        { "key": "Cache-Control", "value": "no-store" }
+        {
+          "key": "Cache-Control",
+          "value": "no-store"
+        }
       ]
     },
     {
       "source": "/index.html",
       "headers": [
-        { "key": "Cache-Control", "value": "no-store" }
+        {
+          "key": "Cache-Control",
+          "value": "no-store"
+        }
       ]
     }
   ]
