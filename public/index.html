@@ -1268,6 +1268,114 @@
       .choice { font-size: 16px; }
     }
 
+
+    /* v0.8.5: older-reader mobile clarity pass. Mobile web only; no PWA. */
+    .mobile-priority-note { display: none; }
+    @media (max-width: 680px) {
+      body { text-rendering: optimizeLegibility; }
+      .hero { padding-top: 22px; }
+      .eyebrow {
+        background: rgba(255, 249, 232, .96);
+        border: 2px solid rgba(168, 121, 47, .38);
+        color: #143D2C;
+        font-weight: 900;
+      }
+      h1 {
+        color: #071B14;
+        text-shadow: 0 1px 0 rgba(255,255,255,.35);
+      }
+      .lead {
+        background: rgba(255, 252, 246, .70);
+        border-left: 5px solid var(--gold-600);
+        padding: 13px 14px;
+        border-radius: 14px;
+      }
+      .legal-update {
+        background: #FFF7DE;
+        border: 2px solid rgba(168, 121, 47, .55);
+        box-shadow: 0 8px 22px rgba(7, 27, 20, .10);
+      }
+      .legal-update strong { color: #071B14; font-weight: 950; }
+      .legal-update span { color: #1D382A; font-weight: 760; }
+      .mobile-priority-note {
+        display: grid;
+        gap: 5px;
+        margin-top: 10px;
+        padding: 13px 14px;
+        border-radius: 16px;
+        background: #0B241A;
+        color: #FFF8E8;
+        border: 2px solid rgba(214, 177, 97, .55);
+        box-shadow: 0 12px 28px rgba(7,27,20,.18);
+      }
+      .mobile-priority-note b { font-size: 16px; line-height: 1.38; color: #F4D58B; }
+      .mobile-priority-note span { font-size: 16px; line-height: 1.55; font-weight: 780; }
+      .trust {
+        background: rgba(255, 252, 246, .92);
+        border: 2px solid rgba(20, 61, 44, .16);
+        color: #102018;
+        font-weight: 900;
+      }
+      .diagnosis { border-width: 2px; }
+      .diag-head { background: #FFFDF5; }
+      .question { background: #FFFDF5; }
+      .question h3 { color: #071B14; font-weight: 950; }
+      .question-hint { color: #263B30; font-weight: 720; }
+      .choice {
+        background: #FFFDF5;
+        border-color: rgba(168, 121, 47, .48);
+        color: #102018;
+        font-weight: 860;
+        box-shadow: 0 8px 18px rgba(7,27,20,.06);
+      }
+      .choice.selected, .subchoice.selected, .product-chip.selected {
+        border-color: #C99C42;
+        box-shadow: 0 0 0 4px rgba(201, 156, 66, .22);
+      }
+      .subquestion { background: #F8F0DB; border: 2px solid rgba(168,121,47,.28); }
+      .subchoice { background: #FFFDF5; border-width: 2px; font-weight: 840; }
+      .result-box, .signal { border-width: 2px; }
+      .report-preview, .payment-offers, .waitlist-conversion, .delivery-hub, .policy-section {
+        border-width: 2px;
+        box-shadow: 0 16px 34px rgba(7,27,20,.16);
+      }
+      .report-safe-note, .payment-safety-note, .policy-warning, .delivery-note {
+        background: #FFF7DE;
+        color: #1D382A;
+        border: 2px solid rgba(168,121,47,.45);
+        font-weight: 800;
+      }
+      .lead-form {
+        border: 2px solid rgba(214,177,97,.62);
+        box-shadow: 0 22px 48px rgba(7,27,20,.28);
+      }
+      .field label { color: #FFF4D1; font-weight: 900; }
+      input, textarea {
+        background: #FFFDF5;
+        border-color: rgba(214,177,97,.82);
+        color: #071B14;
+        font-weight: 760;
+      }
+      input:focus, textarea:focus {
+        border-color: #F0C96F;
+        box-shadow: 0 0 0 5px rgba(240, 201, 111, .26);
+      }
+      .prepay-check {
+        background: rgba(255,248,227,.08);
+        border-radius: 12px;
+        padding: 10px;
+      }
+      .prepay-check input { min-height: auto; width: 22px; height: 22px; }
+      .site-footer { color: #263B30; }
+    }
+
+    @media (max-width: 360px) {
+      h1 { font-size: 34px; }
+      .lead, .legal-update span, .mobile-priority-note span { font-size: 16px; }
+      .question h3 { font-size: 22px; }
+      input, textarea { font-size: 17px; }
+    }
+
   </style>
 </head>
 <body>
@@ -1283,6 +1391,7 @@
         <h1>상속분쟁 위험,<br />먼저 확인하세요.</h1>
         <p class="lead">달라진 유류분 기준, 부동산·생전증여, 해외 거주 가족처럼 놓치기 쉬운 상속분쟁 신호를 쉬운 질문으로 간단히 확인합니다.</p>
         <div class="legal-update"><strong>최근 유류분 기준이 달라졌습니다.</strong><span>예전 기준으로만 준비하면 부양·기여, 형제자매 유류분, 금전 보전 부담, 해외 가족 쟁점을 놓칠 수 있습니다.</span></div>
+        <div class="mobile-priority-note" aria-label="모바일 핵심 안내"><b>핵심만 먼저 확인합니다</b><span>유류분 · 부동산 · 생전증여 · 해외 가족 여부를 쉬운 질문으로 점검합니다.</span></div>
         <div class="trust-row">
           <span class="trust">회원가입 없음</span>
           <span class="trust">결과 즉시 확인</span>
