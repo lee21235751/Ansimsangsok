@@ -1172,6 +1172,102 @@
       .btn { font-size: 15px; }
     }
 
+
+    /* v0.8.4: senior-friendly mobile readability. Mobile web only; no PWA/app install features. */
+    @media (max-width: 680px) {
+      html { font-size: 18px; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+      body { word-break: keep-all; overflow-wrap: break-word; }
+      .topbar { padding: 14px 16px 0; }
+      .brand { font-size: 18px; letter-spacing: -.015em; }
+      .top-note { display: none; }
+      .hero { padding: 24px 16px 18px; }
+      .eyebrow { font-size: 14px; line-height: 1.45; padding: 9px 12px; }
+      h1 { font-size: clamp(38px, 10.8vw, 46px); line-height: 1.12; letter-spacing: -.045em; }
+      .lead { font-size: 18px; line-height: 1.62; font-weight: 650; color: #17281F; }
+      .legal-update { padding: 14px 14px; }
+      .legal-update strong { font-size: 16px; line-height: 1.45; }
+      .legal-update span { font-size: 15px; line-height: 1.62; color: #263B30; }
+      .trust-row { grid-template-columns: 1fr; gap: 8px; }
+      .trust { font-size: 15px; padding: 10px 12px; white-space: normal; line-height: 1.38; }
+      .cta-row { margin-top: 22px; }
+      .btn { min-height: 58px; font-size: 18px; border-radius: 15px; padding: 0 18px; }
+      .micro { font-size: 14px; line-height: 1.55; color: #46544D; }
+      .section { padding: 16px 12px 48px; }
+      .diag-head { padding: 20px 16px 16px; }
+      .diag-head h2 { font-size: 25px; line-height: 1.28; }
+      .diag-head p { font-size: 16px; line-height: 1.6; color: #33473D; }
+      .progress { font-size: 15px; }
+      .question { padding: 22px 16px 20px; }
+      .question h3 { font-size: 24px; line-height: 1.42; letter-spacing: -.028em; }
+      .question-hint { font-size: 16px; line-height: 1.62; color: #4B5C54; }
+      .choice { min-height: 60px; padding: 16px 15px; font-size: 17px; line-height: 1.42; border-width: 2px; }
+      .subquestion-title { font-size: 17px; line-height: 1.5; }
+      .subchoices { grid-template-columns: 1fr; gap: 9px; }
+      .subchoice { min-height: 54px; font-size: 16px; line-height: 1.38; }
+      .nav { padding: 12px 14px 14px; }
+      .nav .btn { min-height: 56px; font-size: 17px; }
+      .result { padding: 20px 16px 24px; }
+      .result h2 { font-size: 27px; line-height: 1.35; }
+      .result p { font-size: 16px; line-height: 1.68; color: #33473D; }
+      .meter { width: 154px; height: 154px; }
+      .meter-inner { width: 118px; height: 118px; }
+      .meter-inner strong { font-size: 38px; }
+      .signal b, .result-box b { font-size: 18px; line-height: 1.35; }
+      .signal p, .result-box p { font-size: 16px; line-height: 1.62; color: #35493F; }
+      .report-preview,
+      .payment-offers,
+      .waitlist-conversion,
+      .delivery-hub,
+      .policy-section { padding: 18px 16px; }
+      .report-preview h3,
+      .payment-offers h3,
+      .waitlist-conversion h3,
+      .delivery-hub h3,
+      .policy-section h3 { font-size: 25px; line-height: 1.35; }
+      .report-preview p,
+      .payment-offers p,
+      .waitlist-conversion p,
+      .delivery-hub p,
+      .policy-section p { font-size: 16px; line-height: 1.65; }
+      .report-badge { font-size: 14px; min-height: 36px; }
+      .sample-report-link { min-height: 56px; font-size: 17px; }
+      .sample-report-caption { font-size: 15px; line-height: 1.6; }
+      .offer-title { font-size: 20px; line-height: 1.38; }
+      .offer-price { font-size: 29px; }
+      .offer-desc { font-size: 16px !important; line-height: 1.6 !important; }
+      .offer-card ul { font-size: 15px; line-height: 1.62; }
+      .offer-button { min-height: 56px; font-size: 17px; }
+      .payment-safety-note,
+      .policy-warning,
+      .delivery-note,
+      .report-safe-note { font-size: 15px; line-height: 1.62; }
+      .waitlist-card span,
+      .waitlist-notice,
+      .intent-banner { font-size: 15px; line-height: 1.6; }
+      .lead-form { padding: 20px 16px 18px; }
+      .lead-form h3 { font-size: 25px; line-height: 1.34; }
+      .lead-form p { font-size: 16px; line-height: 1.65; color: rgba(255,255,255,.84); }
+      .field label { font-size: 16px; line-height: 1.45; }
+      input, textarea { min-height: 58px; font-size: 18px; padding: 15px 14px; border-radius: 14px; }
+      textarea { min-height: 100px; }
+      input::placeholder, textarea::placeholder { color: #6E604B; opacity: 1; }
+      .product-chip { min-height: 54px; font-size: 16px; line-height: 1.42; }
+      .prepay-check { font-size: 15px; line-height: 1.58; }
+      .save-panel { font-size: 15px; line-height: 1.6; }
+      .disclaimer { font-size: 15px; line-height: 1.65; }
+      .policy-card b, .delivery-step b, .delivery-panel h4, .policy-detail h4 { font-size: 18px; line-height: 1.4; }
+      .policy-card ul, .policy-detail li { font-size: 15px; line-height: 1.65; }
+      .site-footer { font-size: 14px; line-height: 1.7; padding-bottom: 48px; }
+    }
+
+    @media (max-width: 390px) {
+      h1 { font-size: 36px; }
+      .question h3 { font-size: 23px; }
+      .btn { font-size: 17px; }
+      .lead { font-size: 17px; }
+      .choice { font-size: 16px; }
+    }
+
   </style>
 </head>
 <body>
