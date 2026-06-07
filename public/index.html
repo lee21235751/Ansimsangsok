@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="ko">
 <head>
   <meta charset="utf-8" />
@@ -1407,6 +1407,149 @@
       #saveLead { width: 100%; min-height: 56px; font-size: 18px; }
     }
 
+
+    /* v0.9.2: mobile forest clarity pass. Mobile web only; no PWA/app features. */
+    @media (max-width: 680px) {
+      :root {
+        --mobile-forest: #06271f;
+        --mobile-forest-2: #0b3329;
+        --mobile-cream: #f5eedf;
+        --mobile-cream-2: #fff9ea;
+        --mobile-gold: #d4ad5a;
+      }
+      body {
+        background: var(--mobile-forest) !important;
+        color: var(--mobile-cream);
+      }
+      .page {
+        background:
+          linear-gradient(180deg, #041a15 0%, var(--mobile-forest) 46%, #082c24 100%) !important;
+      }
+      .topbar {
+        padding: 18px 18px 0 !important;
+      }
+      .brand {
+        color: var(--mobile-cream) !important;
+        font-size: 20px !important;
+      }
+      .seal {
+        background: transparent !important;
+        border: 2px solid var(--mobile-gold) !important;
+        color: var(--mobile-gold) !important;
+        box-shadow: none !important;
+      }
+      .hero {
+        padding: 24px 18px 18px !important;
+      }
+      .eyebrow {
+        background: var(--mobile-cream) !important;
+        border: 2px solid rgba(212, 173, 90, .68) !important;
+        color: #0b3329 !important;
+        box-shadow: none !important;
+        font-size: 15px !important;
+        line-height: 1.38 !important;
+        padding: 10px 14px !important;
+      }
+      h1 {
+        color: #fff7e8 !important;
+        text-shadow: none !important;
+        font-size: clamp(38px, 10.5vw, 46px) !important;
+        line-height: 1.18 !important;
+        letter-spacing: -.045em !important;
+        margin-top: 6px !important;
+      }
+      .lead,
+      .legal-update,
+      .mobile-priority-note,
+      .trust {
+        box-shadow: none !important;
+      }
+      .lead {
+        background: var(--mobile-cream) !important;
+        color: #10291f !important;
+        border: 2px solid rgba(212, 173, 90, .34) !important;
+        border-left: 6px solid var(--mobile-gold) !important;
+        border-radius: 20px !important;
+        padding: 18px 18px !important;
+        font-size: 18px !important;
+        line-height: 1.72 !important;
+        font-weight: 850 !important;
+      }
+      .legal-update {
+        background: var(--mobile-cream-2) !important;
+        color: #10291f !important;
+        border: 2px solid rgba(212, 173, 90, .42) !important;
+        border-radius: 18px !important;
+        padding: 16px 16px !important;
+      }
+      .legal-update strong,
+      .legal-update span {
+        color: #10291f !important;
+      }
+      .legal-update strong {
+        font-size: 17px !important;
+        line-height: 1.45 !important;
+      }
+      .legal-update span {
+        font-size: 16px !important;
+        line-height: 1.72 !important;
+        font-weight: 800 !important;
+      }
+      .mobile-priority-note {
+        background: #08251f !important;
+        color: var(--mobile-cream) !important;
+        border: 2px solid rgba(212, 173, 90, .62) !important;
+        border-radius: 18px !important;
+        padding: 16px 16px !important;
+      }
+      .mobile-priority-note b {
+        color: #f3d681 !important;
+        font-size: 17px !important;
+      }
+      .mobile-priority-note span {
+        color: #fff7e8 !important;
+        font-size: 17px !important;
+        line-height: 1.65 !important;
+      }
+      .trust-row {
+        gap: 9px !important;
+      }
+      .trust {
+        background: var(--mobile-cream) !important;
+        color: #10291f !important;
+        border: 2px solid rgba(255,255,255,.52) !important;
+        border-radius: 999px !important;
+        min-height: 58px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        font-size: 17px !important;
+        font-weight: 900 !important;
+      }
+      .btn-primary {
+        background: linear-gradient(180deg, #f5d77c 0%, #c89835 100%) !important;
+        color: #071b14 !important;
+        border: 2px solid rgba(255, 247, 212, .55) !important;
+        box-shadow: none !important;
+      }
+      .btn-secondary {
+        background: var(--mobile-cream) !important;
+        color: #10291f !important;
+      }
+      .micro {
+        color: #efe2c4 !important;
+      }
+      .diagnosis,
+      .report-preview,
+      .payment-offers,
+      .waitlist-conversion,
+      .delivery-hub,
+      .policy-section,
+      .disclaimer {
+        box-shadow: none !important;
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -1876,7 +2019,7 @@
       } else {
         serverMessage = '저장 설정을 확인할 수 없습니다.';
       }
-      const saved = {...lead, storage: serverOk?'saved':'pending_retry', server_ok: serverOk};
+      const saved = {...lead, storage: serverOk?'supabase+local':'local', server_ok: serverOk, server_message: serverMessage};
       const stored = JSON.parse(localStorage.getItem('ansim_leads') || '[]'); stored.unshift(saved); localStorage.setItem('ansim_leads', JSON.stringify(stored));
       if(serverOk) showSaveStatus(true, '신청이 저장되었습니다.', `접수 시각 · ${formatKst(lead.created_at)}`);
       else showSaveStatus(false, '저장을 완료하지 못했습니다.', '네트워크 상태를 확인한 뒤 잠시 후 다시 시도해주세요.');
@@ -1911,5 +2054,3 @@
   </script>
 </body>
 </html>
-
-
