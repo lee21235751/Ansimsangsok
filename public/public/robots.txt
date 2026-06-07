@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+Disallow: /config.js
+Sitemap: https://www.ansimsangsok.com/sitemap.xml
