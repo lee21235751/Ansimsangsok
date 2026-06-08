@@ -1821,6 +1821,76 @@
       }
     }
 
+  
+
+    /* v0.10.3: mobile readability final fix */
+    .question h3,
+    #questionTitle {
+      color: #071B14 !important;
+      opacity: 1 !important;
+      text-shadow: none !important;
+      font-weight: 950 !important;
+      letter-spacing: -0.035em !important;
+    }
+    .subquestion-title {
+      display: block !important;
+      color: #071B14 !important;
+      opacity: 1 !important;
+      text-shadow: none !important;
+      font-weight: 950 !important;
+      background: rgba(255,253,246,.72) !important;
+      border-radius: 10px !important;
+      padding: 4px 6px !important;
+      margin-bottom: 12px !important;
+    }
+    .prepay-checks.consent-box {
+      background: #FFFDF6 !important;
+      border: 2px solid rgba(168,121,47,.64) !important;
+      box-shadow: none !important;
+    }
+    .prepay-checks.consent-box strong,
+    .prepay-checks.consent-box label,
+    .prepay-checks.consent-box .prepay-check {
+      color: #071B14 !important;
+      opacity: 1 !important;
+      text-shadow: none !important;
+    }
+    .prepay-check {
+      color: #071B14 !important;
+      font-weight: 900 !important;
+      line-height: 1.62 !important;
+      gap: 12px !important;
+    }
+    .prepay-check input {
+      border: 2px solid #071B14 !important;
+      background: #fff !important;
+      accent-color: #D7A64A !important;
+      margin-top: 3px !important;
+      flex: 0 0 auto !important;
+    }
+    @media (max-width: 720px) {
+      .question h3,
+      #questionTitle {
+        font-size: 25px !important;
+        line-height: 1.35 !important;
+        color: #071B14 !important;
+      }
+      .subquestion-title {
+        font-size: 21px !important;
+        line-height: 1.42 !important;
+        color: #071B14 !important;
+      }
+      .prepay-check {
+        font-size: 17px !important;
+        line-height: 1.62 !important;
+      }
+      .prepay-check input {
+        width: 24px !important;
+        height: 24px !important;
+        min-width: 24px !important;
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -1943,7 +2013,7 @@
             <div class="waitlist-notice">이메일만 입력하면 선택하신 안내자료를 받아보실 수 있습니다.</div>
           </div>
 
-          <div class="lead-form">
+          <div class="lead-form guide-request-card" id="guideRequestCard">
             <h3>안내자료를 받을 정보를 입력해주세요</h3>
             <p style="margin:0;color:rgba(255,255,255,.78);line-height:1.55">이메일로 안내자료를 보내드립니다. 입력하신 이메일은 안내자료 제공에만 사용합니다.</p>
             <div class="assist-note">입력이 어렵다면 가족과 함께 천천히 진행하셔도 괜찮습니다.</div>
@@ -1994,7 +2064,7 @@
       { id:'realEstate', type:'multi', title:'보유한 부동산 유형을 모두 선택해주세요.', hint:'해당되는 항목을 모두 선택해주세요. 선택한 유형만 추가로 확인합니다. 정확한 수가 기억나지 않아도 괜찮습니다.', choices:[['none','없음',0],['house','주택',5],['commercial','상가',8],['officetel','오피스텔',6],['pension','펜션',8],['land','토지',9],['factory','공장·창고',9],['other','기타 부동산',7]], detailChoices:{ house:{label:'주택', question:'주택은 몇 채인가요?', choices:[['1','1채',0],['2','2채',7],['3','3채',12],['4plus','4채 이상',17],['unknown','정확히 모르겠음',8]]}, commercial:{label:'상가', question:'상가는 몇 개 보유하고 있나요?', choices:[['1','1개',5],['2','2개',10],['3plus','3개 이상',16],['unknown','정확히 모르겠음',8]]}, officetel:{label:'오피스텔', question:'오피스텔은 몇 개 보유하고 있나요?', choices:[['1','1개',4],['2','2개',8],['3plus','3개 이상',13],['unknown','정확히 모르겠음',7]]}, pension:{label:'펜션', question:'펜션은 몇 개 보유하고 있나요?', choices:[['1','1개',8],['2plus','2개 이상',15],['unknown','정확히 모르겠음',8]]}, land:{label:'토지', question:'토지는 몇 곳에 있나요?', choices:[['1','1곳',6],['2','2곳',11],['3plus','3곳 이상',17],['unknown','정확히 모르겠음',9]]}, factory:{label:'공장·창고', question:'공장·창고는 몇 개 보유하고 있나요?', choices:[['1','1개',8],['2plus','2개 이상',15],['unknown','정확히 모르겠음',8]]}, other:{label:'기타 부동산', question:'기타 부동산은 몇 개 보유하고 있나요?', choices:[['1','1개',5],['2plus','2개 이상',12],['unknown','정확히 모르겠음',7]]} } },
       { id:'gift', title:'이미 큰 금액이나 부동산을 증여한 적이 있나요?', choices:[['no','없음',0],['money','현금 등 일부 있음',8],['realestate','부동산 증여 있음',15],['unknown','잘 모르겠음',6]] },
       { id:'unequal', title:'특정 가족에게 더 많이 남길 계획이 있나요?', choices:[['no','아니오',0],['some','조금 더',8],['much','많이 더',16],['exclude','누군가 제외하고 싶음',22]] },
-      { id:'overseas', title:'본인 또는 가족 중 해외 국적·해외 거주·해외 재산에 해당하는 경우가 있나요?', choices:[['none','해당 없음',0],['self_abroad','본인이 해외 거주 중',14],['family_abroad','배우자 또는 자녀가 해외 거주 중',12],['foreign_family','배우자 또는 자녀가 외국 국적',16],['foreign_assets','해외 부동산 또는 해외 금융자산이 있음',18],['unknown','정확히 모르겠음',8]] },
+      { id:'overseas', type:'multiSimple', title:'본인 또는 가족 중 해외 국적·해외 거주·해외 재산에 해당하는 경우가 있나요?', hint:'해당되는 항목을 모두 선택해주세요. 정확히 모르겠음은 다른 항목과 함께 선택되지 않습니다.', choices:[['none','해당 없음',0],['self_abroad','본인이 해외 거주 중',14],['family_abroad','배우자 또는 자녀가 해외 거주 중',12],['foreign_family','배우자 또는 자녀가 외국 국적',16],['foreign_assets','해외 부동산 또는 해외 금융자산이 있음',18],['unknown','정확히 모르겠음',8]] },
       { id:'will', title:'현재 유언장을 작성해두셨나요?', choices:[['no','없음',8],['hand','자필 유언 있음',5],['notary','공정증서 유언 있음',-8],['unknown','잘 모르겠음',5]] }
     ];
     let step = 0;
@@ -2044,29 +2114,31 @@
       $('stepText').textContent = `${step+1} / ${questions.length}`;
       $('barFill').style.width = `${((step+1)/questions.length)*100}%`;
       $('questionTitle').textContent = q.title;
-      if(q.type === 'multi'){
+      if(q.type === 'multi' || q.type === 'multiSimple'){
         const selected = answerValues(q.id);
         const hint = q.hint ? `<div class="question-hint">${q.hint}</div>` : '';
         const choicesHtml = q.choices.map(([value,label]) => `<button type="button" class="choice ${selected.includes(value)?'selected':''}" data-value="${value}">${label}</button>`).join('');
-        const detailHtml = selected.filter(v => v !== 'none').map(type => {
+        const detailHtml = q.type === 'multi' ? selected.filter(v => v !== 'none').map(type => {
           const detail = q.detailChoices?.[type];
           if(!detail) return '';
           const selectedCount = answers.realEstateCounts?.[type];
           return `<div class="subquestion"><div class="subquestion-title">${detail.question || (detail.label + '은 몇 개인가요?')}</div><div class="subchoices">${detail.choices.map(([value,label]) => `<button type="button" class="subchoice ${selectedCount===value?'selected':''}" data-type="${type}" data-value="${value}">${label}</button>`).join('')}</div></div>`;
-        }).join('');
+        }).join('') : '';
         $('choices').innerHTML = `${hint}<div class="choices multi">${choicesHtml}</div>${detailHtml}`;
         document.querySelectorAll('.choice').forEach(btn=>btn.addEventListener('click',()=>{
           const value = btn.dataset.value;
           let next = answerValues(q.id);
-          if(value === 'none'){
-            next = ['none'];
-            answers.realEstateCounts = {};
+          if(value === 'none' || value === 'unknown'){
+            next = [value];
+            if(q.id === 'realEstate') answers.realEstateCounts = {};
           } else {
-            next = next.filter(v => v !== 'none');
+            next = next.filter(v => v !== 'none' && v !== 'unknown');
             next = next.includes(value) ? next.filter(v => v !== value) : [...next, value];
-            answers.realEstateCounts = answers.realEstateCounts || {};
-            for(const key of Object.keys(answers.realEstateCounts)){
-              if(!next.includes(key)) delete answers.realEstateCounts[key];
+            if(q.id === 'realEstate'){
+              answers.realEstateCounts = answers.realEstateCounts || {};
+              for(const key of Object.keys(answers.realEstateCounts)){
+                if(!next.includes(key)) delete answers.realEstateCounts[key];
+              }
             }
           }
           answers[q.id] = next;
@@ -2088,7 +2160,7 @@
     function score(){
       let s = 18;
       for (const q of questions){
-        if(q.type === 'multi'){
+        if(q.type === 'multi' || q.type === 'multiSimple'){
           const selected = answerValues(q.id);
           let subtotal = 0;
           for(const value of selected){
@@ -2164,7 +2236,8 @@
         : manyEstateItems
           ? `보유 부동산(${selectedEstateLabels.join(', ')})이 여러 유형 또는 여러 건으로 확인되어 평가액 차이와 금전 보전 부담을 미리 검토하는 것이 좋습니다.`
           : `보유 부동산(${selectedEstateLabels.join(', ')})이 있어도 거주·처분 방식과 금전 보전 가능성은 미리 정리해두는 것이 좋습니다.`;
-      const overseasSignal = answers.overseas && answers.overseas !== 'none';
+      const overseasValues = answerValues('overseas');
+      const overseasSignal = overseasValues.length > 0 && !overseasValues.includes('none');
       const boxes = [
         ['유류분 검토 신호', answers.unequal && answers.unequal !== 'no' ? '특정 가족에게 더 많이 남길 계획이 있어 유류분 검토가 필요할 수 있습니다.' : '현재 입력만으로는 큰 신호가 강하지 않습니다.'],
         ['금전 보전 부담 가능성', realEstateText],
@@ -2177,7 +2250,7 @@
     $('prevBtn').addEventListener('click',()=>{ if(step>0){ step--; renderQuestion(); }});
     $('nextBtn').addEventListener('click',()=>{
       const q=questions[step];
-      if(q.type === 'multi'){
+      if(q.type === 'multi' || q.type === 'multiSimple'){
         const selected = answerValues(q.id);
         if(!selected.length){ alert('답변을 선택해주세요.'); return; }
         for(const type of selected.filter(v => v !== 'none')){
@@ -2207,7 +2280,7 @@
     async function saveLead(){
       const selectedProducts = [...document.querySelectorAll('.product-chip.selected')].map(btn => btn.dataset.product);
       const leadAnswers = { ...answers, interest_products: selectedProducts, engagement: {...engagement}, consents: { privacy: Boolean($('privacyConsent')?.checked), marketing: Boolean($('marketingConsent')?.checked) } };
-      const lead = { name:$('leadName').value.trim(), email:$('leadEmail').value.trim(), memo:$('leadMemo').value.trim(), score:score(), answers: leadAnswers, created_at:new Date().toISOString(), page_url:location.href, app_version:'0.10.2-email-only-guide-request'  };
+      const lead = { name:$('leadName').value.trim(), email:$('leadEmail').value.trim(), memo:$('leadMemo').value.trim(), score:score(), answers: leadAnswers, created_at:new Date().toISOString(), page_url:location.href, app_version:'0.10.3-mobile-readability-multiselect'  };
       if(!lead.name || !lead.email){ showSaveStatus(false, '이름 또는 닉네임과 이메일을 입력해주세요.', '필수 입력칸은 노란색 테두리로 표시되어 있습니다.'); return; }
       if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(lead.email)){ showSaveStatus(false, '이메일 형식을 확인해주세요.', '예: name@example.com'); return; }
       if(!$('privacyConsent')?.checked){ showSaveStatus(false, '개인정보 수집·이용 동의를 확인해주세요.', '안내자료를 보내드리기 위해 필요한 확인입니다. 서비스 안내 수신은 선택입니다.'); return; }
