@@ -99,7 +99,7 @@
 
     .hero-grid {
       display: grid;
-      grid-template-columns: 1.04fr 0.96fr;
+      grid-template-columns: 1fr;
       gap: 34px;
       align-items: center;
     }
@@ -168,60 +168,6 @@
       font-weight: 900;
       cursor: pointer;
       min-height: 54px;
-    }
-
-    .preview {
-      border: 1px solid rgba(215, 173, 85, 0.5);
-      border-radius: 34px;
-      overflow: hidden;
-      background: rgba(255, 255, 255, 0.05);
-      box-shadow: var(--shadow);
-    }
-
-    .preview-top {
-      padding: 28px;
-      color: #fffdf5;
-    }
-
-    .score {
-      display: flex;
-      align-items: flex-end;
-      gap: 10px;
-      margin-top: 10px;
-    }
-
-    .score strong {
-      color: var(--gold-light);
-      font-size: clamp(3.4rem, 10vw, 5.8rem);
-      line-height: 0.9;
-    }
-
-    .preview-list {
-      background: #e5e1d2;
-      padding: 24px;
-      display: grid;
-      gap: 16px;
-    }
-
-    .signal-card {
-      background: var(--paper);
-      border-radius: 24px;
-      padding: 18px;
-      color: var(--ink);
-      border: 1px solid rgba(14, 53, 41, 0.08);
-    }
-
-    .signal-card h3 {
-      margin: 0 0 8px;
-      font-size: 1.07rem;
-      color: var(--forest-deep);
-    }
-
-    .signal-card p {
-      margin: 0;
-      color: #44504a;
-      line-height: 1.65;
-      font-weight: 650;
     }
 
     .section {
@@ -586,11 +532,6 @@
         padding: 8px 12px;
       }
 
-      .preview-top,
-      .preview-list {
-        padding: 18px;
-      }
-
       .diagnosis {
         border-radius: 24px;
         padding: 16px;
@@ -702,30 +643,6 @@
               <span class="pill">필요한 도움 찾기</span>
             </div>
           </div>
-
-          <aside class="preview" aria-label="예상 결과 미리보기">
-            <div class="preview-top">
-              <strong>예상 결과 미리보기</strong>
-              <div class="score">
-                <strong>72</strong>
-                <span>점 · 주의 필요</span>
-              </div>
-            </div>
-            <div class="preview-list">
-              <div class="signal-card">
-                <h3>유류분 검토 신호</h3>
-                <p>특정 가족에게 더 많이 남길 계획이 있으면 사전 정리가 필요할 수 있습니다.</p>
-              </div>
-              <div class="signal-card">
-                <h3>부동산 분할 신호</h3>
-                <p>부동산 중심 자산은 나누는 과정에서 가족 간 의견 차이가 생기기 쉽습니다.</p>
-              </div>
-              <div class="signal-card">
-                <h3>해외 요소 확인</h3>
-                <p>해외 국적, 해외 거주, 해외 재산이 있으면 확인할 항목이 늘어날 수 있습니다.</p>
-              </div>
-            </div>
-          </aside>
         </div>
       </div>
     </header>
