@@ -766,10 +766,8 @@
 
   <script>
     // ansimsangsok-clear-saved-progress-on-load
-    try {
-      localStorage.removeItem("ansimsangsokDiagnosisV0104AssetFlow");
-    } catch (error) {
-      console.warn(error);
+    if (window.localStorage) {
+      window.localStorage.removeItem("ansimsangsokDiagnosisV0104AssetFlow");
     }
 
     const questions = [
@@ -1086,10 +1084,7 @@ function saveState() {
     function restoreState() {
       try {
         localStorage.removeItem("ansimsangsokDiagnosisV0104AssetFlow");
-      } catch (error) {
-        console.warn(error);
-      }
-    }
+}
       } catch (error) {
         state.step = 0;
         state.answers = {};
