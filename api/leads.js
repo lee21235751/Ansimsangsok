@@ -5,10 +5,20 @@ export default async function handler(req, res) {
   }
 
   try {
-    const supabaseUrl = process.env.SUPABASE_URL;
-    const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+    const supabaseUrl =
+      process.env.SUPABASE_URL ||
+      process.env.VITE_SUPABASE_URL;
 
-    if (!supabaseUrl || !serviceRoleKey) {
+    const supabaseKey =
+      process.env.SUPABASE_SERVICE_ROLE_KEY ||
+      process.env.VITE_SUPABASE_ANON_KEY;
+
+    const leadsTable =
+      process.env.SUPABASE_LEADS_TABLE ||
+      process.env.VITE_SUPABASE_LEADS_TABLE ||
+      "leads";
+
+    if (!supabaseUrl || !supabaseKey) {
       console.error("Missing Supabase environment variables");
       return res.status(500).json({
         ok: false,
@@ -31,7 +41,9 @@ export default async function handler(req, res) {
       return res.status(400).json({ ok: false, message: "이메일을 정확히 입력해주세요." });
     }
 
-    const baseRow = {
+    const createdAt = new Date().toISOString();
+
+    const fullRow = {
       name,
       email,
       memo,
@@ -40,35 +52,35 @@ export default async function handler(req, res) {
       source: "ansimsangsok-guide-request",
       retention_note: "안내자료 발송 후 30일",
       user_agent: req.headers["user-agent"] || "",
-      created_at: new Date().toISOString()
+      created_at: createdAt
     };
 
-    const minimalRow = {
+    const simpleRow = {
       name,
       email,
       memo,
-      created_at: baseRow.created_at
+      created_at: createdAt
     };
 
     async function insertLead(row) {
-      return await fetch(`${supabaseUrl.replace(/\/$/, "")}/rest/v1/leads`, {
+      return await fetch(`${supabaseUrl.replace(/\/$/, "")}/rest/v1/${encodeURIComponent(leadsTable)}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "apikey": serviceRoleKey,
-          "Authorization": `Bearer ${serviceRoleKey}`,
+          "apikey": supabaseKey,
+          "Authorization": `Bearer ${supabaseKey}`,
           "Prefer": "return=representation"
         },
         body: JSON.stringify(row)
       });
     }
 
-    let insertRes = await insertLead(baseRow);
+    let insertRes = await insertLead(fullRow);
     let text = await insertRes.text();
 
-    if (!insertRes.ok && /column|schema|cache|could not find/i.test(text)) {
-      console.error("Full leads insert failed; retrying minimal row", insertRes.status, text);
-      insertRes = await insertLead(minimalRow);
+    if (!insertRes.ok && /column|schema|cache|could not find|does not exist/i.test(text)) {
+      console.error("Full leads insert failed; retrying simple row", insertRes.status, text);
+      insertRes = await insertLead(simpleRow);
       text = await insertRes.text();
     }
 
