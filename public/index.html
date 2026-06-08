@@ -1082,13 +1082,12 @@ function saveState() {
     }
 
     function restoreState() {
-      try {
-        localStorage.removeItem("ansimsangsokDiagnosisV0104AssetFlow");
-}
-      } catch (error) {
-        state.step = 0;
-        state.answers = {};
+      if (window.localStorage) {
+        window.localStorage.removeItem("ansimsangsokDiagnosisV0104AssetFlow");
       }
+
+      state.step = 0;
+      state.answers = {};
     }
 
     function showResult() {
