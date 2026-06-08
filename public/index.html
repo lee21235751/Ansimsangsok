@@ -621,9 +621,39 @@
         line-height: 1.58 !important;
       }
     }
+
+    .lead-status-banner {
+      position: fixed;
+      left: 50%;
+      bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+      transform: translateX(-50%);
+      z-index: 10000;
+      width: min(92vw, 560px);
+      padding: 16px 18px;
+      border-radius: 20px;
+      background: #fff8dc;
+      border: 2px solid rgba(184, 134, 11, 0.42);
+      color: var(--forest-deep, #06251d);
+      font-weight: 950;
+      font-size: clamp(1.03rem, 3.8vw, 1.18rem);
+      line-height: 1.55;
+      text-align: center;
+      box-shadow: 0 18px 44px rgba(0, 0, 0, 0.22);
+    }
+
+    .lead-status-banner.error {
+      background: #fff3f0;
+      border-color: rgba(160, 45, 25, 0.34);
+      color: #5f1f14;
+    }
+
+    .lead-status-banner.is-hidden {
+      display: none !important;
+    }
 </style>
 </head>
 <body>
+  <div id="leadStatusBanner" class="lead-status-banner is-hidden" role="status" aria-live="polite"></div>
   <button class="home-return-button is-hidden" id="homeReturnButton" type="button" aria-label="처음 화면으로 돌아가기">처음 화면</button>
   <div class="page">
     <header class="hero">
@@ -1114,7 +1144,25 @@ function saveState() {
       }
     });
 
-    document.getElementById("saveLead").addEventListener("click", async () => {
+    
+    function showLeadStatusBanner(message, type = "success") {
+      const banner = document.getElementById("leadStatusBanner");
+      if (!banner) return;
+
+      banner.textContent = message;
+      banner.classList.remove("is-hidden", "error");
+
+      if (type === "error") {
+        banner.classList.add("error");
+      }
+
+      window.clearTimeout(window.__leadStatusBannerTimer);
+      window.__leadStatusBannerTimer = window.setTimeout(() => {
+        banner.classList.add("is-hidden");
+      }, 7000);
+    }
+
+document.getElementById("saveLead").addEventListener("click", async () => {
       const leadName = document.getElementById("leadName").value.trim();
       const leadEmail = document.getElementById("leadEmail").value.trim();
       const leadMemo = document.getElementById("leadMemo").value.trim();
@@ -1148,6 +1196,7 @@ function saveState() {
       saveButton.disabled = true;
       saveButton.textContent = "접수 중입니다...";
       saveStatus.textContent = "안내자료 신청을 접수하고 있습니다.";
+      showLeadStatusBanner("안내자료 신청을 접수하고 있습니다.");
       saveStatus.classList.remove("error");
       saveStatus.classList.add("success");
       saveStatus.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -1168,6 +1217,7 @@ function saveState() {
         }
 
         saveStatus.textContent = "안내자료 신청이 접수되었습니다. 이메일 확인 후 순서대로 안내드릴 수 있습니다.";
+        showLeadStatusBanner("안내자료 신청이 접수되었습니다. 이메일 확인 후 순서대로 안내드릴 수 있습니다.");
         saveStatus.classList.remove("error");
         saveStatus.classList.add("success");
         document.getElementById("leadName").value = "";
@@ -1177,6 +1227,7 @@ function saveState() {
       } catch (error) {
         console.error(error);
         saveStatus.textContent = "잠시 후 다시 신청해 주세요. 입력하신 내용은 외부에 공개되지 않습니다.";
+        showLeadStatusBanner("잠시 후 다시 신청해 주세요. 입력하신 내용은 외부에 공개되지 않습니다.", "error");
         saveStatus.classList.remove("success");
         saveStatus.classList.add("error");
         saveStatus.scrollIntoView({ behavior: "smooth", block: "center" });
