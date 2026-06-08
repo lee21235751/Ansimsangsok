@@ -1739,106 +1739,41 @@
                 <button type="button" class="offer-button" data-select-product="international">이 진단 관심 있음</button>
               </article>
             </div>
-            <div class="payment-safety-note">선택하신 리포트 안내를 먼저 받아보실 수 있습니다. 알림 신청은 구매 확정이 아니며, 제공 범위와 안내 기준을 다시 확인하실 수 있습니다.</div>
-          </div>
-
-          <div class="waitlist-conversion" id="paymentWaitlist">
-            <h3>리포트 안내 받기</h3>
-            <p>필요한 리포트를 선택하고 이메일을 남겨두시면, 선택하신 안내를 먼저 받아보실 수 있습니다.</p>
-            <div class="waitlist-grid">
-              <div class="waitlist-card"><b>먼저 안내</b><span>선택하신 리포트 안내를 먼저 받아보실 수 있습니다.</span></div>
-              <div class="waitlist-card"><b>받는 내용</b><span>쉬운 리포트, 공증 전 준비자료, 국제상속 추가 진단 중 관심 상품 안내를 받습니다.</span></div>
-              <div class="waitlist-card"><b>활용 방법</b><span>상담 전 확인할 질문과 준비자료를 미리 정리해볼 수 있습니다.</span></div>
-            </div>
-            <div class="waitlist-actions">
-              <button type="button" class="waitlist-button" data-waitlist="payment_open">리포트 안내 받기</button>
-              <button type="button" class="waitlist-button secondary" data-waitlist="sample_first">샘플 PDF 확인 후 알림 받기</button>
-            </div>
-            <div class="waitlist-notice">알림 신청은 구매 확정이 아닙니다. 바로 아래 입력칸에 이름 또는 닉네임과 이메일을 남겨주세요.</div>
-          </div>
-
-          <div class="lead-form">
-            <h3>여기에 알림 받을 정보를 입력해주세요</h3>
-            <p style="margin:0;color:rgba(255,255,255,.78);line-height:1.55">이메일은 필수이고, 휴대폰 번호는 문자 안내를 원하실 때만 선택적으로 입력해주세요.
-            입력하신 정보는 선택하신 리포트 안내에만 사용하며, 요청 없이 먼저 전화드리지 않습니다.</p>
+          <div class="lead-form guide-request-card" id="guideRequestCard">
+            <h3>안내자료를 받을 정보를 입력해주세요</h3>
+            <p style="margin:0;color:rgba(255,255,255,.78);line-height:1.55">
+              이메일로 안내자료를 보내드립니다.<br />
+              입력하신 이메일은 안내자료 제공에만 사용합니다.
+            </p>
             <div class="inputs">
-              <div class="field" id="nameField"><label for="leadName">이름 또는 닉네임 <span class="required">필수</span></label><input id="leadName" lang="ko-KR" inputmode="text" placeholder="예: 홍길동" autocomplete="name" autocapitalize="off" spellcheck="false" /><small class="field-hint input-hint" id="nameHint">성함을 한글로 입력해주세요.</small></div>
-              <div class="field"><label for="leadPhone">휴대폰 번호 <span class="optional">선택</span></label><input id="leadPhone" type="tel" inputmode="tel" placeholder="문자 안내를 원하시면 입력해주세요" autocomplete="tel" /></div>
-              <div class="field" id="emailField"><label for="leadEmail">이메일 <span class="required">필수</span></label><input id="leadEmail" class="email-mode" type="email" lang="en" inputmode="email" placeholder="예: name@example.com" autocomplete="email" autocapitalize="none" autocorrect="off" spellcheck="false" /><small class="field-hint input-hint" id="emailHint">이메일은 영문 주소 형식으로 입력해주세요.</small></div>
-              <div class="field full"><label for="leadMemo">메모</label><textarea id="leadMemo" placeholder="예: 부동산이 많음, 재혼가정, 특정 자녀에게 더 주고 싶음"></textarea></div>
-              <div class="field full"><div class="report-cue">선택하신 리포트 안내와 준비자료를 쉽게 받아볼 수 있습니다.</div></div><div class="field full"><label>관심 있는 안내 <span class="required">선택</span></label><div class="product-options"><button type="button" class="product-chip selected" data-product="easy_report">쉬운 2026 유류분 리포트</button><button type="button" class="product-chip" data-product="notary_prep">공증 전 유언 준비자료</button><button type="button" class="product-chip" data-product="international">국제상속 추가 진단</button><button type="button" class="product-chip" data-product="expert_list">전문가 목록 보기</button></div><small class="field-hint">관심 있는 안내를 선택하면 관련 정보를 함께 받아볼 수 있습니다.</small></div>
+              <div class="field" id="nameField">
+                <label for="leadName">이름 또는 닉네임 <span class="required">필수</span></label>
+                <input id="leadName" lang="ko-KR" inputmode="text" placeholder="예: 홍길동" autocomplete="name" autocapitalize="off" spellcheck="false" />
+                <small class="field-hint input-hint" id="nameHint">편하게 알아볼 수 있는 이름을 입력해주세요.</small>
+              </div>
+              <div class="field" id="emailField">
+                <label for="leadEmail">이메일 <span class="required">필수</span></label>
+                <input id="leadEmail" class="email-mode" type="email" lang="en" inputmode="email" placeholder="예: name@example.com" autocomplete="email" autocapitalize="none" autocorrect="off" spellcheck="false" />
+                <small class="field-hint input-hint" id="emailHint">이메일은 영문 주소 형식으로 입력해주세요.</small>
+              </div>
+              <div class="field full">
+                <label for="leadMemo">메모 <span class="optional">선택</span></label>
+                <textarea id="leadMemo" placeholder="궁금한 점이 있으면 짧게 적어주세요."></textarea>
+              </div>
+              <div class="field full">
+                <label>관심 있는 안내자료 <span class="required">선택</span></label>
+                <div class="product-options">
+                  <button type="button" class="product-chip selected" data-product="easy_report">2026 유류분 변화 안내자료</button>
+                  <button type="button" class="product-chip" data-product="notary_prep">상속 준비자료</button>
+                  <button type="button" class="product-chip" data-product="international">해외 가족·재산 안내자료</button>
+                </div>
+              </div>
             </div>
             <div class="prepay-checks consent-box">
-              <strong>신청 전 필수 확인</strong>
-              <label class="prepay-check"><input type="checkbox" id="scopeConsent" /> [필수] 상속분쟁 위험 신호와 상담 전 준비자료를 정리하는 정보성 안내임을 확인했습니다.</label>
-              <label class="prepay-check"><input type="checkbox" id="refundNotice" /> [필수] 리포트 제공 범위와 안내 기준을 확인했습니다.</label>
-              <label class="prepay-check"><input type="checkbox" id="privacyConsent" /> [필수] 개인정보 수집·이용에 동의합니다. 필수 항목은 이름 또는 닉네임, 이메일, 진단 응답, 관심 상품이며 휴대폰 번호는 선택 항목입니다.</label>
-              <label class="prepay-check"><input type="checkbox" id="marketingConsent" /> [선택] 리포트와 서비스 안내를 이메일·문자로 받아보겠습니다.</label>
+              <label class="prepay-check"><input type="checkbox" id="privacyConsent" /> [필수] 개인정보 수집·이용에 동의합니다.</label>
             </div>
-            <div class="field full consent-summary"><b>신청 전 마지막 확인</b><span>필수 확인 3개와 개인정보 동의가 완료되어야 알림 신청이 저장됩니다. 마케팅 수신은 선택입니다.</span></div>
-            <div class="intent-banner" id="intentBanner">선택한 리포트와 이메일이 함께 저장됩니다. 휴대폰 번호는 입력한 경우에만 함께 저장됩니다.</div>
-            <button class="btn" style="background:var(--gold-600);color:var(--forest-950)" id="saveLead" type="button">알림 신청 저장하기</button>
+            <button class="btn" style="background:var(--gold-600);color:var(--forest-950)" id="saveLead" type="button">안내자료 신청하기</button>
             <div id="saveMsg" class="save-panel"></div>
-          </div>
-          <div class="policy-hub compact-policy" id="paymentPolicy">
-            <div>
-              <h3>신청 전 안내</h3>
-              <p>중요한 내용만 먼저 안내드립니다. 자세한 제공 범위와 개인정보 안내는 아래에서 확인할 수 있습니다.</p>
-            </div>
-            <div class="policy-grid">
-              <article class="policy-card" id="productScope">
-                <span class="policy-tag">안내 내용</span>
-                <b>리포트·준비자료</b>
-                <ul>
-                  <li>입력값 기반 위험 신호와 준비자료를 쉬운 말로 정리합니다.</li>
-                </ul>
-              </article>
-              <article class="policy-card" id="privacyPolicy">
-                <span class="policy-tag">개인정보</span>
-                <b>무료 단계 최소 수집</b>
-                <ul>
-                  <li>이름 또는 닉네임, 이메일, 진단 응답, 관심 상품만 필수로 저장합니다. 휴대폰 번호는 입력한 경우에만 저장합니다.</li>
-                  <li>주민등록번호, 등기자료, 가족관계증명서, 계좌정보는 요구하지 않습니다.</li>
-                </ul>
-              </article>
-              <article class="policy-card" id="refundPolicy">
-                <span class="policy-tag">안내 기준</span>
-                <b>제공 전 재확인</b>
-                <ul>
-                  <li>제공 전에 상품 범위와 안내 기준을 다시 확인합니다.</li>
-                  <li>디지털 자료 특성상 제공 이후 기준은 별도로 안내됩니다.</li>
-                </ul>
-              </article>
-            </div>
-            <details class="policy-detail" id="productScopeDetail">
-              <summary>자세한 제공 범위 보기</summary>
-              <p>안심상속 리포트는 입력값을 바탕으로 위험 신호와 상담 전 준비자료를 쉬운 말로 정리합니다.</p>
-              <ul>
-                <li>포함: 진단 응답 요약, 유류분·부동산·국제상속 검토 신호, 준비자료 체크리스트, 전문가에게 물어볼 질문.</li>
-              </ul>
-            </details>
-            <details class="policy-detail" id="privacyPolicyDetail">
-              <summary>개인정보 안내 보기</summary>
-              <p>무료 진단과 리포트 안내 단계에서는 최소한의 정보만 수집하고, 마케팅 수신 동의는 선택으로 분리합니다.</p>
-              <ul>
-                <li>필수 수집: 이름 또는 닉네임, 이메일, 진단 응답, 관심 상품, 저장 시각. 선택 수집: 휴대폰 번호, 메모.</li>
-                <li>미수집: 주민등록번호, 가족관계증명서, 등기부등본, 계좌정보, 정확한 주소.</li>
-                <li>선택 동의: 리포트와 서비스 안내 수신.</li>
-              </ul>
-            </details>
-          </div>
-
-          <div class="delivery-hub" id="reportDelivery">
-            <div>
-              <h3>리포트를 받는 흐름</h3>
-              <p>리포트 안내는 입력하신 이메일로 보내드리며, 휴대폰 번호를 입력하신 경우 문자 안내도 받을 수 있습니다.</p>
-            </div>
-            <div class="delivery-flow" aria-label="리포트 제공 절차">
-              <div class="delivery-step"><span>1</span><b>안내 확인</b><small>선택 상품, 이메일, 휴대폰 번호를 확인합니다.</small></div>
-              <div class="delivery-step"><span>2</span><b>리포트 정리</b><small>진단 응답을 바탕으로 쉬운 설명과 준비자료 체크리스트를 정리합니다.</small></div>
-              <div class="delivery-step"><span>3</span><b>PDF 제공</b><small>PDF 다운로드와 이메일 안내 방식으로 제공합니다.</small></div>
-              <div class="delivery-step"><span>4</span><b>다음 선택</b><small>공증 전 준비자료, 국제상속 추가 진단, 전문가 목록 보기 등 후속 선택지를 안내합니다.</small></div>
-            </div>
           </div>
 
         </div>
@@ -2070,10 +2005,10 @@
     }
     async function saveLead(){
       const selectedProducts = [...document.querySelectorAll('.product-chip.selected')].map(btn => btn.dataset.product);
-      const leadAnswers = { ...answers, interest_products: selectedProducts, engagement: {...engagement}, consents: { scope: Boolean($('scopeConsent')?.checked), refund: Boolean($('refundNotice')?.checked), privacy: Boolean($('privacyConsent')?.checked), marketing: Boolean($('marketingConsent')?.checked) } };
-      const lead = { name:$('leadName').value.trim(), phone:$('leadPhone').value.trim(), email:$('leadEmail').value.trim(), memo:$('leadMemo').value.trim(), score:score(), answers: leadAnswers, created_at:new Date().toISOString(), page_url:location.href, app_version:'0.9.9-email-required-phone-optional'  };
+      const leadAnswers = { ...answers, interest_products: selectedProducts, engagement: {...engagement}, consents: { privacy: Boolean(privacyConsent?.checked) } };
+      const lead = { name:$('leadName').value.trim(), email:$('leadEmail').value.trim(), memo:$('leadMemo').value.trim(), score:score(), answers: leadAnswers, created_at:new Date().toISOString(), page_url:location.href, app_version:'0.10.2-email-only-guide-request'  };
       if(!lead.name || !lead.email){ showSaveStatus(false, '이름 또는 닉네임과 이메일을 입력해주세요.', '필수 입력칸은 노란색 테두리로 표시되어 있습니다.'); return; }
-      if(!$('scopeConsent')?.checked || !$('refundNotice')?.checked || !$('privacyConsent')?.checked){ showSaveStatus(false, '필수 확인과 개인정보 동의를 완료해주세요.', '제공 범위와 개인정보 수집·이용 동의를 확인해야 저장됩니다. 마케팅 수신은 선택입니다.'); return; }
+      if(!privacyConsent?.checked){ showSaveStatus(false, '개인정보 수집·이용 동의를 확인해주세요.', '안내자료 신청을 위해 필요한 확인입니다.'); return; }
       if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(lead.email)){ showSaveStatus(false, '이메일 형식을 확인해주세요.', '예: name@example.com'); return; }
       let serverOk = false;
       let serverMessage = '';
@@ -2092,7 +2027,7 @@
       }
       const saved = {...lead, storage: serverOk?'supabase+local':'local', server_ok: serverOk, server_message: serverMessage};
       const stored = JSON.parse(localStorage.getItem('ansim_leads') || '[]'); stored.unshift(saved); localStorage.setItem('ansim_leads', JSON.stringify(stored));
-      if(serverOk) showSaveStatus(true, '신청이 저장되었습니다.', `접수 시각 · ${formatKst(lead.created_at)}`);
+      if(serverOk) showSaveStatus(true, '안내자료 신청이 완료되었습니다.', `접수 시각 · ${formatKst(lead.created_at)}`);
       else showSaveStatus(false, '저장을 완료하지 못했습니다.', '네트워크 상태를 확인한 뒤 잠시 후 다시 시도해주세요.');
     }
 
@@ -2105,7 +2040,7 @@
       const target = document.querySelector(`.product-chip[data-product="${product}"]`);
       if(target) target.classList.add('selected');
       const banner = $('intentBanner');
-      if(banner){ banner.classList.add('show'); banner.textContent = '관심 상품이 선택되었습니다. 필수 확인 후 알림 신청을 저장할 수 있습니다.'; }
+      if(banner){ banner.classList.add('show'); banner.textContent = '안내자료가 선택되었습니다. 아래에서 이메일을 입력해 신청할 수 있습니다.'; }
       document.querySelector('.lead-form')?.scrollIntoView({behavior:'smooth', block:'center'});
     }
     document.querySelectorAll('.offer-button').forEach(btn => btn.addEventListener('click', () => selectProductFromOffer(btn.dataset.selectProduct)));
@@ -2114,7 +2049,7 @@
       engagement.waitlist_intent = btn.dataset.waitlist;
       if(btn.dataset.waitlist === 'sample_first') engagement.sample_pdf_clicked = true;
       const banner = $('intentBanner');
-      if(banner){ banner.classList.add('show'); banner.textContent = btn.dataset.waitlist === 'payment_open' ? '리포트 안내가 선택되었습니다.' : '샘플 PDF 확인 후 알림 신청이 선택되었습니다.'; }
+      if(banner){ banner.classList.add('show'); banner.textContent = btn.dataset.waitlist === 'payment_open' ? '안내자료가 선택되었습니다.' : '안내자료가 선택되었습니다.'; }
       document.querySelector('.lead-form')?.scrollIntoView({behavior:'smooth', block:'center'});
     }));
 
