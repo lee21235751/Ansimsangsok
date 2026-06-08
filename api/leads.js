@@ -43,46 +43,44 @@ export default async function handler(req, res) {
 
     const createdAt = new Date().toISOString();
 
-    const fullRow = {
+    const noteParts = [];
+
+    if (memo) {
+      noteParts.push(`고객 메모: ${memo}`);
+    }
+
+    if (score !== null) {
+      noteParts.push(`진단 점수: ${score}`);
+    }
+
+    noteParts.push("유입 경로: 안심상속 안내자료 신청");
+    noteParts.push("보관 안내: 안내자료 발송 후 30일");
+
+    if (answers && Object.keys(answers).length > 0) {
+      noteParts.push(`진단 답변: ${JSON.stringify(answers)}`);
+    }
+
+    const note = noteParts.join("\n");
+
+    const row = {
       name,
       email,
-      memo,
-      score,
-      answers,
-      source: "ansimsangsok-guide-request",
-      retention_note: "안내자료 발송 후 30일",
-      user_agent: req.headers["user-agent"] || "",
+      note,
       created_at: createdAt
     };
 
-    const simpleRow = {
-      name,
-      email,
-      memo,
-      created_at: createdAt
-    };
+    const insertRes = await fetch(`${supabaseUrl.replace(/\/$/, "")}/rest/v1/${encodeURIComponent(leadsTable)}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "apikey": supabaseKey,
+        "Authorization": `Bearer ${supabaseKey}`,
+        "Prefer": "return=representation"
+      },
+      body: JSON.stringify(row)
+    });
 
-    async function insertLead(row) {
-      return await fetch(`${supabaseUrl.replace(/\/$/, "")}/rest/v1/${encodeURIComponent(leadsTable)}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "apikey": supabaseKey,
-          "Authorization": `Bearer ${supabaseKey}`,
-          "Prefer": "return=representation"
-        },
-        body: JSON.stringify(row)
-      });
-    }
-
-    let insertRes = await insertLead(fullRow);
-    let text = await insertRes.text();
-
-    if (!insertRes.ok && /column|schema|cache|could not find|does not exist/i.test(text)) {
-      console.error("Full leads insert failed; retrying simple row", insertRes.status, text);
-      insertRes = await insertLead(simpleRow);
-      text = await insertRes.text();
-    }
+    const text = await insertRes.text();
 
     if (!insertRes.ok) {
       console.error("Supabase leads insert failed", insertRes.status, text);
