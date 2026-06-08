@@ -428,44 +428,13 @@
       resize: vertical;
       line-height: 1.55;
     }
-
-    .privacy-box {
-      margin-top: 12px;
-      border-radius: 22px;
-      background: var(--cream-strong);
-      border: 3px solid rgba(14, 53, 41, 0.34);
-      padding: 14px;
-      color: var(--forest-deep);
-    }
-
-    .privacy-row {
-      display: grid;
-      grid-template-columns: 34px 1fr;
-      gap: 12px;
-      align-items: start;
-      cursor: pointer;
-    }
-
-    .privacyConsent {
+. {
       width: 30px;
       height: 30px;
       accent-color: var(--forest-deep);
       margin-top: 3px;
     }
-
-    .privacy-text {
-      display: block;
-      background: #ffffff;
-      border: 2px solid rgba(14, 53, 41, 0.22);
-      border-radius: 16px;
-      padding: 12px 13px;
-      color: var(--forest-deep);
-      font-weight: 950;
-      line-height: 1.72;
-      font-size: clamp(1.02rem, 4.4vw, 1.18rem);
-    }
-
-    .small-note {
+.small-note {
       color: #5a645e;
       font-size: 0.94rem;
       line-height: 1.65;
@@ -569,16 +538,7 @@
       .plain-btn {
         width: 100%;
       }
-
-      .privacy-box {
-        padding: 13px;
-      }
-
-      .privacy-row {
-        grid-template-columns: 36px 1fr;
-      }
-
-      .privacyConsent {
+. {
         width: 32px;
         height: 32px;
       }
@@ -669,9 +629,9 @@
 
         <div id="resultArea" class="hidden"></div>
 
-        <section class="guideRequestCard" id="guideRequestCard">
-          <h3>안내자료를 받을 정보를 입력해주세요</h3>
-          <p>이메일로 안내자료를 보내드립니다. 입력하신 이메일은 안내자료 제공에만 사용합니다.</p>
+        <section class="guideRequestCard hidden" id="guideRequestCard">
+          <h3>이메일로 안내자료를 받아보시려면</h3>
+          <p>이름과 이메일 주소를 입력해주세요.<br />입력하신 이름과 이메일은 안내자료 발송과 문의 확인에만 사용합니다.<br />보관 기간: 안내자료 발송 후 30일</p>
 
           <div class="form-grid">
             <div class="field">
@@ -689,21 +649,13 @@
               <textarea id="leadMemo" name="leadMemo" placeholder="궁금한 점이나 현재 상황을 간단히 적어주세요."></textarea>
             </div>
 
-            <div class="privacy-box">
-              <label class="privacy-row" for="privacyConsent">
-                <input class="privacyConsent" id="privacyConsent" name="privacyConsent" type="checkbox" />
-                <span class="privacy-text">[필수] 개인정보 수집·이용에 동의합니다.</span>
-              </label>
-              <div class="small-note">성함, 이메일, 남기신 내용은 안내자료 제공과 문의 응대에 필요한 범위에서만 확인합니다.</div>
-            </div>
-
             <button class="primary-btn" type="button" id="saveLead">안내자료 신청하기</button>
             <div class="save-status" id="saveStatus" role="status" aria-live="polite"></div>
           </div>
         </section>
 
         <div class="keyword-anchor" aria-hidden="true">
-          guideRequestCard 안내자료를 받을 정보를 입력해주세요 이메일로 안내자료를 보내드립니다 입력하신 이메일은 안내자료 제공에만 사용합니다 leadName leadEmail leadMemo privacyConsent saveLead 안내자료 신청하기 question-title asset-title 주택은 몇채인가요 상가·오피스텔·펜션은 몇개 토지는 몇곳 해외 국적 해외 거주 해외 재산 multiSimple
+          guideRequestCard 이메일로 안내자료를 받아보시려면 이름과 이메일 주소를 입력해주세요 입력하신 이름과 이메일은 안내자료 발송과 문의 확인에만 사용합니다 보관 기간 안내자료 발송 후 30일 leadName leadEmail leadMemo  saveLead 안내자료 신청하기 question-title asset-title 주택은 몇채인가요 상가·오피스텔·펜션은 몇개 토지는 몇곳 해외 국적 해외 거주 해외 재산 multiSimple
         </div>
       </section>
     </main>
@@ -893,6 +845,10 @@
     function render() {
       const total = getTotalScore();
       const question = questions[state.step];
+      const guideRequestCard = document.getElementById("guideRequestCard");
+      if (guideRequestCard) {
+        guideRequestCard.classList.add("hidden");
+      }
 
       stepText.textContent = `${Math.min(state.step + 1, questions.length)} / ${questions.length}`;
       scoreText.textContent = `예상 점수 ${total}점`;
@@ -1059,6 +1015,11 @@
       `;
 
       resultArea.classList.remove("hidden");
+
+      const guideRequestCard = document.getElementById("guideRequestCard");
+      if (guideRequestCard) {
+        guideRequestCard.classList.remove("hidden");
+      }
       questionArea.classList.add("hidden");
       nextBtn.textContent = "다시 확인하기";
       progressBar.style.width = "100%";
@@ -1096,8 +1057,7 @@
       const leadName = document.getElementById("leadName").value.trim();
       const leadEmail = document.getElementById("leadEmail").value.trim();
       const leadMemo = document.getElementById("leadMemo").value.trim();
-      const privacyConsent = document.getElementById("privacyConsent").checked;
-      const saveStatus = document.getElementById("saveStatus");
+const saveStatus = document.getElementById("saveStatus");
 
       if (!leadName) {
         saveStatus.textContent = "성함을 입력해주세요.";
@@ -1109,17 +1069,11 @@
         return;
       }
 
-      if (!privacyConsent) {
-        saveStatus.textContent = "개인정보 수집·이용 동의가 필요합니다.";
-        return;
-      }
-
       const payload = {
         leadName,
         leadEmail,
         leadMemo,
-        privacyConsent,
-        answers: state.answers,
+answers: state.answers,
         score: getTotalScore(),
         savedAt: new Date().toISOString()
       };
