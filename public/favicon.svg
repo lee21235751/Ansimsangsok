@@ -1,15 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
-  <rect width="256" height="256" rx="42" fill="#d4af37"/>
-  <rect x="12" y="12" width="232" height="232" rx="34" fill="#06251d"/>
+  <rect x="0" y="0" width="256" height="256" rx="40" fill="#D4AF37"/>
+  <rect x="14" y="14" width="228" height="228" rx="30" fill="#06251D"/>
   <text
     x="128"
     y="132"
     text-anchor="middle"
     dominant-baseline="middle"
-    font-size="62"
-    font-weight="900"
-    font-family="'Apple SD Gothic Neo','Malgun Gothic','Noto Sans KR','Malgun Gothic',Arial,sans-serif"
-    fill="#d4af37"
-    textLength="218"
-    lengthAdjust="spacingAndGlyphs">안심상속</text>
+    font-size="39"
+    font-weight="800"
+    font-family="'Apple SD Gothic Neo','Malgun Gothic','Noto Sans KR',Arial,sans-serif"
+    letter-spacing="-1.2"
+    fill="#D4AF37">안심상속</text>
 </svg>
