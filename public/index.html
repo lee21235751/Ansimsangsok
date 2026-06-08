@@ -650,6 +650,23 @@
     .lead-status-banner.is-hidden {
       display: none !important;
     }
+
+    /* human-review-home-button-mobile-position */
+    @media (max-width: 640px) {
+      .home-return-button {
+        top: calc(12px + env(safe-area-inset-top, 0px)) !important;
+        right: 12px !important;
+        bottom: auto !important;
+        min-height: 46px !important;
+        padding: 10px 14px !important;
+        font-size: 0.9rem !important;
+        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.16) !important;
+      }
+
+      .lead-status-banner {
+        bottom: calc(16px + env(safe-area-inset-bottom, 0px)) !important;
+      }
+    }
 </style>
 </head>
 <body>
