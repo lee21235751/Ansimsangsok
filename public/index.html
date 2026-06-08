@@ -599,10 +599,32 @@
       font-size: clamp(1rem, 3.5vw, 1.14rem);
       line-height: 1.55;
     }
+
+    .home-return-button.is-hidden {
+      display: none !important;
+    }
+
+    /* human-review-mobile-hero-tuning */
+    @media (max-width: 640px) {
+      .hero h1,
+      .hero-title,
+      h1 {
+        font-size: clamp(2.15rem, 9.4vw, 3rem) !important;
+        line-height: 1.16 !important;
+        letter-spacing: -0.065em !important;
+      }
+
+      .hero p,
+      .hero-copy,
+      .hero-description {
+        font-size: clamp(1.02rem, 4.2vw, 1.18rem) !important;
+        line-height: 1.58 !important;
+      }
+    }
 </style>
 </head>
 <body>
-  <button class="home-return-button" id="homeReturnButton" type="button" aria-label="처음 화면으로 돌아가기">처음 화면</button>
+  <button class="home-return-button is-hidden" id="homeReturnButton" type="button" aria-label="처음 화면으로 돌아가기">처음 화면</button>
   <div class="page">
     <header class="hero">
       <div class="shell">
@@ -869,6 +891,7 @@
 
     function render() {
       const total = getTotalScore();
+      setHomeReturnButtonVisible(false);
       const question = questions[state.step];
       const guideRequestCard = document.getElementById("guideRequestCard");
       if (guideRequestCard) {
@@ -986,7 +1009,19 @@
       });
     }
 
-    function saveState() {
+    
+    function setHomeReturnButtonVisible(visible) {
+      const button = document.getElementById("homeReturnButton");
+      if (!button) return;
+
+      if (visible) {
+        button.classList.remove("is-hidden");
+      } else {
+        button.classList.add("is-hidden");
+      }
+    }
+
+function saveState() {
       localStorage.setItem("ansimsangsokDiagnosisV0104AssetFlow", JSON.stringify(state));
     }
 
@@ -1040,6 +1075,7 @@
       `;
 
       resultArea.classList.remove("hidden");
+      setHomeReturnButtonVisible(true);
 
       const guideRequestCard = document.getElementById("guideRequestCard");
       if (guideRequestCard) {
