@@ -754,7 +754,7 @@
         </section>
 
         <div class="keyword-anchor" aria-hidden="true">
-          guideRequestCard 안내자료를 받을 정보를 입력해주세요 이메일로 안내자료를 보내드립니다 입력하신 이메일은 안내자료 제공에만 사용합니다 leadName leadEmail leadMemo privacyConsent saveLead 안내자료 신청하기 question-title asset-title 주택은 몇 채인가요 상가는 몇 개 토지는 몇 곳 해외 국적 해외 거주 해외 재산 multiSimple
+          guideRequestCard 안내자료를 받을 정보를 입력해주세요 이메일로 안내자료를 보내드립니다 입력하신 이메일은 안내자료 제공에만 사용합니다 leadName leadEmail leadMemo privacyConsent saveLead 안내자료 신청하기 question-title asset-title 주택은 몇채인가요 상가·오피스텔·펜션은 몇개 토지는 몇곳 해외 국적 해외 거주 해외 재산 multiSimple
         </div>
       </section>
     </main>
@@ -792,27 +792,42 @@
         ]
       },
       {
+        type: "multiSimple",
+        key: "assetPresence",
+        title: "보유한 부동산이 있나요?",
+        help: "해당되는 항목을 먼저 선택해주세요. 여러 개를 동시에 선택할 수 있습니다.",
+        exclusive: ["none", "unknown"],
+        options: [
+          { value: "house", label: "주택", score: 0 },
+          { value: "land", label: "토지", score: 0 },
+          { value: "incomeRealEstate", label: "수익형 부동산(상가·오피스텔·펜션)", score: 0 },
+          { value: "factory", label: "공장·창고", score: 0 },
+          { value: "otherRealEstate", label: "기타 부동산", score: 0 },
+          { value: "none", label: "해당 없음", score: 0 },
+          { value: "unknown", label: "정확히 모르겠음", score: 8 }
+        ]
+      },
+      {
         type: "assetCounts",
         key: "assetCounts",
-        title: "부동산은 어떤 형태로 보유하고 있나요?",
-        help: "해당되는 항목마다 수량을 선택해주세요.",
+        title: "선택한 부동산은 얼마나 보유하고 있나요?",
+        help: "앞에서 있다고 선택한 항목만 수량을 확인합니다.",
+        presenceKey: "assetPresence",
         assets: [
-          { key: "house", title: "주택", question: "주택은 몇 채인가요?", labels: ["없음", "1채", "2채", "3채 이상"], scores: [0, 7, 13, 18] },
-          { key: "store", title: "상가", question: "상가는 몇 개 보유하고 있나요?", labels: ["없음", "1개", "2개", "3개 이상"], scores: [0, 8, 14, 20] },
-          { key: "land", title: "토지", question: "토지는 몇 곳에 있나요?", labels: ["없음", "1곳", "2곳", "3곳 이상"], scores: [0, 8, 14, 20] },
-          { key: "officetel", title: "오피스텔", question: "오피스텔은 몇 채인가요?", labels: ["없음", "1채", "2채", "3채 이상"], scores: [0, 6, 10, 15] },
-          { key: "pension", title: "펜션", question: "펜션은 몇 곳에 있나요?", labels: ["없음", "1곳", "2곳", "3곳 이상"], scores: [0, 8, 14, 20] },
-          { key: "factory", title: "공장·창고", question: "공장·창고는 몇 곳에 있나요?", labels: ["없음", "1곳", "2곳", "3곳 이상"], scores: [0, 8, 14, 20] },
-          { key: "otherRealEstate", title: "기타 부동산", question: "기타 부동산은 몇 건인가요?", labels: ["없음", "1건", "2건", "3건 이상"], scores: [0, 6, 11, 16] }
+          { key: "house", title: "주택", question: "주택은 몇채인가요?", labels: ["1채", "2채", "3채 이상"], scores: [7, 13, 18] },
+          { key: "land", title: "토지", question: "토지는 몇곳에 있나요?", labels: ["1곳", "2곳", "3곳 이상"], scores: [8, 14, 20] },
+          { key: "incomeRealEstate", title: "수익형 부동산", question: "상가·오피스텔·펜션은 몇개 보유하고 있나요?", labels: ["1개", "2개", "3개 이상"], scores: [8, 14, 20] },
+          { key: "factory", title: "공장·창고", question: "공장·창고는 몇곳에 있나요?", labels: ["1곳", "2곳", "3곳 이상"], scores: [8, 14, 20] },
+          { key: "otherRealEstate", title: "기타 부동산", question: "기타 부동산은 몇건인가요?", labels: ["1건", "2건", "3건 이상"], scores: [6, 11, 16] }
         ]
       },
       {
         type: "single",
         key: "gift",
-        title: "생전에 특정 가족에게 더 많이 준 재산이 있나요?",
+        title: "과거에 특정 가족에게 더 많이 준 재산이 있나요?",
         help: "증여, 명의 이전, 큰 금액 지원 등을 떠올려 답해주세요.",
         options: [
-          { label: "거의 없음", score: 4 },
+          { label: "없음", score: 4 },
           { label: "일부 있음", score: 16 },
           { label: "상당히 있음", score: 26 },
           { label: "정확히 모르겠음", score: 14 }
@@ -851,7 +866,7 @@
         title: "가족 사이에 이미 의견 차이나 갈등 조짐이 있나요?",
         help: "겉으로 드러난 다툼뿐 아니라 말하기 어려운 분위기도 포함해 생각해주세요.",
         options: [
-          { label: "거의 없음", score: 4 },
+          { label: "없음", score: 4 },
           { label: "조금 있음", score: 14 },
           { label: "이미 뚜렷함", score: 28 },
           { label: "정확히 모르겠음", score: 12 }
@@ -895,11 +910,19 @@
       }
 
       if (question.type === "assetCounts") {
-        return question.assets.reduce((sum, asset) => {
-          const selectedLabel = answer[asset.key];
-          const index = asset.labels.indexOf(selectedLabel);
-          return sum + (index >= 0 ? asset.scores[index] : 0);
-        }, 0);
+        const selectedAssetKeys = Array.isArray(state.answers[question.presenceKey])
+          ? state.answers[question.presenceKey].filter((key) => !["none", "unknown"].includes(key))
+          : [];
+
+        if (selectedAssetKeys.length === 0) return 0;
+
+        return question.assets
+          .filter((asset) => selectedAssetKeys.includes(asset.key))
+          .reduce((sum, asset) => {
+            const selectedLabel = answer[asset.key];
+            const index = asset.labels.indexOf(selectedLabel);
+            return sum + (index >= 0 ? asset.scores[index] : 0);
+          }, 0);
       }
 
       if (question.type === "multiSimple") {
@@ -955,7 +978,21 @@
 
       if (question.type === "assetCounts") {
         const answer = state.answers[question.key] || {};
-        return question.assets.map((asset) => `
+        const selectedAssetKeys = Array.isArray(state.answers[question.presenceKey])
+          ? state.answers[question.presenceKey].filter((key) => !["none", "unknown"].includes(key))
+          : [];
+
+        const assetsToAsk = question.assets.filter((asset) => selectedAssetKeys.includes(asset.key));
+
+        if (assetsToAsk.length === 0) {
+          return `
+            <div class="result-item">
+              앞 질문에서 선택한 부동산이 없습니다. 다음으로 넘어가시면 됩니다.
+            </div>
+          `;
+        }
+
+        return assetsToAsk.map((asset) => `
           <div class="asset-group">
             <div class="asset-title">${asset.title}</div>
             <p class="asset-question">${asset.question}</p>
@@ -1020,12 +1057,12 @@
     }
 
     function saveState() {
-      localStorage.setItem("ansimsangsokDiagnosisV0104", JSON.stringify(state));
+      localStorage.setItem("ansimsangsokDiagnosisV0104AssetFlow", JSON.stringify(state));
     }
 
     function restoreState() {
       try {
-        const saved = JSON.parse(localStorage.getItem("ansimsangsokDiagnosisV0104") || "null");
+        const saved = JSON.parse(localStorage.getItem("ansimsangsokDiagnosisV0104AssetFlow") || "null");
         if (saved && typeof saved === "object") {
           state.step = Number.isInteger(saved.step) ? saved.step : 0;
           state.answers = saved.answers && typeof saved.answers === "object" ? saved.answers : {};
