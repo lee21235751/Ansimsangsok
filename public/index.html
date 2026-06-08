@@ -764,6 +764,13 @@
   </div>
 
   <script>
+    // ansimsangsok-clear-saved-progress-on-load
+    try {
+      localStorage.removeItem("ansimsangsokDiagnosisV0104AssetFlow");
+    } catch (error) {
+      console.warn(error);
+    }
+
     const questions = [
       {
         type: "single",
@@ -1072,16 +1079,16 @@
     }
 
 function saveState() {
-      localStorage.setItem("ansimsangsokDiagnosisV0104AssetFlow", JSON.stringify(state));
+      // 진행 상태는 저장하지 않습니다. 새로 열면 항상 첫 화면에서 시작합니다.
     }
 
     function restoreState() {
       try {
-        const saved = JSON.parse(localStorage.getItem("ansimsangsokDiagnosisV0104AssetFlow") || "null");
-        if (saved && typeof saved === "object") {
-          state.step = Number.isInteger(saved.step) ? saved.step : 0;
-          state.answers = saved.answers && typeof saved.answers === "object" ? saved.answers : {};
-        }
+        localStorage.removeItem("ansimsangsokDiagnosisV0104AssetFlow");
+      } catch (error) {
+        console.warn(error);
+      }
+    }
       } catch (error) {
         state.step = 0;
         state.answers = {};
@@ -1264,9 +1271,7 @@ document.getElementById("saveLead").addEventListener("click", async () => {
         window.scrollTo({ top: 0, behavior: "smooth" });
       });
     }
-
-    restoreState();
-    render();
+render();
   </script>
 
   <div class="v0104-mobile-fix-markers" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;" aria-hidden="true">
@@ -1275,6 +1280,7 @@ document.getElementById("saveLead").addEventListener("click", async () => {
     <span class="asset-title">토지</span>
     <span class="multiSimple">해외 국적 해외 거주 해외 재산 복수선택</span>
   </div>
+  <div class="ansimsangsok-always-start-first-screen" hidden>새로 열면 항상 첫 화면에서 시작</div>
 </body>
 </html>
 
