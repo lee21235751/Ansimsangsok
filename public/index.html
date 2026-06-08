@@ -1053,11 +1053,12 @@
       }
     });
 
-    document.getElementById("saveLead").addEventListener("click", () => {
+    document.getElementById("saveLead").addEventListener("click", async () => {
       const leadName = document.getElementById("leadName").value.trim();
       const leadEmail = document.getElementById("leadEmail").value.trim();
       const leadMemo = document.getElementById("leadMemo").value.trim();
-const saveStatus = document.getElementById("saveStatus");
+      const saveStatus = document.getElementById("saveStatus");
+      const saveButton = document.getElementById("saveLead");
 
       if (!leadName) {
         saveStatus.textContent = "성함을 입력해주세요.";
@@ -1070,16 +1071,43 @@ const saveStatus = document.getElementById("saveStatus");
       }
 
       const payload = {
-        leadName,
-        leadEmail,
-        leadMemo,
-answers: state.answers,
-        score: getTotalScore(),
-        savedAt: new Date().toISOString()
+        name: leadName,
+        email: leadEmail,
+        memo: leadMemo,
+        answers: state.answers,
+        score: getTotalScore()
       };
 
-      localStorage.setItem("ansimsangsokLeadV0104", JSON.stringify(payload));
-      saveStatus.textContent = "안내자료 신청 내용이 저장되었습니다. 이메일 확인 후 순서대로 안내드릴 수 있습니다.";
+      saveButton.disabled = true;
+      saveButton.textContent = "접수 중입니다...";
+      saveStatus.textContent = "안내자료 신청을 접수하고 있습니다.";
+
+      try {
+        const response = await fetch("/api/leads", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await response.json().catch(() => ({}));
+
+        if (!response.ok || !data.ok) {
+          throw new Error(data.message || "신청 접수 실패");
+        }
+
+        saveStatus.textContent = data.message || "안내자료 신청이 접수되었습니다. 이메일 확인 후 순서대로 안내드릴 수 있습니다.";
+        document.getElementById("leadName").value = "";
+        document.getElementById("leadEmail").value = "";
+        document.getElementById("leadMemo").value = "";
+      } catch (error) {
+        console.error(error);
+        saveStatus.textContent = "잠시 후 다시 신청해 주세요. 입력하신 내용은 외부에 공개되지 않습니다.";
+      } finally {
+        saveButton.disabled = false;
+        saveButton.textContent = "안내자료 신청하기";
+      }
     });
 
     
