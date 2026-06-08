@@ -1282,6 +1282,76 @@ render();
     <span class="multiSimple">해외 국적 해외 거주 해외 재산 복수선택</span>
   </div>
   <div class="ansimsangsok-always-start-first-screen" hidden>새로 열면 항상 첫 화면에서 시작</div>
+
+<script>
+  // ansimsangsok-start-diagnosis-safety-fix
+  document.addEventListener("DOMContentLoaded", function () {
+    function showDiagnosisFromStartButton() {
+      var intro = document.getElementById("introArea") || document.querySelector(".intro") || document.querySelector(".hero-section");
+      var diagnosis = document.getElementById("diagnosisArea") || document.querySelector(".diagnosis-card") || document.querySelector("[data-diagnosis-area]");
+      var result = document.getElementById("resultArea");
+      var question = document.getElementById("questionArea");
+
+      try {
+        if (typeof state === "object" && state) {
+          state.step = 0;
+        }
+      } catch (error) {}
+
+      if (intro && intro.classList) {
+        intro.classList.add("hidden");
+      }
+
+      if (diagnosis && diagnosis.classList) {
+        diagnosis.classList.remove("hidden");
+      }
+
+      if (result && result.classList) {
+        result.classList.add("hidden");
+      }
+
+      if (typeof renderQuestion === "function") {
+        renderQuestion();
+      }
+
+      if (question && question.scrollIntoView) {
+        question.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }
+
+    document.addEventListener("click", function (event) {
+      var target = event.target && event.target.closest ? event.target.closest("button, a, [role='button']") : null;
+      if (!target) return;
+
+      var text = (target.textContent || "").replace(/\s+/g, " ").trim();
+
+      if (
+        text.indexOf("무료로 2분 진단하기") >= 0 ||
+        text.indexOf("무료위험도 진단") >= 0 ||
+        text.indexOf("상속분쟁 위험도 무료 사전 진단") >= 0
+      ) {
+        event.preventDefault();
+        showDiagnosisFromStartButton();
+      }
+    }, true);
+
+    var startButtons = Array.prototype.slice.call(document.querySelectorAll("button, a, [role='button']"))
+      .filter(function (el) {
+        var text = (el.textContent || "").replace(/\s+/g, " ").trim();
+        return text.indexOf("무료로 2분 진단하기") >= 0 ||
+               text.indexOf("무료위험도 진단") >= 0 ||
+               text.indexOf("상속분쟁 위험도 무료 사전 진단") >= 0;
+      });
+
+    startButtons.forEach(function (button) {
+      button.addEventListener("click", function (event) {
+        event.preventDefault();
+        showDiagnosisFromStartButton();
+      });
+    });
+  });
+</script>
+
 </body>
 </html>
 
