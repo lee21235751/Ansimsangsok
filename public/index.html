@@ -196,6 +196,38 @@
       font-weight: 700;
     }
 
+
+    .diagnosis-benefit-box {
+      margin: 14px 0 16px;
+      padding: 18px;
+      border-radius: 22px;
+      background: #fff4d8;
+      border: 2px solid rgba(194, 137, 28, 0.62);
+      color: var(--forest-deep);
+      box-shadow: 0 12px 28px rgba(92, 63, 13, 0.12);
+    }
+
+    .diagnosis-benefit-box strong {
+      display: block;
+      margin-bottom: 12px;
+      font-size: clamp(1.25rem, 5vw, 1.55rem);
+      font-weight: 950;
+      letter-spacing: -0.04em;
+    }
+
+    .diagnosis-benefit-box ul {
+      margin: 0;
+      padding-left: 20px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .diagnosis-benefit-box li {
+      font-size: 1.04rem;
+      line-height: 1.55;
+      font-weight: 850;
+    }
+
     .progress-row {
       display: flex;
       justify-content: space-between;
@@ -345,13 +377,25 @@
       padding: 20px;
     }
 
-    .result-score {
-      font-size: clamp(2.8rem, 13vw, 5rem);
-      line-height: 1;
-      margin: 0;
+    .result-headline {
+      margin: 0 0 8px;
+      font-size: clamp(1.65rem, 6vw, 2.35rem);
+      line-height: 1.18;
       color: var(--forest-deep);
       font-weight: 950;
-      letter-spacing: -0.06em;
+      letter-spacing: -0.055em;
+    }
+
+    .result-score {
+      display: inline-flex;
+      margin-top: 10px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: rgba(14, 53, 41, 0.08);
+      color: rgba(14, 53, 41, 0.72);
+      font-size: 0.92rem;
+      font-weight: 850;
+      letter-spacing: -0.02em;
     }
 
     .result-label {
@@ -397,6 +441,232 @@
       color: #49564f;
       line-height: 1.7;
       font-weight: 750;
+    }
+
+
+    
+
+.result-personal-summary{
+  margin:14px 0 18px;
+  padding:16px;
+  border-radius:18px;
+  background:#f8fafc;
+  border:1px solid #dbe3ee;
+}
+.result-personal-summary h4{
+  margin:0 0 10px;
+  font-size:1.08rem;
+  font-weight:900;
+}
+.result-personal-summary ul{
+  margin:0;
+  padding-left:18px;
+}
+.result-personal-summary li{
+  margin:6px 0;
+  line-height:1.6;
+  font-weight:700;
+}
+
+
+.result-risk-summary {
+  margin: 14px 0 18px;
+  padding: 16px;
+  border-radius: 18px;
+  background: #fff8e8;
+  border: 1px solid rgba(215,173,85,.45);
+}
+
+.result-risk-summary h4 {
+  margin: 0 0 10px;
+  font-size: 1.08rem;
+  font-weight: 900;
+  color: var(--forest-deep);
+}
+
+.result-risk-summary ul {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.result-risk-summary li {
+  margin: 6px 0;
+  font-size: 1rem;
+  line-height: 1.6;
+  font-weight: 700;
+}
+
+
+
+
+.final-cta-message{
+  margin:18px 0;
+  padding:16px;
+  border-radius:18px;
+  background:#f7faf7;
+  border:1px solid rgba(31,77,58,.18);
+  text-align:center;
+}
+.final-cta-message strong{
+  display:block;
+  margin-bottom:8px;
+  font-size:1.05rem;
+  font-weight:900;
+  color:#1f4d3a;
+}
+.final-cta-message p{
+  margin:0;
+  line-height:1.7;
+  font-size:1rem;
+  color:#334155;
+}
+
+
+.final-request-reason-box{
+  margin:18px 0;
+  padding:18px;
+  border-radius:20px;
+  background:#fff8eb;
+  border:2px solid rgba(201,145,39,.35);
+}
+
+.final-request-reason-box h4{
+  margin:0 0 12px;
+  font-size:1.15rem;
+  font-weight:950;
+  color:#18392d;
+}
+
+.final-request-reason-box ul{
+  margin:0;
+  padding-left:20px;
+  display:grid;
+  gap:7px;
+}
+
+.final-request-reason-box li{
+  font-weight:800;
+  line-height:1.55;
+}
+
+.final-request-reason-box p{
+  margin:14px 0 0;
+  font-weight:800;
+  color:#475569;
+}
+
+.guide-delivery-box{
+  margin:16px 0;
+  padding:16px;
+  border-radius:18px;
+  background:#f8fafc;
+  border:1px solid #dbe3ee;
+}
+.guide-delivery-box h4{
+  margin:0 0 10px;
+  font-size:1.05rem;
+  font-weight:900;
+}
+.guide-delivery-box ul{
+  margin:0;
+  padding-left:18px;
+}
+.guide-delivery-box li{
+  margin:6px 0;
+  font-weight:700;
+  line-height:1.6;
+}
+
+
+.detail-report-help-box {
+      margin: 16px 0;
+      padding: 16px;
+      border-radius: 18px;
+      background: #f8fafc;
+      border: 1px solid #dbe3ee;
+    }
+
+    .detail-report-help-box h4 {
+      margin: 0 0 10px;
+      color: var(--forest-deep);
+      font-size: 1.05rem;
+      font-weight: 950;
+    }
+
+    .detail-report-help-box ul {
+      margin: 0;
+      padding-left: 18px;
+      display: grid;
+      gap: 7px;
+    }
+
+    .detail-report-help-box li {
+      line-height: 1.55;
+      font-weight: 800;
+      color: #334155;
+    }
+
+.detail-report-value-preview {
+      margin: 0 0 18px;
+      padding: 17px;
+      border-radius: 22px;
+      background: #fffaf0;
+      border: 1px solid rgba(215, 173, 85, 0.48);
+    }
+
+    .detail-report-value-preview h4 {
+      margin: 0 0 12px;
+      color: var(--forest-deep);
+      font-size: clamp(1.15rem, 4.6vw, 1.42rem);
+      font-weight: 950;
+      letter-spacing: -0.035em;
+    }
+
+    .detail-report-checks {
+      display: grid;
+      gap: 8px;
+      color: var(--forest-deep);
+      font-size: 1rem;
+      line-height: 1.6;
+      font-weight: 850;
+    }
+
+    .detail-report-sample-grid {
+      display: grid;
+      gap: 12px;
+      margin-top: 15px;
+    }
+
+    .detail-report-sample-card {
+      background: #fff;
+      border: 1px solid rgba(215, 173, 85, 0.42);
+      border-radius: 18px;
+      padding: 14px;
+      color: var(--forest-deep);
+    }
+
+    .detail-report-sample-card strong {
+      display: block;
+      font-size: 1rem;
+      margin-bottom: 10px;
+    }
+
+    .detail-report-chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .detail-report-chip-row span {
+      min-width: 64px;
+      flex: 1 1 auto;
+      border: 1px solid rgba(215, 173, 85, 0.38);
+      border-radius: 999px;
+      padding: 8px 9px;
+      text-align: center;
+      font-size: 0.95rem;
+      font-weight: 850;
+      background: #fffdf7;
     }
 
     .form-grid {
@@ -847,9 +1117,20 @@
         <h2 class="section-title">무료 위험도 진단</h2>
         <p class="section-copy">고민하지 않고 바로 답할 수 있는 객관식 질문만 먼저 묻습니다.</p>
 
+
+
+        <div class="diagnosis-benefit-box">
+          <strong>2분 후 결과 확인</strong>
+          <ul>
+            <li>현재 상속 상황 정리</li>
+            <li>확인이 필요한 항목</li>
+            <li>다음 단계 안내</li>
+          </ul>
+        </div>
+
         <div class="progress-row">
           <span id="stepText">1 / 8</span>
-          <span id="scoreText">예상 점수 0점</span>
+          <span id="scoreText">약 2분 소요</span>
         </div>
         <div class="progress" aria-hidden="true">
           <div class="progress-bar" id="progressBar"></div>
@@ -865,7 +1146,98 @@
         <div id="resultArea" class="hidden"></div>
 
         <section class="guideRequestCard hidden" id="guideRequestCard">
-          <h3>이메일로 안내자료를 받아보시려면</h3>
+
+          
+
+<div class="result-personal-summary">
+  <h4>현재 입력 내용을 기준으로 확인해보면</h4>
+
+  <ul>
+    <li>부동산이 포함된 경우 상속 재산 범위를 먼저 정리해보는 것이 좋습니다.</li>
+    <li>과거 증여 여부에 따라 확인해야 할 사항이 달라질 수 있습니다.</li>
+    <li>가족 구성에 따라 준비 순서와 확인 항목이 달라질 수 있습니다.</li>
+  </ul>
+</div>
+
+<div class="result-risk-summary">
+  <h4>현재 상황에서 확인이 필요한 항목</h4>
+  <ul>
+    <li>가족관계 확인 필요</li>
+    <li>재산 종류 확인 필요</li>
+    <li>사전 증여 여부 확인 필요</li>
+  </ul>
+</div>
+
+
+<div class="final-request-reason-box">
+  <h4>지금 신청하시면</h4>
+
+  <ul>
+    <li>현재 상황 정리표</li>
+    <li>확인이 필요한 재산 항목</li>
+    <li>준비 자료 체크리스트</li>
+    <li>다음 단계 안내</li>
+  </ul>
+
+  <p>
+    이메일로 받아보실 수 있습니다.
+  </p>
+</div>
+
+<div class="guide-delivery-box">
+  <h4>신청 후 이메일로 안내</h4>
+  <ul>
+    <li>현재 상황 정리표</li>
+    <li>확인해야 할 재산 항목</li>
+    <li>준비 자료 체크리스트</li>
+    <li>다음 단계 안내</li>
+  </ul>
+</div>
+
+<div class="detail-report-value-preview" aria-label="상세자료에서 확인할 수 있는 내용">
+            <h4>상세자료에서 확인할 수 있는 내용</h4>
+            <div class="detail-report-checks">
+              <div>✓ 가족관계 정리표</div>
+              <div>✓ 재산 확인표</div>
+              <div>✓ 준비자료 체크리스트</div>
+              <div>✓ 다음 단계 안내</div>
+            </div>
+
+
+            
+
+            <div class="detail-report-help-box">
+              <h4>이런 경우 도움이 됩니다</h4>
+              <ul>
+                <li>어떤 재산부터 확인해야 할지 막막한 경우</li>
+                <li>가족관계를 어떻게 정리해야 할지 모르는 경우</li>
+                <li>준비해야 할 서류가 궁금한 경우</li>
+                <li>다음에 무엇을 해야 할지 알고 싶은 경우</li>
+              </ul>
+            </div>
+<div class="detail-report-sample-grid">
+              <div class="detail-report-sample-card">
+                <strong>가족관계 정리표 예시</strong>
+                <div class="detail-report-chip-row">
+                  <span>배우자</span>
+                  <span>자녀</span>
+                  <span>손자녀</span><span>형제자매</span>
+                </div>
+              </div>
+
+              <div class="detail-report-sample-card">
+                <strong>재산 확인표 예시</strong>
+                <div class="detail-report-chip-row">
+                  <span>주택</span>
+                  <span>토지</span>
+                  <span>예금</span>
+                  <span>사업체</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <h3>내 상황 상세자료를 받아보시려면</h3>
           <p>이름과 이메일 주소를 입력해주세요.<br />입력하신 이름과 이메일은 안내자료 발송과 문의 확인에만 사용합니다.<br />보관 기간: 안내자료 발송 후 30일</p>
 
           <div class="form-grid">
@@ -884,14 +1256,28 @@
               <textarea id="leadMemo" name="leadMemo" placeholder="궁금한 점이나 현재 상황을 간단히 적어주세요."></textarea>
             </div>
 
-            <button class="primary-btn" type="button" id="saveLead">안내자료 신청하기</button>
+            
+<label class="paid-report-privacy-consent" style="display:flex;align-items:flex-start;gap:10px;margin:16px 0;padding:15px;border:1px solid #cbd5e1;border-radius:16px;background:#ffffff;color:#1f2937;font-size:16px;line-height:1.55;font-weight:700;">
+  
+<input id="paidReportPrivacyConsent" type="checkbox" required style="width:22px;height:22px;margin-top:2px;flex:0 0 auto;" />
+
+  <span>상세자료 안내를 위해 개인정보 수집 및 이용에 동의합니다.</span>
+</label>
+
+<div class="final-cta-message">
+  <strong>상속 상황을 정리하는 첫 단계입니다.</strong>
+  <p>
+    이메일로 안내자료를 받아보시고<br>
+    확인해야 할 사항을 순서대로 살펴보세요.
+  </p>
+</div>
+
+<button class="primary-btn" type="button" id="saveLead">내 상황 상세자료 신청하기</button>
             <div class="save-status" id="saveStatus" role="status" aria-live="polite"></div>
           </div>
         </section>
 
-        <div class="keyword-anchor" aria-hidden="true">
-          guideRequestCard 이메일로 안내자료를 받아보시려면 이름과 이메일 주소를 입력해주세요 입력하신 이름과 이메일은 안내자료 발송과 문의 확인에만 사용합니다 보관 기간 안내자료 발송 후 30일 leadName leadEmail leadMemo  saveLead 안내자료 신청하기 question-title asset-title 주택은 몇채인가요 상가·오피스텔·펜션은 몇개 토지는 몇곳 해외 국적 해외 거주 해외 재산 multiSimple
-        </div>
+        <div class="keyword-anchor" aria-hidden="true" style="display:none"></div>
       </section>
     </main>
 
@@ -1082,6 +1468,10 @@
       return Math.min(100, raw);
     }
 
+    function syncReportAnswersSnapshot() {
+      window.__ansimCurrentAnswers = JSON.parse(JSON.stringify(state.answers || {}));
+    }
+
     function render() {
       const total = getTotalScore();
       setHomeReturnButtonVisible(false);
@@ -1092,7 +1482,7 @@
       }
 
       stepText.textContent = `${Math.min(state.step + 1, questions.length)} / ${questions.length}`;
-      scoreText.textContent = `예상 점수 ${total}점`;
+      scoreText.textContent = "약 2분 소요";
       progressBar.style.width = `${((state.step + 1) / questions.length) * 100}%`;
 
       resultArea.classList.add("hidden");
@@ -1197,6 +1587,7 @@
           }
 
           saveState();
+          syncReportAnswersSnapshot();
           render();
         });
       });
@@ -1255,11 +1646,12 @@ function saveState() {
 
       resultArea.innerHTML = `
         <div class="result-card">
-          <p class="result-score">${score}</p>
+          <p class="result-headline">현재 상황 정리 완료</p>
           <div class="result-label">${label}</div>
           <div class="result-list">
             ${signals.map((item) => `<div class="result-item">${item}</div>`).join("")}
           </div>
+          <p class="result-score">진단 점수 ${score}점</p>
         </div>
       `;
 
@@ -1273,7 +1665,7 @@ function saveState() {
       questionArea.classList.add("hidden");
       nextBtn.textContent = "다시 확인하기";
       progressBar.style.width = "100%";
-      scoreText.textContent = `예상 점수 ${score}점`;
+      scoreText.textContent = "진단 완료";
     }
 
     prevBtn.addEventListener("click", () => {
@@ -1299,6 +1691,7 @@ function saveState() {
         render();
       } else {
         saveState();
+        syncReportAnswersSnapshot();
         showResult();
       }
     });
@@ -1344,12 +1737,38 @@ document.getElementById("saveLead").addEventListener("click", async () => {
         return;
       }
 
+      const freeReport = typeof window.ansimBuildFreeReportData === "function"
+        ? window.ansimBuildFreeReportData()
+        : null;
+
+      const paidReportPreview = typeof window.ansimBuildPaidReportPreviewData === "function"
+        ? window.ansimBuildPaidReportPreviewData()
+        : null;
+
+      const paidReportIntent = typeof window.ansimGetPaidReportIntent === "function"
+        ? window.ansimGetPaidReportIntent()
+        : null;
+
+      const paidReportPaymentIntent = typeof window.ansimGetPaidReportPaymentIntent === "function"
+        ? window.ansimGetPaidReportPaymentIntent()
+        : null;
+
+      const paidReportPaymentResult = typeof window.ansimGetPaidReportPaymentResult === "function"
+        ? window.ansimGetPaidReportPaymentResult()
+        : null;
+
       const payload = {
         name: leadName,
         email: leadEmail,
         memo: leadMemo,
         answers: state.answers,
-        score: getTotalScore()
+        score: getTotalScore(),
+        freeReport,
+        paidReportPreview,
+        paidReportIntent,
+        paidReportPaymentIntent,
+        paidReportPaymentResult,
+        reportRequestedAt: new Date().toISOString()
       };
 
       saveButton.disabled = true;
@@ -1392,7 +1811,7 @@ document.getElementById("saveLead").addEventListener("click", async () => {
         saveStatus.scrollIntoView({ behavior: "smooth", block: "center" });
       } finally {
         saveButton.disabled = false;
-        saveButton.textContent = "안내자료 신청하기";
+        saveButton.textContent = "내 상황 상세자료 신청하기";
       }
     });
 
@@ -1403,6 +1822,7 @@ document.getElementById("saveLead").addEventListener("click", async () => {
         window.scrollTo({ top: 0, behavior: "smooth" });
       });
     }
+syncReportAnswersSnapshot();
 render();
   </script>
 
@@ -1505,136 +1925,2456 @@ render();
 
 
 <script>
-  // ansimsangsok-paid-report-preview-injection
-  (function () {
-    function getRiskContext() {
-      var score = 0;
-
-      try {
-        if (typeof getTotalScore === "function") {
-          score = Number(getTotalScore()) || 0;
-        }
-      } catch (error) {}
-
-      if (score >= 70) {
-        return {
-          level: "주의 필요",
-          headline: "상속분쟁으로 번질 수 있는 지점이 여러 개 보입니다.",
-          lead: "무료 진단은 위험 신호를 간단히 확인하는 단계입니다. 상세리포트에서는 가족관계, 재산 구성, 사전 정리 상태를 함께 놓고 어느 부분부터 정리해야 하는지 더 구체적으로 확인합니다.",
-          points: [
-            ["가족관계", "상속인 구성에 따라 갈등이 생기기 쉬운 지점을 정리합니다."],
-            ["재산구조", "부동산·사업체·현금성 자산처럼 나누기 어려운 재산을 구분합니다."],
-            ["다음 단계", "지금 확인해야 할 서류와 가족 간 논의 순서를 정리합니다."]
-          ]
-        };
+(function () {
+  function safeScore() {
+    try {
+      if (typeof window.getTotalScore === "function") {
+        return Number(window.getTotalScore()) || 0;
       }
-
-      if (score >= 40) {
-        return {
-          level: "확인 필요",
-          headline: "지금 정리해두면 나중의 혼란을 줄일 수 있는 상태입니다.",
-          lead: "현재 위험이 크다고 단정하기보다, 놓치기 쉬운 항목을 미리 정리하는 것이 중요합니다. 상세리포트에서는 가족·재산·서류·논의 순서를 한 번에 볼 수 있게 정리합니다.",
-          points: [
-            ["빠진 항목", "상속인, 재산목록, 부채, 사전 증여 여부를 빠짐없이 체크합니다."],
-            ["우선순위", "먼저 확인할 항목과 나중에 준비해도 되는 항목을 나눕니다."],
-            ["가족 부담", "가족에게 어떻게 설명하면 좋을지 정리 방향을 잡습니다."]
-          ]
-        };
+      if (typeof getTotalScore === "function") {
+        return Number(getTotalScore()) || 0;
       }
+    } catch (error) {}
+    return 0;
+  }
 
+  function getRiskContext() {
+    var score = safeScore();
+
+    if (score >= 70) {
       return {
-        level: "기본 정리",
-        headline: "지금은 기본 정보를 차분히 정리하기 좋은 단계입니다.",
-        lead: "위험 점수가 낮아도 가족관계나 재산 상황이 바뀌면 준비할 내용이 달라질 수 있습니다. 상세리포트에서는 현재 상황을 보기 쉽게 정리하고, 앞으로 확인할 항목을 남겨드립니다.",
-        points: [
-          ["기본정보", "상속인과 주요 재산을 한눈에 정리합니다."],
-          ["체크리스트", "나중에 빠뜨리기 쉬운 서류와 확인 항목을 정리합니다."],
-          ["안심자료", "가족이 함께 볼 수 있는 형태로 다음 단계를 정리합니다."]
+        level: "주의 필요",
+        badge: "확인 항목이 많은 상태",
+        headline: "상속 상황을 여러 항목으로 나누어 정리할 필요가 있습니다.",
+        freeLead: "무료 리포트에서는 현재 상황을 간단히 정리하고, 먼저 확인할 항목을 보여드립니다.",
+        paidLead: "상세자료에서는 가족관계, 재산 구성, 준비서류, 다음 진행순서를 더 구체적으로 정리합니다.",
+        freePoints: [
+          ["현재 상황", "가족 구성과 재산 정리 필요성이 높은 상태로 표시됩니다."],
+          ["확인 필요", "상속인 구성, 부동산, 부채, 사전 증여 여부를 먼저 확인합니다."],
+          ["다음 단계", "자료를 한 번에 모으기보다 항목별로 순서를 나누어 정리합니다."]
+        ],
+        paidPoints: [
+          ["가족관계 분석표", "상속인 구성을 보기 쉽게 정리합니다."],
+          ["재산·부채 체크표", "확인이 필요한 재산과 부채 항목을 나눕니다."],
+          ["우선순위 안내", "먼저 확인할 일과 이후 준비할 일을 구분합니다."],
+          ["전문가 상담 필요도", "추가 도움이 필요한 상황인지 살펴볼 수 있게 정리합니다."]
         ]
       };
     }
 
-    function buildPreviewCard() {
-      if (document.getElementById("paidReportPreviewCard")) return;
+    if (score >= 40) {
+      return {
+        level: "확인 필요",
+        badge: "정리하면 도움이 되는 상태",
+        headline: "지금 정리해두면 가족 간 혼란을 줄이는 데 도움이 됩니다.",
+        freeLead: "무료 리포트에서는 놓치기 쉬운 항목과 준비 방향을 간단히 정리합니다.",
+        paidLead: "상세자료에서는 현재 상황에 맞춰 확인 항목, 준비자료, 진행순서를 더 자세히 안내합니다.",
+        freePoints: [
+          ["현재 상황", "기본 정보는 있으나 빠진 항목이 생길 수 있는 상태입니다."],
+          ["확인 필요", "재산목록, 가족관계, 서류 준비 여부를 점검합니다."],
+          ["다음 단계", "먼저 확인할 항목과 나중에 준비할 항목을 나눕니다."]
+        ],
+        paidPoints: [
+          ["상황 정리표", "답변을 바탕으로 현재 상황을 한눈에 정리합니다."],
+          ["누락 항목 체크", "빠뜨리기 쉬운 재산·서류·가족관계 항목을 확인합니다."],
+          ["준비자료 목록", "가족관계증명서, 등기, 금융자료 등 준비 방향을 정리합니다."],
+          ["진행순서", "다음에 무엇을 확인하면 좋은지 순서대로 정리합니다."]
+        ]
+      };
+    }
 
-      var resultArea = document.getElementById("resultArea");
-      if (!resultArea || resultArea.classList.contains("hidden")) return;
+    return {
+      level: "기본 정리",
+      badge: "기초 정리에 적합한 상태",
+      headline: "현재는 기본 정보를 차분히 정리하기 좋은 단계입니다.",
+      freeLead: "무료 리포트에서는 현재 답변을 바탕으로 기본 정리 방향을 보여드립니다.",
+      paidLead: "상세자료에서는 향후 상황이 바뀌어도 참고할 수 있도록 확인 항목과 준비자료를 더 구체화합니다.",
+      freePoints: [
+        ["현재 상황", "큰 위험 신호보다 기본 정리 필요성이 중심입니다."],
+        ["확인 필요", "가족관계와 주요 재산 항목을 빠짐없이 적어둡니다."],
+        ["다음 단계", "필요한 서류와 연락할 곳을 미리 정리합니다."]
+      ],
+      paidPoints: [
+        ["기본 정보 정리표", "상속인과 주요 재산을 한눈에 볼 수 있게 정리합니다."],
+        ["준비서류 체크", "나중에 필요한 서류를 미리 확인합니다."],
+        ["상황 변화 대비", "가족·재산 상황이 바뀔 때 다시 확인할 항목을 남깁니다."],
+        ["도움 필요도", "전문가 연결이 필요한지 판단할 참고 기준을 정리합니다."]
+      ]
+    };
+  }
 
-      var context = getRiskContext();
+  function escapeHtml(value) {
+    return String(value || "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
 
-      var card = document.createElement("section");
-      card.id = "paidReportPreviewCard";
-      card.className = "paid-report-preview-card";
-      card.innerHTML = [
-        '<div class="preview-eyebrow">상세리포트 미리보기</div>',
-        '<h3>' + context.headline + '</h3>',
-        '<p class="preview-lead">' + context.lead + '</p>',
-        '<div class="preview-point-list">',
-          context.points.map(function (item) {
-            return '<div class="preview-point"><strong>' + item[0] + '</strong> — ' + item[1] + '</div>';
-          }).join(""),
-        '</div>',
-        '<div class="paid-report-includes">',
-          '<p class="paid-report-includes-title">유료 상세리포트에서 더 확인하는 내용</p>',
-          '<ul>',
-            '<li>내 가족관계 기준으로 조심해야 할 상속 쟁점</li>',
-            '<li>부동산·예금·사업체·부채 등 재산별 정리 포인트</li>',
-            '<li>가족과 논의하기 전 준비하면 좋은 확인 항목</li>',
-            '<li>필요한 도움을 받을 때 가져가면 좋은 요약 자료</li>',
-          '</ul>',
-        '</div>',
-        '<div class="paid-report-cta-row">',
-          '<button type="button" class="paid-report-cta" id="paidReportPreviewCta">상세리포트 안내받기</button>',
-          '<p class="paid-report-subcopy">이름과 이메일을 남기면 상세리포트 안내자료를 받을 수 있습니다.</p>',
+  function makePointList(points) {
+    return points.map(function (item) {
+      return [
+        '<div class="preview-point" style="padding:12px 0;border-top:1px solid rgba(15,23,42,0.08);">',
+        '<strong style="display:block;color:#173c2f;margin-bottom:4px;">',
+        escapeHtml(item[0]),
+        '</strong>',
+        '<span style="color:#374151;line-height:1.55;">',
+        escapeHtml(item[1]),
+        '</span>',
         '</div>'
       ].join("");
+    }).join("");
+  }
 
-      resultArea.appendChild(card);
+  function buildReportCards() {
+    var resultArea = document.getElementById("resultArea");
+    if (!resultArea || resultArea.classList.contains("hidden")) return;
 
-      var cta = document.getElementById("paidReportPreviewCta");
-      if (cta) {
-        cta.addEventListener("click", function () {
-          var guideCard =
-            document.getElementById("guideRequestCard") ||
-            document.getElementById("leadName") ||
-            document.getElementById("saveLead");
+    var guide = document.getElementById("guideRequestCard");
+    var context = getRiskContext();
+    window.__ansimFinalScore = safeScore();
 
-          if (guideCard && guideCard.scrollIntoView) {
-            guideCard.scrollIntoView({ behavior: "smooth", block: "center" });
-          }
-        });
+    if (!document.getElementById("freeReportPreviewCard")) {
+      var freeCard = document.createElement("section");
+      freeCard.id = "freeReportPreviewCard";
+      freeCard.className = "paid-report-preview-card";
+      freeCard.style.marginTop = "18px";
+      freeCard.innerHTML = [
+        '<div class="preview-eyebrow">무료 리포트 자동 요약</div>',
+        '<h3>현재 상황 정리</h3>',
+        '<p class="preview-lead">',
+        escapeHtml(context.freeLead),
+        '</p>',
+        '<div style="display:inline-flex;align-items:center;gap:8px;margin:8px 0 14px;padding:8px 12px;border-radius:999px;background:#f8fafc;border:1px solid #dbe3ee;color:#173c2f;font-weight:900;">',
+        escapeHtml(context.level),
+        ' · ',
+        escapeHtml(context.badge),
+        '</div>',
+        '<div class="preview-point-list">',
+        makePointList(context.freePoints),
+        '</div>',
+        '<p style="margin:14px 0 0;color:#6b7280;font-size:0.95rem;line-height:1.6;">무료 리포트는 상황을 먼저 정리하는 자료입니다. 더 구체적인 준비자료와 진행순서는 상세자료에서 이어서 확인하실 수 있습니다.</p>'
+      ].join("");
+
+      if (guide && guide.parentNode === resultArea) {
+        resultArea.insertBefore(freeCard, guide);
+      } else {
+        resultArea.appendChild(freeCard);
       }
     }
 
-    function watchResultArea() {
-      buildPreviewCard();
+    if (!document.getElementById("paidReportPreviewCard")) {
+      var paidCard = document.createElement("section");
+      paidCard.id = "paidReportPreviewCard";
+      paidCard.className = "paid-report-preview-card";
+      paidCard.style.marginTop = "18px";
+      paidCard.innerHTML = [
+        '<div class="preview-eyebrow">상세자료 미리보기</div>',
+        '<h3>',
+        escapeHtml(context.headline),
+        '</h3>',
+        '<p class="preview-lead">',
+        escapeHtml(context.paidLead),
+        '</p>',
+        '<div class="paid-report-includes">',
+        '<p class="paid-report-includes-title">상세자료에는 이런 내용이 담깁니다</p>',
+        '<div class="preview-point-list">',
+        makePointList(context.paidPoints),
+        '</div>',
+        '</div>',
+        '<div class="paid-report-sample-cards" style="display:grid;grid-template-columns:1fr;gap:12px;margin:18px 0;">',
+        '<div style="border:1px solid #e7d7a8;background:#fffaf0;border-radius:18px;padding:16px;">',
+        '<strong style="display:block;color:#173c2f;margin-bottom:6px;">무료에서 확인되는 부분</strong>',
+        '<p style="margin:0;color:#4b5563;line-height:1.6;">현재 상황 요약, 확인 필요 항목, 놓치기 쉬운 부분을 간단히 정리합니다.</p>',
+        '</div>',
+        '<div style="border:1px solid #d6b45f;background:#fff7e0;border-radius:18px;padding:16px;">',
+        '<strong style="display:block;color:#173c2f;margin-bottom:6px;">상세자료에서 이어지는 부분</strong>',
+        '<p style="margin:0;color:#4b5563;line-height:1.6;">상황 분석, 핵심 검토사항, 준비자료, 예상 진행순서, 도움 필요 여부를 더 구체적으로 정리합니다.</p>',
+        '</div>',
+        '</div>',
+        '<p style="margin:0;color:#6b7280;font-size:0.95rem;line-height:1.6;">안심상속은 고객님의 상속 상황을 정리하고, 지금 확인해야 할 항목과 다음 단계를 이해할 수 있도록 돕습니다.</p>'
+      ].join("");
 
-      var resultArea = document.getElementById("resultArea");
-      if (!resultArea || typeof MutationObserver === "undefined") return;
-
-      var observer = new MutationObserver(function () {
-        buildPreviewCard();
-      });
-
-      observer.observe(resultArea, {
-        attributes: true,
-        childList: true,
-        subtree: true,
-        attributeFilter: ["class"]
-      });
+      if (guide && guide.parentNode === resultArea) {
+        resultArea.insertBefore(paidCard, guide);
+      } else {
+        resultArea.appendChild(paidCard);
+      }
     }
+  }
 
-    if (document.readyState === "loading") {
-      document.addEventListener("DOMContentLoaded", watchResultArea);
-    } else {
-      watchResultArea();
-    }
+  function watchResultArea() {
+    var resultArea = document.getElementById("resultArea");
+    if (!resultArea) return;
+
+    var observer = new MutationObserver(function () {
+      buildReportCards();
+    });
+
+    observer.observe(resultArea, {
+      attributes: true,
+      childList: true,
+      subtree: true,
+      attributeFilter: ["class"]
+    });
+
+    buildReportCards();
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    watchResultArea();
 
     document.addEventListener("click", function () {
-      setTimeout(buildPreviewCard, 300);
+      setTimeout(buildReportCards, 250);
     }, true);
-  })();
+  });
+})();
 </script>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  var consent = document.getElementById("paidReportPrivacyConsent");
+  if (!consent) return;
+
+  function findSubmitButton() {
+    var buttons = Array.prototype.slice.call(document.querySelectorAll("button, input[type='submit']"));
+    return buttons.find(function (el) {
+      var text = (el.innerText || el.value || "").trim();
+      return text.indexOf("내 상황 상세자료 신청하기") >= 0;
+    });
+  }
+
+  var submit = findSubmitButton();
+  if (!submit) return;
+
+  function sync() {
+    submit.disabled = !consent.checked;
+    if (submit.disabled) {
+      submit.style.opacity = "0.55";
+      submit.style.cursor = "not-allowed";
+    } else {
+      submit.style.opacity = "1";
+      submit.style.cursor = "pointer";
+    }
+  }
+
+  consent.addEventListener("change", sync);
+  sync();
+});
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  var consent = document.getElementById("paidReportPrivacyConsent");
+  var submit = document.getElementById("saveLead");
+  if (!consent || !submit) return;
+
+  function syncPaidReportConsent() {
+    submit.disabled = !consent.checked;
+    submit.style.opacity = consent.checked ? "1" : "0.55";
+    submit.style.cursor = consent.checked ? "pointer" : "not-allowed";
+  }
+
+  consent.addEventListener("change", syncPaidReportConsent);
+  syncPaidReportConsent();
+});
+</script>
+
+
+<script>
+(function () {
+  if (window.__ansimFunnelInstalled) return;
+  window.__ansimFunnelInstalled = true;
+
+  function getScoreForFunnel() {
+    try {
+      if (typeof window.getTotalScore === "function") {
+        return Number(window.getTotalScore()) || 0;
+      }
+      if (typeof getTotalScore === "function") {
+        return Number(getTotalScore()) || 0;
+      }
+    } catch (error) {}
+
+    return 0;
+  }
+
+  function normalizePayloadScore(name, detail) {
+    var payload = Object.assign({}, detail || {});
+
+    if (
+      name === "diagnosis_start" ||
+      name === "diagnosis_step_3" ||
+      name === "diagnosis_step_6" ||
+      name === "diagnosis_complete" ||
+      name === "result_button_click" ||
+      name === "result_view" ||
+      name === "report_form_view" ||
+      name === "report_cta_click" ||
+      name === "report_form_submit_click"
+    ) {
+      payload.score = getScoreForFunnel();
+    }
+
+    if (name === "diagnosis_complete" || name === "result_button_click" || name === "result_view" || name === "report_form_view") {
+      window.__ansimFinalScore = payload.score;
+    }
+
+    return payload;
+  }
+
+  function sendFunnelEvent(name, detail) {
+    var normalizedDetail = normalizePayloadScore(name, detail);
+
+    var payload = Object.assign({
+      event: name,
+      path: location.pathname,
+      ts: new Date().toISOString()
+    }, normalizedDetail || {});
+
+    try {
+      var key = "ansimsangsokFunnelEvents";
+      var prev = JSON.parse(localStorage.getItem(key) || "[]");
+      prev.push(payload);
+      localStorage.setItem(key, JSON.stringify(prev.slice(-200)));
+    } catch (e) {}
+
+    if (typeof window.gtag === "function") {
+      window.gtag("event", name, payload);
+    }
+
+    if (Array.isArray(window.dataLayer)) {
+      window.dataLayer.push(payload);
+    }
+
+    window.dispatchEvent(new CustomEvent("ansimsangsok:funnel", { detail: payload }));
+    console.log("[ansimsangsok:funnel]", payload);
+  }
+
+  window.ansimTrackFunnel = sendFunnelEvent;
+
+  document.addEventListener("DOMContentLoaded", function () {
+    var started = false;
+    var hit3 = false;
+    var hit6 = false;
+    var completed = false;
+    var resultViewed = false;
+    window.__ansimFinalScore = null;
+
+    function readStep() {
+      var el = document.getElementById("stepText");
+      if (!el) return null;
+      var m = (el.textContent || "").match(/(\d+)\s*\/\s*(\d+)/);
+      if (!m) return null;
+      return { current: Number(m[1]), total: Number(m[2]) };
+    }
+
+    function readScore() {
+      return getScoreForFunnel();
+    }
+
+    function inspect() {
+      var step = readStep();
+      var score = readScore();
+      var resultArea = document.getElementById("resultArea");
+      var guide = document.getElementById("guideRequestCard");
+
+      if (step && !started) {
+        started = true;
+        sendFunnelEvent("diagnosis_start", { step: step.current, total: step.total, score: score });
+      }
+
+      if (step && step.current >= 3 && !hit3) {
+        hit3 = true;
+        sendFunnelEvent("diagnosis_step_3", { step: step.current, total: step.total, score: score });
+      }
+
+      if (step && step.current >= 6 && !hit6) {
+        hit6 = true;
+        sendFunnelEvent("diagnosis_step_6", { step: step.current, total: step.total, score: score });
+      }
+
+      if (step && step.current >= step.total && !completed) {
+        var nextBtn = document.getElementById("nextBtn");
+        var nextText = nextBtn ? (nextBtn.textContent || "") : "";
+        if (nextText.indexOf("결과") >= 0 || nextText.indexOf("다시") >= 0) {
+          completed = true;
+          window.__ansimFinalScore = getScoreForFunnel();
+          sendFunnelEvent("diagnosis_complete", { step: step.current, total: step.total, score: window.__ansimFinalScore });
+        }
+      }
+
+      if (resultArea && !resultArea.classList.contains("hidden") && !resultViewed) {
+        resultViewed = true;
+        window.__ansimFinalScore = getScoreForFunnel();
+        sendFunnelEvent("result_view", {
+          score: window.__ansimFinalScore
+        });
+      }
+
+      if (guide && !guide.classList.contains("hidden")) {
+        if (!guide.dataset.funnelVisibleSent) {
+          guide.dataset.funnelVisibleSent = "1";
+          window.__ansimFinalScore = getScoreForFunnel();
+          sendFunnelEvent("report_form_view", {
+            score: window.__ansimFinalScore
+          });
+        }
+      }
+    }
+
+    document.addEventListener("click", function (event) {
+      var target = event.target;
+      if (!target) return;
+
+      var text = (target.innerText || target.value || "").trim();
+
+      if (text.indexOf("결과 확인") >= 0) {
+        window.__ansimFinalScore = getScoreForFunnel();
+        sendFunnelEvent("result_button_click", { score: window.__ansimFinalScore });
+      }
+
+      if (text.indexOf("내 상황 상세자료 신청하기") >= 0 || text.indexOf("상세자료") >= 0) {
+        sendFunnelEvent("report_cta_click", {
+          score: getScoreForFunnel()
+        });
+      }
+    }, true);
+
+    var saveLead = document.getElementById("saveLead");
+    if (saveLead) {
+      saveLead.addEventListener("click", function () {
+        sendFunnelEvent("report_form_submit_click", {
+          score: getScoreForFunnel()
+        });
+      }, true);
+    }
+
+    inspect();
+    setInterval(inspect, 800);
+  });
+})();
+</script>
+
+
+<script>
+(function () {
+  function getSafeScoreForReport() {
+    try {
+      if (typeof window.getTotalScore === "function") {
+        return Number(window.getTotalScore()) || 0;
+      }
+      if (typeof getTotalScore === "function") {
+        return Number(getTotalScore()) || 0;
+      }
+    } catch (error) {}
+    return 0;
+  }
+
+  function getSafeAnswersForReport() {
+    try {
+      if (window.__ansimCurrentAnswers && typeof window.__ansimCurrentAnswers === "object") {
+        return window.__ansimCurrentAnswers;
+      }
+    } catch (error) {}
+    return {};
+  }
+
+  function getReportLevel(score) {
+    if (score >= 70) {
+      return {
+        level: "주의 필요",
+        headline: "확인 항목이 많은 상속 상황입니다.",
+        freeRatio: "무료 리포트는 현재 상황 정리와 우선 확인 항목 중심으로 구성됩니다.",
+        paidRatio: "유료 상세자료는 가족관계, 재산·부채, 준비서류, 진행순서까지 더 구체적으로 정리합니다."
+      };
+    }
+
+    if (score >= 40) {
+      return {
+        level: "확인 필요",
+        headline: "지금 정리해두면 가족 간 혼란을 줄이는 데 도움이 되는 상황입니다.",
+        freeRatio: "무료 리포트는 놓치기 쉬운 항목과 기본 준비 방향 중심으로 구성됩니다.",
+        paidRatio: "유료 상세자료는 현재 답변을 바탕으로 확인 항목과 준비 순서를 더 구체적으로 정리합니다."
+      };
+    }
+
+    return {
+      level: "기본 정리",
+      headline: "기본 정보를 차분히 정리하기 좋은 상황입니다.",
+      freeRatio: "무료 리포트는 기본 상황 요약과 다음 확인 항목 중심으로 구성됩니다.",
+      paidRatio: "유료 상세자료는 향후 상황 변화에 대비할 수 있도록 준비자료와 진행 흐름을 더 자세히 정리합니다."
+    };
+  }
+
+  function makeFreeReportData() {
+    var score = getSafeScoreForReport();
+    var answers = getSafeAnswersForReport();
+    var level = getReportLevel(score);
+
+    var checkItems = [
+      "상속인 구성과 가족관계를 먼저 정리합니다.",
+      "부동산, 예금, 사업체, 부채 등 확인할 재산 항목을 나눕니다.",
+      "가족관계증명서, 기본증명서, 등기·금융자료 등 준비할 서류를 확인합니다.",
+      "지금 확인할 일과 나중에 준비할 일을 구분합니다."
+    ];
+
+    if (score >= 70) {
+      checkItems.unshift("분쟁 가능성이 있는 항목은 따로 표시해두는 것이 좋습니다.");
+    } else if (score >= 40) {
+      checkItems.unshift("빠뜨리기 쉬운 재산과 부채 항목을 한 번 더 확인합니다.");
+    } else {
+      checkItems.unshift("현재 알고 있는 가족관계와 재산 정보를 한곳에 모읍니다.");
+    }
+
+    return {
+      version: "free-report-v1",
+      score: score,
+      level: level.level,
+      title: "안심상속 무료 리포트 요약",
+      headline: level.headline,
+      purpose: "현재 상속 상황을 정리하고, 먼저 확인해야 할 항목을 이해하기 위한 요약 자료입니다.",
+      summary: level.freeRatio,
+      checkItems: checkItems,
+      nextSteps: [
+        "현재 알고 있는 재산과 부채를 간단히 적어봅니다.",
+        "가족관계와 연락 가능한 가족을 정리합니다.",
+        "확인이 어려운 항목은 상세자료나 전문가 도움 필요 여부를 검토합니다."
+      ],
+      answers: answers
+    };
+  }
+
+  function makePaidReportPreviewData() {
+    var score = getSafeScoreForReport();
+    var level = getReportLevel(score);
+
+    return {
+      version: "paid-report-preview-v1",
+      score: score,
+      level: level.level,
+      title: "안심상속 유료 상세자료 안내",
+      headline: level.headline,
+      summary: level.paidRatio,
+      includes: [
+        "현재 상황 분석",
+        "핵심 검토사항",
+        "확인이 필요한 위험요소",
+        "준비자료 체크리스트",
+        "예상 진행순서",
+        "전문가 상담 필요 여부"
+      ],
+      conversionMessage: "무료 리포트에서 확인되지 않는 부분은 상세자료에서 더 구체적으로 정리됩니다."
+    };
+  }
+
+  window.ansimBuildFreeReportData = makeFreeReportData;
+  window.ansimBuildPaidReportPreviewData = makePaidReportPreviewData;
+})();
+</script>
+
+
+<script>
+(function () {
+  if (window.__ansimReportContentV2Installed) return;
+  window.__ansimReportContentV2Installed = true;
+
+  function score() {
+    try {
+      if (typeof window.getTotalScore === "function") return Number(window.getTotalScore()) || 0;
+      if (typeof getTotalScore === "function") return Number(getTotalScore()) || 0;
+    } catch (error) {}
+    return 0;
+  }
+
+  function answers() {
+    try {
+      if (window.__ansimCurrentAnswers && typeof window.__ansimCurrentAnswers === "object") {
+        return window.__ansimCurrentAnswers;
+      }
+    } catch (error) {}
+    return {};
+  }
+
+  function asArray(value) {
+    return Array.isArray(value) ? value : value ? [value] : [];
+  }
+
+  function joinList(list) {
+    return list.filter(Boolean).join(", ");
+  }
+
+  function riskLevel(currentScore) {
+    if (currentScore >= 70) return "주의 필요";
+    if (currentScore >= 40) return "확인 필요";
+    return "기본 정리";
+  }
+
+  function assetLabel(key) {
+    const map = {
+      house: "주택",
+      building: "상가·건물",
+      land: "토지",
+      deposit: "예금·보험·금융자산",
+      debt: "대출·보증·카드채무",
+      business: "사업체·법인 지분",
+      overseas: "해외 재산"
+    };
+    return map[key] || key;
+  }
+
+  function answerLabel(key, value) {
+    if (Array.isArray(value)) return value.map(v => answerLabel(key, v)).join(", ");
+
+    const map = {
+      self_abroad: "해외 거주·해외 관련 이슈",
+      family_abroad: "해외 거주 가족",
+      overseas_asset: "해외 재산",
+      house: "주택",
+      building: "상가·건물",
+      land: "토지",
+      deposit: "예금·보험·금융자산",
+      debt: "대출·보증·카드채무",
+      business: "사업체·법인 지분"
+    };
+
+    return map[value] || value || "";
+  }
+
+  function buildFacts(a) {
+    const assets = asArray(a.assetPresence).map(assetLabel);
+    const overseas = asArray(a.overseas).map(v => answerLabel("overseas", v));
+    const assetCounts = a.assetCounts && typeof a.assetCounts === "object" ? a.assetCounts : {};
+
+    const countLines = Object.keys(assetCounts)
+      .filter(key => assetCounts[key])
+      .map(key => assetLabel(key) + " " + assetCounts[key]);
+
+    return {
+      family: a.family || "가족관계 확인 필요",
+      will: a.will || "유언·사전 정리 여부 확인 필요",
+      assets: assets.length ? joinList(assets) : "확인된 재산 항목 없음",
+      assetCounts: countLines.length ? joinList(countLines) : "세부 수량 미입력",
+      gift: a.gift || "사전 증여 여부 확인 필요",
+      business: a.business || "사업체 관련 여부 확인 필요",
+      overseas: overseas.length ? joinList(overseas) : "해외 관련 항목 없음",
+      conflict: a.conflict || "가족 간 이견 여부 확인 필요",
+      documents: a.documents || "서류 준비 상태 확인 필요"
+    };
+  }
+
+  function buildFreeReportDataV2() {
+    const currentScore = score();
+    const a = answers();
+    const facts = buildFacts(a);
+    const level = riskLevel(currentScore);
+
+    const summaryItems = [
+      "가족관계: " + facts.family,
+      "주요 재산: " + facts.assets,
+      "재산 수량: " + facts.assetCounts,
+      "서류 준비: " + facts.documents
+    ];
+
+    const checkItems = [
+      "상속인 구성을 가족관계증명서 기준으로 다시 확인합니다.",
+      "부동산, 금융자산, 부채를 따로 나누어 목록화합니다.",
+      "사전 증여나 가족 간 이견 가능성이 있는 항목은 별도로 표시합니다.",
+      "준비된 서류와 아직 필요한 서류를 구분합니다."
+    ];
+
+    if (facts.overseas !== "해외 관련 항목 없음") {
+      checkItems.push("해외 거주·해외 재산 관련 항목은 국내 절차와 별도로 확인할 수 있게 표시합니다.");
+    }
+
+    if (facts.business !== "없음" && facts.business !== "사업체 관련 여부 확인 필요") {
+      checkItems.push("사업체나 법인 지분이 있으면 개인 재산과 분리해 확인합니다.");
+    }
+
+    const freeBoundary = [
+      "무료 리포트는 현재 답변을 바탕으로 상황을 정리하는 자료입니다.",
+      "구체적인 진행순서, 위험요소별 우선순위, 준비자료 세부 목록은 상세자료에서 이어서 확인하도록 구성합니다."
+    ];
+
+    const nextSteps = [
+      "가족관계와 주요 재산 항목을 한 장으로 정리합니다.",
+      "부채와 보증 여부를 재산 목록과 분리해 확인합니다.",
+      "서류가 부족한 항목은 상세자료 신청 후 준비 순서대로 확인합니다."
+    ];
+
+    return {
+      version: "free-report-v2",
+      score: currentScore,
+      level,
+      title: "안심상속 무료 리포트",
+      headline: "현재 답변을 바탕으로 상속 상황을 먼저 정리했습니다.",
+      purpose: "상속 상황을 한눈에 정리하고, 먼저 확인해야 할 항목을 이해하기 위한 요약 자료입니다.",
+      summaryItems,
+      currentSituation: facts,
+      checkItems,
+      nextSteps,
+      freeBoundary,
+      paidBridge: "상세자료에서는 현재 상황 분석, 핵심 검토사항, 위험요소, 준비자료, 예상 진행순서, 전문가 상담 필요 여부를 더 구체적으로 정리합니다.",
+      answers: a
+    };
+  }
+
+  function buildPaidReportPreviewDataV2() {
+    const currentScore = score();
+    const a = answers();
+    const facts = buildFacts(a);
+    const level = riskLevel(currentScore);
+
+    const modules = [
+      {
+        title: "현재 상황 분석",
+        text: "가족관계, 재산 항목, 서류 준비 상태를 한 번에 볼 수 있도록 정리합니다."
+      },
+      {
+        title: "핵심 검토사항",
+        text: "부동산, 금융자산, 부채, 사전 증여, 가족 간 이견 가능성을 항목별로 나눕니다."
+      },
+      {
+        title: "준비자료 체크리스트",
+        text: "가족관계 서류, 등기·금융자료, 부채 확인 자료 등 준비할 자료를 순서대로 정리합니다."
+      },
+      {
+        title: "예상 진행순서",
+        text: "먼저 확인할 일, 자료를 모을 일, 전문가 도움을 검토할 일을 단계별로 구분합니다."
+      },
+      {
+        title: "전문가 상담 필요 여부",
+        text: "분쟁 가능성, 해외 요소, 사업체, 고액·복잡 재산 여부에 따라 추가 도움 필요성을 살펴볼 수 있게 정리합니다."
+      }
+    ];
+
+    if (facts.overseas !== "해외 관련 항목 없음") {
+      modules.push({
+        title: "해외 관련 확인 항목",
+        text: "해외 거주자나 해외 재산이 있는 경우 별도 확인이 필요한 항목을 표시합니다."
+      });
+    }
+
+    if (facts.business !== "없음" && facts.business !== "사업체 관련 여부 확인 필요") {
+      modules.push({
+        title: "사업체·지분 확인 항목",
+        text: "사업체, 법인 지분, 대표자 지위와 관련해 분리해서 확인할 항목을 정리합니다."
+      });
+    }
+
+    return {
+      version: "paid-report-preview-v2",
+      score: currentScore,
+      level,
+      title: "안심상속 유료 상세자료",
+      headline: "무료 리포트에서 보이지 않는 확인 순서와 준비자료를 더 구체적으로 정리합니다.",
+      currentSituation: facts,
+      modules,
+      conversionMessage: "지금 답변만으로 끝내지 않고, 실제로 무엇부터 확인할지 순서가 필요하다면 상세자료가 더 도움이 됩니다."
+    };
+  }
+
+  function escapeHtml(value) {
+    return String(value || "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+
+  function renderList(items) {
+    return (items || []).map(function (item) {
+      return '<li>' + escapeHtml(item) + '</li>';
+    }).join("");
+  }
+
+  function renderModules(modules) {
+    return (modules || []).map(function (item) {
+      return [
+        '<div style="border-top:1px solid rgba(15,23,42,0.08);padding:12px 0;">',
+        '<strong style="display:block;color:#173c2f;margin-bottom:4px;">',
+        escapeHtml(item.title),
+        '</strong>',
+        '<span style="color:#4b5563;line-height:1.6;">',
+        escapeHtml(item.text),
+        '</span>',
+        '</div>'
+      ].join("");
+    }).join("");
+  }
+
+  function upsertDetailCards() {
+    const resultArea = document.getElementById("resultArea");
+    if (!resultArea || resultArea.classList.contains("hidden")) return;
+
+    const guide = document.getElementById("guideRequestCard");
+    const free = buildFreeReportDataV2();
+    const paid = buildPaidReportPreviewDataV2();
+
+    let freeCard = document.getElementById("freeReportDetailCard");
+    if (!freeCard) {
+      freeCard = document.createElement("section");
+      freeCard.id = "freeReportDetailCard";
+      freeCard.className = "paid-report-preview-card";
+      freeCard.style.marginTop = "18px";
+
+      const anchor = document.getElementById("paidReportPreviewCard") || guide;
+      if (anchor && anchor.parentNode === resultArea) {
+        resultArea.insertBefore(freeCard, anchor);
+      } else {
+        resultArea.appendChild(freeCard);
+      }
+    }
+
+    freeCard.innerHTML = [
+      '<div class="preview-eyebrow">무료 리포트</div>',
+      '<h3>내 상황 요약</h3>',
+      '<p class="preview-lead">',
+      escapeHtml(free.headline),
+      '</p>',
+      '<div style="margin:14px 0;padding:14px;border-radius:18px;background:#f8fafc;border:1px solid #dbe3ee;">',
+      '<strong style="display:block;color:#173c2f;margin-bottom:8px;">현재 답변 기준</strong>',
+      '<ul style="margin:0;padding-left:20px;color:#374151;line-height:1.75;">',
+      renderList(free.summaryItems),
+      '</ul>',
+      '</div>',
+      '<div style="margin:14px 0;">',
+      '<strong style="display:block;color:#173c2f;margin-bottom:8px;">먼저 확인할 항목</strong>',
+      '<ul style="margin:0;padding-left:20px;color:#374151;line-height:1.75;">',
+      renderList(free.checkItems.slice(0, 5)),
+      '</ul>',
+      '</div>',
+      '<p style="margin:14px 0 0;color:#6b7280;line-height:1.65;">',
+      escapeHtml(free.freeBoundary.join(" ")),
+      '</p>'
+    ].join("");
+
+    let paidCard = document.getElementById("paidReportValueCard");
+    if (!paidCard) {
+      paidCard = document.createElement("section");
+      paidCard.id = "paidReportValueCard";
+      paidCard.className = "paid-report-preview-card";
+      paidCard.style.marginTop = "18px";
+
+      if (guide && guide.parentNode === resultArea) {
+        resultArea.insertBefore(paidCard, guide);
+      } else {
+        resultArea.appendChild(paidCard);
+      }
+    }
+
+    paidCard.innerHTML = [
+      '<div class="preview-eyebrow">유료 상세자료</div>',
+      '<h3>상세자료에서 더 확인되는 부분</h3>',
+      '<p class="preview-lead">',
+      escapeHtml(paid.conversionMessage),
+      '</p>',
+      '<div>',
+      renderModules(paid.modules),
+      '</div>',
+      '<div style="margin-top:16px;padding:14px;border-radius:18px;background:#fff7e0;border:1px solid #d6b45f;color:#173c2f;font-weight:900;line-height:1.6;">',
+      '무료 리포트는 상황 정리까지, 상세자료는 준비자료와 다음 순서까지 더 구체적으로 정리합니다.',
+      '</div>'
+    ].join("");
+  }
+
+  window.ansimBuildFreeReportData = buildFreeReportDataV2;
+  window.ansimBuildPaidReportPreviewData = buildPaidReportPreviewDataV2;
+  window.ansimRenderReportDetailCards = upsertDetailCards;
+
+  document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("click", function () {
+      setTimeout(upsertDetailCards, 250);
+    }, true);
+
+    setInterval(upsertDetailCards, 900);
+    setTimeout(upsertDetailCards, 600);
+  });
+})();
+</script>
+
+
+
+
+
+<script>
+(function () {
+  if (window.__ansimFreeReportFinalButtonInstalled) return;
+  window.__ansimFreeReportFinalButtonInstalled = true;
+
+  function escapeHtml(value) {
+    return String(value == null ? "" : value)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+
+  function listHtml(items) {
+    return (items || []).map(function (item) {
+      return "<li>" + escapeHtml(item) + "</li>";
+    }).join("");
+  }
+
+  function rowsHtml(situation) {
+    var rows = [
+      ["가족관계", situation && situation.family],
+      ["주요 재산", situation && situation.assets],
+      ["재산 수량", situation && situation.assetCounts],
+      ["사전 증여", situation && situation.gift],
+      ["사업체", situation && situation.business],
+      ["해외 관련", situation && situation.overseas],
+      ["가족 간 이견", situation && situation.conflict],
+      ["서류 준비", situation && situation.documents]
+    ];
+
+    return rows.map(function (row) {
+      return [
+        "<tr>",
+        "<th style='width:112px;text-align:left;vertical-align:top;padding:10px;border-bottom:1px solid #e5e7eb;background:#f8fafc;color:#173c2f;'>",
+        escapeHtml(row[0]),
+        "</th>",
+        "<td style='padding:10px;border-bottom:1px solid #e5e7eb;color:#374151;'>",
+        escapeHtml(row[1] || "확인 필요"),
+        "</td>",
+        "</tr>"
+      ].join("");
+    }).join("");
+  }
+
+  function getReportData() {
+    var report = typeof window.ansimBuildFreeReportData === "function"
+      ? window.ansimBuildFreeReportData()
+      : null;
+
+    var paidPreview = typeof window.ansimBuildPaidReportPreviewData === "function"
+      ? window.ansimBuildPaidReportPreviewData()
+      : null;
+
+    return { report: report, paidPreview: paidPreview };
+  }
+
+  function removeDuplicateOldButtons() {
+    Array.from(document.querySelectorAll("#openFreeReportBtn")).forEach(function (btn) {
+      var card = btn.closest("#freeReportActionCard");
+      if (card) {
+        card.remove();
+      } else {
+        btn.remove();
+      }
+    });
+
+    var cards = Array.from(document.querySelectorAll("#freeReportFinalActionCard"));
+    cards.slice(1).forEach(function (card) {
+      card.remove();
+    });
+  }
+
+  function renderInlineReport() {
+    var data = getReportData();
+    var report = data.report;
+    var paidPreview = data.paidPreview;
+
+    if (!report) {
+      alert("무료 리포트를 만들기 위해 먼저 진단을 완료해주세요.");
+      return;
+    }
+
+    if (typeof window.ansimTrackFunnel === "function") {
+      window.ansimTrackFunnel("free_report_open", {
+        score: report.score,
+        level: report.level,
+        mode: "inline-final"
+      });
+    }
+
+    var actionCard = document.getElementById("freeReportFinalActionCard");
+    var resultArea = document.getElementById("resultArea");
+    var parent = actionCard && actionCard.parentNode ? actionCard.parentNode : resultArea;
+    if (!parent) return;
+
+    var panel = document.getElementById("freeReportInlinePanel");
+    if (!panel) {
+      panel = document.createElement("section");
+      panel.id = "freeReportInlinePanel";
+      panel.className = "paid-report-preview-card";
+      panel.style.marginTop = "18px";
+
+      if (actionCard && actionCard.nextSibling) {
+        parent.insertBefore(panel, actionCard.nextSibling);
+      } else {
+        parent.appendChild(panel);
+      }
+    }
+
+    var now = new Date();
+    var printedAt = now.getFullYear() + "." + String(now.getMonth() + 1).padStart(2, "0") + "." + String(now.getDate()).padStart(2, "0");
+    var paidHeadline = paidPreview && paidPreview.headline
+      ? paidPreview.headline
+      : "무료 리포트에서 보이지 않는 확인 순서와 준비자료를 더 구체적으로 정리합니다.";
+
+    panel.innerHTML = [
+      "<div id='freeReportPrintableArea'>",
+      "<div class='preview-eyebrow'>무료 리포트</div>",
+      "<h3 style='margin-bottom:8px;'>",
+      escapeHtml(report.title || "안심상속 무료 리포트"),
+      "</h3>",
+      "<p class='preview-lead'>",
+      escapeHtml(report.headline || "현재 답변을 바탕으로 상속 상황을 먼저 정리했습니다."),
+      "</p>",
+      "<div style='display:inline-flex;align-items:center;gap:6px;margin:8px 0 14px;padding:8px 12px;border-radius:999px;background:#fff7e0;border:1px solid #d6b45f;color:#173c2f;font-weight:900;'>",
+      "진단 점수 ",
+      escapeHtml(report.score),
+      "점 · ",
+      escapeHtml(report.level),
+      "</div>",
+
+      "<div style='margin:14px 0;padding:14px;border-radius:18px;background:#f8fafc;border:1px solid #dbe3ee;'>",
+      "<strong style='display:block;color:#173c2f;margin-bottom:8px;'>1. 현재 상황 요약</strong>",
+      "<ul style='margin:0;padding-left:20px;color:#374151;line-height:1.75;'>",
+      listHtml(report.summaryItems || []),
+      "</ul>",
+      "</div>",
+
+      "<div style='margin:14px 0;'>",
+      "<strong style='display:block;color:#173c2f;margin-bottom:8px;'>2. 항목별 정리</strong>",
+      "<table style='width:100%;border-collapse:collapse;border:1px solid #e5e7eb;border-radius:14px;overflow:hidden;font-size:0.95rem;'>",
+      "<tbody>",
+      rowsHtml(report.currentSituation || {}),
+      "</tbody>",
+      "</table>",
+      "</div>",
+
+      "<div style='margin:14px 0;padding:14px;border-radius:18px;background:#f8fafc;border:1px solid #dbe3ee;'>",
+      "<strong style='display:block;color:#173c2f;margin-bottom:8px;'>3. 먼저 확인할 항목</strong>",
+      "<ul style='margin:0;padding-left:20px;color:#374151;line-height:1.75;'>",
+      listHtml(report.checkItems || []),
+      "</ul>",
+      "</div>",
+
+      "<div style='margin:14px 0;padding:14px;border-radius:18px;background:#f8fafc;border:1px solid #dbe3ee;'>",
+      "<strong style='display:block;color:#173c2f;margin-bottom:8px;'>4. 다음 단계</strong>",
+      "<ul style='margin:0;padding-left:20px;color:#374151;line-height:1.75;'>",
+      listHtml(report.nextSteps || []),
+      "</ul>",
+      "</div>",
+
+      "<div style='margin:14px 0;padding:14px;border-radius:18px;background:#fff7e0;border:1px solid #d6b45f;'>",
+      "<strong style='display:block;color:#173c2f;margin-bottom:8px;'>상세자료에서 이어지는 부분</strong>",
+      "<p style='margin:0 0 8px;color:#374151;line-height:1.65;'>",
+      escapeHtml(paidHeadline),
+      "</p>",
+      "<p style='margin:0;color:#6b7280;line-height:1.65;'>",
+      escapeHtml(report.paidBridge || "상세자료에서는 현재 상황 분석, 핵심 검토사항, 위험요소, 준비자료, 예상 진행순서, 전문가 상담 필요 여부를 더 구체적으로 정리합니다."),
+      "</p>",
+      "</div>",
+
+      "<p style='margin:14px 0 0;color:#6b7280;font-size:0.92rem;line-height:1.6;'>",
+      "이 무료 리포트는 입력하신 답변을 바탕으로 상속 상황을 정리하고 확인할 항목을 이해하기 위한 자료입니다. 작성일: ",
+      escapeHtml(printedAt),
+      "</p>",
+      "</div>",
+
+      "<div style='display:grid;grid-template-columns:1fr;gap:10px;margin-top:16px;'>",
+      "<button id='printInlineFreeReportBtn' type='button' class='btn btn-primary' style='width:100%;'>인쇄 또는 PDF로 저장</button>",
+      "<button id='closeInlineFreeReportBtn' type='button' class='btn btn-secondary' style='width:100%;'>무료 리포트 접기</button>",
+      "</div>"
+    ].join("");
+
+    var printBtn = document.getElementById("printInlineFreeReportBtn");
+    if (printBtn) {
+      printBtn.addEventListener("click", function () {
+        if (typeof window.ansimTrackFunnel === "function") {
+          window.ansimTrackFunnel("free_report_print_click", {
+            score: report.score,
+            level: report.level
+          });
+        }
+        window.print();
+      });
+    }
+
+    var closeBtn = document.getElementById("closeInlineFreeReportBtn");
+    if (closeBtn) {
+      closeBtn.addEventListener("click", function () {
+        panel.remove();
+      });
+    }
+
+    panel.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  function ensureFinalButton() {
+    var resultArea = document.getElementById("resultArea");
+    if (!resultArea || resultArea.classList.contains("hidden")) return;
+
+    removeDuplicateOldButtons();
+
+    if (document.getElementById("freeReportFinalActionCard")) return;
+
+    var guide = document.getElementById("guideRequestCard");
+    var card = document.createElement("section");
+    card.id = "freeReportFinalActionCard";
+    card.className = "paid-report-preview-card";
+    card.style.marginTop = "18px";
+
+    card.innerHTML = [
+      '<div class="preview-eyebrow">무료 리포트 생성 완료</div>',
+      '<h3>내 무료 리포트 바로 보기</h3>',
+      '<p class="preview-lead">진단 답변을 바탕으로 현재 상황 요약, 확인 필요 항목, 다음 단계를 정리했습니다.</p>',
+      '<button id="openFreeReportFinalBtn" type="button" class="btn btn-primary" style="width:100%;margin-top:10px;">무료 리포트 바로 보기 / PDF로 저장</button>',
+      '<p style="margin:12px 0 0;color:#6b7280;font-size:0.95rem;line-height:1.6;">같은 화면에서 바로 열리며, 인쇄 또는 PDF 저장을 선택할 수 있습니다.</p>'
+    ].join("");
+
+    if (guide && guide.parentNode === resultArea) {
+      resultArea.insertBefore(card, guide);
+    } else {
+      resultArea.appendChild(card);
+    }
+
+    var btn = document.getElementById("openFreeReportFinalBtn");
+    if (btn) {
+      btn.addEventListener("click", function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        renderInlineReport();
+      });
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("click", function () {
+      setTimeout(ensureFinalButton, 120);
+    }, true);
+
+    setInterval(ensureFinalButton, 500);
+    setTimeout(ensureFinalButton, 500);
+    setTimeout(ensureFinalButton, 1500);
+  });
+})();
+</script>
+
+
+
+
+<script>
+(function () {
+  if (window.__ansimPaidReportIntentVisibleFixInstalled) return;
+  window.__ansimPaidReportIntentVisibleFixInstalled = true;
+
+  function getScore() {
+    try {
+      if (typeof window.getTotalScore === "function") return Number(window.getTotalScore()) || 0;
+      if (typeof getTotalScore === "function") return Number(getTotalScore()) || 0;
+    } catch (error) {}
+    return 0;
+  }
+
+  function markPaidIntent() {
+    window.__ansimPaidReportIntent = {
+      requested: true,
+      type: "paid-detail-report",
+      label: "유료 상세자료 안내 희망",
+      requestedAt: new Date().toISOString(),
+      score: getScore()
+    };
+
+    var memo = document.getElementById("leadMemo");
+    if (memo) {
+      var note = "유료 상세자료 안내를 함께 받고 싶습니다.";
+      if (!memo.value.includes(note)) {
+        memo.value = memo.value ? memo.value.trim() + "\n" + note : note;
+      }
+    }
+
+    var status = document.getElementById("paidReportIntentInlineStatus");
+    if (status) {
+      status.textContent = "유료 상세자료 안내 희망이 신청 내용에 표시되었습니다.";
+    }
+
+    var btn = document.getElementById("paidReportIntentInlineBtn");
+    if (btn) {
+      btn.textContent = "유료 상세자료 안내 희망 표시 완료";
+      btn.setAttribute("aria-pressed", "true");
+    }
+
+    if (typeof window.ansimTrackFunnel === "function") {
+      window.ansimTrackFunnel("paid_report_intent_click", {
+        score: getScore(),
+        intent: "paid-detail-report"
+      });
+    }
+  }
+
+  window.ansimGetPaidReportIntent = function () {
+    return window.__ansimPaidReportIntent || null;
+  };
+
+  function insertPaidIntentInlineCard() {
+    var resultArea = document.getElementById("resultArea");
+    if (!resultArea || resultArea.classList.contains("hidden")) return;
+
+    var guide = document.getElementById("guideRequestCard");
+    if (!guide) return;
+
+    if (document.getElementById("paidReportIntentInlineCard")) return;
+
+    var card = document.createElement("div");
+    card.id = "paidReportIntentInlineCard";
+    card.style.cssText = [
+      "margin:16px 0",
+      "padding:16px",
+      "border-radius:18px",
+      "background:#fff7e0",
+      "border:1px solid #d6b45f",
+      "box-sizing:border-box"
+    ].join(";");
+
+    card.innerHTML = [
+      '<div style="font-size:0.78rem;font-weight:900;color:#8a6a16;letter-spacing:.08em;margin-bottom:6px;">유료 상세자료</div>',
+      '<strong style="display:block;color:#173c2f;font-size:1.05rem;line-height:1.45;margin-bottom:8px;">준비자료와 진행순서를 더 구체적으로 받고 싶으신가요?</strong>',
+      '<p style="margin:0 0 12px;color:#4b5563;line-height:1.6;">무료 리포트로 현재 상황을 확인한 뒤, 상세자료 안내를 함께 받아볼 수 있습니다.</p>',
+      '<button id="paidReportIntentInlineBtn" type="button" class="btn btn-primary" style="width:100%;min-height:48px;">유료 상세자료 안내도 함께 받기</button>',
+      '<p id="paidReportIntentInlineStatus" style="margin:10px 0 0;color:#173c2f;font-weight:800;line-height:1.55;"></p>',
+      '<p style="margin:8px 0 0;color:#6b7280;font-size:0.92rem;line-height:1.55;">결제 전 안내를 먼저 받아보고 결정하실 수 있도록 신청 내용에 관심 여부가 함께 기록됩니다.</p>'
+    ].join("");
+
+    var firstInput = guide.querySelector("#leadName");
+    if (firstInput && firstInput.parentNode) {
+      firstInput.parentNode.insertBefore(card, firstInput);
+    } else {
+      guide.insertBefore(card, guide.firstChild);
+    }
+
+    var btn = document.getElementById("paidReportIntentInlineBtn");
+    if (btn) {
+      btn.addEventListener("click", markPaidIntent);
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("click", function () {
+      setTimeout(insertPaidIntentInlineCard, 250);
+    }, true);
+
+    setInterval(insertPaidIntentInlineCard, 700);
+    setTimeout(insertPaidIntentInlineCard, 500);
+    setTimeout(insertPaidIntentInlineCard, 1500);
+  });
+})();
+</script>
+
+
+<script>
+(function () {
+  if (window.__ansimPaidReportPaymentIntentInstalled) return;
+  window.__ansimPaidReportPaymentIntentInstalled = true;
+
+  function getScore() {
+    try {
+      if (typeof window.getTotalScore === "function") return Number(window.getTotalScore()) || 0;
+      if (typeof getTotalScore === "function") return Number(getTotalScore()) || 0;
+    } catch (error) {}
+    return 0;
+  }
+
+  function getPaidPreview() {
+    try {
+      if (typeof window.ansimBuildPaidReportPreviewData === "function") {
+        return window.ansimBuildPaidReportPreviewData();
+      }
+    } catch (error) {}
+    return null;
+  }
+
+  function setPaymentIntent(status) {
+    var preview = getPaidPreview();
+
+    window.__ansimPaidReportPaymentIntent = {
+      requested: true,
+      type: "paid-detail-report-payment",
+      status: status || "payment-guide-viewed",
+      label: "유료 상세자료 결제 안내 확인",
+      amount: 29000,
+      currency: "KRW",
+      requestedAt: new Date().toISOString(),
+      score: getScore(),
+      paidReportPreview: preview
+    };
+
+    if (typeof window.ansimTrackFunnel === "function") {
+      window.ansimTrackFunnel("paid_report_payment_intent", {
+        score: getScore(),
+        amount: 29000,
+        status: window.__ansimPaidReportPaymentIntent.status
+      });
+    }
+
+    var statusEl = document.getElementById("paidPaymentIntentStatus");
+    if (statusEl) {
+      statusEl.textContent = "상세자료 결제 안내 확인이 신청 내용에 함께 표시되었습니다.";
+    }
+
+    var memo = document.getElementById("leadMemo");
+    if (memo) {
+      var note = "유료 상세자료 결제 안내를 확인했습니다.";
+      if (!memo.value.includes(note)) {
+        memo.value = memo.value ? memo.value.trim() + "\n" + note : note;
+      }
+    }
+  }
+
+  function openPaymentGuide() {
+    var resultArea = document.getElementById("resultArea");
+    if (!resultArea || resultArea.classList.contains("hidden")) return;
+
+    var existing = document.getElementById("paidPaymentGuidePanel");
+    if (existing) {
+      existing.scrollIntoView({ behavior: "smooth", block: "start" });
+      setPaymentIntent("payment-guide-reopened");
+      return;
+    }
+
+    var guide = document.getElementById("guideRequestCard");
+    var panel = document.createElement("section");
+    panel.id = "paidPaymentGuidePanel";
+    panel.className = "paid-report-preview-card";
+    panel.style.marginTop = "18px";
+
+    panel.innerHTML = [
+      '<div class="preview-eyebrow">유료 상세자료 결제 안내</div>',
+      '<h3>상세자료를 받아보려면</h3>',
+      '<p class="preview-lead">무료 리포트에서 확인되지 않는 준비자료, 진행순서, 전문가 상담 필요 여부를 더 구체적으로 정리한 상세자료 안내입니다.</p>',
+
+      '<div style="margin:14px 0;padding:16px;border-radius:18px;background:#fff7e0;border:1px solid #d6b45f;">',
+      '<strong style="display:block;color:#173c2f;font-size:1.05rem;margin-bottom:6px;">상세자료 안내 금액</strong>',
+      '<div style="font-size:1.65rem;font-weight:950;color:#173c2f;line-height:1.2;">29,000원</div>',
+      '<p style="margin:8px 0 0;color:#6b7280;line-height:1.6;">현재는 결제 전 안내 확인 단계입니다. 실제 결제 연동 전까지는 신청 내용에 결제 관심 여부만 기록됩니다.</p>',
+      '</div>',
+
+      '<div style="display:grid;grid-template-columns:1fr;gap:10px;margin:14px 0;">',
+      '<div style="padding:14px;border-radius:18px;background:#f8fafc;border:1px solid #dbe3ee;">',
+      '<strong style="display:block;color:#173c2f;margin-bottom:6px;">포함 내용</strong>',
+      '<ul style="margin:0;padding-left:20px;color:#374151;line-height:1.75;">',
+      '<li>현재 상황 분석</li>',
+      '<li>핵심 검토사항</li>',
+      '<li>위험요소와 확인 필요 항목</li>',
+      '<li>준비자료 체크리스트</li>',
+      '<li>예상 진행순서</li>',
+      '<li>전문가 상담 필요 여부</li>',
+      '</ul>',
+      '</div>',
+      '</div>',
+
+      '<button id="paidPaymentIntentBtn" type="button" class="btn btn-primary" style="width:100%;min-height:50px;">상세자료 결제 안내 확인하기</button>',
+      '<p id="paidPaymentIntentStatus" style="margin:12px 0 0;color:#173c2f;font-weight:850;line-height:1.6;"></p>',
+      '<p style="margin:10px 0 0;color:#6b7280;font-size:0.94rem;line-height:1.6;">결제 전 안내를 먼저 확인하고, 필요한 경우 이메일 안내를 통해 다음 절차를 이어갈 수 있습니다.</p>'
+    ].join("");
+
+    if (guide && guide.parentNode === resultArea) {
+      resultArea.insertBefore(panel, guide);
+    } else {
+      resultArea.appendChild(panel);
+    }
+
+    var btn = document.getElementById("paidPaymentIntentBtn");
+    if (btn) {
+      btn.addEventListener("click", function () {
+        setPaymentIntent("payment-guide-confirmed");
+      });
+    }
+
+    setPaymentIntent("payment-guide-viewed");
+    panel.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  function insertPaymentCta() {
+    var resultArea = document.getElementById("resultArea");
+    if (!resultArea || resultArea.classList.contains("hidden")) return;
+
+    if (document.getElementById("paidPaymentCtaCard")) return;
+
+    var intentCard = document.getElementById("paidReportIntentInlineCard");
+    var guide = document.getElementById("guideRequestCard");
+    var card = document.createElement("section");
+    card.id = "paidPaymentCtaCard";
+    card.className = "paid-report-preview-card";
+    card.style.marginTop = "18px";
+
+    card.innerHTML = [
+      '<div class="preview-eyebrow">상세자료 다음 단계</div>',
+      '<h3>유료 상세자료 안내를 확인해보세요</h3>',
+      '<p class="preview-lead">현재 상황에 맞춘 준비자료와 진행순서를 더 구체적으로 받아보고 싶다면, 상세자료 안내를 확인할 수 있습니다.</p>',
+      '<button id="openPaidPaymentGuideBtn" type="button" class="btn btn-primary" style="width:100%;margin-top:10px;">유료 상세자료 안내 확인하기</button>',
+      '<p style="margin:12px 0 0;color:#6b7280;font-size:0.95rem;line-height:1.6;">실제 결제 연동 전 단계로, 안내 확인 여부가 신청 내용에 함께 기록됩니다.</p>'
+    ].join("");
+
+    if (intentCard && intentCard.parentNode) {
+      intentCard.parentNode.insertBefore(card, intentCard.nextSibling);
+    } else if (guide && guide.parentNode === resultArea) {
+      resultArea.insertBefore(card, guide);
+    } else {
+      resultArea.appendChild(card);
+    }
+
+    var btn = document.getElementById("openPaidPaymentGuideBtn");
+    if (btn) {
+      btn.addEventListener("click", function () {
+        if (typeof window.ansimTrackFunnel === "function") {
+          window.ansimTrackFunnel("paid_report_payment_cta_click", {
+            score: getScore(),
+            amount: 29000
+          });
+        }
+        openPaymentGuide();
+      });
+    }
+  }
+
+  window.ansimGetPaidReportPaymentIntent = function () {
+    return window.__ansimPaidReportPaymentIntent || null;
+  };
+
+  document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("click", function () {
+      setTimeout(insertPaymentCta, 150);
+    }, true);
+
+    setInterval(insertPaymentCta, 700);
+    setTimeout(insertPaymentCta, 700);
+    setTimeout(insertPaymentCta, 1600);
+  });
+})();
+</script>
+
+
+<script>
+(function () {
+  if (window.__ansimVisibleOrphanTextCleanupInstalled) return;
+  window.__ansimVisibleOrphanTextCleanupInstalled = true;
+
+  function isSafeToCleanTextNode(node) {
+    if (!node || node.nodeType !== Node.TEXT_NODE) return false;
+
+    var value = String(node.nodeValue || "").trim();
+    if (value !== '",' && value !== '"') return false;
+
+    var parent = node.parentElement;
+    if (!parent) return false;
+
+    var tag = parent.tagName ? parent.tagName.toLowerCase() : "";
+    if (tag === "script" || tag === "style" || tag === "textarea" || tag === "input") return false;
+
+    return true;
+  }
+
+  function cleanVisibleOrphanText() {
+    if (!document.body) return;
+
+    var walker = document.createTreeWalker(
+      document.body,
+      NodeFilter.SHOW_TEXT,
+      {
+        acceptNode: function (node) {
+          return isSafeToCleanTextNode(node)
+            ? NodeFilter.FILTER_ACCEPT
+            : NodeFilter.FILTER_REJECT;
+        }
+      }
+    );
+
+    var nodes = [];
+    var current;
+
+    while ((current = walker.nextNode())) {
+      nodes.push(current);
+    }
+
+    nodes.forEach(function (node) {
+      node.parentNode && node.parentNode.removeChild(node);
+    });
+
+    if (nodes.length && typeof window.ansimTrackFunnel === "function") {
+      window.ansimTrackFunnel("visible_orphan_text_cleanup", {
+        removed: nodes.length
+      });
+    }
+  }
+
+  window.ansimCleanVisibleOrphanText = cleanVisibleOrphanText;
+
+  document.addEventListener("DOMContentLoaded", function () {
+    cleanVisibleOrphanText();
+
+    document.addEventListener("click", function () {
+      setTimeout(cleanVisibleOrphanText, 80);
+      setTimeout(cleanVisibleOrphanText, 350);
+      setTimeout(cleanVisibleOrphanText, 900);
+    }, true);
+
+    setInterval(cleanVisibleOrphanText, 700);
+    setTimeout(cleanVisibleOrphanText, 500);
+    setTimeout(cleanVisibleOrphanText, 1500);
+    setTimeout(cleanVisibleOrphanText, 3000);
+  });
+})();
+</script>
+
+
+<script>
+(function () {
+  if (window.__ansimFinalConversionScreenCleanupInstalled) return;
+  window.__ansimFinalConversionScreenCleanupInstalled = true;
+
+  function setText(selector, text) {
+    var el = document.querySelector(selector);
+    if (el && el.textContent.trim() !== text) {
+      el.textContent = text;
+    }
+  }
+
+  function hideIfExists(selector) {
+    var el = document.querySelector(selector);
+    if (el) {
+      el.style.display = "none";
+      el.setAttribute("aria-hidden", "true");
+    }
+  }
+
+  function compactCard(el) {
+    if (!el) return;
+    el.style.marginTop = "14px";
+    el.style.marginBottom = "14px";
+  }
+
+  function cleanupVisibleOrphans() {
+    if (typeof window.ansimCleanVisibleOrphanText === "function") {
+      window.ansimCleanVisibleOrphanText();
+    }
+  }
+
+  function tuneFreeReportCard() {
+    var card = document.getElementById("freeReportFinalActionCard");
+    if (!card) return;
+
+    compactCard(card);
+
+    var eyebrow = card.querySelector(".preview-eyebrow");
+    if (eyebrow) eyebrow.textContent = "1단계 · 무료 리포트";
+
+    var title = card.querySelector("h3");
+    if (title) title.textContent = "무료 리포트 먼저 확인하기";
+
+    var lead = card.querySelector(".preview-lead");
+    if (lead) {
+      lead.textContent = "진단 답변을 바탕으로 현재 상황, 확인할 항목, 다음 단계를 간단히 정리했습니다.";
+    }
+
+    var btn = document.getElementById("openFreeReportFinalBtn");
+    if (btn) {
+      btn.textContent = "무료 리포트 보기";
+      btn.style.minHeight = "50px";
+    }
+
+    var small = card.querySelector("p[style]");
+    if (small) {
+      small.textContent = "같은 화면에서 열리며, 필요하면 인쇄 또는 PDF 저장을 선택할 수 있습니다.";
+    }
+  }
+
+  function tunePaymentCtaCard() {
+    var card = document.getElementById("paidPaymentCtaCard");
+    if (!card) return;
+
+    compactCard(card);
+
+    var eyebrow = card.querySelector(".preview-eyebrow");
+    if (eyebrow) eyebrow.textContent = "2단계 · 상세자료";
+
+    var title = card.querySelector("h3");
+    if (title) title.textContent = "더 구체적인 정리가 필요하신가요?";
+
+    var lead = card.querySelector(".preview-lead");
+    if (lead) {
+      lead.textContent = "무료 리포트로 부족한 준비자료, 진행순서, 상담 필요 여부를 상세자료에서 더 구체적으로 확인할 수 있습니다.";
+    }
+
+    var btn = document.getElementById("openPaidPaymentGuideBtn");
+    if (btn) {
+      btn.textContent = "유료 상세자료 안내 보기";
+      btn.style.minHeight = "50px";
+    }
+
+    var small = card.querySelector("p[style]");
+    if (small) {
+      small.textContent = "결제 연동 전 단계로, 안내 확인 여부가 신청 내용에 함께 기록됩니다.";
+    }
+  }
+
+  function tunePaidIntentCard() {
+    var card = document.getElementById("paidReportIntentInlineCard");
+    if (!card) return;
+
+    compactCard(card);
+
+    var strong = card.querySelector("strong");
+    if (strong) {
+      strong.textContent = "상세자료 안내를 함께 받아보시겠습니까?";
+    }
+
+    var paragraph = card.querySelector("p");
+    if (paragraph) {
+      paragraph.textContent = "필요 여부를 바로 결정하기 어려우시면, 신청 내용에 관심 여부만 먼저 표시할 수 있습니다.";
+    }
+
+    var btn = document.getElementById("paidReportIntentInlineBtn");
+    if (btn) {
+      btn.textContent = "상세자료 안내 희망 표시";
+      btn.style.minHeight = "50px";
+    }
+  }
+
+  function tunePaymentGuidePanel() {
+    var panel = document.getElementById("paidPaymentGuidePanel");
+    if (!panel) return;
+
+    compactCard(panel);
+
+    var eyebrow = panel.querySelector(".preview-eyebrow");
+    if (eyebrow) eyebrow.textContent = "상세자료 안내";
+
+    var title = panel.querySelector("h3");
+    if (title) title.textContent = "유료 상세자료 29,000원";
+
+    var lead = panel.querySelector(".preview-lead");
+    if (lead) {
+      lead.textContent = "상세자료는 현재 상황 분석, 준비자료, 확인할 항목, 예상 진행순서를 더 구체적으로 정리하는 안내자료입니다.";
+    }
+
+    var btn = document.getElementById("paidPaymentIntentBtn");
+    if (btn) {
+      btn.textContent = "결제 안내 확인 표시";
+      btn.style.minHeight = "50px";
+    }
+
+    var status = document.getElementById("paidPaymentIntentStatus");
+    if (status && status.textContent.trim()) {
+      status.textContent = "결제 안내 확인이 신청 내용에 표시되었습니다.";
+    }
+  }
+
+  function tuneGuideRequestCard() {
+    var card = document.getElementById("guideRequestCard");
+    if (!card) return;
+
+    compactCard(card);
+
+    var headings = Array.from(card.querySelectorAll("h2, h3, strong"));
+    headings.forEach(function (el) {
+      var text = el.textContent.trim();
+
+      if (text.includes("상세자료") || text.includes("안내자료")) {
+        el.textContent = "신청 내용을 남겨주세요";
+      }
+    });
+
+    var saveBtn = document.getElementById("saveLead");
+    if (saveBtn) {
+      saveBtn.textContent = "안내받기 신청";
+      saveBtn.style.minHeight = "52px";
+    }
+  }
+
+  function markFlowOrder() {
+    var resultArea = document.getElementById("resultArea");
+    if (!resultArea || resultArea.classList.contains("hidden")) return;
+
+    var flow = document.getElementById("finalConversionFlowNotice");
+    if (flow) return;
+
+    var freeCard = document.getElementById("freeReportFinalActionCard");
+    if (!freeCard || !freeCard.parentNode) return;
+
+    flow = document.createElement("section");
+    flow.id = "finalConversionFlowNotice";
+    flow.style.cssText = [
+      "margin:14px 0",
+      "padding:14px",
+      "border-radius:18px",
+      "background:#f8fafc",
+      "border:1px solid #dbe3ee",
+      "color:#173c2f",
+      "line-height:1.65"
+    ].join(";");
+
+    flow.innerHTML = [
+      '<strong style="display:block;margin-bottom:6px;">다음 순서로 확인해보세요</strong>',
+      '<ol style="margin:0;padding-left:20px;color:#374151;">',
+      '<li>무료 리포트로 현재 상황을 먼저 확인합니다.</li>',
+      '<li>더 구체적인 정리가 필요하면 상세자료 안내를 확인합니다.</li>',
+      '<li>연락처를 남기면 신청 내용과 함께 저장됩니다.</li>',
+      '</ol>'
+    ].join("");
+
+    freeCard.parentNode.insertBefore(flow, freeCard);
+  }
+
+  function cleanupScreen() {
+    var resultArea = document.getElementById("resultArea");
+    if (!resultArea || resultArea.classList.contains("hidden")) return;
+
+    markFlowOrder();
+    tuneFreeReportCard();
+    tunePaymentCtaCard();
+    tunePaidIntentCard();
+    tunePaymentGuidePanel();
+    tuneGuideRequestCard();
+    cleanupVisibleOrphans();
+
+    if (typeof window.ansimTrackFunnel === "function" && !window.__ansimFinalConversionScreenCleanupTracked) {
+      window.__ansimFinalConversionScreenCleanupTracked = true;
+      window.ansimTrackFunnel("final_conversion_screen_cleanup_view", {
+        cleaned: true
+      });
+    }
+  }
+
+  window.ansimCleanupFinalConversionScreen = cleanupScreen;
+
+  document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("click", function () {
+      setTimeout(cleanupScreen, 100);
+      setTimeout(cleanupScreen, 450);
+      setTimeout(cleanupScreen, 1000);
+    }, true);
+
+    setInterval(cleanupScreen, 900);
+    setTimeout(cleanupScreen, 700);
+    setTimeout(cleanupScreen, 1600);
+    setTimeout(cleanupScreen, 3000);
+  });
+})();
+</script>
+
+
+<script>
+(function () {
+  if (window.__ansimPaymentOrderScaffoldInstalled) return;
+  window.__ansimPaymentOrderScaffoldInstalled = true;
+
+  function getScore() {
+    try {
+      if (typeof window.getTotalScore === "function") return Number(window.getTotalScore()) || 0;
+      if (typeof getTotalScore === "function") return Number(getTotalScore()) || 0;
+    } catch (error) {}
+    return 0;
+  }
+
+  function getLeadName() {
+    var el = document.getElementById("leadName");
+    return el ? String(el.value || "").trim() : "";
+  }
+
+  function getLeadEmail() {
+    var el = document.getElementById("leadEmail");
+    return el ? String(el.value || "").trim() : "";
+  }
+
+  function ensureStatusBox() {
+    var panel = document.getElementById("paidPaymentGuidePanel");
+    if (!panel) return null;
+
+    var box = document.getElementById("paymentOrderStatusBox");
+    if (box) return box;
+
+    box = document.createElement("div");
+    box.id = "paymentOrderStatusBox";
+    box.style.cssText = [
+      "margin-top:12px",
+      "padding:13px",
+      "border-radius:16px",
+      "background:#f8fafc",
+      "border:1px solid #dbe3ee",
+      "color:#173c2f",
+      "line-height:1.6",
+      "font-weight:750"
+    ].join(";");
+
+    var btn = document.getElementById("paidPaymentIntentBtn");
+    if (btn && btn.parentNode) {
+      btn.parentNode.insertBefore(box, btn.nextSibling);
+    } else {
+      panel.appendChild(box);
+    }
+
+    return box;
+  }
+
+  function setPaymentOrderStatus(message) {
+    var box = ensureStatusBox();
+    if (box) box.textContent = message;
+  }
+
+  async function createPaymentOrder() {
+    var payload = {
+      productType: "paid-detail-report",
+      name: getLeadName(),
+      email: getLeadEmail(),
+      score: getScore()
+    };
+
+    setPaymentOrderStatus("결제 준비 정보를 만드는 중입니다.");
+
+    if (typeof window.ansimTrackFunnel === "function") {
+      window.ansimTrackFunnel("payment_order_create_start", {
+        score: payload.score,
+        amount: 29000
+      });
+    }
+
+    try {
+      var res = await fetch("/api/payments", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+      });
+
+      var data = await res.json().catch(function () {
+        return null;
+      });
+
+      if (!res.ok || !data || !data.ok) {
+        throw new Error(data && data.message ? data.message : "결제 준비 정보를 만들지 못했습니다.");
+      }
+
+      window.__ansimPaidReportPaymentOrder = {
+        orderId: data.orderId,
+        status: data.status,
+        productType: data.productType,
+        productName: data.productName,
+        amount: data.amount,
+        currency: data.currency,
+        createdAt: data.createdAt
+      };
+
+      if (window.__ansimPaidReportPaymentIntent) {
+        window.__ansimPaidReportPaymentIntent.paymentOrder = window.__ansimPaidReportPaymentOrder;
+        window.__ansimPaidReportPaymentIntent.status = "payment-order-created";
+      }
+
+      setPaymentOrderStatus("결제 준비가 완료되었습니다. 주문번호: " + data.orderId);
+
+      if (typeof window.ansimTrackFunnel === "function") {
+        window.ansimTrackFunnel("payment_order_created", {
+          score: payload.score,
+          amount: data.amount,
+          orderId: data.orderId
+        });
+      }
+
+      return data;
+    } catch (error) {
+      window.__ansimPaidReportPaymentOrder = {
+        status: "payment_order_failed",
+        amount: 29000,
+        currency: "KRW",
+        errorMessage: error && error.message ? error.message : "결제 준비 실패",
+        createdAt: new Date().toISOString()
+      };
+
+      if (window.__ansimPaidReportPaymentIntent) {
+        window.__ansimPaidReportPaymentIntent.paymentOrder = window.__ansimPaidReportPaymentOrder;
+        window.__ansimPaidReportPaymentIntent.status = "payment-order-failed";
+      }
+
+      setPaymentOrderStatus("결제 준비 정보를 만드는 중 문제가 있었습니다. 연락처를 남기시면 안내를 이어갈 수 있습니다.");
+
+      if (typeof window.ansimTrackFunnel === "function") {
+        window.ansimTrackFunnel("payment_order_create_failed", {
+          score: payload.score,
+          amount: 29000
+        });
+      }
+
+      return null;
+    }
+  }
+
+  function patchPaymentIntentGetter() {
+    var original = typeof window.ansimGetPaidReportPaymentIntent === "function"
+      ? window.ansimGetPaidReportPaymentIntent
+      : null;
+
+    window.ansimGetPaidReportPaymentIntent = function () {
+      var value = original ? original() : (window.__ansimPaidReportPaymentIntent || null);
+
+      if (value && window.__ansimPaidReportPaymentOrder) {
+        value.paymentOrder = window.__ansimPaidReportPaymentOrder;
+      }
+
+      return value;
+    };
+  }
+
+  function wirePaymentButton() {
+    var btn = document.getElementById("paidPaymentIntentBtn");
+    if (!btn || btn.dataset.paymentOrderWired === "1") return;
+
+    btn.dataset.paymentOrderWired = "1";
+    btn.textContent = "결제 준비 정보 만들기";
+
+    btn.addEventListener("click", function () {
+      setTimeout(createPaymentOrder, 80);
+    });
+  }
+
+  window.ansimCreatePaymentOrder = createPaymentOrder;
+  window.ansimGetPaidReportPaymentOrder = function () {
+    return window.__ansimPaidReportPaymentOrder || null;
+  };
+
+  document.addEventListener("DOMContentLoaded", function () {
+    patchPaymentIntentGetter();
+
+    document.addEventListener("click", function () {
+      setTimeout(patchPaymentIntentGetter, 50);
+      setTimeout(wirePaymentButton, 120);
+      setTimeout(wirePaymentButton, 500);
+    }, true);
+
+    setInterval(function () {
+      patchPaymentIntentGetter();
+      wirePaymentButton();
+    }, 700);
+
+    setTimeout(wirePaymentButton, 700);
+    setTimeout(wirePaymentButton, 1600);
+  });
+})();
+</script>
+
+
+<script>
+(function () {
+  if (window.__ansimPaymentResultScreenScaffoldInstalled) return;
+  window.__ansimPaymentResultScreenScaffoldInstalled = true;
+
+  function getScore() {
+    try {
+      if (typeof window.getTotalScore === "function") return Number(window.getTotalScore()) || 0;
+      if (typeof getTotalScore === "function") return Number(getTotalScore()) || 0;
+    } catch (error) {}
+    return 0;
+  }
+
+  function getPaymentOrder() {
+    if (typeof window.ansimGetPaidReportPaymentOrder === "function") {
+      return window.ansimGetPaidReportPaymentOrder();
+    }
+    return window.__ansimPaidReportPaymentOrder || null;
+  }
+
+  function getPaymentIntent() {
+    if (typeof window.ansimGetPaidReportPaymentIntent === "function") {
+      return window.ansimGetPaidReportPaymentIntent();
+    }
+    return window.__ansimPaidReportPaymentIntent || null;
+  }
+
+  function ensureResultPanel() {
+    var paymentPanel = document.getElementById("paidPaymentGuidePanel");
+    var resultArea = document.getElementById("resultArea");
+    if (!paymentPanel && !resultArea) return null;
+
+    var panel = document.getElementById("paymentResultGuidePanel");
+    if (panel) return panel;
+
+    panel = document.createElement("section");
+    panel.id = "paymentResultGuidePanel";
+    panel.className = "paid-report-preview-card";
+    panel.style.marginTop = "18px";
+
+    if (paymentPanel && paymentPanel.parentNode) {
+      paymentPanel.parentNode.insertBefore(panel, paymentPanel.nextSibling);
+    } else {
+      resultArea.appendChild(panel);
+    }
+
+    return panel;
+  }
+
+  function renderPaymentResult(status) {
+    var panel = ensureResultPanel();
+    if (!panel) return;
+
+    var order = getPaymentOrder();
+    var intent = getPaymentIntent();
+    var orderId = order && order.orderId ? order.orderId : "아직 생성 전";
+    var amount = order && order.amount ? order.amount : 29000;
+
+    var isSuccess = status === "success";
+    var isFail = status === "failed";
+    var title = isSuccess ? "결제 확인 후 상세자료 안내가 이어집니다" : isFail ? "결제 확인이 완료되지 않았습니다" : "결제 준비 상태입니다";
+    var badge = isSuccess ? "결제 확인 단계" : isFail ? "결제 확인 필요" : "결제 준비";
+    var description = isSuccess
+      ? "결제가 확인되면 입력하신 이메일 기준으로 상세자료 안내를 이어갈 수 있습니다."
+      : isFail
+        ? "결제 확인이 완료되지 않은 경우에도 신청 내용은 유지됩니다. 필요하면 다시 안내를 확인할 수 있습니다."
+        : "현재는 실제 PG 연결 전 단계입니다. 주문번호와 결제 준비 정보가 신청 내용에 함께 저장됩니다.";
+
+    panel.innerHTML = [
+      '<div class="preview-eyebrow">결제 진행 상태</div>',
+      '<h3>' + title + '</h3>',
+      '<p class="preview-lead">' + description + '</p>',
+      '<div style="margin:14px 0;padding:14px;border-radius:18px;background:#f8fafc;border:1px solid #dbe3ee;">',
+      '<strong style="display:block;color:#173c2f;margin-bottom:8px;">' + badge + '</strong>',
+      '<p style="margin:0;color:#374151;line-height:1.65;">주문번호: <strong>' + orderId + '</strong></p>',
+      '<p style="margin:6px 0 0;color:#374151;line-height:1.65;">상세자료 안내 금액: <strong>' + Number(amount).toLocaleString("ko-KR") + '원</strong></p>',
+      '</div>',
+      '<div style="display:grid;grid-template-columns:1fr;gap:10px;margin-top:14px;">',
+      '<button id="paymentResultSuccessBtn" type="button" class="btn btn-primary" style="width:100%;min-height:50px;">결제 확인 안내 보기</button>',
+      '<button id="paymentResultRetryBtn" type="button" class="btn btn-secondary" style="width:100%;min-height:50px;">결제 안내 다시 확인</button>',
+      '</div>',
+      '<p id="paymentResultStatusText" style="margin:12px 0 0;color:#6b7280;font-size:0.94rem;line-height:1.6;">실제 결제창 연결 전까지는 결제 확인으로 처리하지 않고, 결제 준비 상태와 관심 정보를 저장합니다.</p>'
+    ].join("");
+
+    var successBtn = document.getElementById("paymentResultSuccessBtn");
+    if (successBtn) {
+      successBtn.addEventListener("click", function () {
+        markPaymentResult("success");
+      });
+    }
+
+    var retryBtn = document.getElementById("paymentResultRetryBtn");
+    if (retryBtn) {
+      retryBtn.addEventListener("click", function () {
+        var guideBtn = document.getElementById("openPaidPaymentGuideBtn");
+        if (guideBtn) {
+          guideBtn.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+        markPaymentResult("ready");
+      });
+    }
+
+    panel.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  function markPaymentResult(status) {
+    var order = getPaymentOrder();
+
+    window.__ansimPaidReportPaymentResult = {
+      status: status || "ready",
+      orderId: order && order.orderId ? order.orderId : null,
+      amount: order && order.amount ? order.amount : 29000,
+      currency: order && order.currency ? order.currency : "KRW",
+      productType: "paid-detail-report",
+      checkedAt: new Date().toISOString(),
+      score: getScore()
+    };
+
+    if (window.__ansimPaidReportPaymentIntent) {
+      window.__ansimPaidReportPaymentIntent.paymentResult = window.__ansimPaidReportPaymentResult;
+      if (status === "success") {
+        window.__ansimPaidReportPaymentIntent.status = "payment-result-guide-confirmed";
+      }
+    }
+
+    var statusText = document.getElementById("paymentResultStatusText");
+    if (statusText) {
+      if (status === "success") {
+        statusText.textContent = "결제 확인 안내가 신청 내용에 함께 표시되었습니다.";
+      } else if (status === "failed") {
+        statusText.textContent = "결제 확인이 완료되지 않은 상태로 신청 내용에 표시되었습니다.";
+      } else {
+        statusText.textContent = "결제 준비 상태가 신청 내용에 함께 표시되었습니다.";
+      }
+    }
+
+    if (typeof window.ansimTrackFunnel === "function") {
+      window.ansimTrackFunnel("payment_result_status_marked", {
+        status: window.__ansimPaidReportPaymentResult.status,
+        orderId: window.__ansimPaidReportPaymentResult.orderId,
+        amount: window.__ansimPaidReportPaymentResult.amount,
+        score: window.__ansimPaidReportPaymentResult.score
+      });
+    }
+  }
+
+  function patchPaymentIntentGetter() {
+    var original = typeof window.ansimGetPaidReportPaymentIntent === "function"
+      ? window.ansimGetPaidReportPaymentIntent
+      : null;
+
+    window.ansimGetPaidReportPaymentIntent = function () {
+      var value = original ? original() : (window.__ansimPaidReportPaymentIntent || null);
+
+      if (value && window.__ansimPaidReportPaymentResult) {
+        value.paymentResult = window.__ansimPaidReportPaymentResult;
+      }
+
+      return value;
+    };
+  }
+
+  function wirePaymentOrderResult() {
+    var order = getPaymentOrder();
+    if (!order || !order.orderId) return;
+
+    var existing = document.getElementById("paymentResultGuidePanel");
+    if (existing) return;
+
+    renderPaymentResult("ready");
+    markPaymentResult("ready");
+  }
+
+  window.ansimRenderPaymentResultGuide = renderPaymentResult;
+  window.ansimGetPaidReportPaymentResult = function () {
+    return window.__ansimPaidReportPaymentResult || null;
+  };
+
+  document.addEventListener("DOMContentLoaded", function () {
+    patchPaymentIntentGetter();
+
+    document.addEventListener("click", function () {
+      setTimeout(patchPaymentIntentGetter, 80);
+      setTimeout(wirePaymentOrderResult, 300);
+      setTimeout(wirePaymentOrderResult, 900);
+    }, true);
+
+    setInterval(function () {
+      patchPaymentIntentGetter();
+      wirePaymentOrderResult();
+    }, 900);
+
+    setTimeout(wirePaymentOrderResult, 1200);
+  });
+})();
+</script>
+
+
+<script>
+(function () {
+  if (window.__ansimPaymentEnvUrlScaffoldInstalled) return;
+  window.__ansimPaymentEnvUrlScaffoldInstalled = true;
+
+  function updatePaymentOrderWithUrls(data) {
+    if (!data || !data.payment) return;
+
+    if (!window.__ansimPaidReportPaymentOrder) {
+      window.__ansimPaidReportPaymentOrder = {};
+    }
+
+    window.__ansimPaidReportPaymentOrder.payment = {
+      provider: data.payment.provider,
+      mode: data.payment.mode,
+      successUrl: data.payment.successUrl,
+      failUrl: data.payment.failUrl,
+      cancelUrl: data.payment.cancelUrl,
+      clientKeyConfigured: data.payment.clientKeyConfigured,
+      secretKeyConfigured: data.payment.secretKeyConfigured,
+      webhookSecretConfigured: data.payment.webhookSecretConfigured
+    };
+
+    if (window.__ansimPaidReportPaymentIntent) {
+      window.__ansimPaidReportPaymentIntent.payment = window.__ansimPaidReportPaymentOrder.payment;
+    }
+  }
+
+  var originalFetch = window.fetch;
+  if (typeof originalFetch === "function" && !window.__ansimPaymentFetchPatched) {
+    window.__ansimPaymentFetchPatched = true;
+
+    window.fetch = async function () {
+      var response = await originalFetch.apply(this, arguments);
+
+      try {
+        var url = arguments[0];
+        var isPaymentApi = typeof url === "string" && url.indexOf("/api/payments") >= 0;
+
+        if (isPaymentApi && response && response.clone) {
+          response.clone().json().then(function (data) {
+            updatePaymentOrderWithUrls(data);
+          }).catch(function () {});
+        }
+      } catch (error) {}
+
+      return response;
+    };
+  }
+
+  function renderPaymentEnvNotice() {
+    var panel = document.getElementById("paymentResultGuidePanel") || document.getElementById("paidPaymentGuidePanel");
+    if (!panel) return;
+
+    var order = typeof window.ansimGetPaidReportPaymentOrder === "function"
+      ? window.ansimGetPaidReportPaymentOrder()
+      : window.__ansimPaidReportPaymentOrder;
+
+    if (!order || !order.payment) return;
+
+    var box = document.getElementById("paymentEnvUrlNotice");
+    if (!box) {
+      box = document.createElement("div");
+      box.id = "paymentEnvUrlNotice";
+      box.style.cssText = [
+        "margin-top:12px",
+        "padding:13px",
+        "border-radius:16px",
+        "background:#f8fafc",
+        "border:1px solid #dbe3ee",
+        "color:#374151",
+        "font-size:0.94rem",
+        "line-height:1.6"
+      ].join(";");
+
+      panel.appendChild(box);
+    }
+
+    var providerText = order.payment.provider === "mock"
+      ? "결제 연동 준비 상태"
+      : "PG 결제 연결 준비 상태";
+
+    box.innerHTML = [
+      '<strong style="display:block;color:#173c2f;margin-bottom:6px;">' + providerText + '</strong>',
+      '<div>성공 URL, 실패 URL, 취소 URL 자리가 준비되었습니다.</div>',
+      '<div style="margin-top:4px;color:#6b7280;">실제 결제창 연결 전까지는 결제 확인 상태로 처리하지 않습니다.</div>'
+    ].join("");
+
+    if (typeof window.ansimTrackFunnel === "function" && !window.__ansimPaymentEnvUrlTracked) {
+      window.__ansimPaymentEnvUrlTracked = true;
+      window.ansimTrackFunnel("payment_env_url_ready_view", {
+        provider: order.payment.provider,
+        mode: order.payment.mode
+      });
+    }
+  }
+
+  window.ansimRenderPaymentEnvUrlNotice = renderPaymentEnvNotice;
+
+  document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("click", function () {
+      setTimeout(renderPaymentEnvNotice, 250);
+      setTimeout(renderPaymentEnvNotice, 900);
+      setTimeout(renderPaymentEnvNotice, 1800);
+    }, true);
+
+    setInterval(renderPaymentEnvNotice, 900);
+    setTimeout(renderPaymentEnvNotice, 1200);
+  });
+})();
+</script>
+
+
+<script>
+(function () {
+  if (window.__ansimPaymentMockStatusSafetyInstalled) return;
+  window.__ansimPaymentMockStatusSafetyInstalled = true;
+
+  function getPaymentMode() {
+    var order = typeof window.ansimGetPaidReportPaymentOrder === "function"
+      ? window.ansimGetPaidReportPaymentOrder()
+      : window.__ansimPaidReportPaymentOrder;
+
+    if (order && order.payment && order.payment.mode) return order.payment.mode;
+    if (order && order.payment && order.payment.provider === "mock") return "payment_ready_only";
+
+    var intent = typeof window.ansimGetPaidReportPaymentIntent === "function"
+      ? window.ansimGetPaidReportPaymentIntent()
+      : window.__ansimPaidReportPaymentIntent;
+
+    if (intent && intent.payment && intent.payment.mode) return intent.payment.mode;
+    return "payment_ready_only";
+  }
+
+  function normalizePaymentResultStatus(status) {
+    var mode = getPaymentMode();
+
+    if (mode === "payment_ready_only" && status === "success") {
+      return "guide_confirmed";
+    }
+
+    if (mode === "payment_ready_only" && status === "failed") {
+      return "guide_not_completed";
+    }
+
+    return status || "ready";
+  }
+
+  function getScore() {
+    try {
+      if (typeof window.getTotalScore === "function") return Number(window.getTotalScore()) || 0;
+      if (typeof getTotalScore === "function") return Number(getTotalScore()) || 0;
+    } catch (error) {}
+    return 0;
+  }
+
+  function getOrder() {
+    if (typeof window.ansimGetPaidReportPaymentOrder === "function") {
+      return window.ansimGetPaidReportPaymentOrder();
+    }
+    return window.__ansimPaidReportPaymentOrder || null;
+  }
+
+  function applySafePaymentResult(status) {
+    var safeStatus = normalizePaymentResultStatus(status);
+    var order = getOrder();
+
+    window.__ansimPaidReportPaymentResult = {
+      status: safeStatus,
+      originalRequestedStatus: status || "ready",
+      orderId: order && order.orderId ? order.orderId : null,
+      amount: order && order.amount ? order.amount : 29000,
+      currency: order && order.currency ? order.currency : "KRW",
+      productType: "paid-detail-report",
+      checkedAt: new Date().toISOString(),
+      score: getScore(),
+      paymentMode: getPaymentMode()
+    };
+
+    if (window.__ansimPaidReportPaymentIntent) {
+      window.__ansimPaidReportPaymentIntent.paymentResult = window.__ansimPaidReportPaymentResult;
+
+      if (safeStatus === "guide_confirmed") {
+        window.__ansimPaidReportPaymentIntent.status = "payment-guide-confirmed";
+      } else if (safeStatus === "guide_not_completed") {
+        window.__ansimPaidReportPaymentIntent.status = "payment-guide-not-completed";
+      } else {
+        window.__ansimPaidReportPaymentIntent.status = "payment-ready";
+      }
+    }
+
+    var statusText = document.getElementById("paymentResultStatusText");
+    if (statusText) {
+      if (safeStatus === "guide_confirmed") {
+        statusText.textContent = "결제 안내 확인이 신청 내용에 함께 표시되었습니다. 실제 결제 확인 처리는 PG 연결 후 진행됩니다.";
+      } else if (safeStatus === "guide_not_completed") {
+        statusText.textContent = "결제 안내가 완료되지 않은 상태로 신청 내용에 표시되었습니다.";
+      } else {
+        statusText.textContent = "결제 준비 상태가 신청 내용에 함께 표시되었습니다.";
+      }
+    }
+
+    if (typeof window.ansimTrackFunnel === "function") {
+      window.ansimTrackFunnel("payment_result_safe_status_marked", {
+        status: safeStatus,
+        originalRequestedStatus: status || "ready",
+        orderId: window.__ansimPaidReportPaymentResult.orderId,
+        amount: window.__ansimPaidReportPaymentResult.amount,
+        score: window.__ansimPaidReportPaymentResult.score,
+        paymentMode: window.__ansimPaidReportPaymentResult.paymentMode
+      });
+    }
+
+    return window.__ansimPaidReportPaymentResult;
+  }
+
+  function patchGetter() {
+    var originalIntentGetter = typeof window.ansimGetPaidReportPaymentIntent === "function"
+      ? window.ansimGetPaidReportPaymentIntent
+      : null;
+
+    window.ansimGetPaidReportPaymentIntent = function () {
+      var value = originalIntentGetter ? originalIntentGetter() : (window.__ansimPaidReportPaymentIntent || null);
+
+      if (value && window.__ansimPaidReportPaymentResult) {
+        value.paymentResult = window.__ansimPaidReportPaymentResult;
+      }
+
+      if (value && value.paymentResult && value.paymentResult.status === "success" && getPaymentMode() === "payment_ready_only") {
+        value.paymentResult.status = "guide_confirmed";
+        value.paymentResult.originalRequestedStatus = "success";
+        value.paymentResult.paymentMode = "payment_ready_only";
+      }
+
+      return value;
+    };
+
+    window.ansimGetPaidReportPaymentResult = function () {
+      var value = window.__ansimPaidReportPaymentResult || null;
+
+      if (value && value.status === "success" && getPaymentMode() === "payment_ready_only") {
+        value.status = "guide_confirmed";
+        value.originalRequestedStatus = "success";
+        value.paymentMode = "payment_ready_only";
+      }
+
+      return value;
+    };
+  }
+
+  function patchButtons() {
+    var successBtn = document.getElementById("paymentResultSuccessBtn");
+    if (successBtn && successBtn.dataset.mockSafetyWired !== "1") {
+      successBtn.dataset.mockSafetyWired = "1";
+      successBtn.textContent = "결제 안내 확인 표시";
+
+      successBtn.addEventListener("click", function (event) {
+        if (getPaymentMode() === "payment_ready_only") {
+          event.preventDefault();
+          event.stopPropagation();
+          applySafePaymentResult("success");
+        }
+      }, true);
+    }
+
+    var retryBtn = document.getElementById("paymentResultRetryBtn");
+    if (retryBtn && retryBtn.dataset.mockSafetyWired !== "1") {
+      retryBtn.dataset.mockSafetyWired = "1";
+
+      retryBtn.addEventListener("click", function () {
+        setTimeout(function () {
+          if (getPaymentMode() === "payment_ready_only") {
+            applySafePaymentResult("ready");
+          }
+        }, 80);
+      }, true);
+    }
+  }
+
+  function correctExistingUnsafeState() {
+    if (window.__ansimPaidReportPaymentResult && window.__ansimPaidReportPaymentResult.status === "success" && getPaymentMode() === "payment_ready_only") {
+      applySafePaymentResult("success");
+    }
+
+    if (window.__ansimPaidReportPaymentIntent && window.__ansimPaidReportPaymentIntent.paymentResult && window.__ansimPaidReportPaymentIntent.paymentResult.status === "success" && getPaymentMode() === "payment_ready_only") {
+      applySafePaymentResult("success");
+    }
+  }
+
+  window.ansimApplySafePaymentResult = applySafePaymentResult;
+
+  document.addEventListener("DOMContentLoaded", function () {
+    patchGetter();
+
+    document.addEventListener("click", function () {
+      setTimeout(patchGetter, 40);
+      setTimeout(patchButtons, 80);
+      setTimeout(correctExistingUnsafeState, 120);
+      setTimeout(patchButtons, 500);
+      setTimeout(correctExistingUnsafeState, 700);
+    }, true);
+
+    setInterval(function () {
+      patchGetter();
+      patchButtons();
+      correctExistingUnsafeState();
+    }, 700);
+
+    setTimeout(patchButtons, 700);
+    setTimeout(correctExistingUnsafeState, 1200);
+    setTimeout(patchButtons, 1800);
+  });
+})();
+</script>
+
+</body>",
+
 
 </body>
 </html>

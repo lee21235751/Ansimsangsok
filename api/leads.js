@@ -32,6 +32,11 @@ export default async function handler(req, res) {
     const memo = String(body.memo || "").trim();
     const score = Number.isFinite(Number(body.score)) ? Number(body.score) : null;
     const answers = body.answers && typeof body.answers === "object" ? body.answers : {};
+    const freeReport = body.freeReport && typeof body.freeReport === "object" ? body.freeReport : null;
+    const paidReportPreview = body.paidReportPreview && typeof body.paidReportPreview === "object" ? body.paidReportPreview : null;
+    const paidReportIntent = body.paidReportIntent && typeof body.paidReportIntent === "object" ? body.paidReportIntent : null;
+    const paidReportPaymentIntent = body.paidReportPaymentIntent && typeof body.paidReportPaymentIntent === "object" ? body.paidReportPaymentIntent : null;
+    const reportRequestedAt = String(body.reportRequestedAt || "").trim();
 
     if (!name) {
       return res.status(400).json({ ok: false, message: "성함을 입력해주세요." });
@@ -54,7 +59,32 @@ export default async function handler(req, res) {
     }
 
     noteParts.push("유입 경로: 안심상속 안내자료 신청");
+    noteParts.push("신청 자료: 무료 리포트 요약 + 유료 상세자료 안내");
     noteParts.push("보관 안내: 안내자료 발송 후 30일");
+
+    if (reportRequestedAt) {
+      noteParts.push(`리포트 신청 시각: ${reportRequestedAt}`);
+    }
+
+    if (freeReport) {
+      noteParts.push("무료 리포트 자동 요약:");
+      noteParts.push(JSON.stringify(freeReport, null, 2));
+    }
+
+    if (paidReportPreview) {
+      noteParts.push("유료 상세자료 관심 항목:");
+      noteParts.push(JSON.stringify(paidReportPreview, null, 2));
+    }
+
+    if (paidReportIntent) {
+      noteParts.push("유료 상세자료 안내 희망:");
+      noteParts.push(JSON.stringify(paidReportIntent, null, 2));
+    }
+
+    if (paidReportPaymentIntent) {
+      noteParts.push("유료 상세자료 결제 안내 확인:");
+      noteParts.push(JSON.stringify(paidReportPaymentIntent, null, 2));
+    }
 
     if (answers && Object.keys(answers).length > 0) {
       noteParts.push(`진단 답변: ${JSON.stringify(answers)}`);
