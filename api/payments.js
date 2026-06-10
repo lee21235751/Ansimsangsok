@@ -29,6 +29,27 @@ function sanitizeText(value, maxLength) {
     .slice(0, maxLength);
 }
 
+function getConfiguredPaymentMethods() {
+  const raw = process.env.PAYMENT_METHODS || "card,kakao_pay,naver_pay";
+  const allowed = new Set(["card", "kakao_pay", "naver_pay", "toss_pay", "bank_transfer"]);
+  const labels = {
+    card: "신용카드·체크카드",
+    kakao_pay: "카카오페이",
+    naver_pay: "네이버페이",
+    toss_pay: "토스페이",
+    bank_transfer: "계좌이체"
+  };
+
+  return raw
+    .split(",")
+    .map(value => value.trim())
+    .filter(value => allowed.has(value))
+    .map(value => ({
+      key: value,
+      label: labels[value] || value
+    }));
+}
+
 function getPaymentConfig(req) {
   const host = req.headers && req.headers.host ? String(req.headers.host) : "www.ansimsangsok.com";
   const protocol = host.includes("localhost") || host.includes("127.0.0.1") ? "http" : "https";
@@ -39,6 +60,8 @@ function getPaymentConfig(req) {
     clientKeyConfigured: Boolean(process.env.PAYMENT_CLIENT_KEY),
     secretKeyConfigured: Boolean(process.env.PAYMENT_SECRET_KEY),
     webhookSecretConfigured: Boolean(process.env.PAYMENT_WEBHOOK_SECRET),
+    methods: getConfiguredPaymentMethods(),
+    primaryMethodLabel: process.env.PAYMENT_PRIMARY_METHOD_LABEL || "신용카드·카카오페이·네이버페이",
     successUrl: process.env.PAYMENT_SUCCESS_URL || baseUrl + "/?payment=success",
     failUrl: process.env.PAYMENT_FAIL_URL || baseUrl + "/?payment=fail",
     cancelUrl: process.env.PAYMENT_CANCEL_URL || baseUrl + "/?payment=cancel"
@@ -118,7 +141,18 @@ export default async function handler(req, res) {
         cancelUrl: paymentConfig.cancelUrl,
         clientKeyConfigured: paymentConfig.clientKeyConfigured,
         secretKeyConfigured: paymentConfig.secretKeyConfigured,
-        webhookSecretConfigured: paymentConfig.webhookSecretConfigured
+        webhookSecretConfigured: paymentConfig.webhookSecretConfigured,
+        methods: paymentConfig.methods,
+        primaryMethodLabel: paymentConfig.primaryMethodLabel,
+        tossCheckout: paymentConfig.provider === "toss" ? {
+          clientKeyConfigured: paymentConfig.clientKeyConfigured,
+          clientKey: paymentConfig.clientKeyConfigured ? process.env.PAYMENT_CLIENT_KEY : null,
+          orderName: "안심상속 유료 상세자료",
+          customerName: name || "",
+          customerEmail: email || "",
+          useEscrow: false,
+          allowedMethods: paymentConfig.methods.map(method => method.key)
+        } : null
       },
       message: "결제 준비 정보가 생성되었습니다."
     };

@@ -4373,6 +4373,443 @@ document.addEventListener("DOMContentLoaded", function () {
 })();
 </script>
 
+
+<script>
+(function () {
+  if (window.__ansimPaymentMethodsCardKakaoNaverInstalled) return;
+  window.__ansimPaymentMethodsCardKakaoNaverInstalled = true;
+
+  var DEFAULT_METHODS = [
+    { key: "card", label: "신용카드·체크카드" },
+    { key: "kakao_pay", label: "카카오페이" },
+    { key: "naver_pay", label: "네이버페이" }
+  ];
+
+  function getPaymentOrder() {
+    if (typeof window.ansimGetPaidReportPaymentOrder === "function") {
+      return window.ansimGetPaidReportPaymentOrder();
+    }
+    return window.__ansimPaidReportPaymentOrder || null;
+  }
+
+  function getMethods() {
+    var order = getPaymentOrder();
+    if (order && order.payment && Array.isArray(order.payment.methods) && order.payment.methods.length) {
+      return order.payment.methods;
+    }
+    return DEFAULT_METHODS;
+  }
+
+  function renderMethodBadges(container) {
+    if (!container) return;
+
+    var methods = getMethods();
+    var existing = document.getElementById("paymentMethodBadges");
+    if (existing) {
+      existing.remove();
+    }
+
+    var wrap = document.createElement("div");
+    wrap.id = "paymentMethodBadges";
+    wrap.style.cssText = [
+      "display:flex",
+      "flex-wrap:wrap",
+      "gap:8px",
+      "margin:12px 0 0"
+    ].join(";");
+
+    methods.forEach(function (method) {
+      var badge = document.createElement("span");
+      badge.textContent = method.label;
+      badge.style.cssText = [
+        "display:inline-flex",
+        "align-items:center",
+        "min-height:34px",
+        "padding:7px 10px",
+        "border-radius:999px",
+        "background:#f8fafc",
+        "border:1px solid #dbe3ee",
+        "color:#173c2f",
+        "font-size:0.92rem",
+        "font-weight:800"
+      ].join(";");
+      wrap.appendChild(badge);
+    });
+
+    var lead = container.querySelector(".preview-lead");
+    if (lead && lead.parentNode) {
+      lead.parentNode.insertBefore(wrap, lead.nextSibling);
+    } else {
+      container.appendChild(wrap);
+    }
+  }
+
+  function tunePaymentCopy() {
+    var ctaCard = document.getElementById("paidPaymentCtaCard");
+    if (ctaCard) {
+      var title = ctaCard.querySelector("h3");
+      if (title) title.textContent = "카드·카카오페이·네이버페이로 상세자료를 준비할 수 있습니다.";
+
+      var lead = ctaCard.querySelector(".preview-lead");
+      if (lead) {
+        lead.textContent = "상세자료는 현재 상황 분석, 준비자료, 확인할 항목, 예상 진행순서를 더 구체적으로 정리하는 안내자료입니다.";
+      }
+
+      renderMethodBadges(ctaCard);
+    }
+
+    var guide = document.getElementById("paidPaymentGuidePanel");
+    if (guide) {
+      var title2 = guide.querySelector("h3");
+      if (title2) title2.textContent = "유료 상세자료 29,000원";
+
+      var lead2 = guide.querySelector(".preview-lead");
+      if (lead2) {
+        lead2.textContent = "결제수단은 신용카드·체크카드, 카카오페이, 네이버페이 중심으로 준비합니다.";
+      }
+
+      renderMethodBadges(guide);
+    }
+
+    var btn = document.getElementById("paidPaymentIntentBtn");
+    if (btn && btn.textContent.indexOf("결제") >= 0) {
+      btn.textContent = "결제 준비 정보 만들기";
+    }
+  }
+
+  var originalFetch = window.fetch;
+  if (typeof originalFetch === "function" && !window.__ansimPaymentMethodsFetchPatched) {
+    window.__ansimPaymentMethodsFetchPatched = true;
+
+    window.fetch = async function () {
+      var response = await originalFetch.apply(this, arguments);
+
+      try {
+        var url = arguments[0];
+        var isPaymentApi = typeof url === "string" && url.indexOf("/api/payments") >= 0;
+
+        if (isPaymentApi && response && response.clone) {
+          response.clone().json().then(function (data) {
+            if (data && data.payment && data.payment.methods && window.__ansimPaidReportPaymentOrder) {
+              window.__ansimPaidReportPaymentOrder.payment = Object.assign(
+                {},
+                window.__ansimPaidReportPaymentOrder.payment || {},
+                {
+                  methods: data.payment.methods,
+                  primaryMethodLabel: data.payment.primaryMethodLabel
+                }
+              );
+
+              if (window.__ansimPaidReportPaymentIntent) {
+                window.__ansimPaidReportPaymentIntent.payment = window.__ansimPaidReportPaymentOrder.payment;
+              }
+            }
+
+            setTimeout(tunePaymentCopy, 80);
+            setTimeout(tunePaymentCopy, 500);
+          }).catch(function () {});
+        }
+      } catch (error) {}
+
+      return response;
+    };
+  }
+
+  window.ansimGetPreparedPaymentMethods = getMethods;
+  window.ansimRenderPaymentMethodBadges = tunePaymentCopy;
+
+  document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("click", function () {
+      setTimeout(tunePaymentCopy, 100);
+      setTimeout(tunePaymentCopy, 500);
+      setTimeout(tunePaymentCopy, 1200);
+    }, true);
+
+    setInterval(tunePaymentCopy, 1000);
+    setTimeout(tunePaymentCopy, 1000);
+    setTimeout(tunePaymentCopy, 2500);
+  });
+})();
+</script>
+
+
+<script>
+(function () {
+  if (window.__ansimTossMinimalIntegrationInstalled) return;
+  window.__ansimTossMinimalIntegrationInstalled = true;
+
+  function getScore() {
+    try {
+      if (typeof window.getTotalScore === "function") return Number(window.getTotalScore()) || 0;
+      if (typeof getTotalScore === "function") return Number(getTotalScore()) || 0;
+    } catch (error) {}
+    return 0;
+  }
+
+  function getOrder() {
+    if (typeof window.ansimGetPaidReportPaymentOrder === "function") {
+      return window.ansimGetPaidReportPaymentOrder();
+    }
+    return window.__ansimPaidReportPaymentOrder || null;
+  }
+
+  function isTossReady() {
+    var order = getOrder();
+    return !!(
+      order &&
+      order.payment &&
+      order.payment.provider === "toss" &&
+      order.payment.tossCheckout &&
+      order.payment.tossCheckout.clientKeyConfigured &&
+      order.payment.tossCheckout.clientKey
+    );
+  }
+
+  function loadTossSdk() {
+    return new Promise(function (resolve, reject) {
+      if (window.TossPayments) return resolve(window.TossPayments);
+
+      var existing = document.querySelector('script[data-ansim-toss-sdk="1"]');
+      if (existing) {
+        existing.addEventListener("load", function () {
+          resolve(window.TossPayments);
+        });
+        existing.addEventListener("error", reject);
+        return;
+      }
+
+      var script = document.createElement("script");
+      script.src = "https://js.tosspayments.com/v1/payment";
+      script.async = true;
+      script.dataset.ansimTossSdk = "1";
+      script.onload = function () {
+        resolve(window.TossPayments);
+      };
+      script.onerror = function () {
+        reject(new Error("Toss 결제창 스크립트를 불러오지 못했습니다."));
+      };
+      document.head.appendChild(script);
+    });
+  }
+
+  function getBaseUrl() {
+    return window.location.origin + window.location.pathname;
+  }
+
+  function buildCallbackUrl(type, order) {
+    var base = getBaseUrl();
+    var params = new URLSearchParams();
+    params.set("payment", type);
+    if (order && order.orderId) params.set("orderId", order.orderId);
+    return base + "?" + params.toString();
+  }
+
+  async function requestTossPayment() {
+    var order = getOrder();
+
+    if (!isTossReady()) {
+      if (typeof window.ansimApplySafePaymentResult === "function") {
+        window.ansimApplySafePaymentResult("success");
+      }
+
+      return {
+        ok: true,
+        status: "guide_confirmed",
+        message: "현재는 결제 안내 확인 상태입니다."
+      };
+    }
+
+    var toss = await loadTossSdk();
+    var tossPayments = toss(order.payment.tossCheckout.clientKey);
+
+    if (typeof window.ansimTrackFunnel === "function") {
+      window.ansimTrackFunnel("toss_payment_request_start", {
+        orderId: order.orderId,
+        amount: order.amount,
+        score: getScore()
+      });
+    }
+
+    await tossPayments.requestPayment("카드", {
+      amount: order.amount,
+      orderId: order.orderId,
+      orderName: order.payment.tossCheckout.orderName || "안심상속 유료 상세자료",
+      customerName: order.payment.tossCheckout.customerName || "",
+      customerEmail: order.payment.tossCheckout.customerEmail || "",
+      successUrl: order.payment.successUrl || buildCallbackUrl("success", order),
+      failUrl: order.payment.failUrl || buildCallbackUrl("fail", order)
+    });
+
+    return {
+      ok: true,
+      status: "toss_window_requested"
+    };
+  }
+
+  async function confirmTossPaymentFromUrl() {
+    var params = new URLSearchParams(window.location.search || "");
+    var payment = params.get("payment");
+    var paymentKey = params.get("paymentKey");
+    var orderId = params.get("orderId");
+    var amount = Number(params.get("amount") || "0");
+
+    if (payment !== "success" || !paymentKey || !orderId || !amount) return null;
+
+    try {
+      var res = await fetch("/api/toss-confirm", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          paymentKey: paymentKey,
+          orderId: orderId,
+          amount: amount
+        })
+      });
+
+      var data = await res.json().catch(function () {
+        return null;
+      });
+
+      if (!data || !data.ok) {
+        throw new Error(data && data.message ? data.message : "결제 확인 실패");
+      }
+
+      window.__ansimPaidReportPaymentResult = {
+        status: data.status === "paid_confirmed" ? "paid_confirmed" : "guide_confirmed",
+        provider: data.provider || "toss",
+        orderId: data.orderId || orderId,
+        paymentKey: data.paymentKey || paymentKey,
+        amount: data.amount || amount,
+        method: data.method || null,
+        approvedAt: data.approvedAt || null,
+        receiptUrl: data.receiptUrl || null,
+        checkedAt: new Date().toISOString(),
+        score: getScore()
+      };
+
+      if (window.__ansimPaidReportPaymentIntent) {
+        window.__ansimPaidReportPaymentIntent.paymentResult = window.__ansimPaidReportPaymentResult;
+        window.__ansimPaidReportPaymentIntent.status = window.__ansimPaidReportPaymentResult.status;
+      }
+
+      if (typeof window.ansimTrackFunnel === "function") {
+        window.ansimTrackFunnel("toss_payment_confirmed", {
+          orderId: orderId,
+          amount: amount,
+          score: getScore()
+        });
+      }
+
+      return window.__ansimPaidReportPaymentResult;
+    } catch (error) {
+      window.__ansimPaidReportPaymentResult = {
+        status: "payment_confirm_failed",
+        provider: "toss",
+        orderId: orderId,
+        amount: amount,
+        errorMessage: error && error.message ? error.message : "결제 확인 실패",
+        checkedAt: new Date().toISOString(),
+        score: getScore()
+      };
+
+      if (typeof window.ansimTrackFunnel === "function") {
+        window.ansimTrackFunnel("toss_payment_confirm_failed", {
+          orderId: orderId,
+          amount: amount,
+          score: getScore()
+        });
+      }
+
+      return window.__ansimPaidReportPaymentResult;
+    }
+  }
+
+  function patchPaymentButton() {
+    var btn = document.getElementById("paidPaymentIntentBtn");
+    if (!btn || btn.dataset.tossMinimalWired === "1") return;
+
+    btn.dataset.tossMinimalWired = "1";
+
+    btn.addEventListener("click", function (event) {
+      if (!isTossReady()) return;
+
+      event.preventDefault();
+      event.stopPropagation();
+
+      requestTossPayment().catch(function () {
+        if (typeof window.ansimApplySafePaymentResult === "function") {
+          window.ansimApplySafePaymentResult("failed");
+        }
+      });
+    }, true);
+  }
+
+  function renderTossNotice() {
+    var panel = document.getElementById("paidPaymentGuidePanel") || document.getElementById("paymentResultGuidePanel");
+    if (!panel) return;
+
+    var order = getOrder();
+    if (!order || !order.payment) return;
+
+    var box = document.getElementById("tossMinimalIntegrationNotice");
+    if (!box) {
+      box = document.createElement("div");
+      box.id = "tossMinimalIntegrationNotice";
+      box.style.cssText = [
+        "margin-top:12px",
+        "padding:13px",
+        "border-radius:16px",
+        "background:#f8fafc",
+        "border:1px solid #dbe3ee",
+        "color:#374151",
+        "font-size:0.94rem",
+        "line-height:1.6"
+      ].join(";");
+
+      panel.appendChild(box);
+    }
+
+    if (isTossReady()) {
+      box.innerHTML = [
+        '<strong style="display:block;color:#173c2f;margin-bottom:6px;">카드·카카오페이·네이버페이 결제창 준비</strong>',
+        '<div>결제창 연결 설정이 확인되었습니다.</div>'
+      ].join("");
+    } else {
+      box.innerHTML = [
+        '<strong style="display:block;color:#173c2f;margin-bottom:6px;">결제수단 준비 상태</strong>',
+        '<div>신용카드·체크카드, 카카오페이, 네이버페이 결제수단 자리가 준비되었습니다.</div>',
+        '<div style="margin-top:4px;color:#6b7280;">실제 결제창은 운영 결제 설정 후 활성화됩니다.</div>'
+      ].join("");
+    }
+  }
+
+  window.ansimRequestTossPayment = requestTossPayment;
+  window.ansimConfirmTossPaymentFromUrl = confirmTossPaymentFromUrl;
+  window.ansimIsTossReady = isTossReady;
+
+  document.addEventListener("DOMContentLoaded", function () {
+    confirmTossPaymentFromUrl();
+
+    document.addEventListener("click", function () {
+      setTimeout(patchPaymentButton, 80);
+      setTimeout(renderTossNotice, 250);
+      setTimeout(patchPaymentButton, 700);
+      setTimeout(renderTossNotice, 900);
+    }, true);
+
+    setInterval(function () {
+      patchPaymentButton();
+      renderTossNotice();
+    }, 900);
+
+    setTimeout(patchPaymentButton, 800);
+    setTimeout(renderTossNotice, 1600);
+  });
+})();
+</script>
+
 </body>",
 
 
