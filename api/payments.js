@@ -21,6 +21,17 @@ function readBody(req) {
   });
 }
 
+function normalizeEnvValue(value) {
+  return String(value || "")
+    .replace(/^\uFEFF/, "")
+    .replace(/[\u200B-\u200D\u2060]/g, "")
+    .trim();
+}
+
+function normalizeEnvFlag(value) {
+  return normalizeEnvValue(value).toLowerCase() === "true";
+}
+
 function sanitizeText(value, maxLength) {
   return String(value || "")
     .replace(/[\u0000-\u001f\u007f]/g, " ")
@@ -56,17 +67,17 @@ function getPaymentConfig(req) {
   const baseUrl = protocol + "://" + host;
 
   return {
-    provider: process.env.PAYMENT_PROVIDER || "mock",
-    clientKeyConfigured: Boolean(process.env.PAYMENT_CLIENT_KEY),
-    secretKeyConfigured: Boolean(process.env.PAYMENT_SECRET_KEY),
-    webhookSecretConfigured: Boolean(process.env.PAYMENT_WEBHOOK_SECRET),
+    provider: normalizeEnvValue(process.env.PAYMENT_PROVIDER || "mock"),
+    clientKeyConfigured: Boolean(normalizeEnvValue(process.env.PAYMENT_CLIENT_KEY)),
+    secretKeyConfigured: Boolean(normalizeEnvValue(process.env.PAYMENT_SECRET_KEY)),
+    webhookSecretConfigured: Boolean(normalizeEnvValue(process.env.PAYMENT_WEBHOOK_SECRET)),
     methods: getConfiguredPaymentMethods(),
     primaryMethodLabel: process.env.PAYMENT_PRIMARY_METHOD_LABEL || "신용카드·카카오페이·네이버페이",
     successUrl: process.env.PAYMENT_SUCCESS_URL || baseUrl + "/?payment=success",
     failUrl: process.env.PAYMENT_FAIL_URL || baseUrl + "/?payment=fail",
     cancelUrl: process.env.PAYMENT_CANCEL_URL || baseUrl + "/?payment=cancel",
-    tossTestRouteEnabled: process.env.PAYMENT_TOSS_TEST_ROUTE_ENABLED === "true",
-    tossTestRouteTokenConfigured: Boolean(process.env.PAYMENT_TOSS_TEST_ROUTE_TOKEN)
+    tossTestRouteEnabled: normalizeEnvFlag(process.env.PAYMENT_TOSS_TEST_ROUTE_ENABLED),
+    tossTestRouteTokenConfigured: Boolean(normalizeEnvValue(process.env.PAYMENT_TOSS_TEST_ROUTE_TOKEN))
   };
 }
 
@@ -123,7 +134,7 @@ export default async function handler(req, res) {
       paymentConfig.clientKeyConfigured &&
       (
         !paymentConfig.tossTestRouteTokenConfigured ||
-        tossTestToken === process.env.PAYMENT_TOSS_TEST_ROUTE_TOKEN
+        tossTestToken === normalizeEnvValue(process.env.PAYMENT_TOSS_TEST_ROUTE_TOKEN)
       );
 
     if (productType !== "paid-detail-report") {
@@ -160,7 +171,7 @@ export default async function handler(req, res) {
         primaryMethodLabel: paymentConfig.primaryMethodLabel,
         tossCheckout: (paymentConfig.provider === "toss" || tossTestAllowed) ? {
           clientKeyConfigured: paymentConfig.clientKeyConfigured,
-          clientKey: paymentConfig.clientKeyConfigured ? process.env.PAYMENT_CLIENT_KEY : null,
+          clientKey: paymentConfig.clientKeyConfigured ? normalizeEnvValue(process.env.PAYMENT_CLIENT_KEY) : null,
           orderName: "안심상속 유료 상세자료",
           customerName: name || "",
           customerEmail: email || "",
