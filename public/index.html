@@ -5302,6 +5302,114 @@ document.addEventListener("DOMContentLoaded", function () {
 })();
 </script>
 
+
+<script>
+(function () {
+  if (window.__ansimTossFailReturnHandlerInstalled) return;
+  window.__ansimTossFailReturnHandlerInstalled = true;
+
+  function getScore() {
+    try {
+      if (typeof window.getTotalScore === "function") return Number(window.getTotalScore()) || 0;
+      if (typeof getTotalScore === "function") return Number(getTotalScore()) || 0;
+    } catch (error) {}
+    return 0;
+  }
+
+  function sanitizeText(value, maxLength) {
+    return String(value || "")
+      .replace(/[\u0000-\u001f\u007f]/g, " ")
+      .replace(/\s+/g, " ")
+      .trim()
+      .slice(0, maxLength);
+  }
+
+  function applyFailReturnFromUrl() {
+    var params = new URLSearchParams(window.location.search || "");
+    var payment = params.get("payment");
+
+    if (payment !== "fail" && payment !== "cancel") return null;
+
+    var code = sanitizeText(params.get("code") || payment, 80);
+    var message = sanitizeText(params.get("message") || "결제 처리가 이어지지 않았습니다.", 240);
+    var orderId = sanitizeText(params.get("orderId") || "", 120);
+
+    var result = {
+      status: "payment_failed_or_canceled",
+      provider: "toss",
+      orderId: orderId || null,
+      code: code,
+      message: message,
+      checkedAt: new Date().toISOString(),
+      score: getScore(),
+      retryAvailable: true
+    };
+
+    window.__ansimPaidReportPaymentResult = result;
+
+    if (window.__ansimPaidReportPaymentIntent) {
+      window.__ansimPaidReportPaymentIntent.paymentResult = result;
+      window.__ansimPaidReportPaymentIntent.status = "payment_failed_or_canceled";
+    }
+
+    if (typeof window.ansimTrackFunnel === "function") {
+      window.ansimTrackFunnel("toss_payment_return_failed_or_canceled", {
+        orderId: orderId || null,
+        code: code,
+        score: getScore()
+      });
+    }
+
+    renderFailReturnNotice(result);
+
+    return result;
+  }
+
+  function renderFailReturnNotice(result) {
+    if (!result) result = window.__ansimPaidReportPaymentResult;
+    if (!result || result.status !== "payment_failed_or_canceled") return;
+
+    var resultArea = document.getElementById("resultArea") || document.body;
+    if (!resultArea) return;
+
+    var box = document.getElementById("tossFailReturnNotice");
+    if (!box) {
+      box = document.createElement("section");
+      box.id = "tossFailReturnNotice";
+      box.className = "paid-report-preview-card";
+      box.style.marginTop = "18px";
+
+      if (resultArea.firstChild) {
+        resultArea.insertBefore(box, resultArea.firstChild);
+      } else {
+        resultArea.appendChild(box);
+      }
+    }
+
+    box.innerHTML = [
+      '<div class="preview-eyebrow">결제 확인 안내</div>',
+      '<h3>결제 처리가 이어지지 않았습니다</h3>',
+      '<p class="preview-lead">창을 닫았거나 결제 과정이 중단된 경우입니다. 필요하시면 다시 결제 안내를 확인하실 수 있습니다.</p>',
+      '<div style="margin-top:12px;padding:13px;border-radius:16px;background:#f8fafc;border:1px solid #dbe3ee;color:#374151;line-height:1.6;">',
+      '<div>상태: 다시 시도 가능</div>',
+      result.orderId ? '<div>주문번호: ' + result.orderId + '</div>' : '',
+      result.code ? '<div>확인 코드: ' + result.code + '</div>' : '',
+      '</div>'
+    ].join("");
+  }
+
+  window.ansimApplyTossFailReturnFromUrl = applyFailReturnFromUrl;
+
+  document.addEventListener("DOMContentLoaded", function () {
+    var result = applyFailReturnFromUrl();
+    if (result) {
+      setTimeout(function () { renderFailReturnNotice(result); }, 500);
+      setTimeout(function () { renderFailReturnNotice(result); }, 1500);
+    }
+  });
+})();
+</script>
+
 </body>",
 
 

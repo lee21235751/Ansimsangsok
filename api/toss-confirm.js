@@ -21,6 +21,13 @@ function readBody(req) {
   });
 }
 
+function normalizeEnvValue(value) {
+  return String(value || "")
+    .replace(/^\uFEFF/, "")
+    .replace(/[\u200B-\u200D\u2060]/g, "")
+    .trim();
+}
+
 function sanitizeText(value, maxLength) {
   return String(value || "")
     .replace(/[\u0000-\u001f\u007f]/g, " ")
@@ -38,7 +45,7 @@ export default async function handler(req, res) {
     });
   }
 
-  const provider = process.env.PAYMENT_PROVIDER || "mock";
+  const provider = normalizeEnvValue(process.env.PAYMENT_PROVIDER || "mock");
 
   if (provider !== "toss") {
     return sendJson(res, 200, {
@@ -49,7 +56,9 @@ export default async function handler(req, res) {
     });
   }
 
-  if (!process.env.PAYMENT_SECRET_KEY) {
+  const paymentSecretKey = normalizeEnvValue(process.env.PAYMENT_SECRET_KEY);
+
+  if (!paymentSecretKey) {
     return sendJson(res, 500, {
       ok: false,
       status: "toss_secret_missing",
@@ -83,7 +92,7 @@ export default async function handler(req, res) {
       });
     }
 
-    const encodedSecret = Buffer.from(process.env.PAYMENT_SECRET_KEY + ":").toString("base64");
+    const encodedSecret = Buffer.from(paymentSecretKey + ":").toString("base64");
 
     const response = await fetch("https://api.tosspayments.com/v1/payments/confirm", {
       method: "POST",
