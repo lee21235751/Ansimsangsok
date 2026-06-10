@@ -64,7 +64,9 @@ function getPaymentConfig(req) {
     primaryMethodLabel: process.env.PAYMENT_PRIMARY_METHOD_LABEL || "신용카드·카카오페이·네이버페이",
     successUrl: process.env.PAYMENT_SUCCESS_URL || baseUrl + "/?payment=success",
     failUrl: process.env.PAYMENT_FAIL_URL || baseUrl + "/?payment=fail",
-    cancelUrl: process.env.PAYMENT_CANCEL_URL || baseUrl + "/?payment=cancel"
+    cancelUrl: process.env.PAYMENT_CANCEL_URL || baseUrl + "/?payment=cancel",
+    tossTestRouteEnabled: process.env.PAYMENT_TOSS_TEST_ROUTE_ENABLED === "true",
+    tossTestRouteTokenConfigured: Boolean(process.env.PAYMENT_TOSS_TEST_ROUTE_TOKEN)
   };
 }
 
@@ -110,7 +112,19 @@ export default async function handler(req, res) {
     const email = sanitizeText(body.email, 160);
     const score = Number(body.score || 0);
     const amount = 29000;
+    const tossTestMode = body.tossTestMode === true;
+    const tossTestToken = sanitizeText(body.tossTestToken, 160);
     const paymentConfig = getPaymentConfig(req);
+
+    const tossTestAllowed =
+      tossTestMode &&
+      paymentConfig.tossTestRouteEnabled &&
+      paymentConfig.provider === "toss" &&
+      paymentConfig.clientKeyConfigured &&
+      (
+        !paymentConfig.tossTestRouteTokenConfigured ||
+        tossTestToken === process.env.PAYMENT_TOSS_TEST_ROUTE_TOKEN
+      );
 
     if (productType !== "paid-detail-report") {
       return sendJson(res, 400, {
@@ -134,8 +148,8 @@ export default async function handler(req, res) {
       score: Number.isFinite(score) ? score : 0,
       createdAt: new Date().toISOString(),
       payment: {
-        provider: paymentConfig.provider,
-        mode: paymentConfig.provider === "mock" ? "payment_ready_only" : "pg_ready",
+        provider: tossTestAllowed ? "toss" : paymentConfig.provider,
+        mode: tossTestAllowed ? "toss_test_ready" : (paymentConfig.provider === "mock" ? "payment_ready_only" : "pg_ready"),
         successUrl: paymentConfig.successUrl,
         failUrl: paymentConfig.failUrl,
         cancelUrl: paymentConfig.cancelUrl,
@@ -144,15 +158,21 @@ export default async function handler(req, res) {
         webhookSecretConfigured: paymentConfig.webhookSecretConfigured,
         methods: paymentConfig.methods,
         primaryMethodLabel: paymentConfig.primaryMethodLabel,
-        tossCheckout: paymentConfig.provider === "toss" ? {
+        tossCheckout: (paymentConfig.provider === "toss" || tossTestAllowed) ? {
           clientKeyConfigured: paymentConfig.clientKeyConfigured,
           clientKey: paymentConfig.clientKeyConfigured ? process.env.PAYMENT_CLIENT_KEY : null,
           orderName: "안심상속 유료 상세자료",
           customerName: name || "",
           customerEmail: email || "",
           useEscrow: false,
-          allowedMethods: paymentConfig.methods.map(method => method.key)
+          allowedMethods: paymentConfig.methods.map(method => method.key),
+          testMode: tossTestAllowed
         } : null
+      },
+      testRoute: {
+        requested: tossTestMode,
+        allowed: tossTestAllowed,
+        enabled: paymentConfig.tossTestRouteEnabled
       },
       message: "결제 준비 정보가 생성되었습니다."
     };

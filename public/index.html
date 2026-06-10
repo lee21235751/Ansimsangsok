@@ -4810,6 +4810,498 @@ document.addEventListener("DOMContentLoaded", function () {
 })();
 </script>
 
+
+<script>
+(function () {
+  if (window.__ansimTossTestModeRouteInstalled) return;
+  window.__ansimTossTestModeRouteInstalled = true;
+
+  function isTossTestRoute() {
+    var params = new URLSearchParams(window.location.search || "");
+    return params.get("tossTest") === "1";
+  }
+
+  function getTossTestToken() {
+    var params = new URLSearchParams(window.location.search || "");
+    return params.get("tossToken") || "";
+  }
+
+  function getScore() {
+    try {
+      if (typeof window.getTotalScore === "function") return Number(window.getTotalScore()) || 0;
+      if (typeof getTotalScore === "function") return Number(getTotalScore()) || 0;
+    } catch (error) {}
+    return 0;
+  }
+
+  function patchPaymentOrderPayload() {
+    if (!isTossTestRoute()) return;
+    if (window.__ansimTossTestFetchPatched) return;
+
+    var originalFetch = window.fetch;
+    if (typeof originalFetch !== "function") return;
+
+    window.__ansimTossTestFetchPatched = true;
+
+    window.fetch = async function () {
+      try {
+        var url = arguments[0];
+        var options = arguments[1];
+
+        if (
+          typeof url === "string" &&
+          url.indexOf("/api/payments") >= 0 &&
+          options &&
+          typeof options.body === "string"
+        ) {
+          var body = JSON.parse(options.body || "{}");
+          body.tossTestMode = true;
+          body.tossTestToken = getTossTestToken();
+
+          options = Object.assign({}, options, {
+            body: JSON.stringify(body)
+          });
+
+          arguments[1] = options;
+        }
+      } catch (error) {}
+
+      return originalFetch.apply(this, arguments);
+    };
+  }
+
+  function getOrder() {
+    if (typeof window.ansimGetPaidReportPaymentOrder === "function") {
+      return window.ansimGetPaidReportPaymentOrder();
+    }
+    return window.__ansimPaidReportPaymentOrder || null;
+  }
+
+  function isTossTestReady() {
+    var order = getOrder();
+    return !!(
+      isTossTestRoute() &&
+      order &&
+      order.payment &&
+      order.payment.provider === "toss" &&
+      order.payment.mode === "toss_test_ready" &&
+      order.payment.tossCheckout &&
+      order.payment.tossCheckout.clientKeyConfigured &&
+      order.payment.tossCheckout.clientKey
+    );
+  }
+
+  function renderTossTestPanel() {
+    if (!isTossTestRoute()) return;
+
+    var resultArea = document.getElementById("resultArea");
+    var guide = document.getElementById("paidPaymentGuidePanel");
+    var anchor = guide || resultArea;
+    if (!anchor) return;
+
+    var panel = document.getElementById("tossTestModePanel");
+    if (!panel) {
+      panel = document.createElement("section");
+      panel.id = "tossTestModePanel";
+      panel.className = "paid-report-preview-card";
+      panel.style.marginTop = "18px";
+
+      if (guide && guide.parentNode) {
+        guide.parentNode.insertBefore(panel, guide.nextSibling);
+      } else {
+        anchor.appendChild(panel);
+      }
+    }
+
+    var order = getOrder();
+    var ready = isTossTestReady();
+
+    panel.innerHTML = [
+      '<div class="preview-eyebrow">검증 전용 · Toss 테스트 결제창</div>',
+      '<h3>테스트 결제창 확인 경로입니다</h3>',
+      '<p class="preview-lead">이 영역은 URL에 tossTest=1이 있을 때만 표시됩니다. 일반 고객 흐름에는 표시되지 않습니다.</p>',
+      '<div style="margin:14px 0;padding:14px;border-radius:18px;background:#f8fafc;border:1px solid #dbe3ee;color:#374151;line-height:1.65;">',
+      '<strong style="display:block;color:#173c2f;margin-bottom:6px;">상태: ' + (ready ? '테스트 결제창 준비됨' : '테스트 결제창 준비 전') + '</strong>',
+      '<div>주문번호: ' + (order && order.orderId ? order.orderId : '아직 생성 전') + '</div>',
+      '<div>금액: 29,000원</div>',
+      '<div>결제수단: 신용카드·체크카드, 카카오페이, 네이버페이</div>',
+      '</div>',
+      '<button id="openTossTestCheckoutBtn" type="button" class="btn btn-primary" style="width:100%;min-height:52px;" ' + (ready ? '' : 'disabled') + '>Toss 테스트 결제창 열기</button>',
+      '<p id="tossTestModeStatus" style="margin:12px 0 0;color:#6b7280;font-size:0.94rem;line-height:1.6;">운영 결제를 확정하지 않고 테스트 결제창 호출 여부만 확인합니다.</p>'
+    ].join("");
+
+    var btn = document.getElementById("openTossTestCheckoutBtn");
+    if (btn && btn.dataset.wired !== "1") {
+      btn.dataset.wired = "1";
+      btn.addEventListener("click", function () {
+        if (typeof window.ansimRequestTossPayment === "function") {
+          window.ansimRequestTossPayment().catch(function (error) {
+            var status = document.getElementById("tossTestModeStatus");
+            if (status) {
+              status.textContent = error && error.message ? error.message : "Toss 테스트 결제창 호출 중 문제가 발생했습니다.";
+            }
+          });
+        }
+      });
+    }
+
+    if (typeof window.ansimTrackFunnel === "function" && !window.__ansimTossTestPanelTracked) {
+      window.__ansimTossTestPanelTracked = true;
+      window.ansimTrackFunnel("toss_test_mode_panel_view", {
+        ready: ready,
+        score: getScore()
+      });
+    }
+  }
+
+  function updateNotice() {
+    if (!isTossTestRoute()) return;
+
+    var notice = document.getElementById("tossMinimalIntegrationNotice");
+    if (notice && isTossTestReady()) {
+      notice.innerHTML = [
+        '<strong style="display:block;color:#173c2f;margin-bottom:6px;">Toss 테스트 결제창 준비</strong>',
+        '<div>검증 전용 경로에서 테스트 결제창을 열 수 있습니다.</div>',
+        '<div style="margin-top:4px;color:#6b7280;">일반 고객 경로는 기존 결제 안내 확인 상태를 유지합니다.</div>'
+      ].join("");
+    }
+  }
+
+  window.ansimIsTossTestRoute = isTossTestRoute;
+  window.ansimIsTossTestReady = isTossTestReady;
+
+  document.addEventListener("DOMContentLoaded", function () {
+    patchPaymentOrderPayload();
+
+    document.addEventListener("click", function () {
+      setTimeout(renderTossTestPanel, 120);
+      setTimeout(updateNotice, 200);
+      setTimeout(renderTossTestPanel, 700);
+      setTimeout(updateNotice, 900);
+    }, true);
+
+    setInterval(function () {
+      renderTossTestPanel();
+      updateNotice();
+    }, 900);
+
+    setTimeout(renderTossTestPanel, 1000);
+    setTimeout(updateNotice, 1500);
+  });
+})();
+</script>
+
+
+<script>
+(function () {
+  if (window.__ansimTossTestReadyFixInstalled) return;
+  window.__ansimTossTestReadyFixInstalled = true;
+
+  function isTossTestRoute() {
+    var params = new URLSearchParams(window.location.search || "");
+    return params.get("tossTest") === "1";
+  }
+
+  function getOrder() {
+    if (typeof window.ansimGetPaidReportPaymentOrder === "function") {
+      return window.ansimGetPaidReportPaymentOrder();
+    }
+    return window.__ansimPaidReportPaymentOrder || null;
+  }
+
+  function mergePaymentDataFromResponse(data) {
+    if (!data || !data.payment || !window.__ansimPaidReportPaymentOrder) return;
+
+    window.__ansimPaidReportPaymentOrder.payment = Object.assign(
+      {},
+      window.__ansimPaidReportPaymentOrder.payment || {},
+      data.payment
+    );
+
+    if (data.testRoute) {
+      window.__ansimPaidReportPaymentOrder.testRoute = data.testRoute;
+    }
+
+    if (window.__ansimPaidReportPaymentIntent) {
+      window.__ansimPaidReportPaymentIntent.payment = window.__ansimPaidReportPaymentOrder.payment;
+      window.__ansimPaidReportPaymentIntent.testRoute = window.__ansimPaidReportPaymentOrder.testRoute || null;
+    }
+  }
+
+  function patchFetchForFullPaymentData() {
+    if (window.__ansimTossTestReadyFetchPatched) return;
+
+    var originalFetch = window.fetch;
+    if (typeof originalFetch !== "function") return;
+
+    window.__ansimTossTestReadyFetchPatched = true;
+
+    window.fetch = async function () {
+      var response = await originalFetch.apply(this, arguments);
+
+      try {
+        var url = arguments[0];
+        var isPaymentApi = typeof url === "string" && url.indexOf("/api/payments") >= 0;
+
+        if (isPaymentApi && response && response.clone) {
+          response.clone().json().then(function (data) {
+            mergePaymentDataFromResponse(data);
+            setTimeout(refreshTossTestPanel, 50);
+            setTimeout(refreshTossTestPanel, 300);
+            setTimeout(refreshTossTestPanel, 900);
+          }).catch(function () {});
+        }
+      } catch (error) {}
+
+      return response;
+    };
+  }
+
+  function isTossTestReady() {
+    var order = getOrder();
+
+    return !!(
+      isTossTestRoute() &&
+      order &&
+      order.payment &&
+      order.payment.provider === "toss" &&
+      order.payment.mode === "toss_test_ready" &&
+      order.payment.tossCheckout &&
+      order.payment.tossCheckout.clientKeyConfigured &&
+      order.payment.tossCheckout.clientKey
+    );
+  }
+
+  function refreshTossTestPanel() {
+    if (!isTossTestRoute()) return;
+
+    var panel = document.getElementById("tossTestModePanel");
+    if (!panel) return;
+
+    var order = getOrder();
+    var ready = isTossTestReady();
+
+    var strong = panel.querySelector("strong");
+    if (strong) {
+      strong.textContent = "상태: " + (ready ? "테스트 결제창 준비됨" : "테스트 결제창 준비 전");
+    }
+
+    var btn = document.getElementById("openTossTestCheckoutBtn");
+    if (btn) {
+      btn.disabled = !ready;
+      btn.textContent = ready ? "Toss 테스트 결제창 열기" : "Toss 테스트 결제창 준비 중";
+    }
+
+    var status = document.getElementById("tossTestModeStatus");
+    if (status) {
+      status.textContent = ready
+        ? "테스트 키 설정이 확인되면 이 버튼으로 Toss 테스트 결제창을 열 수 있습니다."
+        : "테스트 결제창 준비 정보를 확인하는 중입니다.";
+    }
+
+    if (typeof window.ansimTrackFunnel === "function" && ready && !window.__ansimTossTestReadyTracked) {
+      window.__ansimTossTestReadyTracked = true;
+      window.ansimTrackFunnel("toss_test_mode_ready", {
+        ready: true,
+        orderId: order && order.orderId ? order.orderId : null,
+        amount: order && order.amount ? order.amount : 29000
+      });
+    }
+  }
+
+  window.ansimIsTossTestReady = isTossTestReady;
+  window.ansimRefreshTossTestPanel = refreshTossTestPanel;
+
+  document.addEventListener("DOMContentLoaded", function () {
+    patchFetchForFullPaymentData();
+
+    document.addEventListener("click", function () {
+      setTimeout(refreshTossTestPanel, 80);
+      setTimeout(refreshTossTestPanel, 300);
+      setTimeout(refreshTossTestPanel, 900);
+      setTimeout(refreshTossTestPanel, 1500);
+    }, true);
+
+    setInterval(refreshTossTestPanel, 700);
+    setTimeout(refreshTossTestPanel, 1200);
+  });
+})();
+</script>
+
+
+<script>
+(function () {
+  if (window.__ansimTossTestOrderMergeFixInstalled) return;
+  window.__ansimTossTestOrderMergeFixInstalled = true;
+
+  function isTossTestRoute() {
+    var params = new URLSearchParams(window.location.search || "");
+    return params.get("tossTest") === "1";
+  }
+
+  function getOrder() {
+    if (typeof window.ansimGetPaidReportPaymentOrder === "function") {
+      return window.ansimGetPaidReportPaymentOrder();
+    }
+    return window.__ansimPaidReportPaymentOrder || null;
+  }
+
+  function rememberPaymentApiResponse(data) {
+    if (!data || !data.payment) return;
+    window.__ansimLastPaymentApiResponse = data;
+  }
+
+  function mergeLastPaymentApiResponse() {
+    if (!isTossTestRoute()) return false;
+
+    var data = window.__ansimLastPaymentApiResponse;
+    var order = getOrder();
+
+    if (!data || !data.payment || !order) return false;
+
+    order.payment = Object.assign({}, order.payment || {}, data.payment);
+
+    if (data.testRoute) {
+      order.testRoute = data.testRoute;
+    }
+
+    if (data.orderId && !order.orderId) {
+      order.orderId = data.orderId;
+    }
+
+    if (data.amount && !order.amount) {
+      order.amount = data.amount;
+    }
+
+    window.__ansimPaidReportPaymentOrder = order;
+
+    if (window.__ansimPaidReportPaymentIntent) {
+      window.__ansimPaidReportPaymentIntent.payment = order.payment;
+      window.__ansimPaidReportPaymentIntent.testRoute = order.testRoute || null;
+      window.__ansimPaidReportPaymentIntent.orderId = order.orderId || window.__ansimPaidReportPaymentIntent.orderId;
+    }
+
+    return true;
+  }
+
+  function patchFetch() {
+    if (window.__ansimTossTestOrderMergeFetchPatched) return;
+
+    var originalFetch = window.fetch;
+    if (typeof originalFetch !== "function") return;
+
+    window.__ansimTossTestOrderMergeFetchPatched = true;
+
+    window.fetch = async function () {
+      var response = await originalFetch.apply(this, arguments);
+
+      try {
+        var url = arguments[0];
+        var isPaymentApi = typeof url === "string" && url.indexOf("/api/payments") >= 0;
+
+        if (isPaymentApi && response && response.clone) {
+          response.clone().json().then(function (data) {
+            rememberPaymentApiResponse(data);
+
+            var delays = [0, 50, 120, 250, 500, 900, 1500, 2500];
+            delays.forEach(function (delay) {
+              setTimeout(function () {
+                mergeLastPaymentApiResponse();
+                refreshPanel();
+              }, delay);
+            });
+          }).catch(function () {});
+        }
+      } catch (error) {}
+
+      return response;
+    };
+  }
+
+  function hasRealTossCheckout(order) {
+    return !!(
+      order &&
+      order.payment &&
+      order.payment.tossCheckout &&
+      order.payment.tossCheckout.clientKeyConfigured &&
+      order.payment.tossCheckout.clientKey
+    );
+  }
+
+  function isTossTestReady() {
+    mergeLastPaymentApiResponse();
+
+    var order = getOrder();
+
+    return !!(
+      isTossTestRoute() &&
+      order &&
+      order.payment &&
+      order.payment.provider === "toss" &&
+      order.payment.mode === "toss_test_ready" &&
+      hasRealTossCheckout(order)
+    );
+  }
+
+  function refreshPanel() {
+    if (!isTossTestRoute()) return;
+
+    mergeLastPaymentApiResponse();
+
+    var panel = document.getElementById("tossTestModePanel");
+    var order = getOrder();
+    var ready = isTossTestReady();
+
+    if (!panel) return;
+
+    var strong = panel.querySelector("strong");
+    if (strong) {
+      strong.textContent = "상태: " + (ready ? "테스트 결제창 준비됨" : "테스트 결제창 준비 전");
+    }
+
+    var btn = document.getElementById("openTossTestCheckoutBtn");
+    if (btn) {
+      btn.disabled = !ready;
+      btn.textContent = ready ? "Toss 테스트 결제창 열기" : "Toss 테스트 결제창 준비 중";
+    }
+
+    var status = document.getElementById("tossTestModeStatus");
+    if (status) {
+      status.textContent = ready
+        ? "테스트 키 설정이 확인되면 이 버튼으로 Toss 테스트 결제창을 열 수 있습니다."
+        : "테스트 결제창 준비 정보를 확인하는 중입니다.";
+    }
+
+    if (ready && typeof window.ansimTrackFunnel === "function" && !window.__ansimTossTestOrderMergeReadyTracked) {
+      window.__ansimTossTestOrderMergeReadyTracked = true;
+      window.ansimTrackFunnel("toss_test_mode_ready", {
+        ready: true,
+        orderId: order && order.orderId ? order.orderId : null,
+        amount: order && order.amount ? order.amount : 29000
+      });
+    }
+  }
+
+  window.ansimIsTossTestReady = isTossTestReady;
+  window.ansimRefreshTossTestPanel = refreshPanel;
+  window.ansimMergeLastPaymentApiResponse = mergeLastPaymentApiResponse;
+
+  document.addEventListener("DOMContentLoaded", function () {
+    patchFetch();
+
+    document.addEventListener("click", function () {
+      [50, 120, 250, 500, 900, 1500, 2400].forEach(function (delay) {
+        setTimeout(refreshPanel, delay);
+      });
+    }, true);
+
+    setInterval(refreshPanel, 500);
+    setTimeout(refreshPanel, 800);
+    setTimeout(refreshPanel, 1500);
+  });
+})();
+</script>
+
 </body>",
 
 
