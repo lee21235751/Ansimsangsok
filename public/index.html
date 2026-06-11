@@ -3630,7 +3630,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     var btn = document.getElementById("paidPaymentIntentBtn");
     if (btn) {
-      btn.textContent = "결제 안내 확인 표시";
+      btn.textContent = "상세자료 29,000원 확인하고 결제하기";
       btn.style.minHeight = "50px";
     }
 
@@ -4385,7 +4385,7 @@ document.addEventListener("DOMContentLoaded", function () {
     var successBtn = document.getElementById("paymentResultSuccessBtn");
     if (successBtn && successBtn.dataset.mockSafetyWired !== "1") {
       successBtn.dataset.mockSafetyWired = "1";
-      successBtn.textContent = "결제 안내 확인 표시";
+      successBtn.textContent = "상세자료 29,000원 확인하고 결제하기";
 
       successBtn.addEventListener("click", function (event) {
         if (getPaymentMode() === "payment_ready_only") {
