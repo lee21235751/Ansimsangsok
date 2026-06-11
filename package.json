@@ -5,7 +5,9 @@
   "type": "module",
   "scripts": {
     "build": "node scripts/build.mjs",
-    "start": "node server.mjs"
+    "start": "node server.mjs",
+    "evidence:update": "node scripts/update-evidence-sources.mjs",
+    "evidence:validate": "node scripts/validate-evidence-sources.mjs"
   },
   "engines": {
     "node": ">=18"

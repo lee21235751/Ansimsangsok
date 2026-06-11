@@ -1,0 +1,109 @@
+{
+  "version": "1.0.0",
+  "updatedAt": "2026-06-11",
+  "purpose": "안심상속 유료 상세자료의 법령·판례·세무·국제상속 근거 최신성 감시",
+  "principles": [
+    "공식자료를 1차 기준으로 사용한다.",
+    "민간자료는 공식 근거가 아니라 누락 쟁점과 쉬운 설명을 위한 보조자료로만 사용한다.",
+    "변경이 감지되면 결론 단정이 아니라 최신 확인 필요 항목으로 분리한다.",
+    "유료 상세자료에는 기준일과 확인 상태를 함께 표시한다."
+  ],
+  "sources": [
+    {
+      "id": "law-civil-code",
+      "grade": "A",
+      "category": "법령",
+      "name": "민법",
+      "provider": "국가법령정보센터",
+      "url": "https://law.go.kr/법령/민법",
+      "watchTarget": "상속인, 법정상속분, 유류분, 기여분, 상속포기·한정승인, 유언",
+      "frequency": "monthly",
+      "reportUse": "상속법 확인 항목과 준비자료 축",
+      "riskRule": "조문 결론을 고객 사안에 단정 적용하지 않는다."
+    },
+    {
+      "id": "law-inheritance-tax",
+      "grade": "A",
+      "category": "상속세",
+      "name": "상속세 및 증여세법",
+      "provider": "국가법령정보센터",
+      "url": "https://law.go.kr/법령/상속세및증여세법",
+      "watchTarget": "상속재산 범위, 신고기한, 공제, 평가, 세율, 신고세액공제",
+      "frequency": "monthly",
+      "reportUse": "상속세 신고·준비자료·평가자료 확인 항목",
+      "riskRule": "세액·공제·절세 결과를 단정하지 않는다."
+    },
+    {
+      "id": "open-law-api",
+      "grade": "A",
+      "category": "공식 API",
+      "name": "국가법령정보 공동활용 OPEN API",
+      "provider": "법제처",
+      "url": "https://open.law.go.kr/LSO/openApi/openApiManual.do",
+      "watchTarget": "현행법령 목록조회·본문조회",
+      "frequency": "monthly",
+      "reportUse": "법령 데이터팩 자동 갱신 후보",
+      "riskRule": "API 키·OC 값은 서버 또는 로컬 스크립트에서만 관리한다."
+    },
+    {
+      "id": "supreme-court-cases",
+      "grade": "A",
+      "category": "판례",
+      "name": "대법원·판례 공개자료",
+      "provider": "대법원·사법정보공개포털·국가법령정보센터 판례",
+      "url": "https://portal.scourt.go.kr/pgp/index.on",
+      "watchTarget": "유류분, 특별수익, 기여분, 명의신탁, 상속재산 평가, 한정승인",
+      "frequency": "monthly",
+      "reportUse": "판례상 확인 포인트와 준비자료 항목",
+      "riskRule": "판례 결론을 고객 사건 결론으로 단정하지 않는다."
+    },
+    {
+      "id": "nts-inheritance-tax",
+      "grade": "A",
+      "category": "국세청",
+      "name": "국세청 상속세 신고안내",
+      "provider": "국세청",
+      "url": "https://www.nts.go.kr",
+      "watchTarget": "상속세 신고납부, 제출자료, 간주상속재산, 가산세, 분납·연부연납",
+      "frequency": "monthly",
+      "reportUse": "상속세 신고 준비자료와 절차 확인",
+      "riskRule": "신고 결과나 세금 감소를 약속하지 않는다."
+    },
+    {
+      "id": "taxlaw-nts",
+      "grade": "B",
+      "category": "세법해석",
+      "name": "국세법령정보시스템",
+      "provider": "국세청",
+      "url": "https://taxlaw.nts.go.kr/",
+      "watchTarget": "세법해석례, 질의회신, 판례·결정례, 세무조사 관련 쟁점",
+      "frequency": "monthly",
+      "reportUse": "세무조사·사전증여·추정상속재산·채무공제 확인 후보",
+      "riskRule": "상담사례는 확인 후보로만 사용한다."
+    },
+    {
+      "id": "international-official",
+      "grade": "B",
+      "category": "국제상속",
+      "name": "국가별 공식 세무·법무자료",
+      "provider": "해당국 공식기관",
+      "url": "country-specific-official-sources",
+      "watchTarget": "미국, EU, 일본, 영국 등 외국 거주·외국 국적·해외재산",
+      "frequency": "case-triggered",
+      "reportUse": "국제상속 확인 항목과 전문가 필요도 판단",
+      "riskRule": "해당국 법률 결론을 단정하지 않는다."
+    },
+    {
+      "id": "private-secondary",
+      "grade": "C",
+      "category": "보조자료",
+      "name": "민간 법률 플랫폼·AI·웹자료",
+      "provider": "로톡 등 민간 공개자료",
+      "url": "public-secondary-sources",
+      "watchTarget": "고객 질문 유형, 쉬운 설명, 누락 쟁점 후보",
+      "frequency": "as-needed",
+      "reportUse": "고객 이해도와 문구 개선",
+      "riskRule": "공식 근거로 표시하지 않는다."
+    }
+  ]
+}
