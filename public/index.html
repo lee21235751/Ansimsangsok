@@ -1400,6 +1400,67 @@
   line-height: 1.56;
 }
 
+
+.paid-case-pack-panel {
+  margin-top: 14px;
+  padding: 15px;
+  border-radius: 18px;
+  border: 1px solid rgba(82,109,86,0.20);
+  background: rgba(247,251,247,0.94);
+}
+.paid-case-pack-panel h4 {
+  margin: 0 0 9px;
+  color: #193a2f;
+  font-size: 16px;
+  line-height: 1.35;
+  letter-spacing: -0.04em;
+}
+.paid-case-pack-lead {
+  margin: 0 0 10px;
+  color: #4f3d22;
+  font-size: 13.5px;
+  line-height: 1.62;
+}
+.paid-case-pack-list {
+  display: grid;
+  gap: 9px;
+}
+.paid-case-pack-item {
+  padding: 12px 13px;
+  border-radius: 15px;
+  background: rgba(255,255,255,0.88);
+  border: 1px solid rgba(197,151,73,0.20);
+}
+.paid-case-pack-item b {
+  display: block;
+  color: #193a2f;
+  font-size: 13.5px;
+  line-height: 1.35;
+  margin-bottom: 4px;
+}
+.paid-case-pack-item span {
+  display: block;
+  color: #5f4b2b;
+  font-size: 13px;
+  line-height: 1.52;
+}
+.paid-case-pack-meta {
+  display: block;
+  margin-top: 6px;
+  color: #846f45;
+  font-size: 12px;
+  line-height: 1.45;
+}
+.paid-case-pack-notice {
+  margin-top: 11px;
+  padding: 11px 12px;
+  border-radius: 14px;
+  background: rgba(25,58,47,0.08);
+  color: #3f3522;
+  font-size: 12.8px;
+  line-height: 1.56;
+}
+
 </style>
 
   <meta name="msapplication-TileColor" content="#06251d" />
@@ -6754,6 +6815,422 @@ document.addEventListener("DOMContentLoaded", function () {
     window.ansimEnhancePaidReportDeepAnalysis = wrappedDeep;
   }
 
+  schedule();
+})();
+</script>
+
+
+<script>
+(function () {
+  if (window.__ansimCaseDataPackV2CleanInstalled) return;
+  window.__ansimCaseDataPackV2CleanInstalled = true;
+
+  var CASE_PACK_UPDATED_AT = "2026-06-11";
+
+  var CASE_ITEMS = [
+    {
+      id: "case-reserved-portion-basic-property",
+      category: "유류분",
+      title: "유류분 기초재산 산입 여부",
+      sourceLabel: "국가법령정보센터 판례",
+      displayText: "피상속인의 생전 재산처분이 단순 처분인지, 유류분 산정의 기초재산에 들어갈 수 있는 증여인지 확인합니다.",
+      checkText: "처분 시기, 대가 관계, 수익자, 가족관계, 상속개시 전후 사정을 나누어 정리합니다."
+    },
+    {
+      id: "case-special-benefit-coheir",
+      category: "특별수익",
+      title: "공동상속인 특별수익 여부",
+      sourceLabel: "국가법령정보센터 판례",
+      displayText: "특정 상속인이 생전에 받은 재산이 상속분 조정에서 따로 확인될 수 있는지 검토합니다.",
+      checkText: "받은 재산의 목적, 금액, 시기, 다른 상속인과의 형평, 통상 부양 범위를 구분합니다."
+    },
+    {
+      id: "case-reserved-portion-period",
+      category: "유류분 기간",
+      title: "유류분 반환 관련 기간",
+      sourceLabel: "국가법령정보센터 민법·판례",
+      displayText: "유류분 관련 기간은 상속개시일, 증여·유증을 안 시점, 실제 자료 확인 시점을 나누어 봅니다.",
+      checkText: "사망일, 유언 확인일, 증여 확인일, 통지·내용증명 등 날짜 자료를 모읍니다."
+    },
+    {
+      id: "case-contribution-support-care",
+      category: "기여분",
+      title: "부양·간병 기여 확인",
+      sourceLabel: "국가법령정보센터 판례",
+      displayText: "부양이나 간병이 있었다면 통상 가족 간 도움을 넘는 특별한 기여인지 확인합니다.",
+      checkText: "기간, 비용 부담, 동거 여부, 병원·요양 자료, 다른 가족의 분담 여부를 정리합니다."
+    },
+    {
+      id: "case-will-legacy-reserved-portion",
+      category: "유언·유증",
+      title: "유언·유증과 유류분 충돌",
+      sourceLabel: "국가법령정보센터 판례",
+      displayText: "유언이나 유증이 특정인에게 집중되어 있으면 다른 상속인의 유류분 확인 항목이 함께 생길 수 있습니다.",
+      checkText: "유언 형식, 작성 시기, 수익자, 재산 범위, 다른 상속인의 법정상속분을 함께 확인합니다."
+    },
+    {
+      id: "case-inheritance-property-valuation",
+      category: "상속재산 평가",
+      title: "상속재산 시가 판단",
+      sourceLabel: "국가법령정보센터 판례·국세청",
+      displayText: "부동산 등 재산평가는 상속개시일과 평가자료 사이의 가격변동 사정까지 확인합니다.",
+      checkText: "매매계약일, 감정평가일, 경매·공매가, 주변 시세, 가격변동 사정을 구분합니다."
+    },
+    {
+      id: "case-debt-limited-acceptance",
+      category: "채무·한정승인",
+      title: "채무 초과와 승인·포기 선택",
+      sourceLabel: "국가법령정보센터 민법·판례",
+      displayText: "채무가 많으면 단순승인으로 볼 수 있는 행동과 한정승인·상속포기 기간을 함께 확인합니다.",
+      checkText: "재산 사용, 예금 인출, 부동산 처분, 채무 통지, 사망일 기준 기간을 따로 정리합니다."
+    },
+    {
+      id: "case-insurance-beneficiary",
+      category: "보험금",
+      title: "사망보험금 수익자 확인",
+      sourceLabel: "국가법령정보센터 판례",
+      displayText: "보험금은 계약자, 피보험자, 수익자에 따라 상속재산 정리 방식이 달라질 수 있습니다.",
+      checkText: "보험계약서, 수익자 지정, 보험료 부담자, 지급일, 세무자료를 따로 확인합니다."
+    },
+    {
+      id: "case-title-trust-real-estate",
+      category: "명의신탁·부동산",
+      title: "명의와 실질 소유 관계",
+      sourceLabel: "국가법령정보센터 판례",
+      displayText: "부동산 명의와 실제 자금 부담자가 다르면 유류분·상속재산 정리에서 별도 확인이 필요할 수 있습니다.",
+      checkText: "매수자금 출처, 등기 명의, 가족 간 약정, 반환 합의, 실질 사용 관계를 나누어 확인합니다."
+    },
+    {
+      id: "case-overseas-complex-assets",
+      category: "해외·복합재산",
+      title: "해외·사업체·주식 등 복합재산",
+      sourceLabel: "국세청·국가법령정보센터",
+      displayText: "해외재산, 비거주자, 사업체, 주식이 있으면 자료 확보와 평가 기준을 분리해 확인합니다.",
+      checkText: "국내외 재산 소재지, 거주자 여부, 지분 자료, 회계자료, 외국 서류 확보 가능성을 정리합니다."
+    }
+  ];
+
+  function getPaymentStatus() {
+    if (window.__ansimPaidReportPaymentResult && window.__ansimPaidReportPaymentResult.status === "paid_confirmed") {
+      return "paid_confirmed";
+    }
+
+    if (window.__ansimPaidReportPaymentIntent && window.__ansimPaidReportPaymentIntent.status === "paid_confirmed") {
+      return "paid_confirmed";
+    }
+
+    try {
+      if (typeof window.ansimGetPaidReportPaymentResult === "function") {
+        var result = window.ansimGetPaidReportPaymentResult();
+        if (result && result.status === "paid_confirmed") return "paid_confirmed";
+        if (result && result.status) return result.status;
+      }
+    } catch (error) {}
+
+    if (window.__ansimPaidReportPaymentResult && window.__ansimPaidReportPaymentResult.status) {
+      return window.__ansimPaidReportPaymentResult.status;
+    }
+
+    if (window.__ansimPaidReportPaymentIntent && window.__ansimPaidReportPaymentIntent.status) {
+      return window.__ansimPaidReportPaymentIntent.status;
+    }
+
+    return "";
+  }
+
+  function isPaidConfirmed() {
+    if (getPaymentStatus() === "paid_confirmed") return true;
+
+    var deliveredCard = document.getElementById("paidReportDeliveredCard");
+    if (deliveredCard && deliveredCard.hidden !== true) return true;
+
+    var bodyText = document.body ? document.body.innerText : "";
+    if (bodyText.indexOf("상세자료가 준비되었습니다") !== -1) return true;
+
+    return false;
+  }
+
+  function itemHtml(item) {
+    return [
+      '<div class="paid-case-pack-item" data-case-id="', item.id, '">',
+      '<b>', item.title, '</b>',
+      '<span>', item.displayText, '</span>',
+      '<small class="paid-case-pack-meta">',
+      item.category, ' · ', item.sourceLabel, ' · ', item.checkText,
+      '</small>',
+      '</div>'
+    ].join("");
+  }
+
+  function findAnchor() {
+    return (
+      document.getElementById("paidReferencePackPanel") ||
+      document.getElementById("paidDeepAnalysisPanel") ||
+      document.querySelector(".paid-deep-analysis-panel") ||
+      document.getElementById("paidReportDeliveredCard") ||
+      document.getElementById("resultArea") ||
+      document.body
+    );
+  }
+
+  function ensurePanel() {
+    var panel = document.getElementById("paidCasePackPanel");
+    if (panel) return panel;
+
+    panel = document.createElement("section");
+    panel.id = "paidCasePackPanel";
+    panel.className = "paid-case-pack-panel";
+
+    var anchor = findAnchor();
+
+    if (anchor && anchor.id === "paidReferencePackPanel" && anchor.parentNode) {
+      anchor.parentNode.insertBefore(panel, anchor.nextSibling);
+    } else if (anchor && anchor.id === "paidDeepAnalysisPanel" && anchor.parentNode) {
+      anchor.parentNode.insertBefore(panel, anchor.nextSibling);
+    } else if (anchor && anchor.classList && anchor.classList.contains("paid-deep-analysis-panel") && anchor.parentNode) {
+      anchor.parentNode.insertBefore(panel, anchor.nextSibling);
+    } else if (anchor && anchor.id === "paidReportDeliveredCard") {
+      var actions = anchor.querySelector(".paid-report-actions");
+      if (actions) actions.insertAdjacentElement("beforebegin", panel);
+      else anchor.appendChild(panel);
+    } else if (anchor && anchor.parentNode && anchor.id !== "resultArea") {
+      anchor.parentNode.insertBefore(panel, anchor.nextSibling);
+    } else {
+      document.body.appendChild(panel);
+    }
+
+    return panel;
+  }
+
+  function renderCasePack() {
+    if (!isPaidConfirmed()) return false;
+
+    var panel = ensurePanel();
+    if (!panel) return false;
+
+    panel.innerHTML = [
+      '<h4>판례 쟁점 데이터팩</h4>',
+      '<p class="paid-case-pack-lead">아래 항목은 현재 답변에 맞춰 유류분, 특별수익, 기여분, 상속재산 평가 등에서 판례상 확인할 쟁점을 빠짐없이 정리한 목록입니다.</p>',
+      '<div class="paid-case-pack-list">',
+      CASE_ITEMS.map(itemHtml).join(""),
+      '</div>',
+      '<p class="paid-case-pack-notice">판례 쟁점 데이터팩은 결론을 단정하지 않고, 상담 전 확인해야 할 쟁점과 자료를 빠뜨리지 않도록 돕는 용도로 사용됩니다. 데이터팩 기준일: ',
+      CASE_PACK_UPDATED_AT,
+      '</p>'
+    ].join("");
+
+    if (typeof window.ansimTrackFunnel === "function" && panel.dataset.v2CleanTracked !== "1") {
+      panel.dataset.v2CleanTracked = "1";
+      window.ansimTrackFunnel("paid_report_case_datapack_v2_view", {
+        count: CASE_ITEMS.length,
+        updatedAt: CASE_PACK_UPDATED_AT
+      });
+    }
+
+    return true;
+  }
+
+  window.ansimCaseDataPackV2 = CASE_ITEMS;
+  window.ansimRenderCaseDataPackV2 = renderCasePack;
+
+  function schedule() {
+    setTimeout(renderCasePack, 80);
+    setTimeout(renderCasePack, 250);
+    setTimeout(renderCasePack, 600);
+    setTimeout(renderCasePack, 1200);
+    setTimeout(renderCasePack, 2200);
+    setTimeout(renderCasePack, 3600);
+  }
+
+  var oldDelivered = window.ansimRenderPaidReportDelivered;
+  if (typeof oldDelivered === "function" && oldDelivered.__caseV2CleanWrapped !== true) {
+    var wrappedDelivered = function () {
+      var result = oldDelivered.apply(this, arguments);
+      schedule();
+      return result;
+    };
+    wrappedDelivered.__caseV2CleanWrapped = true;
+    window.ansimRenderPaidReportDelivered = wrappedDelivered;
+  }
+
+  var oldReference = window.ansimForceCreateLegalTaxCaseReferencePanel;
+  if (typeof oldReference === "function" && oldReference.__caseV2CleanWrapped !== true) {
+    var wrappedReference = function () {
+      var result = oldReference.apply(this, arguments);
+      schedule();
+      return result;
+    };
+    wrappedReference.__caseV2CleanWrapped = true;
+    window.ansimForceCreateLegalTaxCaseReferencePanel = wrappedReference;
+  }
+
+  document.addEventListener("DOMContentLoaded", schedule);
+  document.addEventListener("click", schedule, true);
+  setInterval(renderCasePack, 1000);
+  schedule();
+})();
+</script>
+
+
+<script>
+(function () {
+  if (window.__ansimCaseDataPackV2DirectPanelFixInstalled) return;
+  window.__ansimCaseDataPackV2DirectPanelFixInstalled = true;
+
+  var DIRECT_CASE_ITEMS = [
+    ["case-reserved-portion-basic-property", "유류분", "유류분 기초재산 산입 여부", "피상속인의 생전 재산처분이 단순 처분인지, 유류분 산정의 기초재산에 들어갈 수 있는 증여인지 확인합니다.", "처분 시기, 대가 관계, 수익자, 가족관계, 상속개시 전후 사정을 나누어 정리합니다."],
+    ["case-special-benefit-coheir", "특별수익", "공동상속인 특별수익 여부", "특정 상속인이 생전에 받은 재산이 상속분 조정에서 따로 확인될 수 있는지 검토합니다.", "받은 재산의 목적, 금액, 시기, 다른 상속인과의 형평, 통상 부양 범위를 구분합니다."],
+    ["case-reserved-portion-period", "유류분 기간", "유류분 반환 관련 기간", "유류분 관련 기간은 상속개시일, 증여·유증을 안 시점, 실제 자료 확인 시점을 나누어 봅니다.", "사망일, 유언 확인일, 증여 확인일, 통지·내용증명 등 날짜 자료를 모읍니다."],
+    ["case-contribution-support-care", "기여분", "부양·간병 기여 확인", "부양이나 간병이 있었다면 통상 가족 간 도움을 넘는 특별한 기여인지 확인합니다.", "기간, 비용 부담, 동거 여부, 병원·요양 자료, 다른 가족의 분담 여부를 정리합니다."],
+    ["case-will-legacy-reserved-portion", "유언·유증", "유언·유증과 유류분 충돌", "유언이나 유증이 특정인에게 집중되어 있으면 다른 상속인의 유류분 확인 항목이 함께 생길 수 있습니다.", "유언 형식, 작성 시기, 수익자, 재산 범위, 다른 상속인의 법정상속분을 함께 확인합니다."],
+    ["case-inheritance-property-valuation", "상속재산 평가", "상속재산 시가 판단", "부동산 등 재산평가는 상속개시일과 평가자료 사이의 가격변동 사정까지 확인합니다.", "매매계약일, 감정평가일, 경매·공매가, 주변 시세, 가격변동 사정을 구분합니다."],
+    ["case-debt-limited-acceptance", "채무·한정승인", "채무 초과와 승인·포기 선택", "채무가 많으면 단순승인으로 볼 수 있는 행동과 한정승인·상속포기 기간을 함께 확인합니다.", "재산 사용, 예금 인출, 부동산 처분, 채무 통지, 사망일 기준 기간을 따로 정리합니다."],
+    ["case-insurance-beneficiary", "보험금", "사망보험금 수익자 확인", "보험금은 계약자, 피보험자, 수익자에 따라 상속재산 정리 방식이 달라질 수 있습니다.", "보험계약서, 수익자 지정, 보험료 부담자, 지급일, 세무자료를 따로 확인합니다."],
+    ["case-title-trust-real-estate", "명의신탁·부동산", "명의와 실질 소유 관계", "부동산 명의와 실제 자금 부담자가 다르면 유류분·상속재산 정리에서 별도 확인이 필요할 수 있습니다.", "매수자금 출처, 등기 명의, 가족 간 약정, 반환 합의, 실질 사용 관계를 나누어 확인합니다."],
+    ["case-overseas-complex-assets", "해외·복합재산", "해외·사업체·주식 등 복합재산", "해외재산, 비거주자, 사업체, 주식이 있으면 자료 확보와 평가 기준을 분리해 확인합니다.", "국내외 재산 소재지, 거주자 여부, 지분 자료, 회계자료, 외국 서류 확보 가능성을 정리합니다."]
+  ];
+
+  function shouldShowCasePack() {
+    if (window.__ansimPaidReportPaymentResult && window.__ansimPaidReportPaymentResult.status === "paid_confirmed") return true;
+    if (window.__ansimPaidReportPaymentIntent && window.__ansimPaidReportPaymentIntent.status === "paid_confirmed") return true;
+
+    try {
+      if (typeof window.ansimGetPaidReportPaymentResult === "function") {
+        var result = window.ansimGetPaidReportPaymentResult();
+        if (result && result.status === "paid_confirmed") return true;
+      }
+    } catch (error) {}
+
+    var deliveredCard = document.getElementById("paidReportDeliveredCard");
+    if (deliveredCard && deliveredCard.hidden !== true) return true;
+
+    var bodyText = document.body ? document.body.innerText : "";
+    if (bodyText.indexOf("상세자료가 준비되었습니다") !== -1) return true;
+
+    return false;
+  }
+
+  function itemHtml(item) {
+    return [
+      '<div class="paid-case-pack-item" data-case-id="', item[0], '">',
+      '<b>', item[2], '</b>',
+      '<span>', item[3], '</span>',
+      '<small class="paid-case-pack-meta">',
+      item[1], ' · 국가법령정보센터 판례 확인 포인트 · ', item[4],
+      '</small>',
+      '</div>'
+    ].join("");
+  }
+
+  function findAnchor() {
+    return (
+      document.getElementById("paidReferencePackPanel") ||
+      document.getElementById("paidDeepAnalysisPanel") ||
+      document.querySelector(".paid-deep-analysis-panel") ||
+      document.getElementById("paidReportDeliveredCard") ||
+      document.getElementById("resultArea") ||
+      document.body
+    );
+  }
+
+  function createOrReplaceCasePackPanel() {
+    if (!shouldShowCasePack()) return false;
+
+    var panel = document.getElementById("paidCasePackPanel");
+
+    if (!panel) {
+      panel = document.createElement("section");
+      panel.id = "paidCasePackPanel";
+      panel.className = "paid-case-pack-panel";
+
+      var anchor = findAnchor();
+
+      if (anchor && anchor.id === "paidReferencePackPanel" && anchor.parentNode) {
+        anchor.parentNode.insertBefore(panel, anchor.nextSibling);
+      } else if (anchor && anchor.id === "paidDeepAnalysisPanel" && anchor.parentNode) {
+        anchor.parentNode.insertBefore(panel, anchor.nextSibling);
+      } else if (anchor && anchor.classList && anchor.classList.contains("paid-deep-analysis-panel") && anchor.parentNode) {
+        anchor.parentNode.insertBefore(panel, anchor.nextSibling);
+      } else if (anchor && anchor.id === "paidReportDeliveredCard") {
+        var actions = anchor.querySelector(".paid-report-actions");
+        if (actions) actions.insertAdjacentElement("beforebegin", panel);
+        else anchor.appendChild(panel);
+      } else if (anchor && anchor.parentNode && anchor.id !== "resultArea") {
+        anchor.parentNode.insertBefore(panel, anchor.nextSibling);
+      } else {
+        document.body.appendChild(panel);
+      }
+    }
+
+    panel.innerHTML = [
+      '<h4>판례 쟁점 데이터팩</h4>',
+      '<p class="paid-case-pack-lead">아래 항목은 현재 답변에 맞춰 유류분, 특별수익, 기여분, 상속재산 평가 등에서 판례상 확인할 쟁점을 빠짐없이 정리한 목록입니다.</p>',
+      '<div class="paid-case-pack-list">',
+      DIRECT_CASE_ITEMS.map(itemHtml).join(""),
+      '</div>',
+      '<p class="paid-case-pack-notice">판례 쟁점 데이터팩은 결론을 단정하지 않고, 상담 전 확인해야 할 쟁점과 자료를 빠뜨리지 않도록 돕는 용도로 사용됩니다. 데이터팩 기준일: 2026-06-11</p>'
+    ].join("");
+
+    window.ansimCaseDataPackV2 = DIRECT_CASE_ITEMS.map(function (item) {
+      return {
+        id: item[0],
+        category: item[1],
+        title: item[2],
+        displayText: item[3],
+        checkText: item[4],
+        sourceLabel: "국가법령정보센터 판례 확인 포인트"
+      };
+    });
+
+    if (typeof window.ansimTrackFunnel === "function" && panel.dataset.directPanelTracked !== "1") {
+      panel.dataset.directPanelTracked = "1";
+      window.ansimTrackFunnel("paid_report_case_datapack_v2_direct_panel_view", {
+        count: DIRECT_CASE_ITEMS.length,
+        updatedAt: "2026-06-11"
+      });
+    }
+
+    return true;
+  }
+
+  window.ansimRenderCaseDataPackV2DirectPanel = createOrReplaceCasePackPanel;
+  window.ansimRenderCaseDataPackV2 = createOrReplaceCasePackPanel;
+
+  function schedule() {
+    setTimeout(createOrReplaceCasePackPanel, 50);
+    setTimeout(createOrReplaceCasePackPanel, 150);
+    setTimeout(createOrReplaceCasePackPanel, 350);
+    setTimeout(createOrReplaceCasePackPanel, 700);
+    setTimeout(createOrReplaceCasePackPanel, 1200);
+    setTimeout(createOrReplaceCasePackPanel, 2200);
+    setTimeout(createOrReplaceCasePackPanel, 3600);
+  }
+
+  var oldDelivered = window.ansimRenderPaidReportDelivered;
+  if (typeof oldDelivered === "function" && oldDelivered.__caseV2DirectWrapped !== true) {
+    var wrappedDelivered = function () {
+      var result = oldDelivered.apply(this, arguments);
+      schedule();
+      return result;
+    };
+    wrappedDelivered.__caseV2DirectWrapped = true;
+    window.ansimRenderPaidReportDelivered = wrappedDelivered;
+  }
+
+  var oldReference = window.ansimForceCreateLegalTaxCaseReferencePanel;
+  if (typeof oldReference === "function" && oldReference.__caseV2DirectWrapped !== true) {
+    var wrappedReference = function () {
+      var result = oldReference.apply(this, arguments);
+      schedule();
+      return result;
+    };
+    wrappedReference.__caseV2DirectWrapped = true;
+    window.ansimForceCreateLegalTaxCaseReferencePanel = wrappedReference;
+  }
+
+  document.addEventListener("DOMContentLoaded", schedule);
+  document.addEventListener("click", schedule, true);
+  setInterval(createOrReplaceCasePackPanel, 1000);
   schedule();
 })();
 </script>
