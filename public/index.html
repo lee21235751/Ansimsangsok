@@ -1721,6 +1721,78 @@
   line-height: 1.56;
 }
 
+
+.paid-official-update-watch-panel {
+  margin-top: 14px;
+  padding: 15px;
+  border-radius: 18px;
+  border: 1px solid rgba(82,109,86,0.22);
+  background: rgba(248,251,247,0.96);
+}
+.paid-official-update-watch-panel h4 {
+  margin: 0 0 9px;
+  color: #193a2f;
+  font-size: 16px;
+  line-height: 1.35;
+  letter-spacing: -0.04em;
+}
+.paid-official-update-watch-lead {
+  margin: 0 0 11px;
+  color: #4f3d22;
+  font-size: 13.5px;
+  line-height: 1.62;
+}
+.paid-official-update-watch-grid {
+  display: grid;
+  gap: 9px;
+}
+.paid-official-update-watch-item {
+  padding: 12px 13px;
+  border-radius: 15px;
+  background: rgba(255,255,255,0.92);
+  border: 1px solid rgba(197,151,73,0.20);
+}
+.paid-official-update-watch-item b {
+  display: block;
+  color: #193a2f;
+  font-size: 13.5px;
+  line-height: 1.35;
+  margin-bottom: 4px;
+}
+.paid-official-update-watch-item span {
+  display: block;
+  color: #5f4b2b;
+  font-size: 13px;
+  line-height: 1.52;
+}
+.paid-official-update-watch-meta {
+  display: block;
+  margin-top: 6px;
+  color: #846f45;
+  font-size: 12px;
+  line-height: 1.45;
+}
+.paid-official-update-watch-status {
+  display: inline-block;
+  margin-bottom: 7px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: rgba(25,58,47,0.08);
+  color: #193a2f;
+  font-size: 12px;
+  line-height: 1.25;
+  font-weight: 700;
+}
+.paid-official-update-watch-notice {
+  margin-top: 11px;
+  padding: 11px 12px;
+  border-radius: 14px;
+  background: rgba(25,58,47,0.08);
+  color: #3f3522;
+  font-size: 12.8px;
+  line-height: 1.56;
+}
+
 </style>
 
   <meta name="msapplication-TileColor" content="#06251d" />
@@ -8934,6 +9006,426 @@ document.addEventListener("DOMContentLoaded", function () {
     };
     wrappedAuto.__evidenceFreshnessWrapped = true;
     window.ansimRenderReportAutoEngineV1 = wrappedAuto;
+  }
+
+  document.addEventListener("DOMContentLoaded", schedule);
+  document.addEventListener("click", schedule, true);
+  setInterval(renderAll, 1200);
+  schedule();
+})();
+</script>
+
+
+<script>
+(function () {
+  if (window.__ansimOfficialUpdateWatchEngineV1Installed) return;
+  window.__ansimOfficialUpdateWatchEngineV1Installed = true;
+
+  var OFFICIAL_WATCH_ENGINE_UPDATED_AT = "2026-06-11";
+
+  var OFFICIAL_UPDATE_WATCH_REGISTRY_V1 = [
+    {
+      id: "watch-law-main",
+      grade: "A",
+      category: "법령",
+      title: "국가법령정보센터 법령 변경 감시",
+      sourceLabel: "국가법령정보센터",
+      sourceUrl: "https://law.go.kr/main.html",
+      watchTarget: "민법, 상속세 및 증여세법, 시행령, 시행규칙",
+      watchCycle: "중요 법령 월 1회 이상 확인",
+      reportAction: "변경 신호가 있으면 리포트의 법령 근거 기준일을 갱신하고, 기존 문구는 최신 확인 필요 항목으로 분리합니다."
+    },
+    {
+      id: "watch-inheritance-tax-law",
+      grade: "A",
+      category: "상속세",
+      title: "상속세 및 증여세법 개정 감시",
+      sourceLabel: "국가법령정보센터·국세청",
+      sourceUrl: "https://law.go.kr/법령/상속세및증여세법",
+      watchTarget: "상속재산 범위, 신고기한, 공제, 평가, 세율, 신고세액공제",
+      watchCycle: "월 1회 이상, 세법 개정기 수시 확인",
+      reportAction: "세금·공제·신고 일정 관련 문구는 최신 확인 전 단정하지 않고 준비자료 중심으로 표시합니다."
+    },
+    {
+      id: "watch-supreme-court-cases",
+      grade: "A",
+      category: "판례",
+      title: "대법원·판례 변경 감시",
+      sourceLabel: "대법원·사법정보공개포털·국가법령정보센터 판례",
+      sourceUrl: "https://portal.scourt.go.kr/pgp/index.on",
+      watchTarget: "유류분, 특별수익, 기여분, 명의신탁, 상속재산 평가, 한정승인",
+      watchCycle: "월 1회 이상, 주요 판결 공개 시 추가 확인",
+      reportAction: "최신 판례는 결론 단정이 아니라 비교 확인 포인트와 준비자료 항목으로 반영합니다."
+    },
+    {
+      id: "watch-nts-guidance",
+      grade: "A",
+      category: "국세청",
+      title: "국세청 상속세 안내 변경 감시",
+      sourceLabel: "국세청",
+      sourceUrl: "https://www.nts.go.kr",
+      watchTarget: "상속세 신고납부, 제출자료, 간주상속재산, 가산세, 분납·연부연납",
+      watchCycle: "월 1회 이상 확인",
+      reportAction: "국세청 안내 변경 신호가 있으면 세무 준비자료와 신고 일정 안내를 최신 확인 필요 항목으로 표시합니다."
+    },
+    {
+      id: "watch-taxlaw-nts",
+      grade: "B",
+      category: "세법해석",
+      title: "국세법령정보시스템 변경 감시",
+      sourceLabel: "국세법령정보시스템",
+      sourceUrl: "https://taxlaw.nts.go.kr/",
+      watchTarget: "세법해석례, 질의회신, 판례·결정례, 세무조사 관련 쟁점",
+      watchCycle: "월 1회 이상, 쟁점별 필요 시 확인",
+      reportAction: "해석례·상담사례는 공식 결론 근거가 아니라 확인 후보와 소명자료 항목으로 반영합니다."
+    },
+    {
+      id: "watch-international-official",
+      grade: "B",
+      category: "국제상속",
+      title: "국가별 공식자료 변경 감시",
+      sourceLabel: "해당국 세무당국·법무부·공식 안내",
+      sourceUrl: "국가별 공식자료",
+      watchTarget: "미국, EU, 일본, 영국 등 외국 거주·외국 국적·해외재산 관련 공식 안내",
+      watchCycle: "국제상속 신호가 있을 때 우선 확인",
+      reportAction: "해당국 결론을 단정하지 않고 공식 확인처, 번역공증, 아포스티유, 현지 전문가 확인 항목으로 반영합니다."
+    },
+    {
+      id: "watch-public-secondary",
+      grade: "C",
+      category: "보조자료",
+      title: "민간 법률 플랫폼·AI·웹자료 보조 감시",
+      sourceLabel: "로톡 등 민간 공개자료",
+      sourceUrl: "민간 공개자료",
+      watchTarget: "고객 질문 유형, 쉬운 설명, 누락 쟁점 후보",
+      watchCycle: "리포트 문구 개선 시 참고",
+      reportAction: "공식 근거로 표시하지 않고 고객 이해도 개선과 질문 유형 보강에만 사용합니다."
+    }
+  ];
+
+  function collectText() {
+    var parts = [];
+
+    if (document.body) {
+      parts.push(document.body.innerText || "");
+      parts.push(document.body.textContent || "");
+    }
+
+    try {
+      Array.prototype.forEach.call(document.querySelectorAll("input, textarea, select"), function (el) {
+        if (el.value) parts.push(el.value);
+        if (el.checked && el.labels) {
+          Array.prototype.forEach.call(el.labels, function (label) {
+            parts.push(label.innerText || label.textContent || "");
+          });
+        }
+        if (el.selectedOptions) {
+          Array.prototype.forEach.call(el.selectedOptions, function (option) {
+            parts.push(option.innerText || option.textContent || option.value || "");
+          });
+        }
+      });
+    } catch (error) {}
+
+    try {
+      if (window.__ansimDiagnosisAnswers) parts.push(JSON.stringify(window.__ansimDiagnosisAnswers));
+      if (window.__ansimReportAnswers) parts.push(JSON.stringify(window.__ansimReportAnswers));
+      if (window.__ansimLeadPayload) parts.push(JSON.stringify(window.__ansimLeadPayload));
+      if (window.ansimEvidenceFreshnessEngineV1) parts.push(JSON.stringify(window.ansimEvidenceFreshnessEngineV1));
+      if (window.ansimDomesticEvidenceReviewEngineV1) parts.push(JSON.stringify(window.ansimDomesticEvidenceReviewEngineV1));
+      if (window.ansimReportAutoEngineV1) parts.push(JSON.stringify(window.ansimReportAutoEngineV1));
+    } catch (error) {}
+
+    return parts.join(" ");
+  }
+
+  function hasAny(text, words) {
+    return words.some(function (word) {
+      return text.indexOf(word) !== -1;
+    });
+  }
+
+  function isPaidReportVisible() {
+    if (window.__ansimPaidReportPaymentResult && window.__ansimPaidReportPaymentResult.status === "paid_confirmed") return true;
+    if (window.__ansimPaidReportPaymentIntent && window.__ansimPaidReportPaymentIntent.status === "paid_confirmed") return true;
+
+    try {
+      if (typeof window.ansimGetPaidReportPaymentResult === "function") {
+        var result = window.ansimGetPaidReportPaymentResult();
+        if (result && result.status === "paid_confirmed") return true;
+      }
+    } catch (error) {}
+
+    var deliveredCard = document.getElementById("paidReportDeliveredCard");
+    if (deliveredCard && deliveredCard.hidden !== true) return true;
+
+    var text = document.body ? document.body.innerText || "" : "";
+    return text.indexOf("상세자료가 준비되었습니다") !== -1;
+  }
+
+  function buildWatchItems() {
+    var text = collectText();
+    var selected = [];
+
+    function add(id) {
+      var item = OFFICIAL_UPDATE_WATCH_REGISTRY_V1.find(function (source) {
+        return source.id === id;
+      });
+      if (item && selected.indexOf(item) === -1) selected.push(item);
+    }
+
+    add("watch-law-main");
+    add("watch-inheritance-tax-law");
+    add("watch-supreme-court-cases");
+    add("watch-nts-guidance");
+    add("watch-taxlaw-nts");
+
+    if (hasAny(text, ["해외", "외국", "비거주", "미국", "일본", "영국", "EU", "국제상속", "아포스티유", "번역", "공증"])) {
+      add("watch-international-official");
+    }
+
+    if (hasAny(text, ["로톡", "AI", "웹사이트", "상담", "칼럼", "기사", "사례", "민간"])) {
+      add("watch-public-secondary");
+    }
+
+    return selected;
+  }
+
+  function buildWatchScore() {
+    var items = buildWatchItems();
+    var officialCount = items.filter(function (item) {
+      return item.grade === "A" || item.grade === "B";
+    }).length;
+    var hasLaw = items.some(function (item) { return item.id === "watch-law-main"; });
+    var hasTax = items.some(function (item) { return item.id === "watch-inheritance-tax-law" || item.id === "watch-nts-guidance"; });
+    var hasCase = items.some(function (item) { return item.id === "watch-supreme-court-cases"; });
+    var hasTaxLaw = items.some(function (item) { return item.id === "watch-taxlaw-nts"; });
+
+    var score = 72;
+    if (hasLaw) score += 6;
+    if (hasTax) score += 6;
+    if (hasCase) score += 6;
+    if (hasTaxLaw) score += 5;
+    score += Math.min(8, officialCount);
+    if (score > 98) score = 98;
+
+    return {
+      score: score,
+      status: score >= 92 ? "공식자료 감시 구조 양호" : score >= 84 ? "공식자료 감시 보강 권장" : "공식자료 감시 필요",
+      selectedCount: items.length,
+      officialCount: officialCount
+    };
+  }
+
+  function buildChangeSignals() {
+    var text = collectText();
+    var hasInternational = hasAny(text, ["해외", "외국", "비거주", "미국", "일본", "영국", "EU", "국제상속"]);
+    var hasTaxInvestigation = hasAny(text, ["세무조사", "추정상속재산", "사전증여", "사용처", "소명"]);
+    var hasDispute = hasAny(text, ["유류분", "특별수익", "기여분", "명의신탁", "소송", "분쟁", "협의"]);
+    var hasPrivate = hasAny(text, ["로톡", "AI", "웹사이트", "상담", "칼럼", "기사", "민간"]);
+
+    return [
+      {
+        id: "signal-law",
+        title: "법령 개정 신호",
+        ok: true,
+        text: "민법과 상속세 및 증여세법은 상세자료의 기본 기준이므로, 법령 기준일을 항상 함께 표시합니다.",
+        meta: "상시 감시 · 국가법령정보센터"
+      },
+      {
+        id: "signal-case",
+        title: "판례 변경 신호",
+        ok: true,
+        text: hasDispute ? "분쟁 쟁점이 있어 유류분·특별수익·기여분·명의신탁 판례 축을 우선 감시합니다." : "분쟁 신호가 약해도 주요 상속 판례 축은 기본 감시합니다.",
+        meta: "월 1회 이상 · 대법원·판례"
+      },
+      {
+        id: "signal-tax",
+        title: "세무자료 변경 신호",
+        ok: true,
+        text: hasTaxInvestigation ? "세무조사·소명자료 신호가 있어 국세청·국세법령정보 축을 우선 확인합니다." : "상속세 신고·자료 준비 축은 기본 감시합니다.",
+        meta: "월 1회 이상 · 국세청·국세법령정보"
+      },
+      {
+        id: "signal-international",
+        title: "국제상속 공식자료 신호",
+        ok: true,
+        text: hasInternational ? "해외 요소가 있어 해당국 공식자료와 번역공증·아포스티유 확인 항목을 우선 감시합니다." : "해외 요소가 확인되면 국가별 공식자료 감시 항목을 추가합니다.",
+        meta: hasInternational ? "활성 · 국가별 공식자료" : "대기 · 해외 요소 발생 시"
+      },
+      {
+        id: "signal-private",
+        title: "민간자료 보조 신호",
+        ok: true,
+        text: hasPrivate ? "민간 법률 플랫폼·AI·웹자료는 고객 질문 유형과 쉬운 설명을 위한 보조자료로만 사용합니다." : "민간자료는 공식 근거가 아니라 문구 개선과 누락 쟁점 확인용으로 제한합니다.",
+        meta: "보조 · 공식 근거 아님"
+      },
+      {
+        id: "signal-prerelease",
+        title: "리포트 배포 전 최신성 확인",
+        ok: true,
+        text: "유료 상세자료 배포 전, 기준일·공식 근거·위험 표현·전문가 필요도·고령층 이해도를 함께 점검합니다.",
+        meta: "자동 점검 · 유료 리포트 품질"
+      }
+    ];
+  }
+
+  function itemHtml(item) {
+    return [
+      '<div class="paid-official-update-watch-item" data-watch-id="', item.id, '">',
+      '<span class="paid-official-update-watch-status">', item.grade, '등급 · ', item.category, '</span>',
+      '<b>', item.title, '</b>',
+      '<span>', item.watchTarget, '</span>',
+      '<small class="paid-official-update-watch-meta">',
+      item.sourceLabel, ' · ', item.watchCycle, ' · ', item.reportAction,
+      '</small>',
+      '</div>'
+    ].join("");
+  }
+
+  function signalHtml(item) {
+    return [
+      '<div class="paid-official-update-watch-item" data-watch-signal-id="', item.id, '">',
+      '<span class="paid-official-update-watch-status">', item.meta, '</span>',
+      '<b>', item.title, '</b>',
+      '<span>', item.text, '</span>',
+      '</div>'
+    ].join("");
+  }
+
+  function findAnchor() {
+    return (
+      document.getElementById("paidEvidenceFreshnessPanel") ||
+      document.getElementById("paidReportPreflightPanel") ||
+      document.getElementById("paidDomesticEvidencePanel") ||
+      document.getElementById("paidInternationalPanel") ||
+      document.getElementById("paidAutoEnginePanel") ||
+      document.getElementById("paidCasePackPanel") ||
+      document.getElementById("paidReferencePackPanel") ||
+      document.getElementById("paidDeepAnalysisPanel") ||
+      document.querySelector(".paid-deep-analysis-panel") ||
+      document.getElementById("paidReportDeliveredCard") ||
+      document.getElementById("resultArea") ||
+      document.body
+    );
+  }
+
+  function ensurePanel() {
+    var panel = document.getElementById("paidOfficialUpdateWatchPanel");
+    if (panel) return panel;
+
+    panel = document.createElement("section");
+    panel.id = "paidOfficialUpdateWatchPanel";
+    panel.className = "paid-official-update-watch-panel";
+
+    var anchor = findAnchor();
+
+    if (anchor && anchor.parentNode && anchor.id !== "resultArea") {
+      anchor.parentNode.insertBefore(panel, anchor.nextSibling);
+    } else if (anchor && anchor.id === "paidReportDeliveredCard") {
+      var actions = anchor.querySelector(".paid-report-actions");
+      if (actions) actions.insertAdjacentElement("beforebegin", panel);
+      else anchor.appendChild(panel);
+    } else {
+      document.body.appendChild(panel);
+    }
+
+    return panel;
+  }
+
+  function buildObject() {
+    return {
+      updatedAt: OFFICIAL_WATCH_ENGINE_UPDATED_AT,
+      sources: OFFICIAL_UPDATE_WATCH_REGISTRY_V1,
+      selectedSources: buildWatchItems(),
+      score: buildWatchScore(),
+      changeSignals: buildChangeSignals()
+    };
+  }
+
+  function renderAll() {
+    if (!isPaidReportVisible()) return false;
+
+    var data = buildObject();
+    var panel = ensurePanel();
+
+    panel.innerHTML = [
+      '<h4>공식자료 업데이트 감시 엔진</h4>',
+      '<p class="paid-official-update-watch-lead">유료 상세자료가 오래된 법령·판례·세무자료에 기대지 않도록, 공식자료 변경 감시 대상과 반영 기준을 자동으로 점검합니다.</p>',
+      '<div class="paid-official-update-watch-item">',
+      '<span class="paid-official-update-watch-status">', data.score.status, ' · ', data.score.score, '점</span>',
+      '<b>공식자료 감시 구조 종합 점검</b>',
+      '<span>공식 감시 축 ', data.score.officialCount, '개와 선택 감시 항목 ', data.score.selectedCount, '개를 기준으로 상세자료 최신성 구조를 점검했습니다.</span>',
+      '<small class="paid-official-update-watch-meta">기준일 ', OFFICIAL_WATCH_ENGINE_UPDATED_AT, ' · 공식자료 우선 · 민간자료 보조</small>',
+      '</div>',
+      '<div class="paid-official-update-watch-grid">',
+      data.selectedSources.map(itemHtml).join(""),
+      '</div>',
+      '<h4 style="margin-top:14px;">변경 감지·반영 신호</h4>',
+      '<div class="paid-official-update-watch-grid">',
+      data.changeSignals.map(signalHtml).join(""),
+      '</div>',
+      '<p class="paid-official-update-watch-notice">이 엔진은 공식자료의 변경 여부를 리포트 품질 점검에 반영하기 위한 감시 구조입니다. 실제 법령·판례·세무자료 내용은 공식 출처 확인 후 데이터팩 기준일과 함께 갱신합니다.</p>'
+    ].join("");
+
+    window.ansimOfficialUpdateWatchEngineV1 = data;
+
+    if (typeof window.ansimTrackFunnel === "function" && !window.__ansimOfficialUpdateWatchTracked) {
+      window.__ansimOfficialUpdateWatchTracked = true;
+      window.ansimTrackFunnel("paid_report_official_update_watch_v1_view", {
+        score: data.score.score,
+        selectedCount: data.selectedSources.length,
+        updatedAt: OFFICIAL_WATCH_ENGINE_UPDATED_AT
+      });
+    }
+
+    return true;
+  }
+
+  window.ansimOfficialUpdateWatchRegistryV1 = OFFICIAL_UPDATE_WATCH_REGISTRY_V1;
+  window.ansimBuildOfficialUpdateWatchV1 = buildObject;
+  window.ansimRenderOfficialUpdateWatchV1 = renderAll;
+
+  function schedule() {
+    setTimeout(renderAll, 80);
+    setTimeout(renderAll, 250);
+    setTimeout(renderAll, 600);
+    setTimeout(renderAll, 1200);
+    setTimeout(renderAll, 2200);
+    setTimeout(renderAll, 3600);
+  }
+
+  var oldDelivered = window.ansimRenderPaidReportDelivered;
+  if (typeof oldDelivered === "function" && oldDelivered.__officialUpdateWatchWrapped !== true) {
+    var wrappedDelivered = function () {
+      var result = oldDelivered.apply(this, arguments);
+      schedule();
+      return result;
+    };
+    wrappedDelivered.__officialUpdateWatchWrapped = true;
+    window.ansimRenderPaidReportDelivered = wrappedDelivered;
+  }
+
+  var oldFreshness = window.ansimRenderEvidenceFreshnessV1;
+  if (typeof oldFreshness === "function" && oldFreshness.__officialUpdateWatchWrapped !== true) {
+    var wrappedFreshness = function () {
+      var result = oldFreshness.apply(this, arguments);
+      schedule();
+      return result;
+    };
+    wrappedFreshness.__officialUpdateWatchWrapped = true;
+    window.ansimRenderEvidenceFreshnessV1 = wrappedFreshness;
+  }
+
+  var oldDomestic = window.ansimRenderDomesticEvidenceReviewV1;
+  if (typeof oldDomestic === "function" && oldDomestic.__officialUpdateWatchWrapped !== true) {
+    var wrappedDomestic = function () {
+      var result = oldDomestic.apply(this, arguments);
+      schedule();
+      return result;
+    };
+    wrappedDomestic.__officialUpdateWatchWrapped = true;
+    window.ansimRenderDomesticEvidenceReviewV1 = wrappedDomestic;
   }
 
   document.addEventListener("DOMContentLoaded", schedule);
