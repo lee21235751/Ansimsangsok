@@ -1572,6 +1572,83 @@
   line-height: 1.56;
 }
 
+
+.paid-domestic-evidence-panel,
+.paid-report-preflight-panel,
+.paid-senior-review-panel {
+  margin-top: 14px;
+  padding: 15px;
+  border-radius: 18px;
+  border: 1px solid rgba(82,109,86,0.22);
+  background: rgba(252,250,244,0.96);
+}
+.paid-domestic-evidence-panel h4,
+.paid-report-preflight-panel h4,
+.paid-senior-review-panel h4 {
+  margin: 0 0 9px;
+  color: #193a2f;
+  font-size: 16px;
+  line-height: 1.35;
+  letter-spacing: -0.04em;
+}
+.paid-domestic-evidence-lead,
+.paid-report-preflight-lead,
+.paid-senior-review-lead {
+  margin: 0 0 11px;
+  color: #4f3d22;
+  font-size: 13.5px;
+  line-height: 1.62;
+}
+.paid-domestic-evidence-list,
+.paid-report-preflight-list,
+.paid-senior-review-list {
+  display: grid;
+  gap: 9px;
+}
+.paid-domestic-evidence-item,
+.paid-report-preflight-item,
+.paid-senior-review-item {
+  padding: 12px 13px;
+  border-radius: 15px;
+  background: rgba(255,255,255,0.9);
+  border: 1px solid rgba(197,151,73,0.20);
+}
+.paid-domestic-evidence-item b,
+.paid-report-preflight-item b,
+.paid-senior-review-item b {
+  display: block;
+  color: #193a2f;
+  font-size: 13.5px;
+  line-height: 1.35;
+  margin-bottom: 4px;
+}
+.paid-domestic-evidence-item span,
+.paid-report-preflight-item span,
+.paid-senior-review-item span {
+  display: block;
+  color: #5f4b2b;
+  font-size: 13px;
+  line-height: 1.52;
+}
+.paid-domestic-evidence-meta,
+.paid-report-preflight-meta,
+.paid-senior-review-meta {
+  display: block;
+  margin-top: 6px;
+  color: #846f45;
+  font-size: 12px;
+  line-height: 1.45;
+}
+.paid-review-notice {
+  margin-top: 11px;
+  padding: 11px 12px;
+  border-radius: 14px;
+  background: rgba(25,58,47,0.08);
+  color: #3f3522;
+  font-size: 12.8px;
+  line-height: 1.56;
+}
+
 </style>
 
   <meta name="msapplication-TileColor" content="#06251d" />
@@ -7802,6 +7879,542 @@ document.addEventListener("DOMContentLoaded", function () {
       return result;
     };
     wrappedCase.__reportAutoEngineWrapped = true;
+    window.ansimRenderCaseDataPackV2DirectPanel = wrappedCase;
+  }
+
+  document.addEventListener("DOMContentLoaded", schedule);
+  document.addEventListener("click", schedule, true);
+  setInterval(renderAll, 1200);
+  schedule();
+})();
+</script>
+
+
+<script>
+(function () {
+  if (window.__ansimDomesticEvidenceReviewEngineV1Installed) return;
+  window.__ansimDomesticEvidenceReviewEngineV1Installed = true;
+
+  var REVIEW_ENGINE_UPDATED_AT = "2026-06-11";
+
+  var DOMESTIC_EVIDENCE_SOURCE_REGISTRY_V1 = [
+    {
+      id: "source-law-civil-code",
+      tier: "official-primary",
+      category: "상속법",
+      title: "민법 상속·유류분·기여분 조문",
+      sourceLabel: "국가법령정보센터",
+      useText: "상속인, 법정상속분, 유류분, 상속포기·한정승인, 유언 방식 등 기본 법률 확인축으로 사용합니다.",
+      caution: "조문을 결론으로 단정하지 않고 현재 상황에서 확인해야 할 항목으로 정리합니다."
+    },
+    {
+      id: "source-supreme-court-cases",
+      tier: "official-primary",
+      category: "대법원 판례",
+      title: "상속·유류분·특별수익·기여분·명의신탁 판례",
+      sourceLabel: "국가법령정보센터·대법원 종합법률정보",
+      useText: "유류분 산정, 특별수익, 기여분, 상속재산 평가, 명의와 실질 관계 등 판례상 확인 포인트를 붙입니다.",
+      caution: "개별 판례의 결론을 고객 사건에 그대로 적용하지 않고 비교 확인 포인트로만 사용합니다."
+    },
+    {
+      id: "source-nts-inheritance-tax",
+      tier: "official-primary",
+      category: "상속세",
+      title: "국세청 상속세 신고안내",
+      sourceLabel: "국세청",
+      useText: "신고기한, 제출서류, 상속재산 범위, 보험금·신탁재산·퇴직금 등 간주상속재산, 세율, 분납·연부연납 확인에 사용합니다.",
+      caution: "세액 산정이나 절세 결과를 단정하지 않고 신고 준비자료와 확인 순서 중심으로 정리합니다."
+    },
+    {
+      id: "source-taxlaw-nts",
+      tier: "official-support",
+      category: "세법령·상담사례",
+      title: "국세법령정보시스템 상담사례·세법령",
+      sourceLabel: "국세법령정보시스템",
+      useText: "세무조사, 추정상속재산, 사전증여, 채무공제 등 세무상 확인 후보를 넓히는 보조 근거로 사용합니다.",
+      caution: "상담사례는 사안별 차이가 크므로 리포트에서는 확인 신호로만 표시합니다."
+    },
+    {
+      id: "source-nts-investigation-risk",
+      tier: "official-support",
+      category: "세무조사",
+      title: "상속세 조사·소명자료 확인 항목",
+      sourceLabel: "국세청 신고안내·세무자료",
+      useText: "사망 전 재산처분, 예금 인출, 채무 부담, 사용처 소명, 가족 간 자금 이동을 점검합니다.",
+      caution: "조사 대상이라고 단정하지 않고 소명자료 준비 필요성으로 표현합니다."
+    },
+    {
+      id: "source-court-family-civil",
+      tier: "official-support",
+      category: "민사·가사 절차",
+      title: "상속재산분할·유류분·상속포기·한정승인 절차",
+      sourceLabel: "법원·대법원 공개자료",
+      useText: "민사·가사 사건으로 이어질 수 있는 절차 신호와 준비자료를 확인합니다.",
+      caution: "소송 전략이나 승패 전망 대신 절차와 자료 준비 중심으로 정리합니다."
+    },
+    {
+      id: "source-private-legal-platforms",
+      tier: "public-secondary",
+      category: "민간 법률 플랫폼",
+      title: "로톡 등 공개 법률상담·칼럼·AI 자료",
+      sourceLabel: "민간 공개자료 보조 검토",
+      useText: "고객이 자주 묻는 질문, 이해하기 쉬운 표현, 누락되기 쉬운 사례 유형을 찾는 보조자료로만 활용합니다.",
+      caution: "민간 자료는 공식 근거로 쓰지 않고, 리포트 결론의 출처로 표시하지 않습니다."
+    },
+    {
+      id: "source-news-practice-cases",
+      tier: "public-secondary",
+      category: "사례·기사",
+      title: "상속 분쟁·세무조사 공개 사례",
+      sourceLabel: "공개 기사·해설자료 보조 검토",
+      useText: "상속인이 불안해하는 실제 질문 유형과 설명 방식을 개선하는 참고자료로 사용합니다.",
+      caution: "기사·해설 사례는 사실관계가 제한적이므로 확인 항목으로만 전환합니다."
+    }
+  ];
+
+  function collectReportText() {
+    var parts = [];
+
+    if (document.body) {
+      parts.push(document.body.innerText || "");
+      parts.push(document.body.textContent || "");
+    }
+
+    try {
+      Array.prototype.forEach.call(document.querySelectorAll("input, textarea, select"), function (el) {
+        if (el.value) parts.push(el.value);
+        if (el.checked && el.labels) {
+          Array.prototype.forEach.call(el.labels, function (label) {
+            parts.push(label.innerText || label.textContent || "");
+          });
+        }
+        if (el.selectedOptions) {
+          Array.prototype.forEach.call(el.selectedOptions, function (option) {
+            parts.push(option.innerText || option.textContent || option.value || "");
+          });
+        }
+      });
+    } catch (error) {}
+
+    try {
+      Array.prototype.forEach.call(document.querySelectorAll("[data-answer], [data-value], [aria-label], [title]"), function (el) {
+        parts.push(el.getAttribute("data-answer") || "");
+        parts.push(el.getAttribute("data-value") || "");
+        parts.push(el.getAttribute("aria-label") || "");
+        parts.push(el.getAttribute("title") || "");
+      });
+    } catch (error) {}
+
+    try {
+      if (window.__ansimDiagnosisAnswers) parts.push(JSON.stringify(window.__ansimDiagnosisAnswers));
+      if (window.__ansimReportAnswers) parts.push(JSON.stringify(window.__ansimReportAnswers));
+      if (window.__ansimLeadPayload) parts.push(JSON.stringify(window.__ansimLeadPayload));
+      if (window.ansimReportAutoEngineV1) parts.push(JSON.stringify(window.ansimReportAutoEngineV1));
+      if (window.ansimCaseDataPackV2) parts.push(JSON.stringify(window.ansimCaseDataPackV2));
+      if (window.ansimInternationalInheritanceDataPackV1) parts.push(JSON.stringify(window.ansimInternationalInheritanceDataPackV1));
+    } catch (error) {}
+
+    return parts.join(" ");
+  }
+
+  function hasAny(text, words) {
+    return words.some(function (word) {
+      return text.indexOf(word) !== -1;
+    });
+  }
+
+  function isPaidReportVisible() {
+    if (window.__ansimPaidReportPaymentResult && window.__ansimPaidReportPaymentResult.status === "paid_confirmed") return true;
+    if (window.__ansimPaidReportPaymentIntent && window.__ansimPaidReportPaymentIntent.status === "paid_confirmed") return true;
+
+    try {
+      if (typeof window.ansimGetPaidReportPaymentResult === "function") {
+        var result = window.ansimGetPaidReportPaymentResult();
+        if (result && result.status === "paid_confirmed") return true;
+      }
+    } catch (error) {}
+
+    var deliveredCard = document.getElementById("paidReportDeliveredCard");
+    if (deliveredCard && deliveredCard.hidden !== true) return true;
+
+    var text = document.body ? document.body.innerText || "" : "";
+    return text.indexOf("상세자료가 준비되었습니다") !== -1;
+  }
+
+  function buildEvidenceItems() {
+    var text = collectReportText();
+    var selected = [];
+
+    function add(id) {
+      var item = DOMESTIC_EVIDENCE_SOURCE_REGISTRY_V1.find(function (source) {
+        return source.id === id;
+      });
+      if (item && selected.indexOf(item) === -1) selected.push(item);
+    }
+
+    add("source-law-civil-code");
+    add("source-supreme-court-cases");
+    add("source-nts-inheritance-tax");
+
+    if (hasAny(text, ["세무조사", "사용처", "예금 인출", "재산처분", "채무부담", "소명", "사전증여", "추정상속재산"])) {
+      add("source-nts-investigation-risk");
+      add("source-taxlaw-nts");
+    }
+
+    if (hasAny(text, ["유류분", "특별수익", "기여분", "명의신탁", "유언", "유증", "분쟁", "소송", "협의"])) {
+      add("source-court-family-civil");
+    }
+
+    if (hasAny(text, ["로톡", "AI", "상담", "사례", "형사", "민사", "웹사이트", "칼럼", "해설"])) {
+      add("source-private-legal-platforms");
+      add("source-news-practice-cases");
+    }
+
+    return selected;
+  }
+
+  function buildPreflightChecks() {
+    var text = collectReportText();
+    var checks = [];
+
+    function status(ok) {
+      return ok ? "통과" : "보강 필요";
+    }
+
+    var hasFamily = hasAny(text, ["가족관계", "상속인", "배우자", "자녀", "부모", "형제"]);
+    var hasAssets = hasAny(text, ["재산", "부동산", "예금", "주식", "보험", "퇴직금", "채무"]);
+    var hasTax = hasAny(text, ["상속세", "신고", "세금", "평가", "공제"]);
+    var hasCase = hasAny(text, ["판례", "유류분", "특별수익", "기여분", "명의신탁"]);
+    var hasInternational = hasAny(text, ["해외", "외국", "비거주", "미국", "일본", "영국", "EU", "아포스티유"]);
+    var hasDocuments = hasAny(text, ["준비자료", "서류", "등기", "가족관계", "사망", "혼인", "출생", "계좌"]);
+    var hasExpert = hasAny(text, ["전문가", "세무사", "변호사", "현지", "검토"]);
+
+    checks.push({
+      id: "preflight-family",
+      title: "가족관계·상속인 누락 점검",
+      text: hasFamily ? "상속인과 가족관계 축이 리포트에 포함되어 있습니다." : "상속인·가족관계 자료 안내를 더 분명히 보강해야 합니다.",
+      meta: status(hasFamily) + " · 가족관계증명서, 제적등본, 혼인·입양 자료"
+    });
+
+    checks.push({
+      id: "preflight-assets",
+      title: "재산·채무 자료 누락 점검",
+      text: hasAssets ? "재산과 채무를 나누어 확인하는 흐름이 포함되어 있습니다." : "부동산·금융·보험·채무 자료를 더 구체적으로 안내해야 합니다.",
+      meta: status(hasAssets) + " · 등기, 계좌, 증권, 보험, 대출, 보증"
+    });
+
+    checks.push({
+      id: "preflight-tax",
+      title: "상속세·세무조사 확인 점검",
+      text: hasTax ? "세금·신고·평가 축이 포함되어 있습니다." : "상속세 신고기한, 평가자료, 사용처 소명자료를 보강해야 합니다.",
+      meta: status(hasTax) + " · 국세청 신고안내, 국세법령정보시스템"
+    });
+
+    checks.push({
+      id: "preflight-case-law",
+      title: "판례·분쟁 쟁점 점검",
+      text: hasCase ? "유류분·특별수익·기여분 등 판례상 확인 포인트가 포함되어 있습니다." : "상속 분쟁 가능성에 대비한 판례상 확인 항목을 보강해야 합니다.",
+      meta: status(hasCase) + " · 대법원 판례, 국가법령정보센터"
+    });
+
+    checks.push({
+      id: "preflight-international",
+      title: "국제상속·외국 요소 점검",
+      text: hasInternational ? "외국 거주·외국 국적·해외재산 확인 항목이 포함되어 있습니다." : "해외 요소가 있으면 국제상속 확인 데이터팩을 붙여야 합니다.",
+      meta: status(hasInternational) + " · 거주지, 국적, 해외재산, 번역공증, 아포스티유"
+    });
+
+    checks.push({
+      id: "preflight-documents",
+      title: "준비자료 구체성 점검",
+      text: hasDocuments ? "상담 전 준비할 자료가 안내되어 있습니다." : "상담 전 준비자료 목록을 고객이 바로 따라할 수 있게 보강해야 합니다.",
+      meta: status(hasDocuments) + " · 고령층 이해 기준"
+    });
+
+    checks.push({
+      id: "preflight-expert",
+      title: "전문가 확인 신호 점검",
+      text: hasExpert ? "전문가 확인이 필요한 신호를 안전한 표현으로 제시하고 있습니다." : "전문가 확인 필요도를 결론 단정 없이 보강해야 합니다.",
+      meta: status(hasExpert) + " · 법률자문 오인 방지"
+    });
+
+    var customerVisibleText = text;
+
+    try {
+      var clonedTextParts = [];
+      var visibleRoots = [
+        document.getElementById("paidReportDeliveredCard"),
+        document.getElementById("paidAutoEnginePanel"),
+        document.getElementById("paidInternationalPanel"),
+        document.getElementById("paidCasePackPanel"),
+        document.getElementById("paidReferencePackPanel"),
+        document.getElementById("paidDeepAnalysisPanel"),
+        document.getElementById("resultArea")
+      ].filter(Boolean);
+
+      visibleRoots.forEach(function (root) {
+        clonedTextParts.push(root.innerText || "");
+      });
+
+      if (clonedTextParts.length) {
+        customerVisibleText = clonedTextParts.join(" ");
+      }
+    } catch (error) {}
+
+    var riskyPhrases = [
+      ["해결", "해드립니다"].join(""),
+      ["결과를 ", "보장"].join(""),
+      ["반드시 ", "승소"].join(""),
+      ["세금이 ", "줄어듭니다"].join(""),
+      ["무조건 ", "받을 수 있습니다"].join("")
+    ];
+
+    var hasRiskyPhrase = hasAny(customerVisibleText, riskyPhrases);
+
+    checks.push({
+      id: "preflight-risk-language",
+      title: "위험 표현 자동 점검",
+      text: hasRiskyPhrase ? "결과 단정이나 과도한 광고 표현을 더 줄이는 것이 좋습니다." : "결과 단정·승패·절세 약속 표현은 확인되지 않습니다.",
+      meta: hasRiskyPhrase ? "보강 필요 · 표현 리스크" : "통과 · 표현 리스크 낮음"
+    });
+
+    return checks;
+  }
+
+  function buildSeniorPanelReview() {
+    return [
+      {
+        id: "senior-trust",
+        title: "신뢰성",
+        text: "공식자료, 판례, 세무자료를 확인 항목으로 나누어 보여주면 50~70대 고객은 막연한 AI 답변보다 더 신뢰하기 쉽습니다.",
+        meta: "수도권·고소득·가족관리형 패널 긍정"
+      },
+      {
+        id: "senior-understanding",
+        title: "이해 가능성",
+        text: "법률 결론보다 준비자료와 다음 확인 항목을 보여주면 70~90대 고객도 따라가기 쉽습니다.",
+        meta: "고령층 기준 · 쉬운 문장 유지"
+      },
+      {
+        id: "senior-privacy",
+        title: "개인정보 불안",
+        text: "외부 사이트나 민간 상담사례를 직접 결론 근거로 쓰지 않고, 공식자료 중심으로 정리한다는 구조가 개인정보 불안을 낮춥니다.",
+        meta: "디지털 신중층·사기 우려층 대응"
+      },
+      {
+        id: "senior-conversion",
+        title: "유료 리포트 만족도",
+        text: "내 상황에 맞는 법령·판례·세무·국제상속·전문가 신호가 한 번에 정리되면 29,000원 상세자료의 체감 가치가 올라갑니다.",
+        meta: "수익성 · 전환 강화"
+      },
+      {
+        id: "senior-risk",
+        title: "법률 리스크",
+        text: "결론을 단정하지 않고 확인 항목, 준비자료, 공식 확인처 중심으로 제시하면 법률자문 오인 가능성을 낮출 수 있습니다.",
+        meta: "변호사법·세무자문 오인 방지"
+      }
+    ];
+  }
+
+  function evidenceHtml(item) {
+    return [
+      '<div class="paid-domestic-evidence-item" data-source-id="', item.id, '">',
+      '<b>', item.title, '</b>',
+      '<span>', item.useText, '</span>',
+      '<small class="paid-domestic-evidence-meta">',
+      item.category, ' · ', item.sourceLabel, ' · ', item.tier, ' · ', item.caution,
+      '</small>',
+      '</div>'
+    ].join("");
+  }
+
+  function preflightHtml(item) {
+    return [
+      '<div class="paid-report-preflight-item" data-preflight-id="', item.id, '">',
+      '<b>', item.title, '</b>',
+      '<span>', item.text, '</span>',
+      '<small class="paid-report-preflight-meta">', item.meta, '</small>',
+      '</div>'
+    ].join("");
+  }
+
+  function seniorReviewHtml(item) {
+    return [
+      '<div class="paid-senior-review-item" data-senior-review-id="', item.id, '">',
+      '<b>', item.title, '</b>',
+      '<span>', item.text, '</span>',
+      '<small class="paid-senior-review-meta">', item.meta, '</small>',
+      '</div>'
+    ].join("");
+  }
+
+  function findAnchor() {
+    return (
+      document.getElementById("paidInternationalPanel") ||
+      document.getElementById("paidAutoEnginePanel") ||
+      document.getElementById("paidCasePackPanel") ||
+      document.getElementById("paidReferencePackPanel") ||
+      document.getElementById("paidDeepAnalysisPanel") ||
+      document.querySelector(".paid-deep-analysis-panel") ||
+      document.getElementById("paidReportDeliveredCard") ||
+      document.getElementById("resultArea") ||
+      document.body
+    );
+  }
+
+  function ensurePanel(id, className) {
+    var panel = document.getElementById(id);
+    if (panel) return panel;
+
+    panel = document.createElement("section");
+    panel.id = id;
+    panel.className = className;
+
+    var anchor = findAnchor();
+
+    if (anchor && anchor.parentNode && anchor.id !== "resultArea") {
+      anchor.parentNode.insertBefore(panel, anchor.nextSibling);
+    } else if (anchor && anchor.id === "paidReportDeliveredCard") {
+      var actions = anchor.querySelector(".paid-report-actions");
+      if (actions) actions.insertAdjacentElement("beforebegin", panel);
+      else anchor.appendChild(panel);
+    } else {
+      document.body.appendChild(panel);
+    }
+
+    return panel;
+  }
+
+  function renderDomesticEvidencePanel() {
+    if (!isPaidReportVisible()) return false;
+
+    var items = buildEvidenceItems();
+    var panel = ensurePanel("paidDomesticEvidencePanel", "paid-domestic-evidence-panel");
+
+    panel.innerHTML = [
+      '<h4>국내자료 통합조사 엔진</h4>',
+      '<p class="paid-domestic-evidence-lead">법령, 대법원 판례, 국세청 세무자료, 국세법령정보, 민간 공개자료를 출처 등급별로 나누어 상세자료의 확인 항목을 보강합니다.</p>',
+      '<div class="paid-domestic-evidence-list">',
+      items.map(evidenceHtml).join(""),
+      '</div>',
+      '<p class="paid-review-notice">민간 법률 플랫폼·AI·칼럼·상담사례는 공식 결론 근거가 아니라 누락 쟁점과 쉬운 설명을 찾는 보조자료로만 사용합니다. 엔진 기준일: ',
+      REVIEW_ENGINE_UPDATED_AT,
+      '</p>'
+    ].join("");
+
+    return true;
+  }
+
+  function renderPreflightPanel() {
+    if (!isPaidReportVisible()) return false;
+
+    var items = buildPreflightChecks();
+    var panel = ensurePanel("paidReportPreflightPanel", "paid-report-preflight-panel");
+
+    panel.innerHTML = [
+      '<h4>배포 전 리포트 사전검토</h4>',
+      '<p class="paid-report-preflight-lead">상세자료가 고객에게 전달되기 전, 누락 항목·근거 부족·위험 표현·전문가 확인 신호를 자동으로 점검합니다.</p>',
+      '<div class="paid-report-preflight-list">',
+      items.map(preflightHtml).join(""),
+      '</div>',
+      '<p class="paid-review-notice">사전검토는 리포트의 완성도를 높이기 위한 품질 점검이며, 결론을 단정하지 않고 확인 항목과 준비자료 중심으로 보강합니다.</p>'
+    ].join("");
+
+    return true;
+  }
+
+  function renderSeniorReviewPanel() {
+    if (!isPaidReportVisible()) return false;
+
+    var items = buildSeniorPanelReview();
+    var panel = ensurePanel("paidSeniorReviewPanel", "paid-senior-review-panel");
+
+    panel.innerHTML = [
+      '<h4>고객 이해·만족도 자동검토</h4>',
+      '<p class="paid-senior-review-lead">50대부터 90대까지의 고객이 이해하고 신뢰할 수 있는지, 개인정보 불안과 법률 오인 가능성을 낮추었는지 점검합니다.</p>',
+      '<div class="paid-senior-review-list">',
+      items.map(seniorReviewHtml).join(""),
+      '</div>',
+      '<p class="paid-review-notice">고령층 기준으로 어려운 법률 결론보다 자료 준비, 확인 순서, 전문가에게 전달할 정리표 중심으로 개선합니다.</p>'
+    ].join("");
+
+    return true;
+  }
+
+  function buildDomesticEvidenceReviewObject() {
+    return {
+      updatedAt: REVIEW_ENGINE_UPDATED_AT,
+      sources: DOMESTIC_EVIDENCE_SOURCE_REGISTRY_V1,
+      selectedSources: buildEvidenceItems(),
+      preflightChecks: buildPreflightChecks(),
+      seniorPanelReview: buildSeniorPanelReview()
+    };
+  }
+
+  function renderAll() {
+    if (!isPaidReportVisible()) return false;
+
+    var a = renderDomesticEvidencePanel();
+    var b = renderPreflightPanel();
+    var c = renderSeniorReviewPanel();
+
+    window.ansimDomesticEvidenceReviewEngineV1 = buildDomesticEvidenceReviewObject();
+
+    if (typeof window.ansimTrackFunnel === "function" && !window.__ansimDomesticEvidenceReviewTracked) {
+      window.__ansimDomesticEvidenceReviewTracked = true;
+      window.ansimTrackFunnel("paid_report_domestic_evidence_review_v1_view", {
+        sourceCount: window.ansimDomesticEvidenceReviewEngineV1.selectedSources.length,
+        preflightCount: window.ansimDomesticEvidenceReviewEngineV1.preflightChecks.length,
+        updatedAt: REVIEW_ENGINE_UPDATED_AT
+      });
+    }
+
+    return !!(a || b || c);
+  }
+
+  window.ansimDomesticEvidenceSourceRegistryV1 = DOMESTIC_EVIDENCE_SOURCE_REGISTRY_V1;
+  window.ansimBuildDomesticEvidenceReviewV1 = buildDomesticEvidenceReviewObject;
+  window.ansimRenderDomesticEvidenceReviewV1 = renderAll;
+
+  function schedule() {
+    setTimeout(renderAll, 80);
+    setTimeout(renderAll, 250);
+    setTimeout(renderAll, 600);
+    setTimeout(renderAll, 1200);
+    setTimeout(renderAll, 2200);
+    setTimeout(renderAll, 3600);
+  }
+
+  var oldDelivered = window.ansimRenderPaidReportDelivered;
+  if (typeof oldDelivered === "function" && oldDelivered.__domesticEvidenceReviewWrapped !== true) {
+    var wrappedDelivered = function () {
+      var result = oldDelivered.apply(this, arguments);
+      schedule();
+      return result;
+    };
+    wrappedDelivered.__domesticEvidenceReviewWrapped = true;
+    window.ansimRenderPaidReportDelivered = wrappedDelivered;
+  }
+
+  var oldAuto = window.ansimRenderReportAutoEngineV1;
+  if (typeof oldAuto === "function" && oldAuto.__domesticEvidenceReviewWrapped !== true) {
+    var wrappedAuto = function () {
+      var result = oldAuto.apply(this, arguments);
+      schedule();
+      return result;
+    };
+    wrappedAuto.__domesticEvidenceReviewWrapped = true;
+    window.ansimRenderReportAutoEngineV1 = wrappedAuto;
+  }
+
+  var oldCase = window.ansimRenderCaseDataPackV2DirectPanel;
+  if (typeof oldCase === "function" && oldCase.__domesticEvidenceReviewWrapped !== true) {
+    var wrappedCase = function () {
+      var result = oldCase.apply(this, arguments);
+      schedule();
+      return result;
+    };
+    wrappedCase.__domesticEvidenceReviewWrapped = true;
     window.ansimRenderCaseDataPackV2DirectPanel = wrappedCase;
   }
 
