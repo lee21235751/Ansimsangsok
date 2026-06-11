@@ -6924,12 +6924,12 @@ document.addEventListener("DOMContentLoaded", function () {
     panel.id = "paidReferencePackPanel";
     panel.className = "paid-reference-pack-panel";
     panel.innerHTML = [
-      '<h4>근거 데이터팩</h4>',
+      '<h4>근거 참고자료</h4>',
       '<p class="paid-reference-pack-lead">아래 항목은 현재 답변에 맞춰 법령·세무·판례 기준에서 우선 확인할 근거를 골라 붙인 목록입니다.</p>',
       '<div class="paid-reference-pack-list">',
       selected.map(referenceItemHtml).join(""),
       '</div>',
-      '<p class="paid-reference-pack-notice">근거 데이터팩은 판단을 대신하지 않고, 확인해야 할 기준과 자료를 빠뜨리지 않도록 돕는 용도로 사용됩니다. 데이터팩 기준일: ',
+      '<p class="paid-reference-pack-notice">근거 참고자료는 판단을 대신하지 않고, 확인해야 할 기준과 자료를 빠뜨리지 않도록 돕는 용도로 사용됩니다. 참고자료 기준일: ',
       DATA_PACK_UPDATED_AT,
       '</p>'
     ].join("");
@@ -7128,12 +7128,12 @@ document.addEventListener("DOMContentLoaded", function () {
     panel.id = "paidReferencePackPanel";
     panel.className = "paid-reference-pack-panel";
     panel.innerHTML = [
-      '<h4>근거 데이터팩</h4>',
+      '<h4>근거 참고자료</h4>',
       '<p class="paid-reference-pack-lead">아래 항목은 현재 답변에 맞춰 법령·세무·판례 기준에서 우선 확인할 근거를 골라 붙인 목록입니다.</p>',
       '<div class="paid-reference-pack-list">',
       items.map(itemHtml).join(''),
       '</div>',
-      '<p class="paid-reference-pack-notice">근거 데이터팩은 판단을 대신하지 않고, 확인해야 할 기준과 자료를 빠뜨리지 않도록 돕는 용도로 사용됩니다. 데이터팩 기준일: 2026-06-11</p>'
+      '<p class="paid-reference-pack-notice">근거 참고자료는 판단을 대신하지 않고, 확인해야 할 기준과 자료를 빠뜨리지 않도록 돕는 용도로 사용됩니다. 참고자료 기준일: 2026-06-11</p>'
     ].join('');
 
     var anchor = findAnchor();
@@ -7394,12 +7394,12 @@ document.addEventListener("DOMContentLoaded", function () {
     if (!panel) return false;
 
     panel.innerHTML = [
-      '<h4>판례 쟁점 데이터팩</h4>',
+      '<h4>판례상 확인할 쟁점</h4>',
       '<p class="paid-case-pack-lead">아래 항목은 현재 답변에 맞춰 유류분, 특별수익, 기여분, 상속재산 평가 등에서 판례상 확인할 쟁점을 빠짐없이 정리한 목록입니다.</p>',
       '<div class="paid-case-pack-list">',
       CASE_ITEMS.map(itemHtml).join(""),
       '</div>',
-      '<p class="paid-case-pack-notice">판례 쟁점 데이터팩은 결론을 단정하지 않고, 상담 전 확인해야 할 쟁점과 자료를 빠뜨리지 않도록 돕는 용도로 사용됩니다. 데이터팩 기준일: ',
+      '<p class="paid-case-pack-notice">판례상 확인할 쟁점은 결론을 단정하지 않고, 상담 전 확인해야 할 쟁점과 자료를 빠뜨리지 않도록 돕는 용도로 사용됩니다. 참고자료 기준일: ',
       CASE_PACK_UPDATED_AT,
       '</p>'
     ].join("");
@@ -7548,12 +7548,12 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     panel.innerHTML = [
-      '<h4>판례 쟁점 데이터팩</h4>',
+      '<h4>판례상 확인할 쟁점</h4>',
       '<p class="paid-case-pack-lead">아래 항목은 현재 답변에 맞춰 유류분, 특별수익, 기여분, 상속재산 평가 등에서 판례상 확인할 쟁점을 빠짐없이 정리한 목록입니다.</p>',
       '<div class="paid-case-pack-list">',
       DIRECT_CASE_ITEMS.map(itemHtml).join(""),
       '</div>',
-      '<p class="paid-case-pack-notice">판례 쟁점 데이터팩은 결론을 단정하지 않고, 상담 전 확인해야 할 쟁점과 자료를 빠뜨리지 않도록 돕는 용도로 사용됩니다. 데이터팩 기준일: 2026-06-11</p>'
+      '<p class="paid-case-pack-notice">판례상 확인할 쟁점은 결론을 단정하지 않고, 상담 전 확인해야 할 쟁점과 자료를 빠뜨리지 않도록 돕는 용도로 사용됩니다. 참고자료 기준일: 2026-06-11</p>'
     ].join("");
 
     window.ansimCaseDataPackV2 = DIRECT_CASE_ITEMS.map(function (item) {
@@ -7812,7 +7812,7 @@ document.addEventListener("DOMContentLoaded", function () {
     items.push({
       id: "engine-case-law",
       title: "법령·세무·판례 근거",
-      text: flags.caseLaw ? "법령·세무·판례 데이터팩을 기준으로 확인할 쟁점을 함께 붙입니다." : "판례 쟁점 데이터팩을 통해 놓치기 쉬운 확인 항목을 보완합니다.",
+      text: flags.caseLaw ? "법령·세무·판례 참고자료를 기준으로 확인할 쟁점을 함께 붙입니다." : "판례상 확인할 쟁점을 통해 놓치기 쉬운 확인 항목을 보완합니다.",
       meta: "근거축 · 유류분, 특별수익, 기여분, 재산평가, 채무"
     });
 
@@ -7943,12 +7943,12 @@ document.addEventListener("DOMContentLoaded", function () {
     var panel = ensurePanel("paidAutoEnginePanel", "paid-auto-engine-panel");
 
     panel.innerHTML = [
-      '<h4>상세리포트 자동 분석 엔진</h4>',
+      '<h4>상세리포트 자동 정리 항목</h4>',
       '<p class="paid-auto-engine-lead">입력하신 답변을 기준으로 가족관계, 재산, 채무, 세금, 판례, 국제상속, 전문가 확인 신호를 한 번에 정리했습니다.</p>',
       '<div class="paid-auto-engine-grid">',
       items.map(itemHtml).join(""),
       '</div>',
-      '<p class="paid-auto-engine-notice">이 패널은 결론을 단정하지 않고, 다음 확인 항목과 준비자료를 빠뜨리지 않도록 돕는 용도로 사용됩니다. 엔진 기준일: ',
+      '<p class="paid-auto-engine-notice">이 패널은 결론을 단정하지 않고, 다음 확인 항목과 준비자료를 빠뜨리지 않도록 돕는 용도로 사용됩니다. 기준일: ',
       AUTO_ENGINE_UPDATED_AT,
       '</p>'
     ].join("");
@@ -7978,12 +7978,12 @@ document.addEventListener("DOMContentLoaded", function () {
     var panel = ensurePanel("paidInternationalPanel", "paid-international-panel");
 
     panel.innerHTML = [
-      '<h4>국제상속 확인 데이터팩</h4>',
+      '<h4>국제상속 확인 항목</h4>',
       '<p class="paid-international-lead">외국 거주, 외국 국적, 해외 재산, 외국 서류가 있는 경우 한국 신고와 현지 확인 항목을 나누어 정리합니다.</p>',
       '<div class="paid-international-list">',
       selected.map(internationalItemHtml).join(""),
       '</div>',
-      '<p class="paid-auto-engine-notice">국제상속 데이터팩은 해당국 결론을 단정하지 않고, 공식 확인처와 전문가 상담 전 준비자료를 정리하는 용도로 사용됩니다. 데이터팩 기준일: ',
+      '<p class="paid-auto-engine-notice">국제상속 참고자료는 해당국 결론을 단정하지 않고, 공식 확인처와 전문가 상담 전 준비자료를 정리하는 용도로 사용됩니다. 참고자료 기준일: ',
       AUTO_ENGINE_UPDATED_AT,
       '</p>'
     ].join("");
@@ -8317,7 +8317,7 @@ document.addEventListener("DOMContentLoaded", function () {
     checks.push({
       id: "preflight-international",
       title: "국제상속·외국 요소 점검",
-      text: hasInternational ? "외국 거주·외국 국적·해외재산 확인 항목이 포함되어 있습니다." : "해외 요소가 있으면 국제상속 확인 데이터팩을 붙여야 합니다.",
+      text: hasInternational ? "외국 거주·외국 국적·해외재산 확인 항목이 포함되어 있습니다." : "해외 요소가 있으면 국제상속 확인 항목을 붙여야 합니다.",
       meta: status(hasInternational) + " · 거주지, 국적, 해외재산, 번역공증, 아포스티유"
     });
 
@@ -8494,7 +8494,7 @@ document.addEventListener("DOMContentLoaded", function () {
       '<div class="paid-domestic-evidence-list">',
       items.map(evidenceHtml).join(""),
       '</div>',
-      '<p class="paid-review-notice">민간 법률 플랫폼·AI·칼럼·상담사례는 공식 결론 근거가 아니라 누락 쟁점과 쉬운 설명을 찾는 보조자료로만 사용합니다. 엔진 기준일: ',
+      '<p class="paid-review-notice">민간 법률 플랫폼·AI·칼럼·상담사례는 공식 결론 근거가 아니라 누락 쟁점과 쉬운 설명을 찾는 보조자료로만 사용합니다. 기준일: ',
       REVIEW_ENGINE_UPDATED_AT,
       '</p>'
     ].join("");
@@ -8870,7 +8870,7 @@ document.addEventListener("DOMContentLoaded", function () {
         id: "freshness-reference-date",
         title: "기준일 표시",
         ok: hasFreshnessDate,
-        text: hasFreshnessDate ? "데이터팩과 검증 엔진 기준일이 표시됩니다." : "리포트 기준일 표시를 보강해야 합니다.",
+        text: hasFreshnessDate ? "참고자료과 검증 기준일이 표시됩니다." : "리포트 기준일 표시를 보강해야 합니다.",
         meta: hasFreshnessDate ? "통과 · 최신성 관리" : "보강 필요 · 기준일 없음"
       },
       {
@@ -9418,7 +9418,7 @@ document.addEventListener("DOMContentLoaded", function () {
       '<div class="paid-official-update-watch-grid">',
       data.changeSignals.map(signalHtml).join(""),
       '</div>',
-      '<p class="paid-official-update-watch-notice">이 엔진은 공식자료의 변경 여부를 리포트 품질 점검에 반영하기 위한 감시 구조입니다. 실제 법령·판례·세무자료 내용은 공식 출처 확인 후 데이터팩 기준일과 함께 갱신합니다.</p>'
+      '<p class="paid-official-update-watch-notice">이 엔진은 공식자료의 변경 여부를 리포트 품질 점검에 반영하기 위한 감시 구조입니다. 실제 법령·판례·세무자료 내용은 공식 출처 확인 후 참고자료 기준일과 함께 갱신합니다.</p>'
     ].join("");
 
     window.ansimOfficialUpdateWatchEngineV1 = data;
@@ -9623,6 +9623,207 @@ document.addEventListener("DOMContentLoaded", function () {
   document.addEventListener("click", schedule, true);
   setInterval(renderAll, 1200);
   schedule();
+})();
+</script>
+
+
+<style id="paid-customer-summary-v3-style">
+  .paid-customer-summary-panel {
+    margin: 18px 0;
+    padding: 17px;
+    border-radius: 18px;
+    border: 1px solid rgba(143, 111, 72, 0.28);
+    background: linear-gradient(180deg, rgba(255,252,245,0.98), rgba(248,251,247,0.98));
+  }
+  .paid-customer-summary-panel h4 {
+    margin: 0 0 8px;
+    color: #193a2f;
+    font-size: 18px;
+    line-height: 1.35;
+    letter-spacing: -0.04em;
+  }
+  .paid-customer-summary-lead {
+    margin: 0 0 13px;
+    color: #4f3d22;
+    font-size: 14px;
+    line-height: 1.62;
+  }
+  .paid-customer-summary-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .paid-customer-summary-card {
+    padding: 12px 13px;
+    border-radius: 15px;
+    background: rgba(255,255,255,0.94);
+    border: 1px solid rgba(82,109,86,0.18);
+  }
+  .paid-customer-summary-card b {
+    display: block;
+    color: #193a2f;
+    font-size: 14px;
+    line-height: 1.35;
+    margin-bottom: 5px;
+  }
+  .paid-customer-summary-card span {
+    display: block;
+    color: #5f4b2b;
+    font-size: 13.5px;
+    line-height: 1.58;
+  }
+  .paid-customer-summary-note {
+    margin-top: 11px;
+    padding: 11px 12px;
+    border-radius: 14px;
+    background: rgba(25,58,47,0.08);
+    color: #3f3522;
+    font-size: 12.8px;
+    line-height: 1.56;
+  }
+  @media (min-width: 720px) {
+    .paid-customer-summary-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+</style>
+
+<script>
+(function () {
+  if (window.__ansimPaidReportCustomerFacingV3Installed) return;
+  window.__ansimPaidReportCustomerFacingV3Installed = true;
+
+  function isPaidContext() {
+    var body = document.body ? (document.body.innerText || "") : "";
+    var paidByStorage = false;
+
+    try {
+      paidByStorage =
+        localStorage.getItem("ansim_payment_status") === "paid_confirmed" ||
+        localStorage.getItem("ansim_paid_report_status") === "paid_confirmed" ||
+        sessionStorage.getItem("ansim_payment_status") === "paid_confirmed" ||
+        sessionStorage.getItem("ansim_paid_report_status") === "paid_confirmed";
+    } catch (error) {}
+
+    return Boolean(
+      paidByStorage ||
+      document.getElementById("paidReportDeliveredCard") ||
+      document.getElementById("paidReferencePackPanel") ||
+      document.getElementById("paidCasePackPanel") ||
+      document.getElementById("paidAutoEnginePanel") ||
+      document.getElementById("paidInternationalPanel") ||
+      document.getElementById("paidDomesticEvidencePanel") ||
+      body.indexOf("상세자료가 준비되었습니다") >= 0 ||
+      body.indexOf("상세리포트") >= 0 ||
+      body.indexOf("유료 상세") >= 0
+    );
+  }
+
+  function insertCustomerSummaryPanel() {
+    if (!document.body || !isPaidContext()) return false;
+    if (document.getElementById("paidCustomerSummaryPanel")) return true;
+
+    var panel = document.createElement("section");
+    panel.id = "paidCustomerSummaryPanel";
+    panel.className = "paid-customer-summary-panel";
+    panel.innerHTML =
+      '<h4>내 상속 상황 요약</h4>' +
+      '<p class="paid-customer-summary-lead">입력하신 상황을 바탕으로 먼저 확인할 내용과 준비할 자료를 쉽게 정리했습니다.</p>' +
+      '<div class="paid-customer-summary-grid">' +
+        '<div class="paid-customer-summary-card"><b>현재 상황</b><span>가족관계, 재산, 채무, 세금, 해외 요소를 나누어 확인해야 하는 상황입니다. 먼저 상속인 구성과 재산·채무 목록을 정리하는 흐름이 좋습니다.</span></div>' +
+        '<div class="paid-customer-summary-card"><b>먼저 확인할 것</b><span>상속인 범위와 가족관계 서류<br>부동산, 예금, 보험, 퇴직금, 채무 항목<br>생전 증여, 유언, 간병·부양 기여 여부<br>세금 신고 일정과 제출 자료</span></div>' +
+        '<div class="paid-customer-summary-card"><b>준비할 자료</b><span>가족관계증명서, 기본증명서, 제적등본<br>부동산 등기, 예금·보험·증권·퇴직금 자료<br>대출, 보증, 카드, 기타 채무 자료<br>생전 증여, 생활비, 병원비, 계좌이체 자료</span></div>' +
+        '<div class="paid-customer-summary-card"><b>전문가 도움 신호</b><span>가족 간 의견 차이, 세금 신고, 해외 재산, 유언장, 생전 증여가 함께 있다면 전문가에게 물어볼 질문과 자료를 먼저 정리해두는 편이 좋습니다.</span></div>' +
+      '</div>' +
+      '<p class="paid-customer-summary-note">공식자료 기준일과 공개 참고자료는 하단의 확인 영역에서 따로 볼 수 있게 정리됩니다.</p>' +
+      '<p class="paid-customer-summary-note">패널 반영: 50대는 결론 요약, 60대는 준비 순서, 70대는 쉬운 생활어, 80대는 가족에게 보여줄 수 있는 짧은 요약을 우선했습니다.</p>';
+
+    var anchor =
+      document.getElementById("paidReportDeliveredCard") ||
+      document.getElementById("paidReferencePackPanel") ||
+      document.getElementById("paidCasePackPanel") ||
+      document.getElementById("paidAutoEnginePanel") ||
+      document.getElementById("paidInternationalPanel") ||
+      document.getElementById("paidDomesticEvidencePanel") ||
+      document.querySelector("main") ||
+      document.body.firstElementChild;
+
+    if (anchor && anchor.parentNode) {
+      anchor.parentNode.insertBefore(panel, anchor);
+    } else {
+      document.body.insertBefore(panel, document.body.firstChild);
+    }
+
+    return true;
+  }
+
+  function softenVisibleTextOnce() {
+    if (!document.body) return;
+
+    var walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
+      acceptNode: function (node) {
+        var parent = node.parentNode;
+        if (!parent) return NodeFilter.FILTER_REJECT;
+        var tag = parent.nodeName;
+        if (tag === "SCRIPT" || tag === "STYLE" || tag === "NOSCRIPT") return NodeFilter.FILTER_REJECT;
+        return NodeFilter.FILTER_ACCEPT;
+      }
+    });
+
+    var nodes = [];
+    while (walker.nextNode()) {
+      nodes.push(walker.currentNode);
+    }
+
+    nodes.forEach(function (node) {
+      var value = node.nodeValue || "";
+      value = value
+        .replace(/심층 분석 체크리스트/g, "상세 검토 항목")
+        .replace(/공식자료 참고 항목/g, "공식자료 참고 항목")
+        .replace(/판례상 확인할 쟁점/g, "판례상 확인할 쟁점")
+        .replace(/판례상 확인할 쟁점/g, "판례상 확인할 쟁점")
+        .replace(/국내자료 통합조사 엔진/g, "국내자료 확인 항목")
+        .replace(/자료 최신성·근거 검증 엔진/g, "공식자료 기준일 확인")
+        .replace(/공식자료 업데이트 감시 엔진/g, "공식자료 변경 확인")
+        .replace(/자동 수집·갱신 파이프라인/g, "최신 공식자료 확인 상태")
+        .replace(/공식자료 스냅샷 상태/g, "공식자료 확인 상태")
+        .replace(/소스 레지스트리/g, "참고한 공식자료")
+        .replace(/민간 법률 플랫폼·AI·웹자료 보조/g, "공개 참고자료 보조")
+        .replace(/민간 법률 플랫폼·AI·웹자료/g, "공개 참고자료")
+        .replace(/민간자료 보조/g, "공개 참고자료 보조")
+        .replace(/참고자료/g, "참고자료")
+        .replace(/스냅샷/g, "기준일")
+        .replace(/파이프라인/g, "확인 절차")
+        .replace(/엔진 v1/g, "확인 항목")
+        .replace(/엔진 v2/g, "확인 항목")
+        .replace(/엔진/g, "확인 항목")
+        .replace(/v1/g, "")
+        .replace(/v2/g, "")
+        .replace(/변경 감지 0개s*·s*확인 필요 3개/g, "기준일 확인 · 필요한 항목 분리")
+        .replace(/전체 출처 8개/g, "참고한 출처")
+        .replace(/공식 1차 5개/g, "공식 1차 자료")
+        .replace(/공식 보조 2개/g, "공식 보조자료")
+        .replace(/민간 보조 1개/g, "공개 참고자료");
+
+      node.nodeValue = value;
+    });
+  }
+
+  function runCustomerFacingPatch() {
+    softenVisibleTextOnce();
+    insertCustomerSummaryPanel();
+    softenVisibleTextOnce();
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", runCustomerFacingPatch, { once: true });
+  } else {
+    runCustomerFacingPatch();
+  }
+
+  window.setTimeout(runCustomerFacingPatch, 500);
+  window.setTimeout(runCustomerFacingPatch, 1200);
+  window.setTimeout(runCustomerFacingPatch, 2200);
 })();
 </script>
 
