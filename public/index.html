@@ -1461,6 +1461,117 @@
   line-height: 1.56;
 }
 
+
+.paid-auto-engine-panel {
+  margin-top: 14px;
+  padding: 15px;
+  border-radius: 18px;
+  border: 1px solid rgba(82,109,86,0.22);
+  background: rgba(252,250,244,0.96);
+}
+.paid-auto-engine-panel h4 {
+  margin: 0 0 9px;
+  color: #193a2f;
+  font-size: 16px;
+  line-height: 1.35;
+  letter-spacing: -0.04em;
+}
+.paid-auto-engine-lead {
+  margin: 0 0 11px;
+  color: #4f3d22;
+  font-size: 13.5px;
+  line-height: 1.62;
+}
+.paid-auto-engine-grid {
+  display: grid;
+  gap: 9px;
+}
+.paid-auto-engine-item {
+  padding: 12px 13px;
+  border-radius: 15px;
+  background: rgba(255,255,255,0.88);
+  border: 1px solid rgba(197,151,73,0.20);
+}
+.paid-auto-engine-item b {
+  display: block;
+  color: #193a2f;
+  font-size: 13.5px;
+  line-height: 1.35;
+  margin-bottom: 4px;
+}
+.paid-auto-engine-item span {
+  display: block;
+  color: #5f4b2b;
+  font-size: 13px;
+  line-height: 1.52;
+}
+.paid-auto-engine-meta {
+  display: block;
+  margin-top: 6px;
+  color: #846f45;
+  font-size: 12px;
+  line-height: 1.45;
+}
+.paid-international-panel {
+  margin-top: 14px;
+  padding: 15px;
+  border-radius: 18px;
+  border: 1px solid rgba(82,109,86,0.22);
+  background: rgba(247,251,247,0.95);
+}
+.paid-international-panel h4 {
+  margin: 0 0 9px;
+  color: #193a2f;
+  font-size: 16px;
+  line-height: 1.35;
+  letter-spacing: -0.04em;
+}
+.paid-international-lead {
+  margin: 0 0 11px;
+  color: #4f3d22;
+  font-size: 13.5px;
+  line-height: 1.62;
+}
+.paid-international-list {
+  display: grid;
+  gap: 9px;
+}
+.paid-international-item {
+  padding: 12px 13px;
+  border-radius: 15px;
+  background: rgba(255,255,255,0.9);
+  border: 1px solid rgba(197,151,73,0.20);
+}
+.paid-international-item b {
+  display: block;
+  color: #193a2f;
+  font-size: 13.5px;
+  line-height: 1.35;
+  margin-bottom: 4px;
+}
+.paid-international-item span {
+  display: block;
+  color: #5f4b2b;
+  font-size: 13px;
+  line-height: 1.52;
+}
+.paid-international-meta {
+  display: block;
+  margin-top: 6px;
+  color: #846f45;
+  font-size: 12px;
+  line-height: 1.45;
+}
+.paid-auto-engine-notice {
+  margin-top: 11px;
+  padding: 11px 12px;
+  border-radius: 14px;
+  background: rgba(25,58,47,0.08);
+  color: #3f3522;
+  font-size: 12.8px;
+  line-height: 1.56;
+}
+
 </style>
 
   <meta name="msapplication-TileColor" content="#06251d" />
@@ -7231,6 +7342,472 @@ document.addEventListener("DOMContentLoaded", function () {
   document.addEventListener("DOMContentLoaded", schedule);
   document.addEventListener("click", schedule, true);
   setInterval(createOrReplaceCasePackPanel, 1000);
+  schedule();
+})();
+</script>
+
+
+<script>
+(function () {
+  if (window.__ansimReportAutoEngineV1Installed) return;
+  window.__ansimReportAutoEngineV1Installed = true;
+
+  var AUTO_ENGINE_UPDATED_AT = "2026-06-11";
+
+  var INTERNATIONAL_DATA_PACK_V1 = [
+    {
+      id: "intl-korea-resident-nonresident",
+      region: "한국",
+      title: "한국 거주자·비거주자 구분",
+      sourceLabel: "국세청·상속세 및 증여세법 확인 항목",
+      displayText: "외국 거주 이력이 있으면 한국 상속세 신고 범위와 거주자·비거주자 구분을 먼저 확인합니다.",
+      checkText: "사망 당시 주소, 국내 체류·생활 근거, 가족·재산 소재지, 해외 체류 기간을 나누어 정리합니다."
+    },
+    {
+      id: "intl-us-estate-tax",
+      region: "미국",
+      title: "미국 소재 재산 확인",
+      sourceLabel: "IRS estate tax 확인 항목",
+      displayText: "미국 부동산, 미국 금융계좌, 미국 주식·증권계좌가 있으면 미국 세무 확인 항목이 생길 수 있습니다.",
+      checkText: "미국 소재 재산, 계좌 명의, 증권 보유 여부, 시민권·영주권·거주 이력, 현지 신고 필요성을 구분합니다."
+    },
+    {
+      id: "intl-eu-succession",
+      region: "EU",
+      title: "EU 마지막 거주지·국적법 선택 확인",
+      sourceLabel: "EU cross-border succession 확인 항목",
+      displayText: "EU 거주 이력이나 EU 소재 재산이 있으면 마지막 거주지, 국적법 선택, 유언 내용을 함께 확인합니다.",
+      checkText: "마지막 habitual residence, 유언상 준거법 선택, 재산 소재 국가, 덴마크·아일랜드 예외 여부를 정리합니다."
+    },
+    {
+      id: "intl-japan-inheritance-tax",
+      region: "일본",
+      title: "일본 거주·일본 재산 확인",
+      sourceLabel: "일본 국세청 상속세 확인 항목",
+      displayText: "일본 거주자, 일본 소재 재산, 일본 국적·주소 이력이 있으면 일본 상속세 확인 항목을 분리합니다.",
+      checkText: "상속인 주소, 피상속인 주소, 일본 국내재산, 일본 국적 여부, 최근 거주 이력을 정리합니다."
+    },
+    {
+      id: "intl-uk-inheritance-tax",
+      region: "영국",
+      title: "영국 거주·영국 재산 확인",
+      sourceLabel: "HMRC inheritance tax 확인 항목",
+      displayText: "영국 장기 거주, 영국 부동산, 영국 금융자산이 있으면 영국 상속세 확인 항목을 따로 봅니다.",
+      checkText: "영국 소재 재산, 장기 거주 여부, 배우자·가족 거주지, 현지 신고·probate 필요성을 정리합니다."
+    },
+    {
+      id: "intl-documents-apostille",
+      region: "공통 서류",
+      title: "번역·공증·아포스티유 자료",
+      sourceLabel: "국제서류 준비 확인 항목",
+      displayText: "해외 사망·혼인·출생·가족관계 자료는 번역, 공증, 아포스티유 또는 영사확인이 필요할 수 있습니다.",
+      checkText: "사망증명, 혼인증명, 출생증명, 가족관계 자료, 거주증명, 현지 재산자료의 발급국과 사용처를 정리합니다."
+    },
+    {
+      id: "intl-professional-signal",
+      region: "전문가 연결",
+      title: "국내·현지 전문가 확인 신호",
+      sourceLabel: "전문가 상담 전 정리 항목",
+      displayText: "해외 거주, 외국 국적, 해외 재산, 외국 유언장이 함께 있으면 국내 전문가와 현지 전문가 확인을 나누어 준비합니다.",
+      checkText: "한국 세무, 한국 상속 정리, 현지 probate·등기·세무, 번역공증 업무를 역할별로 구분합니다."
+    }
+  ];
+
+  function normalizeText(value) {
+    return value == null ? "" : String(value);
+  }
+
+  function bodyText() {
+    var parts = [];
+
+    if (document.body) {
+      parts.push(document.body.innerText || "");
+      parts.push(document.body.textContent || "");
+    }
+
+    try {
+      Array.prototype.forEach.call(document.querySelectorAll("input, textarea, select"), function (el) {
+        if (el.value) parts.push(el.value);
+        if (el.checked && el.labels) {
+          Array.prototype.forEach.call(el.labels, function (label) {
+            parts.push(label.innerText || label.textContent || "");
+          });
+        }
+        if (el.selectedOptions) {
+          Array.prototype.forEach.call(el.selectedOptions, function (option) {
+            parts.push(option.innerText || option.textContent || option.value || "");
+          });
+        }
+      });
+    } catch (error) {}
+
+    try {
+      Array.prototype.forEach.call(document.querySelectorAll("[data-answer], [data-value], [aria-label], [title]"), function (el) {
+        parts.push(el.getAttribute("data-answer") || "");
+        parts.push(el.getAttribute("data-value") || "");
+        parts.push(el.getAttribute("aria-label") || "");
+        parts.push(el.getAttribute("title") || "");
+      });
+    } catch (error) {}
+
+    try {
+      if (window.__ansimDiagnosisAnswers) parts.push(JSON.stringify(window.__ansimDiagnosisAnswers));
+      if (window.__ansimReportAnswers) parts.push(JSON.stringify(window.__ansimReportAnswers));
+      if (window.__ansimLeadPayload) parts.push(JSON.stringify(window.__ansimLeadPayload));
+      if (window.__ansimPaidReportPaymentIntent) parts.push(JSON.stringify(window.__ansimPaidReportPaymentIntent));
+    } catch (error) {}
+
+    return parts.join(" ");
+  }
+
+  function hasAny(text, words) {
+    return words.some(function (word) {
+      return text.indexOf(word) !== -1;
+    });
+  }
+
+  function isPaidReportVisible() {
+    if (window.__ansimPaidReportPaymentResult && window.__ansimPaidReportPaymentResult.status === "paid_confirmed") return true;
+    if (window.__ansimPaidReportPaymentIntent && window.__ansimPaidReportPaymentIntent.status === "paid_confirmed") return true;
+
+    try {
+      if (typeof window.ansimGetPaidReportPaymentResult === "function") {
+        var result = window.ansimGetPaidReportPaymentResult();
+        if (result && result.status === "paid_confirmed") return true;
+      }
+    } catch (error) {}
+
+    var deliveredCard = document.getElementById("paidReportDeliveredCard");
+    if (deliveredCard && deliveredCard.hidden !== true) return true;
+
+    return bodyText().indexOf("상세자료가 준비되었습니다") !== -1;
+  }
+
+  function getFlags() {
+    var text = bodyText();
+
+    return {
+      family: hasAny(text, ["배우자", "자녀", "형제", "부모", "가족관계", "상속인"]),
+      realEstate: hasAny(text, ["주택", "상가", "토지", "부동산", "아파트", "건물"]),
+      financial: hasAny(text, ["예금", "계좌", "주식", "증권", "보험", "퇴직금", "금융"]),
+      debt: hasAny(text, ["채무", "대출", "빚", "보증", "부채"]),
+      reservedPortion: hasAny(text, ["유류분", "유언", "유증", "증여", "생전"]),
+      contribution: hasAny(text, ["기여분", "간병", "부양", "돌봄", "병원비", "요양"]),
+      tax: hasAny(text, ["상속세", "세금", "신고", "공제", "평가"]),
+      caseLaw: hasAny(text, ["판례", "특별수익", "명의신탁", "유류분", "기여분"]),
+      international: hasAny(text, ["해외", "외국", "국외", "비거주", "거주자", "외국인", "미국", "일본", "중국", "캐나다", "호주", "영국", "EU", "유럽", "해외재산", "아포스티유", "번역", "공증"]),
+      us: hasAny(text, ["미국", "영주권", "시민권", "IRS", "미국 주식", "미국 부동산"]),
+      eu: hasAny(text, ["EU", "유럽", "독일", "프랑스", "이탈리아", "스페인", "네덜란드"]),
+      japan: hasAny(text, ["일본", "일본 재산", "일본 거주"]),
+      uk: hasAny(text, ["영국", "UK", "런던", "HMRC"])
+    };
+  }
+
+  function buildAutoSummary() {
+    var flags = getFlags();
+    var items = [];
+
+    items.push({
+      id: "engine-family",
+      title: "가족관계·상속인 정리",
+      text: flags.family ? "상속인 구성을 기준으로 가족관계 서류와 상속 순서를 먼저 정리합니다." : "상속인 확인을 위해 가족관계 자료부터 준비하는 흐름이 좋습니다.",
+      meta: "기본축 · 가족관계증명서, 제적등본, 혼인·입양 관련 자료"
+    });
+
+    items.push({
+      id: "engine-assets",
+      title: "재산·채무 분리",
+      text: flags.realEstate || flags.financial || flags.debt ? "부동산, 금융자산, 보험, 채무를 분리해 확인해야 합니다." : "재산과 채무를 항목별로 나누어 빠진 자료가 없는지 확인합니다.",
+      meta: "자료축 · 등기, 계좌, 증권, 보험, 대출, 보증 자료"
+    });
+
+    items.push({
+      id: "engine-reserved-portion",
+      title: "유류분·특별수익·기여분",
+      text: flags.reservedPortion || flags.contribution ? "생전 증여, 유언, 부양·간병 기여가 있으면 유류분·특별수익·기여분 쟁점을 함께 정리합니다." : "가족 간 분쟁 가능성을 낮추기 위해 생전 이전재산과 기여 사정을 확인합니다.",
+      meta: "분쟁축 · 유언, 증여, 간병, 생활비, 주택자금, 사업자금"
+    });
+
+    items.push({
+      id: "engine-tax",
+      title: "세금·신고 일정",
+      text: flags.tax || flags.realEstate || flags.financial ? "상속재산 평가, 신고기한, 공제 항목, 제출자료를 함께 정리합니다." : "신고 필요 여부와 준비자료를 미리 나누어 확인합니다.",
+      meta: "세무축 · 상속세 신고기한, 평가자료, 공제자료"
+    });
+
+    items.push({
+      id: "engine-case-law",
+      title: "법령·세무·판례 근거",
+      text: flags.caseLaw ? "법령·세무·판례 데이터팩을 기준으로 확인할 쟁점을 함께 붙입니다." : "판례 쟁점 데이터팩을 통해 놓치기 쉬운 확인 항목을 보완합니다.",
+      meta: "근거축 · 유류분, 특별수익, 기여분, 재산평가, 채무"
+    });
+
+    items.push({
+      id: "engine-international",
+      title: "국제상속·해외 요소",
+      text: flags.international ? "외국 거주, 외국 국적, 해외 재산, 외국 서류가 있어 한국 신고와 현지 확인 항목을 나누어 봅니다." : "외국 요소가 확인되면 한국 신고와 현지 절차를 분리해 정리할 수 있습니다.",
+      meta: "국제축 · 거주지, 국적, 해외재산, 번역공증, 아포스티유"
+    });
+
+    items.push({
+      id: "engine-expert",
+      title: "전문가 확인 필요도",
+      text: buildExpertSignalText(flags),
+      meta: "연결축 · 한국 세무, 한국 상속 정리, 현지 절차, 자료 검토"
+    });
+
+    return items;
+  }
+
+  function buildExpertSignalText(flags) {
+    var score = 0;
+    if (flags.international) score += 3;
+    if (flags.debt) score += 2;
+    if (flags.reservedPortion) score += 2;
+    if (flags.contribution) score += 1;
+    if (flags.realEstate) score += 1;
+    if (flags.tax) score += 1;
+
+    if (score >= 5) {
+      return "복합 쟁점이 있어 전문가에게 전달할 자료를 미리 정리하는 것이 좋습니다.";
+    }
+
+    if (score >= 3) {
+      return "일부 쟁점은 전문가 확인을 검토할 수 있도록 자료를 구분해 두는 것이 좋습니다.";
+    }
+
+    return "현재는 기본 자료를 먼저 정리하고, 추가 쟁점이 확인되면 전문가 확인 여부를 판단하는 흐름이 좋습니다.";
+  }
+
+  function selectInternationalItems() {
+    var flags = getFlags();
+    var selected = [];
+
+    selected.push("intl-korea-resident-nonresident");
+
+    if (flags.us) selected.push("intl-us-estate-tax");
+    if (flags.eu) selected.push("intl-eu-succession");
+    if (flags.japan) selected.push("intl-japan-inheritance-tax");
+    if (flags.uk) selected.push("intl-uk-inheritance-tax");
+
+    if (flags.international && selected.length === 1) {
+      selected.push("intl-documents-apostille");
+      selected.push("intl-professional-signal");
+    }
+
+    if (flags.international) {
+      if (selected.indexOf("intl-documents-apostille") === -1) selected.push("intl-documents-apostille");
+      if (selected.indexOf("intl-professional-signal") === -1) selected.push("intl-professional-signal");
+    }
+
+    return INTERNATIONAL_DATA_PACK_V1.filter(function (item) {
+      return selected.indexOf(item.id) !== -1;
+    });
+  }
+
+  function itemHtml(item) {
+    return [
+      '<div class="paid-auto-engine-item" data-engine-id="', item.id, '">',
+      '<b>', item.title, '</b>',
+      '<span>', item.text, '</span>',
+      '<small class="paid-auto-engine-meta">', item.meta, '</small>',
+      '</div>'
+    ].join("");
+  }
+
+  function internationalItemHtml(item) {
+    return [
+      '<div class="paid-international-item" data-international-id="', item.id, '">',
+      '<b>', item.title, '</b>',
+      '<span>', item.displayText, '</span>',
+      '<small class="paid-international-meta">',
+      item.region, ' · ', item.sourceLabel, ' · ', item.checkText,
+      '</small>',
+      '</div>'
+    ].join("");
+  }
+
+  function findAnchor() {
+    return (
+      document.getElementById("paidCasePackPanel") ||
+      document.getElementById("paidReferencePackPanel") ||
+      document.getElementById("paidDeepAnalysisPanel") ||
+      document.querySelector(".paid-deep-analysis-panel") ||
+      document.getElementById("paidReportDeliveredCard") ||
+      document.getElementById("resultArea") ||
+      document.body
+    );
+  }
+
+  function ensurePanel(id, className) {
+    var panel = document.getElementById(id);
+    if (panel) return panel;
+
+    panel = document.createElement("section");
+    panel.id = id;
+    panel.className = className;
+
+    var anchor = findAnchor();
+
+    if (anchor && anchor.parentNode && anchor.id !== "resultArea") {
+      anchor.parentNode.insertBefore(panel, anchor.nextSibling);
+    } else if (anchor && anchor.id === "paidReportDeliveredCard") {
+      var actions = anchor.querySelector(".paid-report-actions");
+      if (actions) actions.insertAdjacentElement("beforebegin", panel);
+      else anchor.appendChild(panel);
+    } else {
+      document.body.appendChild(panel);
+    }
+
+    return panel;
+  }
+
+  function renderAutoEnginePanel() {
+    if (!isPaidReportVisible()) return false;
+
+    var items = buildAutoSummary();
+    var panel = ensurePanel("paidAutoEnginePanel", "paid-auto-engine-panel");
+
+    panel.innerHTML = [
+      '<h4>상세리포트 자동 분석 엔진</h4>',
+      '<p class="paid-auto-engine-lead">입력하신 답변을 기준으로 가족관계, 재산, 채무, 세금, 판례, 국제상속, 전문가 확인 신호를 한 번에 정리했습니다.</p>',
+      '<div class="paid-auto-engine-grid">',
+      items.map(itemHtml).join(""),
+      '</div>',
+      '<p class="paid-auto-engine-notice">이 패널은 결론을 단정하지 않고, 다음 확인 항목과 준비자료를 빠뜨리지 않도록 돕는 용도로 사용됩니다. 엔진 기준일: ',
+      AUTO_ENGINE_UPDATED_AT,
+      '</p>'
+    ].join("");
+
+    if (typeof window.ansimTrackFunnel === "function" && panel.dataset.tracked !== "1") {
+      panel.dataset.tracked = "1";
+      window.ansimTrackFunnel("paid_report_auto_engine_v1_view", {
+        count: items.length,
+        updatedAt: AUTO_ENGINE_UPDATED_AT
+      });
+    }
+
+    return true;
+  }
+
+  function renderInternationalPanel() {
+    if (!isPaidReportVisible()) return false;
+
+    var selected = selectInternationalItems();
+
+    if (!selected.length) {
+      var old = document.getElementById("paidInternationalPanel");
+      if (old && old.parentNode) old.parentNode.removeChild(old);
+      return false;
+    }
+
+    var panel = ensurePanel("paidInternationalPanel", "paid-international-panel");
+
+    panel.innerHTML = [
+      '<h4>국제상속 확인 데이터팩</h4>',
+      '<p class="paid-international-lead">외국 거주, 외국 국적, 해외 재산, 외국 서류가 있는 경우 한국 신고와 현지 확인 항목을 나누어 정리합니다.</p>',
+      '<div class="paid-international-list">',
+      selected.map(internationalItemHtml).join(""),
+      '</div>',
+      '<p class="paid-auto-engine-notice">국제상속 데이터팩은 해당국 결론을 단정하지 않고, 공식 확인처와 전문가 상담 전 준비자료를 정리하는 용도로 사용됩니다. 데이터팩 기준일: ',
+      AUTO_ENGINE_UPDATED_AT,
+      '</p>'
+    ].join("");
+
+    if (typeof window.ansimTrackFunnel === "function" && panel.dataset.tracked !== "1") {
+      panel.dataset.tracked = "1";
+      window.ansimTrackFunnel("paid_report_international_datapack_v1_view", {
+        count: selected.length,
+        updatedAt: AUTO_ENGINE_UPDATED_AT
+      });
+    }
+
+    return true;
+  }
+
+  function renderAll() {
+    if (!isPaidReportVisible()) return false;
+
+    var a = renderAutoEnginePanel();
+    var b = renderInternationalPanel();
+
+    window.ansimReportAutoEngineV1 = {
+      updatedAt: AUTO_ENGINE_UPDATED_AT,
+      flags: getFlags(),
+      summary: buildAutoSummary(),
+      internationalItems: selectInternationalItems()
+    };
+
+    return !!(a || b);
+  }
+
+  window.ansimInternationalInheritanceDataPackV1 = INTERNATIONAL_DATA_PACK_V1;
+  window.ansimRenderReportAutoEngineV1 = renderAll;
+  window.ansimBuildReportAutoEngineV1 = function () {
+    return {
+      updatedAt: AUTO_ENGINE_UPDATED_AT,
+      flags: getFlags(),
+      summary: buildAutoSummary(),
+      internationalItems: selectInternationalItems()
+    };
+  };
+
+  function schedule() {
+    setTimeout(renderAll, 80);
+    setTimeout(renderAll, 250);
+    setTimeout(renderAll, 600);
+    setTimeout(renderAll, 1200);
+    setTimeout(renderAll, 2200);
+    setTimeout(renderAll, 3600);
+  }
+
+  var oldDelivered = window.ansimRenderPaidReportDelivered;
+  if (typeof oldDelivered === "function" && oldDelivered.__reportAutoEngineWrapped !== true) {
+    var wrappedDelivered = function () {
+      var result = oldDelivered.apply(this, arguments);
+      schedule();
+      return result;
+    };
+    wrappedDelivered.__reportAutoEngineWrapped = true;
+    window.ansimRenderPaidReportDelivered = wrappedDelivered;
+  }
+
+  var oldDeep = window.ansimEnhancePaidReportDeepAnalysis;
+  if (typeof oldDeep === "function" && oldDeep.__reportAutoEngineWrapped !== true) {
+    var wrappedDeep = function () {
+      var result = oldDeep.apply(this, arguments);
+      schedule();
+      return result;
+    };
+    wrappedDeep.__reportAutoEngineWrapped = true;
+    window.ansimEnhancePaidReportDeepAnalysis = wrappedDeep;
+  }
+
+  var oldReference = window.ansimForceCreateLegalTaxCaseReferencePanel;
+  if (typeof oldReference === "function" && oldReference.__reportAutoEngineWrapped !== true) {
+    var wrappedReference = function () {
+      var result = oldReference.apply(this, arguments);
+      schedule();
+      return result;
+    };
+    wrappedReference.__reportAutoEngineWrapped = true;
+    window.ansimForceCreateLegalTaxCaseReferencePanel = wrappedReference;
+  }
+
+  var oldCase = window.ansimRenderCaseDataPackV2DirectPanel;
+  if (typeof oldCase === "function" && oldCase.__reportAutoEngineWrapped !== true) {
+    var wrappedCase = function () {
+      var result = oldCase.apply(this, arguments);
+      schedule();
+      return result;
+    };
+    wrappedCase.__reportAutoEngineWrapped = true;
+    window.ansimRenderCaseDataPackV2DirectPanel = wrappedCase;
+  }
+
+  document.addEventListener("DOMContentLoaded", schedule);
+  document.addEventListener("click", schedule, true);
+  setInterval(renderAll, 1200);
   schedule();
 })();
 </script>
