@@ -1070,6 +1070,68 @@
       }
     }
   
+
+.paid-trust-box {
+  margin: 14px 0 14px;
+  padding: 16px;
+  border-radius: 18px;
+  border: 1px solid rgba(197, 151, 73, 0.34);
+  background: linear-gradient(180deg, rgba(255, 250, 238, 0.98), rgba(255, 246, 224, 0.92));
+  box-shadow: 0 10px 24px rgba(48, 35, 18, 0.08);
+}
+.paid-trust-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(25, 58, 47, 0.92);
+  color: #fff8e7;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-bottom: 8px;
+}
+.paid-trust-box h4 {
+  margin: 0 0 10px;
+  color: #193a2f;
+  font-size: 18px;
+  line-height: 1.35;
+  letter-spacing: -0.04em;
+}
+.paid-trust-box ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+.paid-trust-box li {
+  display: grid;
+  gap: 2px;
+  padding: 10px 11px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(197, 151, 73, 0.16);
+}
+.paid-trust-box strong {
+  color: #193a2f;
+  font-size: 14px;
+  line-height: 1.35;
+}
+.paid-trust-box span {
+  color: #5f4b2b;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.paid-trust-note {
+  margin: 10px 0 0;
+  padding-top: 10px;
+  border-top: 1px dashed rgba(197, 151, 73, 0.35);
+  color: #4f3d22;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
 </style>
 
   <meta name="msapplication-TileColor" content="#06251d" />
@@ -3253,7 +3315,7 @@ document.addEventListener("DOMContentLoaded", function () {
       '<div style="margin:14px 0;padding:16px;border-radius:18px;background:#fff7e0;border:1px solid #d6b45f;">',
       '<strong style="display:block;color:#173c2f;font-size:1.05rem;margin-bottom:6px;">상세자료 안내 금액</strong>',
       '<div style="font-size:1.65rem;font-weight:950;color:#173c2f;line-height:1.2;">29,000원</div>',
-      '<p style="margin:8px 0 0;color:#6b7280;line-height:1.6;">현재는 결제 전 안내 확인 단계입니다. 실제 결제 연동 전까지는 신청 내용에 결제 관심 여부만 기록됩니다.</p>',
+      '<p style="margin:8px 0 0;color:#6b7280;line-height:1.6;">아직 결제 전입니다. 포함 내용을 확인한 뒤 다음 단계에서 결제수단을 선택하실 수 있습니다.</p>',
       '</div>',
 
       '<div style="display:grid;grid-template-columns:1fr;gap:10px;margin:14px 0;">',
@@ -3270,9 +3332,20 @@ document.addEventListener("DOMContentLoaded", function () {
       '</div>',
       '</div>',
 
-      '<button id="paidPaymentIntentBtn" type="button" class="btn btn-primary" style="width:100%;min-height:50px;">상세자료 결제 안내 확인하기</button>',
+      '<div class="paid-trust-box" id="paidTrustBox">',
+      '<div class="paid-trust-eyebrow">결제 전 확인</div>',
+      '<h4>29,000원으로 받을 수 있는 내용</h4>',
+      '<ul>',
+      '<li><strong>현재 상황 분석</strong><span>가족관계, 재산 항목, 준비 상태를 한눈에 정리합니다.</span></li>',
+      '<li><strong>확인할 자료</strong><span>등기, 금융자료, 부채, 사전 증여 등 빠뜨리기 쉬운 항목을 정리합니다.</span></li>',
+      '<li><strong>다음 순서</strong><span>무엇부터 확인하고 어떤 자료를 준비하면 좋을지 순서대로 안내합니다.</span></li>',
+      '<li><strong>도움 필요 여부</strong><span>분쟁 가능성, 해외 요소, 복잡한 재산이 있을 때 추가 도움 방향을 확인합니다.</span></li>',
+      '</ul>',
+      '<p class="paid-trust-note">입력하신 이름과 이메일은 상세자료 안내와 문의 확인에만 사용됩니다.</p>',
+      '</div>',
+      '<button id="paidPaymentIntentBtn" type="button" class="btn btn-primary" style="width:100%;min-height:50px;">상세자료 29,000원 확인하고 결제하기</button>',
       '<p id="paidPaymentIntentStatus" style="margin:12px 0 0;color:#173c2f;font-weight:850;line-height:1.6;"></p>',
-      '<p style="margin:10px 0 0;color:#6b7280;font-size:0.94rem;line-height:1.6;">결제 전 안내를 먼저 확인하고, 필요한 경우 이메일 안내를 통해 다음 절차를 이어갈 수 있습니다.</p>'
+      '<p style="margin:10px 0 0;color:#6b7280;font-size:0.94rem;line-height:1.6;">입력하신 연락처로 상세자료 안내와 다음 절차를 이어갈 수 있습니다.</p>'
     ].join("");
 
     if (guide && guide.parentNode === resultArea) {
@@ -3310,7 +3383,7 @@ document.addEventListener("DOMContentLoaded", function () {
       '<h3>유료 상세자료 안내를 확인해보세요</h3>',
       '<p class="preview-lead">현재 상황에 맞춘 준비자료와 진행순서를 더 구체적으로 받아보고 싶다면, 상세자료 안내를 확인할 수 있습니다.</p>',
       '<button id="openPaidPaymentGuideBtn" type="button" class="btn btn-primary" style="width:100%;margin-top:10px;">유료 상세자료 안내 확인하기</button>',
-      '<p style="margin:12px 0 0;color:#6b7280;font-size:0.95rem;line-height:1.6;">실제 결제 연동 전 단계로, 안내 확인 여부가 신청 내용에 함께 기록됩니다.</p>'
+      '<p style="margin:12px 0 0;color:#6b7280;font-size:0.95rem;line-height:1.6;">실제 금액과 포함 내용을 먼저 확인한 뒤, 필요하시면 결제 단계로 이어집니다.</p>'
     ].join("");
 
     if (intentCard && intentCard.parentNode) {
@@ -3505,13 +3578,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
     var btn = document.getElementById("openPaidPaymentGuideBtn");
     if (btn) {
-      btn.textContent = "유료 상세자료 안내 보기";
+      btn.textContent = "상세자료 구성과 금액 확인하기";
       btn.style.minHeight = "50px";
     }
 
     var small = card.querySelector("p[style]");
     if (small) {
-      small.textContent = "결제 연동 전 단계로, 안내 확인 여부가 신청 내용에 함께 기록됩니다.";
+      small.textContent = "금액과 포함 내용을 먼저 확인한 뒤, 필요하시면 결제 단계로 이어집니다.";
     }
   }
 
@@ -3563,7 +3636,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     var status = document.getElementById("paidPaymentIntentStatus");
     if (status && status.textContent.trim()) {
-      status.textContent = "결제 안내 확인이 신청 내용에 표시되었습니다.";
+      status.textContent = "상세자료 안내를 확인했습니다.";
     }
   }
 
@@ -3827,7 +3900,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (!btn || btn.dataset.paymentOrderWired === "1") return;
 
     btn.dataset.paymentOrderWired = "1";
-    btn.textContent = "결제 준비 정보 만들기";
+    btn.textContent = "상세자료 29,000원 확인하고 결제하기";
 
     btn.addEventListener("click", function () {
       setTimeout(createPaymentOrder, 80);
@@ -4473,7 +4546,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     var btn = document.getElementById("paidPaymentIntentBtn");
     if (btn && btn.textContent.indexOf("결제") >= 0) {
-      btn.textContent = "결제 준비 정보 만들기";
+      btn.textContent = "상세자료 29,000원 확인하고 결제하기";
     }
   }
 
