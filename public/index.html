@@ -2774,7 +2774,7 @@ render();
         ["기본 정보 정리표", "상속인과 주요 재산을 한눈에 볼 수 있게 정리합니다."],
         ["준비서류 체크", "나중에 필요한 서류를 미리 확인합니다."],
         ["상황 변화 대비", "가족·재산 상황이 바뀔 때 다시 확인할 항목을 남깁니다."],
-        ["도움 필요도", "전문가 연결이 필요한지 판단할 참고 기준을 정리합니다."]
+        ["도움 필요도", "전문가 확인이 필요한지 판단할 참고 기준을 정리합니다."]
       ]
     };
   }
@@ -7679,7 +7679,7 @@ document.addEventListener("DOMContentLoaded", function () {
     },
     {
       id: "intl-professional-signal",
-      region: "전문가 연결",
+      region: "전문가 확인",
       title: "국내·현지 전문가 확인 신호",
       sourceLabel: "전문가 상담 전 정리 항목",
       displayText: "해외 거주, 외국 국적, 해외 재산, 외국 유언장이 함께 있으면 국내 전문가와 현지 전문가 확인을 나누어 준비합니다.",
@@ -7827,7 +7827,7 @@ document.addEventListener("DOMContentLoaded", function () {
       id: "engine-expert",
       title: "전문가 확인 필요도",
       text: buildExpertSignalText(flags),
-      meta: "연결축 · 한국 세무, 한국 상속 정리, 현지 절차, 자료 검토"
+      meta: "확인축 · 한국 세무, 한국 상속 정리, 현지 절차, 자료 검토"
     });
 
     return items;
@@ -7943,7 +7943,7 @@ document.addEventListener("DOMContentLoaded", function () {
     var panel = ensurePanel("paidAutoEnginePanel", "paid-auto-engine-panel");
 
     panel.innerHTML = [
-      '<h4>상세리포트 자동 정리 항목</h4>',
+      '<h4>상세리포트 정리 항목</h4>',
       '<p class="paid-auto-engine-lead">입력하신 답변을 기준으로 가족관계, 재산, 채무, 세금, 판례, 국제상속, 전문가 확인 신호를 한 번에 정리했습니다.</p>',
       '<div class="paid-auto-engine-grid">',
       items.map(itemHtml).join(""),
@@ -8892,7 +8892,7 @@ document.addEventListener("DOMContentLoaded", function () {
         title: "전문가 필요도",
         ok: hasExpertSignal,
         text: hasExpertSignal ? "전문가 확인 신호가 결론 단정 없이 표시됩니다." : "전문가 확인 필요도를 안전하게 보강해야 합니다.",
-        meta: hasExpertSignal ? "통과 · 전문가 연결 가능성" : "보강 필요 · 수익화 연결 약함"
+        meta: hasExpertSignal ? "통과 · 전문가 확인 가능성" : "보강 필요 · 수익화 연결 약함"
       },
       {
         id: "freshness-international",
@@ -9824,6 +9824,285 @@ document.addEventListener("DOMContentLoaded", function () {
   window.setTimeout(runCustomerFacingPatch, 500);
   window.setTimeout(runCustomerFacingPatch, 1200);
   window.setTimeout(runCustomerFacingPatch, 2200);
+})();
+</script>
+
+
+<style id="paid-report-product-structure-v1-style">
+  .paid-product-structure-panel {
+    margin: 18px 0;
+    padding: 17px;
+    border-radius: 18px;
+    border: 1px solid rgba(82, 109, 86, 0.24);
+    background: linear-gradient(180deg, rgba(255,252,245,0.98), rgba(247,251,248,0.98));
+  }
+  .paid-product-structure-panel h4 {
+    margin: 0 0 8px;
+    color: #193a2f;
+    font-size: 18px;
+    line-height: 1.35;
+    letter-spacing: -0.04em;
+  }
+  .paid-product-structure-lead {
+    margin: 0 0 13px;
+    color: #4f3d22;
+    font-size: 14px;
+    line-height: 1.62;
+  }
+  .paid-product-structure-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .paid-product-structure-card {
+    padding: 12px 13px;
+    border-radius: 15px;
+    background: #fff;
+    border: 1px solid rgba(143, 111, 72, 0.18);
+  }
+  .paid-product-structure-card b {
+    display: block;
+    margin-bottom: 6px;
+    color: #193a2f;
+    font-size: 14px;
+    line-height: 1.35;
+  }
+  .paid-product-structure-card span {
+    display: block;
+    color: #5f4b2b;
+    font-size: 13.5px;
+    line-height: 1.58;
+  }
+  .paid-product-structure-note {
+    margin-top: 11px;
+    padding: 11px 12px;
+    border-radius: 14px;
+    background: rgba(143, 111, 72, 0.10);
+    color: #3f3522;
+    font-size: 12.8px;
+    line-height: 1.56;
+  }
+  .paid-product-structure-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+    margin-top: 12px;
+  }
+  .paid-product-structure-action {
+    display: block;
+    width: 100%;
+    padding: 11px 12px;
+    border-radius: 14px;
+    border: 1px solid rgba(25, 58, 47, 0.24);
+    background: rgba(255, 255, 255, 0.96);
+    color: #193a2f;
+    font-size: 13.5px;
+    line-height: 1.45;
+    text-align: left;
+  }
+  @media (min-width: 720px) {
+    .paid-product-structure-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .paid-product-structure-actions {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+  @media print {
+    .paid-product-structure-panel {
+      break-inside: avoid;
+      page-break-inside: avoid;
+      border: 1px solid #999;
+      background: #fff;
+    }
+  }
+</style>
+
+<script>
+(function () {
+  if (window.__ansimPaidReportProductStructureV1Installed) return;
+  window.__ansimPaidReportProductStructureV1Installed = true;
+
+  function isPaidReportContext() {
+    var body = document.body ? (document.body.innerText || "") : "";
+    var storagePaid = false;
+
+    try {
+      storagePaid =
+        localStorage.getItem("ansim_payment_status") === "paid_confirmed" ||
+        localStorage.getItem("ansim_paid_report_status") === "paid_confirmed" ||
+        sessionStorage.getItem("ansim_payment_status") === "paid_confirmed" ||
+        sessionStorage.getItem("ansim_paid_report_status") === "paid_confirmed";
+    } catch (error) {}
+
+    return Boolean(
+      storagePaid ||
+      document.getElementById("paidCustomerSummaryPanel") ||
+      document.getElementById("paidReportDeliveredCard") ||
+      document.getElementById("paidReferencePackPanel") ||
+      document.getElementById("paidCasePackPanel") ||
+      document.getElementById("paidInternationalPanel") ||
+      document.getElementById("paidDomesticEvidencePanel") ||
+      body.indexOf("상세자료가 준비되었습니다") >= 0 ||
+      body.indexOf("상세정리 리포트") >= 0 ||
+      body.indexOf("상세리포트") >= 0
+    );
+  }
+
+  function findAnchor() {
+    return (
+      document.getElementById("paidCustomerSummaryPanel") ||
+      document.getElementById("paidReportDeliveredCard") ||
+      document.getElementById("paidReferencePackPanel") ||
+      document.getElementById("paidCasePackPanel") ||
+      document.getElementById("paidInternationalPanel") ||
+      document.getElementById("paidDomesticEvidencePanel") ||
+      document.querySelector("main") ||
+      document.body.firstElementChild
+    );
+  }
+
+  function insertBeforeAnchor(newNode, refNode) {
+    if (refNode && refNode.parentNode) {
+      refNode.parentNode.insertBefore(newNode, refNode);
+      return;
+    }
+    document.body.insertBefore(newNode, document.body.firstChild);
+  }
+
+  function insertAfter(newNode, refNode) {
+    if (!refNode || !refNode.parentNode) {
+      document.body.appendChild(newNode);
+      return;
+    }
+    if (refNode.nextSibling) {
+      refNode.parentNode.insertBefore(newNode, refNode.nextSibling);
+    } else {
+      refNode.parentNode.appendChild(newNode);
+    }
+  }
+
+  function makeProductHero() {
+    if (document.getElementById("paidProductValuePanel")) return true;
+
+    var panel = document.createElement("section");
+    panel.id = "paidProductValuePanel";
+    panel.className = "paid-product-structure-panel";
+    panel.innerHTML =
+      '<h4>안심상속 상세정리 리포트</h4>' +
+      '<p class="paid-product-structure-lead">혼자 읽어도 이해하기 쉽고, 가족과 상의할 때도 보여주기 쉽게 정리했습니다. 필요한 경우 전문가에게 물어볼 질문과 준비자료도 함께 확인할 수 있습니다.</p>' +
+      '<div class="paid-product-structure-grid">' +
+        '<div class="paid-product-structure-card"><b>혼자 이해하기</b><span>상속인, 재산, 채무, 세금, 해외 요소를 나누어 현재 상황을 한눈에 볼 수 있게 정리합니다.</span></div>' +
+        '<div class="paid-product-structure-card"><b>가족과 상의하기</b><span>가족에게 설명하기 어려운 내용을 확인 항목과 준비자료 중심으로 짧게 정리합니다.</span></div>' +
+        '<div class="paid-product-structure-card"><b>필요한 도움 준비하기</b><span>변호사·세무사·회계사에게 물어볼 질문과 가져가면 좋은 자료를 미리 정리할 수 있습니다.</span></div>' +
+        '<div class="paid-product-structure-card"><b>공식자료 기준 확인</b><span>참고한 공식자료와 기준일을 확인할 수 있도록 구성해 신뢰도를 높였습니다.</span></div>' +
+      '</div>' +
+      '<p class="paid-product-structure-note">이 리포트는 결론을 단정하기보다, 지금 확인할 항목과 다음에 준비할 자료를 정리하는 데 초점을 둡니다.</p>';
+
+    insertBeforeAnchor(panel, findAnchor());
+    return true;
+  }
+
+  function makeFamilySummary() {
+    if (document.getElementById("paidFamilyOnePageSummaryPanel")) return true;
+
+    var panel = document.createElement("section");
+    panel.id = "paidFamilyOnePageSummaryPanel";
+    panel.className = "paid-product-structure-panel";
+    panel.innerHTML =
+      '<h4>가족과 함께 보는 1장 요약</h4>' +
+      '<p class="paid-product-structure-lead">가족에게 바로 설명하기 어렵지 않도록, 현재 상황과 함께 확인할 자료를 1장 요약 흐름으로 정리했습니다.</p>' +
+      '<div class="paid-product-structure-grid">' +
+        '<div class="paid-product-structure-card"><b>현재 함께 볼 내용</b><span>상속인 범위, 재산과 채무, 생전 증여나 유언 여부, 세금 신고 일정을 가족 대화의 출발점으로 정리합니다.</span></div>' +
+        '<div class="paid-product-structure-card"><b>가족과 먼저 나눌 이야기</b><span>누가 맞는지보다 어떤 자료가 필요한지부터 확인하는 흐름이 좋습니다. 감정이 앞서기 쉬운 내용은 자료 목록과 일정부터 나누어 봅니다.</span></div>' +
+        '<div class="paid-product-structure-card"><b>함께 확인할 자료</b><span>가족관계 서류, 재산 목록, 채무 자료, 생전 계좌이체 내역, 병원비·생활비 자료, 유언 관련 자료를 따로 모아둡니다.</span></div>' +
+        '<div class="paid-product-structure-card"><b>다음 대화 순서</b><span>자료가 모이면 가족 간 의견 차이, 세금 신고, 해외 재산, 생전 증여, 유언장 여부를 차례로 확인하는 흐름이 좋습니다.</span></div>' +
+      '</div>' +
+      '<p class="paid-product-structure-note">가족 공유용 요약은 판단을 정하는 문서가 아니라, 함께 확인할 항목과 준비자료를 보기 쉽게 정리한 안내입니다.</p>';
+
+    var anchor = document.getElementById("paidCustomerSummaryPanel") || document.getElementById("paidProductValuePanel") || findAnchor();
+    insertAfter(panel, anchor);
+    return true;
+  }
+
+  function makeExpertPrepMemo() {
+    if (document.getElementById("paidExpertConsultPrepPanel")) return true;
+
+    var panel = document.createElement("section");
+    panel.id = "paidExpertConsultPrepPanel";
+    panel.className = "paid-product-structure-panel";
+    panel.innerHTML =
+      '<h4>전문가 상담 전 준비 메모</h4>' +
+      '<p class="paid-product-structure-lead">필요한 경우 변호사·세무사·회계사에게 상황을 설명할 때 빠뜨리기 쉬운 질문과 자료를 미리 정리할 수 있습니다.</p>' +
+      '<div class="paid-product-structure-grid">' +
+        '<div class="paid-product-structure-card"><b>변호사에게 물어볼 질문</b><span>상속인 범위, 유언, 생전 증여, 가족 간 의견 차이, 재산 명의와 관련해 어떤 자료부터 확인하면 좋은지 물어볼 수 있습니다.</span></div>' +
+        '<div class="paid-product-structure-card"><b>세무사·회계사에게 물어볼 질문</b><span>상속세 신고 일정, 재산 평가자료, 채무 반영 자료, 사전 증여 자료, 해외 재산 여부를 어떻게 정리하면 좋은지 확인할 수 있습니다.</span></div>' +
+        '<div class="paid-product-structure-card"><b>가져가면 좋은 자료</b><span>가족관계증명서, 기본증명서, 제적등본, 부동산 등기, 예금·보험·증권 자료, 채무 자료, 생전 이체 내역, 유언 관련 자료를 준비해둡니다.</span></div>' +
+        '<div class="paid-product-structure-card"><b>상담 전에 정리할 말</b><span>가장 걱정되는 점, 가족 간 의견 차이, 이미 확인한 자료, 아직 모르는 자료, 원하는 진행 방향을 짧게 적어두면 설명 시간을 줄이는 데 도움이 됩니다.</span></div>' +
+      '</div>' +
+      '<p class="paid-product-structure-note">이 메모는 상담 전에 상황과 질문을 정리해두기 위한 준비용입니다.</p>';
+
+    var anchor = document.getElementById("paidFamilyOnePageSummaryPanel") || document.getElementById("paidCustomerSummaryPanel") || findAnchor();
+    insertAfter(panel, anchor);
+    return true;
+  }
+
+  function makeNextChoicePanel() {
+    if (document.getElementById("paidNextChoicePanel")) return true;
+
+    var panel = document.createElement("section");
+    panel.id = "paidNextChoicePanel";
+    panel.className = "paid-product-structure-panel";
+    panel.innerHTML =
+      '<h4>다음 선택 안내</h4>' +
+      '<p class="paid-product-structure-lead">상황을 정리한 뒤에는 가족과 먼저 상의할지, 전문가에게 물어볼 질문을 정리할지, 준비자료를 다시 확인할지 선택해볼 수 있습니다.</p>' +
+      '<div class="paid-product-structure-actions">' +
+        '<button type="button" class="paid-product-structure-action" data-paid-choice="family">가족과 먼저 상의하기</button>' +
+        '<button type="button" class="paid-product-structure-action" data-paid-choice="expert">전문가에게 물어볼 질문 정리하기</button>' +
+        '<button type="button" class="paid-product-structure-action" data-paid-choice="docs">준비자료 다시 확인하기</button>' +
+      '</div>' +
+      '<p class="paid-product-structure-note">50대는 결론 요약, 60대는 가족 공유, 70대는 쉬운 생활어, 80대는 가족에게 보여줄 수 있는 짧은 요약을 우선했습니다.</p>';
+
+    var anchor = document.getElementById("paidExpertConsultPrepPanel") || document.getElementById("paidFamilyOnePageSummaryPanel") || findAnchor();
+    insertAfter(panel, anchor);
+
+    var buttons = panel.querySelectorAll("[data-paid-choice]");
+    buttons.forEach(function (button) {
+      button.addEventListener("click", function () {
+        var choice = button.getAttribute("data-paid-choice");
+        var targetId = "paidFamilyOnePageSummaryPanel";
+
+        if (choice === "expert") targetId = "paidExpertConsultPrepPanel";
+        if (choice === "docs") targetId = "paidCustomerSummaryPanel";
+
+        var target = document.getElementById(targetId);
+        if (target && typeof target.scrollIntoView === "function") {
+          target.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      });
+    });
+
+    return true;
+  }
+
+  function runProductStructure() {
+    if (!document.body || !isPaidReportContext()) return false;
+    makeProductHero();
+    makeFamilySummary();
+    makeExpertPrepMemo();
+    makeNextChoicePanel();
+    return true;
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", runProductStructure, { once: true });
+  } else {
+    runProductStructure();
+  }
+
+  window.setTimeout(runProductStructure, 600);
+  window.setTimeout(runProductStructure, 1600);
+  window.setTimeout(runProductStructure, 2800);
 })();
 </script>
 
