@@ -10379,6 +10379,26 @@ ready(function(){setTimeout(run,500);setTimeout(run,1500);setTimeout(run,3000);}
 window.__ansimMobileDensityCopyCompressV1Installed=true;
 })();
 </script>
+
+
+
+
+
+<script>
+(function ansimPrepurchaseTeaserGateV1c(){
+window.__ansimPrepurchaseTeaserGateV1cInstalled=true;
+function ready(fn){if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',fn,{once:true});}else{fn();}}
+function paid(){try{return [localStorage.getItem('ansim_payment_status'),localStorage.getItem('ansim_paid_report_status'),sessionStorage.getItem('ansim_payment_status'),sessionStorage.getItem('ansim_paid_report_status')].join(' ').indexOf('paid_confirmed')>=0;}catch(e){return false;}}
+function addStyle(){if(document.getElementById('prepurchase-teaser-gate-v1c-style'))return;var s=document.createElement('style');s.id='prepurchase-teaser-gate-v1c-style';s.textContent='.prepurchase-preview-wrap.prepurchase-teaser-gated{padding:16px!important}.prepurchase-teaser-gate-wrap{margin:0!important;padding:0!important}.prepurchase-teaser-gate-list{display:grid;gap:8px;margin:10px 0 0;padding:0;list-style:none}.prepurchase-teaser-gate-list li{padding:10px 11px;border:1px solid rgba(151,119,64,.18);border-radius:14px;background:rgba(255,255,255,.9);font-size:.86rem;line-height:1.42;color:#4f3f2b}.prepurchase-teaser-gate-list strong{display:block;margin-bottom:2px;color:#342410}.prepurchase-teaser-gate-note{margin:11px 0 0;font-size:.8rem;line-height:1.45;color:#7a674a}.prepurchase-teaser-gate-cta{margin:10px 0 0;font-size:.82rem;font-weight:800;color:#8a6428}';document.head.appendChild(s);}
+function findPreview(){return document.querySelector('.prepurchase-preview-wrap');}
+function gatePreview(){var preview=findPreview();if(!preview)return false;if(preview.getAttribute('data-teaser-gated')==='1')return true;preview.setAttribute('data-teaser-gated','1');preview.classList.add('prepurchase-teaser-gated');preview.innerHTML='<div class="prepurchase-teaser-gate-wrap"><p style="margin:0 0 6px;font-size:.78rem;font-weight:900;color:#8a6428;">유료 상세정리 리포트 구성</p><h2 style="margin:0 0 8px;font-size:1.08rem;line-height:1.32;color:#342410;letter-spacing:-.03em;">무엇을 받는지만 짧게 확인하세요</h2><p style="margin:0;font-size:.9rem;line-height:1.5;color:#5f4d35;">구체적인 내용은 신청 후 리포트에서 확인할 수 있습니다.</p><ul class="prepurchase-teaser-gate-list"><li><strong>상황 요약</strong>내 상속 상황의 큰 흐름을 정리합니다.</li><li><strong>함께 볼 요약</strong>가족과 확인할 핵심 항목을 담습니다.</li><li><strong>자료 확인</strong>빠진 자료를 살펴볼 수 있게 돕습니다.</li></ul><p class="prepurchase-teaser-gate-note">구매 전에는 구성만 간단히 보여드리고, 상세 문장과 체크 내용은 리포트에서 확인합니다.</p><p class="prepurchase-teaser-gate-cta">아래 신청 버튼에서 바로 확인하실 수 있습니다.</p></div>';return true;}
+function replaceTextNode(node){var t=node.nodeValue;if(!t)return;var n=t;n=n.replaceAll('가족 공유용 요약','함께 볼 요약');n=n.replaceAll('인쇄용 1장 요약본','요약본');n=n.replaceAll('인쇄용 1장 요약','요약본');n=n.replaceAll('준비자료 체크리스트','자료 확인 목록');n=n.replaceAll('전문가에게 물어볼 질문','상담 준비 항목');n=n.replaceAll('상담 전 질문','상담 준비 항목');n=n.replaceAll('상담 전후','상담 전후 확인');n=n.replaceAll('참고자료','자료');n=n.replaceAll('가족관계','가족 관련 자료');n=n.replaceAll('부채','확인할 금액 자료');n=n.replaceAll('비용 자료','비용 관련 자료');if(n!==t)node.nodeValue=n;}
+function scrubPrepurchaseText(){if(paid())return;var walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,{acceptNode:function(node){var p=node.parentElement;if(!p)return NodeFilter.FILTER_REJECT;if(p.closest('script,style'))return NodeFilter.FILTER_REJECT;if(p.closest('.paid-premium-received-wrap,.paid-today-actions-wrap'))return NodeFilter.FILTER_REJECT;return NodeFilter.FILTER_ACCEPT;}});var nodes=[];while(walker.nextNode()){nodes.push(walker.currentNode);}nodes.forEach(replaceTextNode);}
+function removePaidOnlyPanelsBeforePurchase(){if(paid())return;Array.prototype.slice.call(document.querySelectorAll('.paid-premium-received-wrap,.paid-today-actions-wrap')).forEach(function(el){if(el&&el.parentNode)el.parentNode.removeChild(el);});}
+function run(){if(paid())return;addStyle();gatePreview();scrubPrepurchaseText();removePaidOnlyPanelsBeforePurchase();}
+ready(function(){run();var tries=0;var timer=setInterval(function(){tries++;run();if(tries>=30){clearInterval(timer);}},350);try{var observer=new MutationObserver(function(){run();});observer.observe(document.body,{childList:true,subtree:true,characterData:true});setTimeout(function(){observer.disconnect();},12000);}catch(e){}});
+})();
+</script>
 </body>
 </html>
 
