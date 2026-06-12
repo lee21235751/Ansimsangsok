@@ -10424,6 +10424,200 @@ document.addEventListener("DOMContentLoaded", function () {
 })();
 </script>
 
+
+<script>
+(function ansimResultPaidConversionV5(){
+  if (window.__ansimResultPaidConversionV5Installed) return;
+  window.__ansimResultPaidConversionV5Installed = true;
+
+  var installTimer = null;
+  var installAttempts = 0;
+
+  function ready(fn){
+    if(document.readyState === "loading"){
+      document.addEventListener("DOMContentLoaded", fn, { once:true });
+    } else {
+      fn();
+    }
+  }
+
+  function clean(text){
+    return String(text || "").replace(/\s+/g, " ").trim();
+  }
+
+  function isPaidConfirmed(){
+    try {
+      return localStorage.getItem("ansim_payment_status") === "paid_confirmed" ||
+        localStorage.getItem("ansim_paid_report_status") === "paid_confirmed" ||
+        sessionStorage.getItem("ansim_payment_status") === "paid_confirmed" ||
+        sessionStorage.getItem("ansim_paid_report_status") === "paid_confirmed";
+    } catch (error) {
+      return false;
+    }
+  }
+
+  function hasCompletedResultSignal(){
+    var body = clean(document.body.innerText || "");
+    return body.indexOf("진단 완료") >= 0 ||
+      body.indexOf("진단 점수") >= 0 ||
+      body.indexOf("현재 상황 정리 완료") >= 0;
+  }
+
+  function getScore(){
+    var candidates = [];
+    try {
+      if (typeof window.getTotalScore === "function") candidates.push(window.getTotalScore());
+    } catch (error) {}
+
+    try {
+      candidates.push(localStorage.getItem("ansim_diagnosis_score"));
+      candidates.push(sessionStorage.getItem("ansim_diagnosis_score"));
+    } catch (error) {}
+
+    var body = clean(document.body.innerText || "");
+    var match = body.match(/진단 점수\s*([0-9]{1,3})\s*점/);
+    if (match && match[1]) candidates.push(match[1]);
+
+    for (var i = 0; i < candidates.length; i += 1) {
+      var n = Number(candidates[i]);
+      if (Number.isFinite(n) && n > 0) return Math.round(n);
+    }
+
+    return null;
+  }
+
+  function addStyle(){
+    if(document.getElementById("ansim-result-paid-conversion-v5-style")) return;
+
+    var style = document.createElement("style");
+    style.id = "ansim-result-paid-conversion-v5-style";
+    style.textContent = [
+      ".ansim-result-conversion-v5{margin:12px 0 14px;padding:16px 15px;border:1px solid rgba(176,138,74,.36);border-radius:18px;background:linear-gradient(180deg,#fffaf1 0%,#fff 100%);box-shadow:0 10px 24px rgba(40,28,12,.06);}",
+      ".ansim-result-conversion-v5 h3{margin:0 0 7px;font-size:18px;line-height:1.32;color:#2f2418;font-weight:900;letter-spacing:-.02em;}",
+      ".ansim-result-conversion-v5 p{margin:0;color:#5f5346;font-size:14px;line-height:1.55;}",
+      ".ansim-result-free-paid-v5{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px;}",
+      ".ansim-result-free-paid-v5 div{padding:10px;border-radius:13px;border:1px solid rgba(176,138,74,.16);background:#fff;}",
+      ".ansim-result-free-paid-v5 strong{display:block;font-size:13px;color:#2f2418;margin-bottom:4px;}",
+      ".ansim-result-free-paid-v5 small{display:block;font-size:12px;color:#6f6255;line-height:1.45;}",
+      ".ansim-result-conversion-list-v5{display:grid;grid-template-columns:1fr;gap:8px;margin:12px 0;}",
+      ".ansim-result-conversion-item-v5{display:flex;gap:9px;align-items:flex-start;padding:10px 11px;border-radius:13px;background:#fff;border:1px solid rgba(176,138,74,.16);}",
+      ".ansim-result-conversion-badge-v5{flex:0 0 auto;width:22px;height:22px;border-radius:999px;background:#b08a4a;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;margin-top:1px;}",
+      ".ansim-result-conversion-item-v5 b{display:block;font-size:14px;color:#2f2418;margin-bottom:2px;}",
+      ".ansim-result-conversion-item-v5 span{display:block;font-size:13px;color:#6f6255;line-height:1.45;}",
+      ".ansim-result-conversion-cta-v5{display:block;width:100%;margin-top:12px;padding:14px 15px;border:0;border-radius:14px;background:#2f2418;color:#fff;text-align:center;font-size:16px;font-weight:900;line-height:1.35;text-decoration:none;box-shadow:0 10px 20px rgba(47,36,24,.18);cursor:pointer;}",
+      ".ansim-result-conversion-sub-v5{display:block;margin-top:7px;text-align:center;font-size:12px;color:#7a6b5b;line-height:1.45;}"
+    ].join("");
+    document.head.appendChild(style);
+  }
+
+  function makeCard(score){
+    var scoreText = score === null ? "현재 답변 기준" : "진단 점수 " + score + "점 기준";
+
+    var wrap = document.createElement("section");
+    wrap.className = "ansim-result-conversion-v5";
+    wrap.setAttribute("aria-label", "상속정리 리포트 안내");
+
+    wrap.innerHTML = [
+      '<h3>무료 진단으로 현재 상황은 정리됐습니다.</h3>',
+      '<p>' + scoreText + '으로, 이제 중요한 것은 <b>상속인·재산·채무·준비자료·일정</b>을 한 장 흐름으로 정리하는 것입니다.</p>',
+      '<div class="ansim-result-free-paid-v5">',
+        '<div><strong>무료 진단</strong><small>현재 상황의 방향과 놓치기 쉬운 항목을 간단히 확인</small></div>',
+        '<div><strong>상속정리 리포트</strong><small>내 답변 기준으로 확인할 항목과 준비 순서를 정리</small></div>',
+      '</div>',
+      '<div class="ansim-result-conversion-list-v5">',
+        '<div class="ansim-result-conversion-item-v5"><i class="ansim-result-conversion-badge-v5">1</i><div><b>상속인 관계</b><span>함께 확인해야 할 관계를 먼저 정리합니다.</span></div></div>',
+        '<div class="ansim-result-conversion-item-v5"><i class="ansim-result-conversion-badge-v5">2</i><div><b>재산·채무 항목</b><span>부동산, 예금, 채무처럼 빠뜨리기 쉬운 항목을 구분합니다.</span></div></div>',
+        '<div class="ansim-result-conversion-item-v5"><i class="ansim-result-conversion-badge-v5">3</i><div><b>준비자료와 다음 순서</b><span>지금 확인할 자료와 다음에 정리할 순서를 한눈에 봅니다.</span></div></div>',
+      '</div>',
+      '<button type="button" class="ansim-result-conversion-cta-v5" data-ansim-result-conversion-cta-v5="true">상속정리 리포트로 이어서 정리하기</button>',
+      '<span class="ansim-result-conversion-sub-v5">복잡한 설명은 줄이고, 내 상황 기준의 정리표로 확인합니다.</span>'
+    ].join("");
+
+    var cta = wrap.querySelector("[data-ansim-result-conversion-cta-v5]");
+    if(cta){
+      cta.addEventListener("click", function(){
+        try {
+          window.dataLayer = window.dataLayer || [];
+          window.dataLayer.push({
+            event: "report_cta_click",
+            source: "result_paid_conversion_v5",
+            score: score
+          });
+        } catch (error) {}
+
+        var target = document.querySelector("form") || document.querySelector("#leadForm") || document.querySelector("input, textarea");
+        if(target && target.scrollIntoView){
+          target.scrollIntoView({ behavior: "smooth", block: "start" });
+          return;
+        }
+
+        var applyButton = Array.prototype.slice.call(document.querySelectorAll("button,a")).find(function(el){
+          var text = clean(el.innerText || el.textContent || "");
+          return text.indexOf("내 상황 상세자료 신청하기") >= 0;
+        });
+
+        if(applyButton && applyButton.scrollIntoView){
+          applyButton.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+      });
+    }
+
+    return wrap;
+  }
+
+  function findResultCard(){
+    return document.querySelector("#resultArea > .result-card") ||
+      document.querySelector("#resultArea .result-card");
+  }
+
+  function install(){
+    if(isPaidConfirmed()) return;
+    if(document.querySelector(".ansim-result-conversion-v5")) return;
+    if(!hasCompletedResultSignal()) return;
+
+    var resultCard = findResultCard();
+    if(!resultCard || !resultCard.parentNode) return;
+
+    addStyle();
+
+    var card = makeCard(getScore());
+
+    if(resultCard.nextSibling){
+      resultCard.parentNode.insertBefore(card, resultCard.nextSibling);
+    } else {
+      resultCard.parentNode.appendChild(card);
+    }
+
+    document.documentElement.dataset.ansimResultPaidConversionV5 = "installed-after-result-card";
+  }
+
+  function scheduleInstall(){
+    install();
+
+    if(installTimer) clearInterval(installTimer);
+    installTimer = setInterval(function(){
+      installAttempts += 1;
+      install();
+      if(installAttempts > 30 || document.querySelector(".ansim-result-conversion-v5")){
+        clearInterval(installTimer);
+      }
+    }, 500);
+  }
+
+  ready(function(){
+    scheduleInstall();
+
+    try {
+      var observer = new MutationObserver(function(){
+        install();
+      });
+      observer.observe(document.body, { childList:true, subtree:true, characterData:true });
+      setTimeout(function(){ observer.disconnect(); }, 22000);
+    } catch (error) {}
+  });
+})();
+</script>
+
 </body>",
 
 
