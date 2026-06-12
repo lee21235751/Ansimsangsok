@@ -10237,6 +10237,193 @@ document.addEventListener("DOMContentLoaded", function () {
 })();
 </script>
 
+
+<script>
+(function ansimProgressiveDisclosureV3(){
+  if (window.__ansimProgressiveDisclosureV3Installed) return;
+  window.__ansimProgressiveDisclosureV3Installed = true;
+
+  var DETAIL_PHRASES = [
+    "국제상속 확인 항목",
+    "한국 거주자·비거주자 구분",
+    "미국 소재 재산 확인",
+    "EU 마지막 거주지",
+    "일본 거주·일본 재산 확인",
+    "영국 거주·영국 재산 확인",
+    "번역·공증·아포스티유",
+    "국내·현지 전문가 확인 신호",
+    "상세리포트 정리 항목",
+    "가족관계·상속인 정리",
+    "재산·채무 분리",
+    "유류분·특별수익·기여분",
+    "세금·신고 일정",
+    "법령·세무·판례 근거",
+    "국제상속·해외 요소",
+    "전문가 확인 용도",
+    "참고자료 기준일",
+    "공식자료 기준"
+  ];
+
+  function ready(fn){
+    if(document.readyState === "loading"){
+      document.addEventListener("DOMContentLoaded", fn, { once:true });
+    } else {
+      fn();
+    }
+  }
+
+  function clean(text){
+    return String(text || "").replace(/\s+/g, " ").trim();
+  }
+
+  function textOf(el){
+    return clean(el ? el.textContent || "" : "");
+  }
+
+  function isPaidConfirmed(){
+    try {
+      return localStorage.getItem("ansim_payment_status") === "paid_confirmed" ||
+        localStorage.getItem("ansim_paid_report_status") === "paid_confirmed" ||
+        sessionStorage.getItem("ansim_payment_status") === "paid_confirmed" ||
+        sessionStorage.getItem("ansim_paid_report_status") === "paid_confirmed";
+    } catch (error) {
+      return false;
+    }
+  }
+
+  function addStyle(){
+    if(document.getElementById("ansim-progressive-disclosure-v3-style")) return;
+
+    var style = document.createElement("style");
+    style.id = "ansim-progressive-disclosure-v3-style";
+    style.textContent = [
+      ".ansim-disclosure-card-v3{margin:12px 0 12px;border:1px solid rgba(176,138,74,.32);border-radius:16px;background:#fffaf1;overflow:hidden;}",
+      ".ansim-disclosure-button-v3{width:100%;padding:14px 15px;border:0;background:transparent;color:#3b2a16;font-size:15px;font-weight:850;line-height:1.35;text-align:left;cursor:pointer;}",
+      ".ansim-disclosure-button-v3 span{display:block;font-size:13px;font-weight:600;color:#766653;margin-top:4px;}",
+      ".ansim-disclosure-panel-v3{display:none;border-top:1px solid rgba(176,138,74,.18);background:#fff;}",
+      ".ansim-disclosure-card-v3.is-open .ansim-disclosure-panel-v3{display:block;}",
+      ".ansim-detail-hidden-v3{display:none !important;}",
+      ".ansim-disclosure-card-v3.is-open .ansim-detail-hidden-v3{display:block !important;}",
+      ".ansim-disclosure-panel-v3 > *{margin:0 !important;box-shadow:none !important;border-radius:0 !important;}"
+    ].join("");
+    document.head.appendChild(style);
+  }
+
+  function hasDetailPhrase(text){
+    return DETAIL_PHRASES.some(function(phrase){ return text.indexOf(phrase) >= 0; });
+  }
+
+  function hasEssential(text){
+    return text.indexOf("상속정리 리포트") >= 0 ||
+      text.indexOf("복잡한 상속 상황을 정리하고") >= 0 ||
+      text.indexOf("무료 위험도 진단") >= 0 ||
+      text.indexOf("현재 상속과 관련된 가족 상황은 어떤가요?") >= 0 ||
+      text.indexOf("상속정리 리포트 구성") >= 0 ||
+      (text.indexOf("이전") >= 0 && text.indexOf("다음") >= 0);
+  }
+
+  function pickDetailBlocks(){
+    var elements = Array.prototype.slice.call(document.querySelectorAll("section, article, aside, div"));
+    var candidates = [];
+
+    elements.forEach(function(el){
+      if(el.closest(".ansim-disclosure-card-v3")) return;
+      if(el.classList && el.classList.contains("ansim-prepurchase-summary-v9")) return;
+
+      var text = textOf(el);
+      if(!hasDetailPhrase(text)) return;
+      if(hasEssential(text)) return;
+      if(text.length < 40) return;
+      if(text.length > 3200) return;
+
+      candidates.push({
+        el: el,
+        text: text,
+        len: text.length,
+        top: Math.round(el.getBoundingClientRect().top + window.scrollY)
+      });
+    });
+
+    candidates.sort(function(a, b){
+      if(Math.abs(a.top - b.top) > 20) return a.top - b.top;
+      return a.len - b.len;
+    });
+
+    var chosen = [];
+    candidates.forEach(function(item){
+      var overlaps = chosen.some(function(prev){
+        return prev.el.contains(item.el) || item.el.contains(prev.el);
+      });
+      if(!overlaps) chosen.push(item);
+    });
+
+    return chosen.slice(0, 10);
+  }
+
+  function makeCard(){
+    var card = document.createElement("div");
+    card.className = "ansim-disclosure-card-v3";
+
+    var button = document.createElement("button");
+    button.type = "button";
+    button.className = "ansim-disclosure-button-v3";
+    button.setAttribute("aria-expanded", "false");
+    button.innerHTML = "상세 확인 항목 보기<span>해외 재산, 근거자료, 복잡한 상황이 있는 경우만 펼쳐서 확인하세요.</span>";
+
+    var panel = document.createElement("div");
+    panel.className = "ansim-disclosure-panel-v3";
+
+    button.addEventListener("click", function(){
+      var open = card.classList.toggle("is-open");
+      button.setAttribute("aria-expanded", open ? "true" : "false");
+      button.innerHTML = (open ? "상세 내용 접기" : "상세 확인 항목 보기") + "<span>해외 재산, 근거자료, 복잡한 상황이 있는 경우만 펼쳐서 확인하세요.</span>";
+    });
+
+    card.appendChild(button);
+    card.appendChild(panel);
+
+    return { card: card, panel: panel };
+  }
+
+  function install(){
+    if(isPaidConfirmed()) return;
+
+    addStyle();
+
+    if(document.querySelector(".ansim-disclosure-card-v3")) return;
+
+    var blocks = pickDetailBlocks();
+    if(!blocks.length){
+      document.documentElement.dataset.ansimDisclosureCollapsedCount = "0";
+      return;
+    }
+
+    var first = blocks[0].el;
+    var parent = first.parentNode;
+    if(!parent) return;
+
+    var made = makeCard();
+    parent.insertBefore(made.card, first);
+
+    var count = 0;
+    blocks.forEach(function(item){
+      if(!item.el || !item.el.parentNode) return;
+      item.el.classList.add("ansim-detail-hidden-v3");
+      made.panel.appendChild(item.el);
+      count += 1;
+    });
+
+    document.documentElement.dataset.ansimDisclosureCollapsedCount = String(count);
+  }
+
+  ready(function(){
+    install();
+    setTimeout(install, 1200);
+    setTimeout(install, 3200);
+  });
+})();
+</script>
+
 </body>",
 
 
