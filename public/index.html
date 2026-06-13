@@ -2178,8 +2178,8 @@
   </ul>
 </div>
 
-<div class="detail-report-value-preview" aria-label="상세자료에서 확인할 수 있는 내용">
-            <h4>상세자료에서 확인할 수 있는 내용</h4>
+<div class="detail-report-value-preview" aria-label="상속정리 리포트에서 확인할 수 있는 내용">
+            <h4>상속정리 리포트에서 확인할 수 있는 내용</h4>
             <div class="detail-report-checks">
               <div>✓ 가족관계 정리표</div>
               <div>✓ 재산 확인표</div>
@@ -2221,8 +2221,8 @@
             </div>
           </div>
 
-          <h3>내 상황 상세자료를 받아보시려면</h3>
-          <p>이름과 이메일 주소를 입력해주세요.<br />입력하신 이름과 이메일은 안내자료 발송과 문의 확인에만 사용합니다.<br />보관 기간: 안내자료 발송 후 30일</p>
+          <h3>내 상황 상속정리 리포트를 받아보시려면</h3>
+          <p>이름과 이메일 주소를 입력해주세요.<br />입력하신 이름과 이메일은 상속정리 리포트 안내 발송과 문의 확인에만 사용합니다.<br />보관 기간: 상속정리 리포트 안내 발송 후 30일</p>
 
           <div class="form-grid">
             <div class="field">
@@ -2245,18 +2245,18 @@
   
 <input id="paidReportPrivacyConsent" type="checkbox" required style="width:22px;height:22px;margin-top:2px;flex:0 0 auto;" />
 
-  <span>상세자료 안내를 위해 개인정보 수집 및 이용에 동의합니다.</span>
+  <span>상속정리 리포트 안내를 위해 개인정보 수집 및 이용에 동의합니다.</span>
 </label>
 
 <div class="final-cta-message">
   <strong>상속 상황을 정리하는 첫 단계입니다.</strong>
   <p>
-    이메일로 안내자료를 받아보시고<br>
+    이메일로 상속정리 리포트 안내를 받아보시고<br>
     확인해야 할 사항을 순서대로 살펴보세요.
   </p>
 </div>
 
-<button class="primary-btn" type="button" id="saveLead">내 상황 상세자료 신청하기</button>
+<button class="primary-btn" type="button" id="saveLead">내 상황 상속정리 리포트 안내 신청하기</button>
             <div class="save-status" id="saveStatus" role="status" aria-live="polite"></div>
           </div>
         </section>
@@ -2757,8 +2757,8 @@ document.getElementById("saveLead").addEventListener("click", async () => {
 
       saveButton.disabled = true;
       saveButton.textContent = "접수 중입니다...";
-      saveStatus.textContent = "안내자료 신청을 접수하고 있습니다.";
-      showLeadStatusBanner("안내자료 신청을 접수하고 있습니다.");
+      saveStatus.textContent = "상속정리 리포트 안내 신청을 접수하고 있습니다.";
+      showLeadStatusBanner("상속정리 리포트 안내 신청을 접수하고 있습니다.");
       saveStatus.classList.remove("error");
       saveStatus.classList.add("success");
       saveStatus.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -2778,8 +2778,8 @@ document.getElementById("saveLead").addEventListener("click", async () => {
           throw new Error(data.message || "신청 접수 실패");
         }
 
-        saveStatus.textContent = "안내자료 신청이 접수되었습니다. 이메일 확인 후 순서대로 안내드릴 수 있습니다.";
-        showLeadStatusBanner("안내자료 신청이 접수되었습니다. 이메일 확인 후 순서대로 안내드릴 수 있습니다.");
+        saveStatus.textContent = "상속정리 리포트 안내 신청이 접수되었습니다. 이메일 확인 후 순서대로 안내드릴 수 있습니다.";
+        showLeadStatusBanner("상속정리 리포트 안내 신청이 접수되었습니다. 이메일 확인 후 순서대로 안내드릴 수 있습니다.");
         saveStatus.classList.remove("error");
         saveStatus.classList.add("success");
         document.getElementById("leadName").value = "";
@@ -2795,7 +2795,7 @@ document.getElementById("saveLead").addEventListener("click", async () => {
         saveStatus.scrollIntoView({ behavior: "smooth", block: "center" });
       } finally {
         saveButton.disabled = false;
-        saveButton.textContent = "내 상황 상세자료 신청하기";
+        saveButton.textContent = "내 상황 상속정리 리포트 안내 신청하기";
       }
     });
 
@@ -2931,7 +2931,7 @@ render();
         badge: "확인 항목이 많은 상태",
         headline: "상속 상황을 여러 항목으로 나누어 정리할 필요가 있습니다.",
         freeLead: "무료 리포트에서는 현재 상황을 간단히 정리하고, 먼저 확인할 항목을 보여드립니다.",
-        paidLead: "상세자료에서는 가족관계, 재산 구성, 준비서류, 다음 진행순서를 더 구체적으로 정리합니다.",
+        paidLead: "상속정리 리포트에서는 가족관계, 재산 구성, 준비서류, 다음 진행순서를 더 구체적으로 정리합니다.",
         freePoints: [
           ["현재 상황", "가족 구성과 재산 정리 필요성이 높은 상태로 표시됩니다."],
           ["확인 필요", "상속인 구성, 부동산, 부채, 사전 증여 여부를 먼저 확인합니다."],
@@ -2952,7 +2952,7 @@ render();
         badge: "정리하면 도움이 되는 상태",
         headline: "지금 정리해두면 가족 간 혼란을 줄이는 데 도움이 됩니다.",
         freeLead: "무료 리포트에서는 놓치기 쉬운 항목과 준비 방향을 간단히 정리합니다.",
-        paidLead: "상세자료에서는 현재 상황에 맞춰 확인 항목, 준비자료, 진행순서를 더 자세히 안내합니다.",
+        paidLead: "상속정리 리포트에서는 현재 상황에 맞춰 확인 항목, 준비자료, 진행순서를 더 자세히 안내합니다.",
         freePoints: [
           ["현재 상황", "기본 정보는 있으나 빠진 항목이 생길 수 있는 상태입니다."],
           ["확인 필요", "재산목록, 가족관계, 서류 준비 여부를 점검합니다."],
@@ -2972,7 +2972,7 @@ render();
       badge: "기초 정리에 적합한 상태",
       headline: "현재는 기본 정보를 차분히 정리하기 좋은 단계입니다.",
       freeLead: "무료 리포트에서는 현재 답변을 바탕으로 기본 정리 방향을 보여드립니다.",
-      paidLead: "상세자료에서는 향후 상황이 바뀌어도 참고할 수 있도록 확인 항목과 준비자료를 더 구체화합니다.",
+      paidLead: "상속정리 리포트에서는 향후 상황이 바뀌어도 참고할 수 있도록 확인 항목과 준비자료를 더 구체화합니다.",
       freePoints: [
         ["현재 상황", "큰 위험 신호보다 기본 정리 필요성이 중심입니다."],
         ["확인 필요", "가족관계와 주요 재산 항목을 빠짐없이 적어둡니다."],
@@ -3038,7 +3038,7 @@ render();
         '<div class="preview-point-list">',
         makePointList(context.freePoints),
         '</div>',
-        '<p style="margin:14px 0 0;color:#6b7280;font-size:0.95rem;line-height:1.6;">무료 리포트는 상황을 먼저 정리하는 자료입니다. 더 구체적인 준비자료와 진행순서는 상세자료에서 이어서 확인하실 수 있습니다.</p>'
+        '<p style="margin:14px 0 0;color:#6b7280;font-size:0.95rem;line-height:1.6;">무료 리포트는 상황을 먼저 정리하는 자료입니다. 더 구체적인 준비자료와 진행순서는 상속정리 리포트에서 이어서 확인하실 수 있습니다.</p>'
       ].join("");
 
       if (guide && guide.parentNode === resultArea) {
@@ -3054,7 +3054,7 @@ render();
       paidCard.className = "paid-report-preview-card";
       paidCard.style.marginTop = "18px";
       paidCard.innerHTML = [
-        '<div class="preview-eyebrow">상세자료 미리보기</div>',
+        '<div class="preview-eyebrow">상속정리 리포트 미리보기</div>',
         '<h3>',
         escapeHtml(context.headline),
         '</h3>',
@@ -3062,7 +3062,7 @@ render();
         escapeHtml(context.paidLead),
         '</p>',
         '<div class="paid-report-includes">',
-        '<p class="paid-report-includes-title">상세자료에는 이런 내용이 담깁니다</p>',
+        '<p class="paid-report-includes-title">상속정리 리포트에는 이런 내용이 담깁니다</p>',
         '<div class="preview-point-list">',
         makePointList(context.paidPoints),
         '</div>',
@@ -3073,7 +3073,7 @@ render();
         '<p style="margin:0;color:#4b5563;line-height:1.6;">현재 상황 요약, 확인 필요 항목, 놓치기 쉬운 부분을 간단히 정리합니다.</p>',
         '</div>',
         '<div style="border:1px solid #d6b45f;background:#fff7e0;border-radius:18px;padding:16px;">',
-        '<strong style="display:block;color:#173c2f;margin-bottom:6px;">상세자료에서 이어지는 부분</strong>',
+        '<strong style="display:block;color:#173c2f;margin-bottom:6px;">상속정리 리포트에서 이어지는 부분</strong>',
         '<p style="margin:0;color:#4b5563;line-height:1.6;">상황 분석, 핵심 검토사항, 준비자료, 예상 진행순서, 도움 필요 여부를 더 구체적으로 정리합니다.</p>',
         '</div>',
         '</div>',
@@ -3126,7 +3126,7 @@ document.addEventListener("DOMContentLoaded", function () {
     var buttons = Array.prototype.slice.call(document.querySelectorAll("button, input[type='submit']"));
     return buttons.find(function (el) {
       var text = (el.innerText || el.value || "").trim();
-      return text.indexOf("내 상황 상세자료 신청하기") >= 0;
+      return text.indexOf("내 상황 상속정리 리포트 안내 신청하기") >= 0;
     });
   }
 
@@ -3320,7 +3320,7 @@ document.addEventListener("DOMContentLoaded", function () {
         sendFunnelEvent("result_button_click", { score: window.__ansimFinalScore });
       }
 
-      if (text.indexOf("내 상황 상세자료 신청하기") >= 0 || text.indexOf("상세자료") >= 0) {
+      if (text.indexOf("내 상황 상속정리 리포트 안내 신청하기") >= 0 || text.indexOf("상속정리 리포트") >= 0) {
         sendFunnelEvent("report_cta_click", {
           score: getScoreForFunnel()
         });
@@ -3372,7 +3372,7 @@ document.addEventListener("DOMContentLoaded", function () {
         level: "주의 필요",
         headline: "확인 항목이 많은 상속 상황입니다.",
         freeRatio: "무료 리포트는 현재 상황 정리와 우선 확인 항목 중심으로 구성됩니다.",
-        paidRatio: "유료 상세자료는 가족관계, 재산·부채, 준비서류, 진행순서까지 더 구체적으로 정리합니다."
+        paidRatio: "상속정리 리포트는 가족관계, 재산·부채, 준비서류, 진행순서까지 더 구체적으로 정리합니다."
       };
     }
 
@@ -3381,7 +3381,7 @@ document.addEventListener("DOMContentLoaded", function () {
         level: "확인 필요",
         headline: "지금 정리해두면 가족 간 혼란을 줄이는 데 도움이 되는 상황입니다.",
         freeRatio: "무료 리포트는 놓치기 쉬운 항목과 기본 준비 방향 중심으로 구성됩니다.",
-        paidRatio: "유료 상세자료는 현재 답변을 바탕으로 확인 항목과 준비 순서를 더 구체적으로 정리합니다."
+        paidRatio: "상속정리 리포트는 현재 답변을 바탕으로 확인 항목과 준비 순서를 더 구체적으로 정리합니다."
       };
     }
 
@@ -3389,7 +3389,7 @@ document.addEventListener("DOMContentLoaded", function () {
       level: "기본 정리",
       headline: "기본 정보를 차분히 정리하기 좋은 상황입니다.",
       freeRatio: "무료 리포트는 기본 상황 요약과 다음 확인 항목 중심으로 구성됩니다.",
-      paidRatio: "유료 상세자료는 향후 상황 변화에 대비할 수 있도록 준비자료와 진행 흐름을 더 자세히 정리합니다."
+      paidRatio: "상속정리 리포트는 향후 상황 변화에 대비할 수 있도록 준비자료와 진행 흐름을 더 자세히 정리합니다."
     };
   }
 
@@ -3425,7 +3425,7 @@ document.addEventListener("DOMContentLoaded", function () {
       nextSteps: [
         "현재 알고 있는 재산과 부채를 간단히 적어봅니다.",
         "가족관계와 연락 가능한 가족을 정리합니다.",
-        "확인이 어려운 항목은 상세자료나 전문가 도움 필요 여부를 검토합니다."
+        "확인이 어려운 항목은 상속정리 리포트나 전문가 도움 필요 여부를 검토합니다."
       ],
       answers: answers
     };
@@ -3439,7 +3439,7 @@ document.addEventListener("DOMContentLoaded", function () {
       version: "paid-report-preview-v1",
       score: score,
       level: level.level,
-      title: "안심상속 유료 상세자료 안내",
+      title: "안심상속 상속정리 리포트 안내",
       headline: level.headline,
       summary: level.paidRatio,
       includes: [
@@ -3450,7 +3450,7 @@ document.addEventListener("DOMContentLoaded", function () {
         "예상 진행순서",
         "전문가 상담 필요 여부"
       ],
-      conversionMessage: "무료 리포트에서 확인되지 않는 부분은 상세자료에서 더 구체적으로 정리됩니다."
+      conversionMessage: "무료 리포트에서 확인되지 않는 부분은 상속정리 리포트에서 더 구체적으로 정리됩니다."
     };
   }
 
@@ -3579,13 +3579,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const freeBoundary = [
       "무료 리포트는 현재 답변을 바탕으로 상황을 정리하는 자료입니다.",
-      "구체적인 진행순서, 위험요소별 우선순위, 준비자료 세부 목록은 상세자료에서 이어서 확인하도록 구성합니다."
+      "구체적인 진행순서, 위험요소별 우선순위, 준비자료 세부 목록은 상속정리 리포트에서 이어서 확인하도록 구성합니다."
     ];
 
     const nextSteps = [
       "가족관계와 주요 재산 항목을 한 장으로 정리합니다.",
       "부채와 보증 여부를 재산 목록과 분리해 확인합니다.",
-      "서류가 부족한 항목은 상세자료 신청 후 준비 순서대로 확인합니다."
+      "서류가 부족한 항목은 상속정리 리포트 안내 신청 후 준비 순서대로 확인합니다."
     ];
 
     return {
@@ -3600,7 +3600,7 @@ document.addEventListener("DOMContentLoaded", function () {
       checkItems,
       nextSteps,
       freeBoundary,
-      paidBridge: "상세자료에서는 현재 상황 분석, 핵심 검토사항, 위험요소, 준비자료, 예상 진행순서, 전문가 상담 필요 여부를 더 구체적으로 정리합니다.",
+      paidBridge: "상속정리 리포트에서는 현재 상황 분석, 핵심 검토사항, 위험요소, 준비자료, 예상 진행순서, 전문가 상담 필요 여부를 더 구체적으로 정리합니다.",
       answers: a
     };
   }
@@ -3652,11 +3652,11 @@ document.addEventListener("DOMContentLoaded", function () {
       version: "paid-report-preview-v2",
       score: currentScore,
       level,
-      title: "안심상속 유료 상세자료",
+      title: "안심상속 상속정리 리포트",
       headline: "무료 리포트에서 보이지 않는 확인 순서와 준비자료를 더 구체적으로 정리합니다.",
       currentSituation: facts,
       modules,
-      conversionMessage: "지금 답변만으로 끝내지 않고, 실제로 무엇부터 확인할지 순서가 필요하다면 상세자료가 더 도움이 됩니다."
+      conversionMessage: "지금 답변만으로 끝내지 않고, 실제로 무엇부터 확인할지 순서가 필요하다면 상속정리 리포트가 더 도움이 됩니다."
     };
   }
 
@@ -3751,8 +3751,8 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     paidCard.innerHTML = [
-      '<div class="preview-eyebrow">유료 상세자료</div>',
-      '<h3>상세자료에서 더 확인되는 부분</h3>',
+      '<div class="preview-eyebrow">상속정리 리포트</div>',
+      '<h3>상속정리 리포트에서 더 확인되는 부분</h3>',
       '<p class="preview-lead">',
       escapeHtml(paid.conversionMessage),
       '</p>',
@@ -3760,7 +3760,7 @@ document.addEventListener("DOMContentLoaded", function () {
       renderModules(paid.modules),
       '</div>',
       '<div style="margin-top:16px;padding:14px;border-radius:18px;background:#fff7e0;border:1px solid #d6b45f;color:#173c2f;font-weight:900;line-height:1.6;">',
-      '무료 리포트는 상황 정리까지, 상세자료는 준비자료와 다음 순서까지 더 구체적으로 정리합니다.',
+      '무료 리포트는 상황 정리까지, 상속정리 리포트는 준비자료와 다음 순서까지 더 구체적으로 정리합니다.',
       '</div>'
     ].join("");
   }
@@ -3948,12 +3948,12 @@ document.addEventListener("DOMContentLoaded", function () {
       "</div>",
 
       "<div style='margin:14px 0;padding:14px;border-radius:18px;background:#fff7e0;border:1px solid #d6b45f;'>",
-      "<strong style='display:block;color:#173c2f;margin-bottom:8px;'>상세자료에서 이어지는 부분</strong>",
+      "<strong style='display:block;color:#173c2f;margin-bottom:8px;'>상속정리 리포트에서 이어지는 부분</strong>",
       "<p style='margin:0 0 8px;color:#374151;line-height:1.65;'>",
       escapeHtml(paidHeadline),
       "</p>",
       "<p style='margin:0;color:#6b7280;line-height:1.65;'>",
-      escapeHtml(report.paidBridge || "상세자료에서는 현재 상황 분석, 핵심 검토사항, 위험요소, 준비자료, 예상 진행순서, 전문가 상담 필요 여부를 더 구체적으로 정리합니다."),
+      escapeHtml(report.paidBridge || "상속정리 리포트에서는 현재 상황 분석, 핵심 검토사항, 위험요소, 준비자료, 예상 진행순서, 전문가 상담 필요 여부를 더 구체적으로 정리합니다."),
       "</p>",
       "</div>",
 
@@ -4062,14 +4062,14 @@ document.addEventListener("DOMContentLoaded", function () {
     window.__ansimPaidReportIntent = {
       requested: true,
       type: "paid-detail-report",
-      label: "유료 상세자료 안내 희망",
+      label: "상속정리 리포트 안내 희망",
       requestedAt: new Date().toISOString(),
       score: getScore()
     };
 
     var memo = document.getElementById("leadMemo");
     if (memo) {
-      var note = "유료 상세자료 안내를 함께 받고 싶습니다.";
+      var note = "상속정리 리포트 안내를 함께 받고 싶습니다.";
       if (!memo.value.includes(note)) {
         memo.value = memo.value ? memo.value.trim() + "\n" + note : note;
       }
@@ -4077,12 +4077,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
     var status = document.getElementById("paidReportIntentInlineStatus");
     if (status) {
-      status.textContent = "유료 상세자료 안내 희망이 신청 내용에 표시되었습니다.";
+      status.textContent = "상속정리 리포트 안내 희망이 신청 내용에 표시되었습니다.";
     }
 
     var btn = document.getElementById("paidReportIntentInlineBtn");
     if (btn) {
-      btn.textContent = "유료 상세자료 안내 희망 표시 완료";
+      btn.textContent = "상속정리 리포트 안내 희망 표시 완료";
       btn.setAttribute("aria-pressed", "true");
     }
 
@@ -4119,10 +4119,10 @@ document.addEventListener("DOMContentLoaded", function () {
     ].join(";");
 
     card.innerHTML = [
-      '<div style="font-size:0.78rem;font-weight:900;color:#8a6a16;letter-spacing:.08em;margin-bottom:6px;">유료 상세자료</div>',
+      '<div style="font-size:0.78rem;font-weight:900;color:#8a6a16;letter-spacing:.08em;margin-bottom:6px;">상속정리 리포트</div>',
       '<strong style="display:block;color:#173c2f;font-size:1.05rem;line-height:1.45;margin-bottom:8px;">준비자료와 진행순서를 더 구체적으로 받고 싶으신가요?</strong>',
-      '<p style="margin:0 0 12px;color:#4b5563;line-height:1.6;">무료 리포트로 현재 상황을 확인한 뒤, 상세자료 안내를 함께 받아볼 수 있습니다.</p>',
-      '<button id="paidReportIntentInlineBtn" type="button" class="btn btn-primary" style="width:100%;min-height:48px;">유료 상세자료 안내도 함께 받기</button>',
+      '<p style="margin:0 0 12px;color:#4b5563;line-height:1.6;">무료 리포트로 현재 상황을 확인한 뒤, 상속정리 리포트 안내를 함께 받아볼 수 있습니다.</p>',
+      '<button id="paidReportIntentInlineBtn" type="button" class="btn btn-primary" style="width:100%;min-height:48px;">상속정리 리포트 안내도 함께 받기</button>',
       '<p id="paidReportIntentInlineStatus" style="margin:10px 0 0;color:#173c2f;font-weight:800;line-height:1.55;"></p>',
       '<p style="margin:8px 0 0;color:#6b7280;font-size:0.92rem;line-height:1.55;">결제 전 안내를 먼저 받아보고 결정하실 수 있도록 신청 내용에 관심 여부가 함께 기록됩니다.</p>'
     ].join("");
@@ -4182,7 +4182,7 @@ document.addEventListener("DOMContentLoaded", function () {
       requested: true,
       type: "paid-detail-report-payment",
       status: status || "payment-guide-viewed",
-      label: "유료 상세자료 결제 안내 확인",
+      label: "상속정리 리포트 결제 안내 확인",
       amount: 29000,
       currency: "KRW",
       requestedAt: new Date().toISOString(),
@@ -4200,12 +4200,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
     var statusEl = document.getElementById("paidPaymentIntentStatus");
     if (statusEl) {
-      statusEl.textContent = "상세자료 결제 안내 확인이 신청 내용에 함께 표시되었습니다.";
+      statusEl.textContent = "상속정리 리포트 결제 안내 확인이 신청 내용에 함께 표시되었습니다.";
     }
 
     var memo = document.getElementById("leadMemo");
     if (memo) {
-      var note = "유료 상세자료 결제 안내를 확인했습니다.";
+      var note = "상속정리 리포트 결제 안내를 확인했습니다.";
       if (!memo.value.includes(note)) {
         memo.value = memo.value ? memo.value.trim() + "\n" + note : note;
       }
@@ -4230,12 +4230,12 @@ document.addEventListener("DOMContentLoaded", function () {
     panel.style.marginTop = "18px";
 
     panel.innerHTML = [
-      '<div class="preview-eyebrow">유료 상세자료 결제 안내</div>',
-      '<h3>상세자료를 받아보려면</h3>',
-      '<p class="preview-lead">무료 리포트에서 확인되지 않는 준비자료, 진행순서, 전문가 상담 필요 여부를 더 구체적으로 정리한 상세자료 안내입니다.</p>',
+      '<div class="preview-eyebrow">상속정리 리포트 결제 안내</div>',
+      '<h3>상속정리 리포트를 받아보려면</h3>',
+      '<p class="preview-lead">무료 리포트에서 확인되지 않는 준비자료, 진행순서, 전문가 상담 필요 여부를 더 구체적으로 정리한 상속정리 리포트 안내입니다.</p>',
 
       '<div style="margin:14px 0;padding:16px;border-radius:18px;background:#fff7e0;border:1px solid #d6b45f;">',
-      '<strong style="display:block;color:#173c2f;font-size:1.05rem;margin-bottom:6px;">상세자료 안내 금액</strong>',
+      '<strong style="display:block;color:#173c2f;font-size:1.05rem;margin-bottom:6px;">상속정리 리포트 안내 금액</strong>',
       '<div style="font-size:1.65rem;font-weight:950;color:#173c2f;line-height:1.2;">29,000원</div>',
       '<p style="margin:8px 0 0;color:#6b7280;line-height:1.6;">아직 결제 전입니다. 포함 내용을 확인한 뒤 다음 단계에서 결제수단을 선택하실 수 있습니다.</p>',
       '</div>',
@@ -4263,11 +4263,11 @@ document.addEventListener("DOMContentLoaded", function () {
       '<li><strong>다음 순서</strong><span>무엇부터 확인하고 어떤 자료를 준비하면 좋을지 순서대로 안내합니다.</span></li>',
       '<li><strong>도움 필요 여부</strong><span>분쟁 가능성, 해외 요소, 복잡한 재산이 있을 때 추가 도움 방향을 확인합니다.</span></li>',
       '</ul>',
-      '<p class="paid-trust-note">입력하신 이름과 이메일은 상세자료 안내와 문의 확인에만 사용됩니다.</p>',
+      '<p class="paid-trust-note">입력하신 이름과 이메일은 상속정리 리포트 안내와 문의 확인에만 사용됩니다.</p>',
       '</div>',
-      '<button id="paidPaymentIntentBtn" type="button" class="btn btn-primary" style="width:100%;min-height:50px;">상세자료 29,000원 확인하고 결제하기</button>',
+      '<button id="paidPaymentIntentBtn" type="button" class="btn btn-primary" style="width:100%;min-height:50px;">상속정리 리포트 29,000원 확인하고 결제하기</button>',
       '<p id="paidPaymentIntentStatus" style="margin:12px 0 0;color:#173c2f;font-weight:850;line-height:1.6;"></p>',
-      '<p style="margin:10px 0 0;color:#6b7280;font-size:0.94rem;line-height:1.6;">입력하신 연락처로 상세자료 안내와 다음 절차를 이어갈 수 있습니다.</p>'
+      '<p style="margin:10px 0 0;color:#6b7280;font-size:0.94rem;line-height:1.6;">입력하신 연락처로 상속정리 리포트 안내와 다음 절차를 이어갈 수 있습니다.</p>'
     ].join("");
 
     if (guide && guide.parentNode === resultArea) {
@@ -4301,10 +4301,10 @@ document.addEventListener("DOMContentLoaded", function () {
     card.style.marginTop = "18px";
 
     card.innerHTML = [
-      '<div class="preview-eyebrow">상세자료 다음 단계</div>',
-      '<h3>유료 상세자료 안내를 확인해보세요</h3>',
-      '<p class="preview-lead">현재 상황에 맞춘 준비자료와 진행순서를 더 구체적으로 받아보고 싶다면, 상세자료 안내를 확인할 수 있습니다.</p>',
-      '<button id="openPaidPaymentGuideBtn" type="button" class="btn btn-primary" style="width:100%;margin-top:10px;">유료 상세자료 안내 확인하기</button>',
+      '<div class="preview-eyebrow">상속정리 리포트 다음 단계</div>',
+      '<h3>상속정리 리포트 안내를 확인해보세요</h3>',
+      '<p class="preview-lead">현재 상황에 맞춘 준비자료와 진행순서를 더 구체적으로 받아보고 싶다면, 상속정리 리포트 안내를 확인할 수 있습니다.</p>',
+      '<button id="openPaidPaymentGuideBtn" type="button" class="btn btn-primary" style="width:100%;margin-top:10px;">상속정리 리포트 안내 확인하기</button>',
       '<p style="margin:12px 0 0;color:#6b7280;font-size:0.95rem;line-height:1.6;">실제 금액과 포함 내용을 먼저 확인한 뒤, 필요하시면 결제 단계로 이어집니다.</p>'
     ].join("");
 
@@ -4488,19 +4488,19 @@ document.addEventListener("DOMContentLoaded", function () {
     compactCard(card);
 
     var eyebrow = card.querySelector(".preview-eyebrow");
-    if (eyebrow) eyebrow.textContent = "2단계 · 상세자료";
+    if (eyebrow) eyebrow.textContent = "2단계 · 상속정리 리포트";
 
     var title = card.querySelector("h3");
     if (title) title.textContent = "더 구체적인 정리가 필요하신가요?";
 
     var lead = card.querySelector(".preview-lead");
     if (lead) {
-      lead.textContent = "무료 리포트로 부족한 준비자료, 진행순서, 상담 필요 여부를 상세자료에서 더 구체적으로 확인할 수 있습니다.";
+      lead.textContent = "무료 리포트로 부족한 준비자료, 진행순서, 상담 필요 여부를 상속정리 리포트에서 더 구체적으로 확인할 수 있습니다.";
     }
 
     var btn = document.getElementById("openPaidPaymentGuideBtn");
     if (btn) {
-      btn.textContent = "상세자료 구성과 금액 확인하기";
+      btn.textContent = "상속정리 리포트 구성과 금액 확인하기";
       btn.style.minHeight = "50px";
     }
 
@@ -4518,7 +4518,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     var strong = card.querySelector("strong");
     if (strong) {
-      strong.textContent = "상세자료 안내를 함께 받아보시겠습니까?";
+      strong.textContent = "상속정리 리포트 안내를 함께 받아보시겠습니까?";
     }
 
     var paragraph = card.querySelector("p");
@@ -4528,7 +4528,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     var btn = document.getElementById("paidReportIntentInlineBtn");
     if (btn) {
-      btn.textContent = "상세자료 안내 희망 표시";
+      btn.textContent = "상속정리 리포트 안내 희망 표시";
       btn.style.minHeight = "50px";
     }
   }
@@ -4540,25 +4540,25 @@ document.addEventListener("DOMContentLoaded", function () {
     compactCard(panel);
 
     var eyebrow = panel.querySelector(".preview-eyebrow");
-    if (eyebrow) eyebrow.textContent = "상세자료 안내";
+    if (eyebrow) eyebrow.textContent = "상속정리 리포트 안내";
 
     var title = panel.querySelector("h3");
-    if (title) title.textContent = "유료 상세자료 29,000원";
+    if (title) title.textContent = "상속정리 리포트 29,000원";
 
     var lead = panel.querySelector(".preview-lead");
     if (lead) {
-      lead.textContent = "상세자료는 현재 상황 분석, 준비자료, 확인할 항목, 예상 진행순서를 더 구체적으로 정리하는 안내자료입니다.";
+      lead.textContent = "상속정리 리포트는 현재 상황 분석, 준비자료, 확인할 항목, 예상 진행순서를 더 구체적으로 정리해 드리는 자료입니다.";
     }
 
     var btn = document.getElementById("paidPaymentIntentBtn");
     if (btn) {
-      btn.textContent = "상세자료 29,000원 확인하고 결제하기";
+      btn.textContent = "상속정리 리포트 29,000원 확인하고 결제하기";
       btn.style.minHeight = "50px";
     }
 
     var status = document.getElementById("paidPaymentIntentStatus");
     if (status && status.textContent.trim()) {
-      status.textContent = "상세자료 안내를 확인했습니다.";
+      status.textContent = "상속정리 리포트 안내를 확인했습니다.";
     }
   }
 
@@ -4572,7 +4572,7 @@ document.addEventListener("DOMContentLoaded", function () {
     headings.forEach(function (el) {
       var text = el.textContent.trim();
 
-      if (text.includes("상세자료") || text.includes("안내자료")) {
+      if (text.includes("상속정리 리포트") || text.includes("상속정리 리포트 안내")) {
         el.textContent = "신청 내용을 남겨주세요";
       }
     });
@@ -4610,7 +4610,7 @@ document.addEventListener("DOMContentLoaded", function () {
       '<strong style="display:block;margin-bottom:6px;">다음 순서로 확인해보세요</strong>',
       '<ol style="margin:0;padding-left:20px;color:#374151;">',
       '<li>무료 리포트로 현재 상황을 먼저 확인합니다.</li>',
-      '<li>더 구체적인 정리가 필요하면 상세자료 안내를 확인합니다.</li>',
+      '<li>더 구체적인 정리가 필요하면 상속정리 리포트 안내를 확인합니다.</li>',
       '<li>연락처를 남기면 신청 내용과 함께 저장됩니다.</li>',
       '</ol>'
     ].join("");
@@ -4822,7 +4822,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (!btn || btn.dataset.paymentOrderWired === "1") return;
 
     btn.dataset.paymentOrderWired = "1";
-    btn.textContent = "상세자료 29,000원 확인하고 결제하기";
+    btn.textContent = "상속정리 리포트 29,000원 확인하고 결제하기";
 
     btn.addEventListener("click", function () {
       setTimeout(createPaymentOrder, 80);
@@ -4915,10 +4915,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
     var isSuccess = status === "success";
     var isFail = status === "failed";
-    var title = isSuccess ? "결제 확인 후 상세자료 안내가 이어집니다" : isFail ? "결제 확인이 완료되지 않았습니다" : "결제 준비 상태입니다";
+    var title = isSuccess ? "결제 확인 후 상속정리 리포트 안내가 이어집니다" : isFail ? "결제 확인이 완료되지 않았습니다" : "결제 준비 상태입니다";
     var badge = isSuccess ? "결제 확인 단계" : isFail ? "결제 확인 필요" : "결제 준비";
     var description = isSuccess
-      ? "결제가 확인되면 입력하신 이메일 기준으로 상세자료 안내를 이어갈 수 있습니다."
+      ? "결제가 확인되면 입력하신 이메일 기준으로 상속정리 리포트 안내를 이어갈 수 있습니다."
       : isFail
         ? "결제 확인이 완료되지 않은 경우에도 신청 내용은 유지됩니다. 필요하면 다시 안내를 확인할 수 있습니다."
         : "현재는 실제 PG 연결 전 단계입니다. 주문번호와 결제 준비 정보가 신청 내용에 함께 저장됩니다.";
@@ -4930,7 +4930,7 @@ document.addEventListener("DOMContentLoaded", function () {
       '<div style="margin:14px 0;padding:14px;border-radius:18px;background:#f8fafc;border:1px solid #dbe3ee;">',
       '<strong style="display:block;color:#173c2f;margin-bottom:8px;">' + badge + '</strong>',
       '<p style="margin:0;color:#374151;line-height:1.65;">주문번호: <strong>' + orderId + '</strong></p>',
-      '<p style="margin:6px 0 0;color:#374151;line-height:1.65;">상세자료 안내 금액: <strong>' + Number(amount).toLocaleString("ko-KR") + '원</strong></p>',
+      '<p style="margin:6px 0 0;color:#374151;line-height:1.65;">상속정리 리포트 안내 금액: <strong>' + Number(amount).toLocaleString("ko-KR") + '원</strong></p>',
       '</div>',
       '<div style="display:grid;grid-template-columns:1fr;gap:10px;margin-top:14px;">',
       '<button id="paymentResultSuccessBtn" type="button" class="btn btn-primary" style="width:100%;min-height:50px;">결제 확인 안내 보기</button>',
@@ -5307,7 +5307,7 @@ document.addEventListener("DOMContentLoaded", function () {
     var successBtn = document.getElementById("paymentResultSuccessBtn");
     if (successBtn && successBtn.dataset.mockSafetyWired !== "1") {
       successBtn.dataset.mockSafetyWired = "1";
-      successBtn.textContent = "상세자료 29,000원 확인하고 결제하기";
+      successBtn.textContent = "상속정리 리포트 29,000원 확인하고 결제하기";
 
       successBtn.addEventListener("click", function (event) {
         if (getPaymentMode() === "payment_ready_only") {
@@ -5443,11 +5443,11 @@ document.addEventListener("DOMContentLoaded", function () {
     var ctaCard = document.getElementById("paidPaymentCtaCard");
     if (ctaCard) {
       var title = ctaCard.querySelector("h3");
-      if (title) title.textContent = "카드·카카오페이·네이버페이로 상세자료를 준비할 수 있습니다.";
+      if (title) title.textContent = "카드·카카오페이·네이버페이로 상속정리 리포트를 준비할 수 있습니다.";
 
       var lead = ctaCard.querySelector(".preview-lead");
       if (lead) {
-        lead.textContent = "상세자료는 현재 상황 분석, 준비자료, 확인할 항목, 예상 진행순서를 더 구체적으로 정리하는 안내자료입니다.";
+        lead.textContent = "상속정리 리포트는 현재 상황 분석, 준비자료, 확인할 항목, 예상 진행순서를 더 구체적으로 정리해 드리는 자료입니다.";
       }
 
       renderMethodBadges(ctaCard);
@@ -5456,7 +5456,7 @@ document.addEventListener("DOMContentLoaded", function () {
     var guide = document.getElementById("paidPaymentGuidePanel");
     if (guide) {
       var title2 = guide.querySelector("h3");
-      if (title2) title2.textContent = "유료 상세자료 29,000원";
+      if (title2) title2.textContent = "상속정리 리포트 29,000원";
 
       var lead2 = guide.querySelector(".preview-lead");
       if (lead2) {
@@ -5468,7 +5468,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     var btn = document.getElementById("paidPaymentIntentBtn");
     if (btn && btn.textContent.indexOf("결제") >= 0) {
-      btn.textContent = "상세자료 29,000원 확인하고 결제하기";
+      btn.textContent = "상속정리 리포트 29,000원 확인하고 결제하기";
     }
   }
 
@@ -5628,7 +5628,7 @@ document.addEventListener("DOMContentLoaded", function () {
     await tossPayments.requestPayment("카드", {
       amount: order.amount,
       orderId: order.orderId,
-      orderName: order.payment.tossCheckout.orderName || "안심상속 유료 상세자료",
+      orderName: order.payment.tossCheckout.orderName || "안심상속 상속정리 리포트",
       customerName: order.payment.tossCheckout.customerName || "",
       customerEmail: order.payment.tossCheckout.customerEmail || "",
       successUrl: order.payment.successUrl || buildCallbackUrl("success", order),
@@ -6598,8 +6598,8 @@ document.addEventListener("DOMContentLoaded", function () {
     var data = buildPaidReportData();
 
     card.innerHTML = [
-      '<div class="paid-report-delivered-eyebrow">유료 상세자료</div>',
-      '<h3>상세자료가 준비되었습니다</h3>',
+      '<div class="paid-report-delivered-eyebrow">상속정리 리포트</div>',
+      '<h3>상속정리 리포트가 준비되었습니다</h3>',
       '<p class="paid-report-delivered-lead">현재 답변을 바탕으로 확인할 항목, 준비자료, 다음 순서를 더 구체적으로 정리했습니다.</p>',
       '<div class="paid-report-summary-grid">',
       summaryHtml(data.summary),
@@ -6620,9 +6620,9 @@ document.addEventListener("DOMContentLoaded", function () {
       '<h4>추가 도움을 검토할 수 있는 경우</h4>',
       '<ul>', listHtml(data.helpSignals), '</ul>',
       '</div>',
-      '<p class="paid-report-notice">이 자료는 입력하신 답변을 바탕으로 상속 상황을 정리하고 다음 확인 방향을 이해하기 쉽게 구성한 안내자료입니다.</p>',
+      '<p class="paid-report-notice">이 자료는 입력하신 답변을 바탕으로 상속 상황을 정리하고 다음 확인 방향을 이해하기 쉽게 구성한 상속정리 리포트 안내입니다.</p>',
       '<div class="paid-report-actions">',
-      '<button type="button" class="btn btn-primary" id="paidReportPrintBtn">상세자료 인쇄 또는 PDF 저장</button>',
+      '<button type="button" class="btn btn-primary" id="paidReportPrintBtn">상속정리 리포트 인쇄 또는 PDF 저장</button>',
       '<button type="button" class="btn btn-secondary" id="paidReportBackToFormBtn">신청 내용 확인하기</button>',
       '</div>'
     ].join("");
@@ -7538,7 +7538,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (deliveredCard && deliveredCard.hidden !== true) return true;
 
     var bodyText = document.body ? document.body.innerText : "";
-    if (bodyText.indexOf("상세자료가 준비되었습니다") !== -1) return true;
+    if (bodyText.indexOf("상속정리 리포트가 준비되었습니다") !== -1) return true;
 
     return false;
   }
@@ -7698,7 +7698,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (deliveredCard && deliveredCard.hidden !== true) return true;
 
     var bodyText = document.body ? document.body.innerText : "";
-    if (bodyText.indexOf("상세자료가 준비되었습니다") !== -1) return true;
+    if (bodyText.indexOf("상속정리 리포트가 준비되었습니다") !== -1) return true;
 
     return false;
   }
@@ -7962,7 +7962,7 @@ document.addEventListener("DOMContentLoaded", function () {
     var deliveredCard = document.getElementById("paidReportDeliveredCard");
     if (deliveredCard && deliveredCard.hidden !== true) return true;
 
-    return bodyText().indexOf("상세자료가 준비되었습니다") !== -1;
+    return bodyText().indexOf("상속정리 리포트가 준비되었습니다") !== -1;
   }
 
   function getFlags() {
@@ -8443,7 +8443,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (deliveredCard && deliveredCard.hidden !== true) return true;
 
     var text = document.body ? document.body.innerText || "" : "";
-    return text.indexOf("상세자료가 준비되었습니다") !== -1;
+    return text.indexOf("상속정리 리포트가 준비되었습니다") !== -1;
   }
 
   function buildEvidenceItems() {
@@ -8609,7 +8609,7 @@ document.addEventListener("DOMContentLoaded", function () {
       {
         id: "senior-conversion",
         title: "유료 리포트 만족도",
-        text: "내 상황에 맞는 법령·판례·세무·국제상속·전문가 신호가 한 번에 정리되면 29,000원 상세자료의 체감 가치가 올라갑니다.",
+        text: "내 상황에 맞는 법령·판례·세무·국제상속·전문가 신호가 한 번에 정리되면 29,000원 상속정리 리포트의 체감 가치가 올라갑니다.",
         meta: "수익성 · 전환 강화"
       },
       {
@@ -8698,7 +8698,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     panel.innerHTML = [
       '<h4>국내자료 통합조사 엔진</h4>',
-      '<p class="paid-domestic-evidence-lead">법령, 대법원 판례, 국세청 세무자료, 국세법령정보, 민간 공개자료를 출처 등급별로 나누어 상세자료의 확인 항목을 보강합니다.</p>',
+      '<p class="paid-domestic-evidence-lead">법령, 대법원 판례, 국세청 세무자료, 국세법령정보, 민간 공개자료를 출처 등급별로 나누어 상속정리 리포트의 확인 항목을 보강합니다.</p>',
       '<div class="paid-domestic-evidence-list">',
       items.map(evidenceHtml).join(""),
       '</div>',
@@ -8718,7 +8718,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     panel.innerHTML = [
       '<h4>배포 전 리포트 사전검토</h4>',
-      '<p class="paid-report-preflight-lead">상세자료가 고객에게 전달되기 전, 누락 항목·근거 부족·위험 표현·전문가 확인 신호를 자동으로 점검합니다.</p>',
+      '<p class="paid-report-preflight-lead">상속정리 리포트가 고객에게 전달되기 전, 누락 항목·근거 부족·위험 표현·전문가 확인 신호를 자동으로 점검합니다.</p>',
       '<div class="paid-report-preflight-list">',
       items.map(preflightHtml).join(""),
       '</div>',
@@ -8962,7 +8962,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (deliveredCard && deliveredCard.hidden !== true) return true;
 
     var text = document.body ? document.body.innerText || "" : "";
-    return text.indexOf("상세자료가 준비되었습니다") !== -1;
+    return text.indexOf("상속정리 리포트가 준비되었습니다") !== -1;
   }
 
   function buildFreshnessItems() {
@@ -9192,7 +9192,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     panel.innerHTML = [
       '<h4>자료 최신성·근거 검증 엔진</h4>',
-      '<p class="paid-evidence-freshness-lead">유료 상세자료가 전달되기 전, 법령·판례·세무·국제상속·민간 보조자료의 신뢰도와 기준일을 점검합니다.</p>',
+      '<p class="paid-evidence-freshness-lead">상속정리 리포트가 전달되기 전, 법령·판례·세무·국제상속·민간 보조자료의 신뢰도와 기준일을 점검합니다.</p>',
       '<div class="paid-evidence-freshness-item">',
       '<span class="paid-evidence-freshness-status">', data.score.status, ' · ', data.score.score, '점</span>',
       '<b>근거 구조 종합 점검</b>',
@@ -9421,7 +9421,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (deliveredCard && deliveredCard.hidden !== true) return true;
 
     var text = document.body ? document.body.innerText || "" : "";
-    return text.indexOf("상세자료가 준비되었습니다") !== -1;
+    return text.indexOf("상속정리 리포트가 준비되었습니다") !== -1;
   }
 
   function buildWatchItems() {
@@ -9490,7 +9490,7 @@ document.addEventListener("DOMContentLoaded", function () {
         id: "signal-law",
         title: "법령 개정 신호",
         ok: true,
-        text: "민법과 상속세 및 증여세법은 상세자료의 기본 기준이므로, 법령 기준일을 항상 함께 표시합니다.",
+        text: "민법과 상속세 및 증여세법은 상속정리 리포트의 기본 기준이므로, 법령 기준일을 항상 함께 표시합니다.",
         meta: "상시 감시 · 국가법령정보센터"
       },
       {
@@ -9525,7 +9525,7 @@ document.addEventListener("DOMContentLoaded", function () {
         id: "signal-prerelease",
         title: "리포트 배포 전 최신성 확인",
         ok: true,
-        text: "유료 상세자료 배포 전, 기준일·공식 근거·위험 표현·전문가 필요도·고령층 이해도를 함께 점검합니다.",
+        text: "상속정리 리포트 배포 전, 기준일·공식 근거·위험 표현·전문가 필요도·고령층 이해도를 함께 점검합니다.",
         meta: "자동 점검 · 유료 리포트 품질"
       }
     ];
@@ -9612,11 +9612,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
     panel.innerHTML = [
       '<h4>공식자료 업데이트 감시 엔진</h4>',
-      '<p class="paid-official-update-watch-lead">유료 상세자료가 오래된 법령·판례·세무자료에 기대지 않도록, 공식자료 변경 감시 대상과 반영 기준을 자동으로 점검합니다.</p>',
+      '<p class="paid-official-update-watch-lead">상속정리 리포트가 오래된 법령·판례·세무자료에 기대지 않도록, 공식자료 변경 감시 대상과 반영 기준을 자동으로 점검합니다.</p>',
       '<div class="paid-official-update-watch-item">',
       '<span class="paid-official-update-watch-status">', data.score.status, ' · ', data.score.score, '점</span>',
       '<b>공식자료 감시 구조 종합 점검</b>',
-      '<span>공식 감시 축 ', data.score.officialCount, '개와 선택 감시 항목 ', data.score.selectedCount, '개를 기준으로 상세자료 최신성 구조를 점검했습니다.</span>',
+      '<span>공식 감시 축 ', data.score.officialCount, '개와 선택 감시 항목 ', data.score.selectedCount, '개를 기준으로 상속정리 리포트 최신성 구조를 점검했습니다.</span>',
       '<small class="paid-official-update-watch-meta">기준일 ', OFFICIAL_WATCH_ENGINE_UPDATED_AT, ' · 공식자료 우선 · 민간자료 보조</small>',
       '</div>',
       '<div class="paid-official-update-watch-grid">',
@@ -9732,7 +9732,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (deliveredCard && deliveredCard.hidden !== true) return true;
 
     var text = document.body ? document.body.innerText || "" : "";
-    return text.indexOf("상세자료가 준비되었습니다") !== -1;
+    return text.indexOf("상속정리 리포트가 준비되었습니다") !== -1;
   }
 
   function findAnchor() {
@@ -9781,7 +9781,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     panel.innerHTML = [
       '<h4>자동 수집·갱신 파이프라인</h4>',
-      '<p>공식자료 수집 스크립트와 기준 스냅샷을 통해 유료 상세자료의 법령·판례·세무자료 기준일을 관리합니다.</p>',
+      '<p>공식자료 수집 스크립트와 기준 스냅샷을 통해 상속정리 리포트의 법령·판례·세무자료 기준일을 관리합니다.</p>',
       '<div class="paid-evidence-pipeline-grid">',
       '<div class="paid-evidence-pipeline-item">',
       '<b>공식자료 스냅샷 상태</b>',
@@ -9935,7 +9935,7 @@ document.addEventListener("DOMContentLoaded", function () {
       document.getElementById("paidAutoEnginePanel") ||
       document.getElementById("paidInternationalPanel") ||
       document.getElementById("paidDomesticEvidencePanel") ||
-      body.indexOf("상세자료가 준비되었습니다") >= 0 ||
+      body.indexOf("상속정리 리포트가 준비되었습니다") >= 0 ||
       body.indexOf("상속정리 리포트") >= 0 ||
       body.indexOf("유료 상세") >= 0
     );
@@ -10179,7 +10179,7 @@ document.addEventListener("DOMContentLoaded", function () {
       document.getElementById("paidCasePackPanel") ||
       document.getElementById("paidInternationalPanel") ||
       document.getElementById("paidDomesticEvidencePanel") ||
-      body.indexOf("상세자료가 준비되었습니다") >= 0 ||
+      body.indexOf("상속정리 리포트가 준비되었습니다") >= 0 ||
       body.indexOf("상속정리 리포트") >= 0 ||
       body.indexOf("상속정리 리포트") >= 0
     );
@@ -10737,7 +10737,7 @@ document.addEventListener("DOMContentLoaded", function () {
         '<div class="ansim-result-conversion-item-v5"><i class="ansim-result-conversion-badge-v5">2</i><div><b>재산·채무 항목</b><span>부동산, 예금, 채무처럼 빠뜨리기 쉬운 항목을 구분합니다.</span></div></div>',
         '<div class="ansim-result-conversion-item-v5"><i class="ansim-result-conversion-badge-v5">3</i><div><b>준비자료와 다음 순서</b><span>지금 확인할 자료와 다음에 정리할 순서를 한눈에 봅니다.</span></div></div>',
       '</div>',
-      '<button type="button" class="ansim-result-conversion-cta-v5" data-ansim-result-conversion-cta-v5="true">상속정리 리포트로 이어서 정리하기</button>',
+      '<button type="button" class="ansim-result-conversion-cta-v5" data-ansim-result-conversion-cta-v5="true">상속정리 리포트로 이어서 정리하기 29,000원에 포함되는 요약·체크리스트·가족 공유용 정리를 확인할 수 있습니다.</button>',
       '<span class="ansim-result-conversion-sub-v5">복잡한 설명은 줄이고, 내 상황 기준의 정리표로 확인합니다.</span>'
     ].join("");
 
@@ -10761,7 +10761,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         var applyButton = Array.prototype.slice.call(document.querySelectorAll("button,a")).find(function(el){
           var text = clean(el.innerText || el.textContent || "");
-          return text.indexOf("내 상황 상세자료 신청하기") >= 0;
+          return text.indexOf("내 상황 상속정리 리포트 안내 신청하기") >= 0;
         });
 
         if(applyButton && applyButton.scrollIntoView){
@@ -10925,7 +10925,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if(!preview || preview.dataset.ansimBottomCompressedV2 === "true") return;
 
     var text = clean(preview.innerText || preview.textContent || "");
-    if(text.indexOf("상세자료 미리보기") < 0) return;
+    if(text.indexOf("상속정리 리포트 미리보기") < 0) return;
 
     var children = Array.prototype.slice.call(preview.children);
     if(children.length < 2) return;
@@ -10940,10 +10940,10 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     var summary = makeSummary(
-      "상세자료 미리보기는 핵심만 먼저 보여드립니다.",
+      "상속정리 리포트 미리보기는 핵심만 먼저 보여드립니다.",
       "상황 정리표, 확인 항목, 준비자료 방향을 리포트에서 더 자세히 확인할 수 있습니다."
     );
-    var toggle = makeToggle(wrap, "상세자료 구성 더 보기", "상세자료 구성 접기");
+    var toggle = makeToggle(wrap, "상속정리 리포트 구성 더 보기", "상속정리 리포트 구성 접기");
 
     if(keepFirst && keepFirst.parentNode === preview){
       keepFirst.insertAdjacentElement("afterend", summary);
@@ -11002,7 +11002,7 @@ document.addEventListener("DOMContentLoaded", function () {
       "신청 전에 꼭 필요한 내용만 남겼습니다.",
       "현재 입력 내용을 기준으로 확인 항목과 준비 순서를 정리해 받을 수 있습니다."
     );
-    var toggle = makeToggle(wrap, "신청 전 상세 설명 더 보기", "신청 전 상세 설명 접기");
+    var toggle = makeToggle(wrap, "신청 전 리포트 안내 더 보기", "신청 전 상세 설명 접기");
 
     guide.insertBefore(summary, formChild);
     guide.insertBefore(toggle, formChild);
