@@ -10618,6 +10618,236 @@ document.addEventListener("DOMContentLoaded", function () {
 })();
 </script>
 
+
+<script>
+(function ansimResultBottomCompressV2(){
+  if (window.__ansimResultBottomCompressV2Installed) return;
+  window.__ansimResultBottomCompressV2Installed = true;
+
+  var timer = null;
+  var attempts = 0;
+
+  function ready(fn){
+    if(document.readyState === "loading"){
+      document.addEventListener("DOMContentLoaded", fn, { once:true });
+    } else {
+      fn();
+    }
+  }
+
+  function clean(text){
+    return String(text || "").replace(/\s+/g, " ").trim();
+  }
+
+  function isPaidConfirmed(){
+    try {
+      return localStorage.getItem("ansim_payment_status") === "paid_confirmed" ||
+        localStorage.getItem("ansim_paid_report_status") === "paid_confirmed" ||
+        sessionStorage.getItem("ansim_payment_status") === "paid_confirmed" ||
+        sessionStorage.getItem("ansim_paid_report_status") === "paid_confirmed";
+    } catch (error) {
+      return false;
+    }
+  }
+
+  function hasResult(){
+    var body = clean(document.body.innerText || "");
+    return body.indexOf("진단 완료") >= 0 ||
+      body.indexOf("진단 점수") >= 0 ||
+      body.indexOf("현재 상황 정리 완료") >= 0;
+  }
+
+  function addStyle(){
+    if(document.getElementById("ansim-result-bottom-compress-v2-style")) return;
+
+    var style = document.createElement("style");
+    style.id = "ansim-result-bottom-compress-v2-style";
+    style.textContent = [
+      ".ansim-bottom-compress-v2-summary{margin:10px 0;padding:12px 13px;border-radius:15px;border:1px solid rgba(176,138,74,.22);background:#fffaf1;color:#3b3024;}",
+      ".ansim-bottom-compress-v2-summary b{display:block;font-size:14px;margin-bottom:4px;color:#2f2418;}",
+      ".ansim-bottom-compress-v2-summary span{display:block;font-size:13px;line-height:1.5;color:#6a5d50;}",
+      ".ansim-bottom-compress-v2-toggle{display:block;width:100%;margin:8px 0 10px;padding:11px 12px;border-radius:13px;border:1px solid rgba(176,138,74,.32);background:#fff;color:#2f2418;font-size:14px;font-weight:850;text-align:center;cursor:pointer;}",
+      ".ansim-bottom-compress-v2-collapsed{display:none!important;}",
+      ".ansim-bottom-compress-v2-wrap{margin:8px 0 10px;}",
+      ".ansim-bottom-compress-v2-compact #paidReportPreviewCard{padding-top:14px!important;padding-bottom:14px!important;}",
+      ".ansim-bottom-compress-v2-compact #guideRequestCard{padding-top:14px!important;padding-bottom:14px!important;}"
+    ].join("");
+    document.head.appendChild(style);
+  }
+
+  function makeSummary(title, body){
+    var box = document.createElement("div");
+    box.className = "ansim-bottom-compress-v2-summary";
+    box.innerHTML = "<b>" + title + "</b><span>" + body + "</span>";
+    return box;
+  }
+
+  function makeToggle(target, openText, closeText){
+    var btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "ansim-bottom-compress-v2-toggle";
+    btn.textContent = openText;
+    btn.setAttribute("data-ansim-bottom-compress-toggle-v2", "true");
+
+    btn.addEventListener("click", function(){
+      var opened = target.classList.contains("ansim-bottom-compress-v2-collapsed");
+      if(opened){
+        target.classList.remove("ansim-bottom-compress-v2-collapsed");
+        btn.textContent = closeText;
+      } else {
+        target.classList.add("ansim-bottom-compress-v2-collapsed");
+        btn.textContent = openText;
+      }
+
+      try {
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({
+          event: "result_detail_toggle",
+          source: "result_bottom_compress_v2",
+          opened: opened
+        });
+      } catch (error) {}
+    });
+
+    return btn;
+  }
+
+  function compressPreview(){
+    var preview = document.querySelector("#paidReportPreviewCard");
+    if(!preview || preview.dataset.ansimBottomCompressedV2 === "true") return;
+
+    var text = clean(preview.innerText || preview.textContent || "");
+    if(text.indexOf("상세자료 미리보기") < 0) return;
+
+    var children = Array.prototype.slice.call(preview.children);
+    if(children.length < 2) return;
+
+    var keepFirst = children[0];
+    var wrap = document.createElement("div");
+    wrap.className = "ansim-bottom-compress-v2-wrap ansim-bottom-compress-v2-collapsed";
+    wrap.setAttribute("data-ansim-preview-details-v2", "true");
+
+    children.slice(1).forEach(function(child){
+      wrap.appendChild(child);
+    });
+
+    var summary = makeSummary(
+      "상세자료 미리보기는 핵심만 먼저 보여드립니다.",
+      "상황 정리표, 확인 항목, 준비자료 방향을 리포트에서 더 자세히 확인할 수 있습니다."
+    );
+    var toggle = makeToggle(wrap, "상세자료 구성 더 보기", "상세자료 구성 접기");
+
+    if(keepFirst && keepFirst.parentNode === preview){
+      keepFirst.insertAdjacentElement("afterend", summary);
+      summary.insertAdjacentElement("afterend", toggle);
+      toggle.insertAdjacentElement("afterend", wrap);
+    } else {
+      preview.prepend(wrap);
+      preview.prepend(toggle);
+      preview.prepend(summary);
+    }
+
+    preview.dataset.ansimBottomCompressedV2 = "true";
+  }
+
+  function findFormChild(guide){
+    var children = Array.prototype.slice.call(guide.children);
+    return children.find(function(child){
+      var text = clean(child.innerText || child.textContent || "");
+      return child.querySelector("input, textarea, form") ||
+        (text.indexOf("성함") >= 0 && text.indexOf("이메일") >= 0);
+    });
+  }
+
+  function compressGuide(){
+    var guide = document.querySelector("#guideRequestCard");
+    if(!guide || guide.dataset.ansimBottomCompressedV2 === "true") return;
+
+    var guideText = clean(guide.innerText || guide.textContent || "");
+    if(guideText.indexOf("성함") < 0 || guideText.indexOf("이메일") < 0) return;
+
+    var formChild = findFormChild(guide);
+    if(!formChild || formChild.parentNode !== guide) return;
+
+    var children = Array.prototype.slice.call(guide.children);
+    var beforeForm = [];
+
+    for(var i = 0; i < children.length; i += 1){
+      if(children[i] === formChild) break;
+      var text = clean(children[i].innerText || children[i].textContent || "");
+      if(!text) continue;
+      if(children[i].classList.contains("ansim-bottom-compress-v2-summary")) continue;
+      beforeForm.push(children[i]);
+    }
+
+    if(beforeForm.length === 0) return;
+
+    var wrap = document.createElement("div");
+    wrap.className = "ansim-bottom-compress-v2-wrap ansim-bottom-compress-v2-collapsed";
+    wrap.setAttribute("data-ansim-guide-details-v2", "true");
+
+    beforeForm.forEach(function(child){
+      wrap.appendChild(child);
+    });
+
+    var summary = makeSummary(
+      "신청 전에 꼭 필요한 내용만 남겼습니다.",
+      "현재 입력 내용을 기준으로 확인 항목과 준비 순서를 정리해 받을 수 있습니다."
+    );
+    var toggle = makeToggle(wrap, "신청 전 상세 설명 더 보기", "신청 전 상세 설명 접기");
+
+    guide.insertBefore(summary, formChild);
+    guide.insertBefore(toggle, formChild);
+    guide.insertBefore(wrap, formChild);
+
+    guide.dataset.ansimBottomCompressedV2 = "true";
+  }
+
+  function install(){
+    if(isPaidConfirmed()) return;
+    if(!hasResult()) return;
+
+    addStyle();
+    document.documentElement.classList.add("ansim-bottom-compress-v2-compact");
+
+    compressPreview();
+    compressGuide();
+
+    if(
+      document.querySelector("#paidReportPreviewCard[data-ansim-bottom-compressed-v2='true']") &&
+      document.querySelector("#guideRequestCard[data-ansim-bottom-compressed-v2='true']")
+    ){
+      document.documentElement.dataset.ansimResultBottomCompressV2 = "installed";
+    }
+  }
+
+  function schedule(){
+    install();
+
+    if(timer) clearInterval(timer);
+    timer = setInterval(function(){
+      attempts += 1;
+      install();
+      if(attempts > 30 || document.documentElement.dataset.ansimResultBottomCompressV2 === "installed"){
+        clearInterval(timer);
+      }
+    }, 500);
+  }
+
+  ready(function(){
+    schedule();
+
+    try {
+      var observer = new MutationObserver(function(){
+        install();
+      });
+      observer.observe(document.body, { childList:true, subtree:true, characterData:true });
+      setTimeout(function(){ observer.disconnect(); }, 22000);
+    } catch (error) {}
+  });
+})();
+</script>
+
 </body>",
 
 
