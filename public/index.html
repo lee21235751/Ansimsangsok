@@ -1974,6 +1974,95 @@
 }
 </style>
 
+
+
+
+
+
+<style id="ansim-disclosure-stable-fix">
+@media (max-width: 768px) {
+  html,
+  body {
+    background: #fffdf5 !important;
+    min-height: 100% !important;
+    overflow-x: hidden !important;
+    scroll-behavior: auto !important;
+  }
+
+  body > .page,
+  .page {
+    background: #fffdf5 !important;
+    min-height: 100svh !important;
+    overflow-x: hidden !important;
+  }
+
+  header.hero,
+  .hero {
+    background-color: #0f3326 !important;
+    background-image:
+      radial-gradient(circle at 12% 8%, rgba(241, 213, 134, 0.16), transparent 30%),
+      linear-gradient(145deg, #082d22 0%, #163b2a 62%, #24381f 100%) !important;
+  }
+
+  main#diagnosis,
+  #diagnosis,
+  .diagnosis,
+  .diagnosis-section,
+  .question-card,
+  .result-card,
+  .report-card,
+  .summary-card,
+  .form-card {
+    background-color: #fffdf5 !important;
+  }
+
+  main#diagnosis,
+  #diagnosis {
+    min-height: 100svh !important;
+    padding-bottom: max(48px, env(safe-area-inset-bottom)) !important;
+  }
+
+  body,
+  body * {
+    animation-duration: 0.001ms !important;
+    animation-delay: 0ms !important;
+    transition-duration: 0.001ms !important;
+    transition-delay: 0ms !important;
+  }
+
+  .ansim-disclosure-card-v3 .ansim-disclosure-panel-v3 {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    max-height: 0 !important;
+    overflow: hidden !important;
+  }
+
+  .ansim-disclosure-card-v3.ansim-disclosure-open-stable .ansim-disclosure-panel-v3 {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  .ansim-disclosure-button-v3 {
+    pointer-events: auto !important;
+    touch-action: manipulation !important;
+    cursor: pointer !important;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0.08) !important;
+  }
+
+  button,
+  a,
+  [role="button"],
+  summary {
+    pointer-events: auto !important;
+    touch-action: manipulation !important;
+  }
+}
+</style>
+
 </head>
 <body>
   <div id="leadStatusBanner" class="lead-status-banner is-hidden" role="status" aria-live="polite"></div>
@@ -3312,7 +3401,7 @@ document.addEventListener("DOMContentLoaded", function () {
     var checkItems = [
       "상속인 구성과 가족관계를 먼저 정리합니다.",
       "부동산, 예금, 사업체, 부채 등 확인할 재산 항목을 나눕니다.",
-      "가족관계증명서, 기본증명서, 등기·금융자료 등 준비할 서류를 확인합니다.",
+      "가족관계증명서, 기본 확인 서류, 등기·금융자료 등 준비할 서류를 확인합니다.",
       "지금 확인할 일과 나중에 준비할 일을 구분합니다."
     ];
 
@@ -6423,7 +6512,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     var documents = [
-      "가족관계증명서, 기본증명서 등 가족관계 확인 서류",
+      "가족관계증명서, 기본 확인 서류 등 가족관계 확인 서류",
       "부동산 등기, 임대차 관련 자료, 시가 확인 자료",
       "예금·보험·증권 등 금융자료",
       "대출, 보증, 세금 등 부채 확인 자료",
@@ -6719,7 +6808,7 @@ document.addEventListener("DOMContentLoaded", function () {
     ];
 
     var evidenceChecklist = [
-      "가족관계증명서, 기본증명서, 혼인·입양 관련 서류",
+      "가족관계증명서, 기본 확인 서류, 혼인·입양 관련 서류",
       "부동산 등기, 건축물대장, 임대차계약, 시가 확인 자료",
       "예금·보험·증권·퇴직금 등 금융자료",
       "대출, 보증, 세금, 미납금 등 채무자료",
@@ -7904,7 +7993,7 @@ document.addEventListener("DOMContentLoaded", function () {
       id: "engine-family",
       title: "가족관계·상속인 정리",
       text: flags.family ? "상속인 구성을 기준으로 가족관계 서류와 상속 순서를 먼저 정리합니다." : "상속인 확인을 위해 가족관계 자료부터 준비하는 흐름이 좋습니다.",
-      meta: "기본축 · 가족관계증명서, 제적등본, 혼인·입양 관련 자료"
+      meta: "기본축 · 가족관계증명서, 가족관계 확인 서류, 혼인·입양 관련 자료"
     });
 
     items.push({
@@ -8062,7 +8151,7 @@ document.addEventListener("DOMContentLoaded", function () {
     var panel = ensurePanel("paidAutoEnginePanel", "paid-auto-engine-panel");
 
     panel.innerHTML = [
-      '<h4>상세리포트 정리 항목</h4>',
+      '<h4>상속정리 리포트 정리 항목</h4>',
       '<p class="paid-auto-engine-lead">입력하신 답변을 기준으로 가족관계, 재산, 채무, 세금, 판례, 국제상속, 전문가 확인 신호를 한 번에 정리했습니다.</p>',
       '<div class="paid-auto-engine-grid">',
       items.map(itemHtml).join(""),
@@ -8409,7 +8498,7 @@ document.addEventListener("DOMContentLoaded", function () {
       id: "preflight-family",
       title: "가족관계·상속인 누락 점검",
       text: hasFamily ? "상속인과 가족관계 축이 리포트에 포함되어 있습니다." : "상속인·가족관계 자료 안내를 더 분명히 보강해야 합니다.",
-      meta: status(hasFamily) + " · 가족관계증명서, 제적등본, 혼인·입양 자료"
+      meta: status(hasFamily) + " · 가족관계증명서, 가족관계 확인 서류, 혼인·입양 자료"
     });
 
     checks.push({
@@ -9847,7 +9936,7 @@ document.addEventListener("DOMContentLoaded", function () {
       document.getElementById("paidInternationalPanel") ||
       document.getElementById("paidDomesticEvidencePanel") ||
       body.indexOf("상세자료가 준비되었습니다") >= 0 ||
-      body.indexOf("상세리포트") >= 0 ||
+      body.indexOf("상속정리 리포트") >= 0 ||
       body.indexOf("유료 상세") >= 0
     );
   }
@@ -9865,7 +9954,7 @@ document.addEventListener("DOMContentLoaded", function () {
       '<div class="paid-customer-summary-grid">' +
         '<div class="paid-customer-summary-card"><b>현재 상황</b><span>가족관계, 재산, 채무, 세금, 해외 요소를 나누어 확인해야 하는 상황입니다. 먼저 상속인 구성과 재산·채무 목록을 정리하는 흐름이 좋습니다.</span></div>' +
         '<div class="paid-customer-summary-card"><b>먼저 확인할 것</b><span>상속인 범위와 가족관계 서류<br>부동산, 예금, 보험, 퇴직금, 채무 항목<br>생전 증여, 유언, 간병·부양 기여 여부<br>세금 신고 일정과 제출 자료</span></div>' +
-        '<div class="paid-customer-summary-card"><b>준비할 자료</b><span>가족관계증명서, 기본증명서, 제적등본<br>부동산 등기, 예금·보험·증권·퇴직금 자료<br>대출, 보증, 카드, 기타 채무 자료<br>생전 증여, 생활비, 병원비, 계좌이체 자료</span></div>' +
+        '<div class="paid-customer-summary-card"><b>준비할 자료</b><span>가족관계증명서, 기본 확인 서류, 가족관계 확인 서류<br>부동산 등기, 예금·보험·증권·퇴직금 자료<br>대출, 보증, 카드, 기타 채무 자료<br>생전 증여, 생활비, 병원비, 계좌이체 자료</span></div>' +
         '<div class="paid-customer-summary-card"><b>전문가 도움 신호</b><span>가족 간 의견 차이, 세금 신고, 해외 재산, 유언장, 생전 증여가 함께 있다면 전문가에게 물어볼 질문과 자료를 먼저 정리해두는 편이 좋습니다.</span></div>' +
       '</div>' +
       '<p class="paid-customer-summary-note">공식자료 기준일과 공개 참고자료는 하단의 확인 영역에서 따로 볼 수 있게 정리됩니다.</p>' +
@@ -10092,7 +10181,7 @@ document.addEventListener("DOMContentLoaded", function () {
       document.getElementById("paidDomesticEvidencePanel") ||
       body.indexOf("상세자료가 준비되었습니다") >= 0 ||
       body.indexOf("상속정리 리포트") >= 0 ||
-      body.indexOf("상세리포트") >= 0
+      body.indexOf("상속정리 리포트") >= 0
     );
   }
 
@@ -10184,7 +10273,7 @@ document.addEventListener("DOMContentLoaded", function () {
       '<div class="paid-product-structure-grid">' +
         '<div class="paid-product-structure-card"><b>변호사에게 물어볼 질문</b><span>상속인 범위, 유언, 생전 증여, 가족 간 의견 차이, 재산 명의와 관련해 어떤 자료부터 확인하면 좋은지 물어볼 수 있습니다.</span></div>' +
         '<div class="paid-product-structure-card"><b>세무사·회계사에게 물어볼 질문</b><span>상속세 신고 일정, 재산 평가자료, 채무 반영 자료, 사전 증여 자료, 해외 재산 여부를 어떻게 정리하면 좋은지 확인할 수 있습니다.</span></div>' +
-        '<div class="paid-product-structure-card"><b>가져가면 좋은 자료</b><span>가족관계증명서, 기본증명서, 제적등본, 부동산 등기, 예금·보험·증권 자료, 채무 자료, 생전 이체 내역, 유언 관련 자료를 준비해둡니다.</span></div>' +
+        '<div class="paid-product-structure-card"><b>가져가면 좋은 자료</b><span>가족관계증명서, 기본 확인 서류, 가족관계 확인 서류, 부동산 등기, 예금·보험·증권 자료, 채무 자료, 생전 이체 내역, 유언 관련 자료를 준비해둡니다.</span></div>' +
         '<div class="paid-product-structure-card"><b>상담 전에 정리할 말</b><span>가장 걱정되는 점, 가족 간 의견 차이, 이미 확인한 자료, 아직 모르는 자료, 원하는 진행 방향을 짧게 적어두면 설명 시간을 줄이는 데 도움이 됩니다.</span></div>' +
       '</div>' +
       '<p class="paid-product-structure-note">이 메모는 상담 전에 상황과 질문을 정리해두기 위한 준비용입니다.</p>';
@@ -10371,7 +10460,7 @@ document.addEventListener("DOMContentLoaded", function () {
     "영국 거주·영국 재산 확인",
     "번역·공증·아포스티유",
     "국내·현지 전문가 확인 신호",
-    "상세리포트 정리 항목",
+    "상속정리 리포트 정리 항목",
     "가족관계·상속인 정리",
     "재산·채무 분리",
     "유류분·특별수익·기여분",
@@ -10967,6 +11056,97 @@ document.addEventListener("DOMContentLoaded", function () {
 })();
 </script>
 
+
+
+
+
+<script>
+(function ansimDisclosureStableFix() {
+  if (window.__ansimDisclosureStableFixInstalled) return;
+  window.__ansimDisclosureStableFixInstalled = true;
+
+  function isMobile() {
+    return window.matchMedia && window.matchMedia("(max-width: 768px)").matches;
+  }
+
+  function helperHtml() {
+    return '<span>해외 재산, 근거자료, 복잡한 상황이 있는 경우만 펼쳐서 확인하세요.</span>';
+  }
+
+  function setButtonLabel(button, open) {
+    if (!button) return;
+    button.setAttribute("aria-expanded", open ? "true" : "false");
+    button.innerHTML = (open ? "상세내용 접기 " : "상세 확인 항목 보기 ") + helperHtml();
+  }
+
+  function setPanel(card, open) {
+    if (!card) return false;
+
+    var button = card.querySelector(".ansim-disclosure-button-v3");
+    var panel = card.querySelector(".ansim-disclosure-panel-v3");
+    if (!button || !panel) return false;
+
+    card.classList.toggle("ansim-disclosure-open-stable", open);
+    card.setAttribute("data-ansim-disclosure-open-stable", open ? "true" : "false");
+
+    panel.hidden = !open;
+    panel.setAttribute("aria-hidden", open ? "false" : "true");
+    panel.style.display = open ? "block" : "none";
+    panel.style.visibility = open ? "visible" : "hidden";
+    panel.style.opacity = open ? "1" : "0";
+    panel.style.maxHeight = open ? "none" : "0px";
+    panel.style.overflow = open ? "visible" : "hidden";
+
+    setButtonLabel(button, open);
+    return true;
+  }
+
+  function setup() {
+    if (!isMobile()) return;
+
+    document.documentElement.style.backgroundColor = "#fffdf5";
+    if (document.body) document.body.style.backgroundColor = "#fffdf5";
+
+    Array.prototype.slice.call(document.querySelectorAll(".ansim-disclosure-card-v3")).forEach(function(card) {
+      setPanel(card, false);
+    });
+  }
+
+  document.addEventListener("click", function(event) {
+    if (!isMobile()) return;
+
+    var button = event.target && event.target.closest ? event.target.closest(".ansim-disclosure-button-v3") : null;
+    if (!button) return;
+
+    var card = button.closest(".ansim-disclosure-card-v3");
+    if (!card) return;
+
+    event.preventDefault();
+    event.stopPropagation();
+    if (event.stopImmediatePropagation) event.stopImmediatePropagation();
+
+    var isOpen = card.classList.contains("ansim-disclosure-open-stable") || button.getAttribute("aria-expanded") === "true";
+    setPanel(card, !isOpen);
+
+    try {
+      button.scrollIntoView({ block: "center", inline: "nearest" });
+    } catch (error) {}
+  }, true);
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", setup);
+  } else {
+    setup();
+  }
+
+  window.addEventListener("load", function() {
+    setup();
+    setTimeout(setup, 50);
+    setTimeout(setup, 250);
+  });
+})();
+</script>
+
 </body>",
 
 
@@ -11058,7 +11238,7 @@ function textOf(el){return el?String(el.textContent||''):'';}
 function isPaidView(){try{var a=localStorage.getItem('ansim_payment_status')||'';var b=localStorage.getItem('ansim_paid_report_status')||'';var c=sessionStorage.getItem('ansim_payment_status')||'';var d=sessionStorage.getItem('ansim_paid_report_status')||'';return [a,b,c,d].join(' ').indexOf('paid_confirmed')>=0;}catch(e){return false;}}
 function style(){if(document.getElementById('paid-report-body-density-v1-style'))return;var s=document.createElement('style');s.id='paid-report-body-density-v1-style';s.textContent='.paid-density-wrap{margin:16px 0 16px;padding:17px;border:1px solid rgba(151,119,64,.25);border-radius:22px;background:linear-gradient(180deg,#fffaf0 0%,#fffdf9 100%);box-shadow:0 14px 30px rgba(43,31,18,.07)}.paid-density-eyebrow{margin:0 0 6px;font-size:.8rem;font-weight:850;color:#8a6428}.paid-density-wrap h2{margin:0 0 8px;font-size:1.18rem;line-height:1.32;color:#3b2a15;letter-spacing:-.03em}.paid-density-lead{margin:0 0 14px;font-size:.94rem;line-height:1.58;color:#66533a}.paid-density-grid{display:grid;gap:10px}.paid-density-card{padding:12px;border:1px solid rgba(151,119,64,.17);border-radius:15px;background:rgba(255,255,255,.78)}.paid-density-card strong{display:block;margin:0 0 5px;font-size:.94rem;line-height:1.35;color:#4a3417}.paid-density-card ul{margin:0;padding-left:18px;display:grid;gap:5px}.paid-density-card li{font-size:.86rem;line-height:1.43;color:#6b5a42}.paid-density-question{margin:12px 0 0;padding:12px;border-radius:15px;background:#fff;border:1px dashed rgba(151,119,64,.32);font-size:.88rem;line-height:1.5;color:#5b472a}.paid-density-question strong{color:#3b2a15}.paid-density-note{margin:9px 0 0;font-size:.82rem;line-height:1.45;color:#7a674a}@media(min-width:760px){.paid-density-wrap{padding:21px}.paid-density-wrap h2{font-size:1.3rem}.paid-density-grid{grid-template-columns:repeat(2,1fr)}}';document.head.appendChild(s);}
 function card(title,items){var c=document.createElement('section');c.className='paid-density-card';var h=document.createElement('strong');h.textContent=title;var ul=document.createElement('ul');items.forEach(function(t){var li=document.createElement('li');li.textContent=t;ul.appendChild(li);});c.appendChild(h);c.appendChild(ul);return c;}
-function panel(){var wrap=document.createElement('section');wrap.className='paid-density-wrap';wrap.setAttribute('aria-label','상세리포트 본문 정리 강화');var eyebrow=document.createElement('p');eyebrow.className='paid-density-eyebrow';eyebrow.textContent='상세리포트 본문 정리';var h=document.createElement('h2');h.textContent='내 상황을 더 자세히 나누어 정리했습니다';var lead=document.createElement('p');lead.className='paid-density-lead';lead.textContent='아래 항목은 상속 상황을 한 번에 끝내기보다, 가족과 대화하거나 필요한 도움을 찾기 전에 놓치기 쉬운 부분을 나누어 확인하도록 만든 정리입니다.';var grid=document.createElement('div');grid.className='paid-density-grid';grid.appendChild(card('1. 현재 상황 정리',['상속인이 누구인지 먼저 확인합니다.','재산과 부채를 따로 나누어 봅니다.','예금, 부동산, 보험, 차량처럼 확인 경로가 다른 항목을 분리합니다.']));grid.appendChild(card('2. 먼저 확인할 쟁점',['연락이 어려운 가족이 있는지 확인합니다.','해외 거주 가족이나 해외 재산 가능성을 따로 봅니다.','유언장, 증여, 생전 관리 내역처럼 가족 대화가 필요한 항목을 표시합니다.']));grid.appendChild(card('3. 준비자료 체크',['가족관계증명서와 기본증명서처럼 시작 자료를 구분합니다.','등기부, 금융거래, 보험 내역처럼 재산 확인 자료를 나누어 봅니다.','장례비, 병원비, 채무 관련 자료처럼 빠뜨리기 쉬운 항목을 확인합니다.']));grid.appendChild(card('4. 가족 대화 준비',['누가 받을지보다 무엇을 확인해야 하는지부터 이야기할 수 있게 정리합니다.','감정이 커지기 쉬운 항목은 자료 확인 순서로 바꾸어 봅니다.','가족에게 공유하기 쉬운 요약 문장으로 다시 정리합니다.']));var question=document.createElement('p');question.className='paid-density-question';question.innerHTML='<strong>전문가에게 물어볼 질문 예시</strong><br>상속인 범위 확인이 필요한가요? · 재산 조회에서 빠질 수 있는 항목이 있나요? · 가족 간 대화 전에 준비하면 좋은 자료가 있나요? · 해외 거주 가족이나 해외 재산은 따로 확인해야 하나요?';var note=document.createElement('p');note.className='paid-density-note';note.textContent='이 정리는 법적 결론이나 세금 금액을 확정하기보다, 상담 전 상황을 이해하고 준비할 항목을 정리하는 데 초점을 둡니다.';wrap.appendChild(eyebrow);wrap.appendChild(h);wrap.appendChild(lead);wrap.appendChild(grid);wrap.appendChild(question);wrap.appendChild(note);return wrap;}
+function panel(){var wrap=document.createElement('section');wrap.className='paid-density-wrap';wrap.setAttribute('aria-label','상속정리 리포트 본문 정리 강화');var eyebrow=document.createElement('p');eyebrow.className='paid-density-eyebrow';eyebrow.textContent='상속정리 리포트 본문 정리';var h=document.createElement('h2');h.textContent='내 상황을 더 자세히 나누어 정리했습니다';var lead=document.createElement('p');lead.className='paid-density-lead';lead.textContent='아래 항목은 상속 상황을 한 번에 끝내기보다, 가족과 대화하거나 필요한 도움을 찾기 전에 놓치기 쉬운 부분을 나누어 확인하도록 만든 정리입니다.';var grid=document.createElement('div');grid.className='paid-density-grid';grid.appendChild(card('1. 현재 상황 정리',['상속인이 누구인지 먼저 확인합니다.','재산과 부채를 따로 나누어 봅니다.','예금, 부동산, 보험, 차량처럼 확인 경로가 다른 항목을 분리합니다.']));grid.appendChild(card('2. 먼저 확인할 쟁점',['연락이 어려운 가족이 있는지 확인합니다.','해외 거주 가족이나 해외 재산 가능성을 따로 봅니다.','유언장, 증여, 생전 관리 내역처럼 가족 대화가 필요한 항목을 표시합니다.']));grid.appendChild(card('3. 준비자료 체크',['가족관계증명서와 기본 확인 서류처럼 시작 자료를 구분합니다.','등기부, 금융거래, 보험 내역처럼 재산 확인 자료를 나누어 봅니다.','장례비, 병원비, 채무 관련 자료처럼 빠뜨리기 쉬운 항목을 확인합니다.']));grid.appendChild(card('4. 가족 대화 준비',['누가 받을지보다 무엇을 확인해야 하는지부터 이야기할 수 있게 정리합니다.','감정이 커지기 쉬운 항목은 자료 확인 순서로 바꾸어 봅니다.','가족에게 공유하기 쉬운 요약 문장으로 다시 정리합니다.']));var question=document.createElement('p');question.className='paid-density-question';question.innerHTML='<strong>전문가에게 물어볼 질문 예시</strong><br>상속인 범위 확인이 필요한가요? · 재산 조회에서 빠질 수 있는 항목이 있나요? · 가족 간 대화 전에 준비하면 좋은 자료가 있나요? · 해외 거주 가족이나 해외 재산은 따로 확인해야 하나요?';var note=document.createElement('p');note.className='paid-density-note';note.textContent='이 정리는 상담 전 상황을 이해하고 준비할 항목을 차분히 정리하는 데 초점을 둡니다.';wrap.appendChild(eyebrow);wrap.appendChild(h);wrap.appendChild(lead);wrap.appendChild(grid);wrap.appendChild(question);wrap.appendChild(note);return wrap;}
 function findPaidArea(){var els=Array.prototype.slice.call(document.querySelectorAll('section,article,div,main'));var best=null;els.forEach(function(el){var t=textOf(el);var score=0;if(t.indexOf('상속정리 리포트 자료 안내')>=0)score+=8;if(t.indexOf('상속 상황을 정리한 자료가 준비되었습니다')>=0)score+=7;if(t.indexOf('안심상속 상속정리 리포트')>=0)score+=6;if(t.indexOf('내 상속 상황 요약')>=0)score+=5;if(t.indexOf('추천 확인 순서')>=0)score+=4;if(t.indexOf('가족 공유용 요약')>=0)score+=3;if(!best||score>best.score)best={el:el,score:score};});return best&&best.score>=5?best.el:(document.querySelector('main')||document.body);}
 function install(){if(!isPaidView())return;if(document.querySelector('.paid-density-wrap'))return;style();var target=findPaidArea();var p=panel();var anchors=Array.prototype.slice.call(target.querySelectorAll('section,article,div,h1,h2,h3,p'));var placed=false;for(var i=0;i<anchors.length;i++){var t=textOf(anchors[i]);if(t.indexOf('추천 확인 순서')>=0||t.indexOf('내 상속 상황 요약')>=0||t.indexOf('가족 공유용 요약')>=0){anchors[i].insertAdjacentElement('afterend',p);placed=true;break;}}if(!placed)target.appendChild(p);}
 ready(function(){setTimeout(install,700);setTimeout(install,1700);setTimeout(install,3000);});
@@ -11110,7 +11290,7 @@ function isPaidView(){try{var a=localStorage.getItem('ansim_payment_status')||''
 function style(){if(document.getElementById('paid-family-share-phrases-v1-style'))return;var s=document.createElement('style');s.id='paid-family-share-phrases-v1-style';s.textContent='.paid-family-phrases-wrap{margin:16px 0 16px;padding:17px;border:1px solid rgba(151,119,64,.25);border-radius:22px;background:linear-gradient(180deg,#fff8ea 0%,#fffefb 100%);box-shadow:0 14px 30px rgba(43,31,18,.07)}.paid-family-phrases-eyebrow{margin:0 0 6px;font-size:.8rem;font-weight:850;color:#8a6428}.paid-family-phrases-wrap h2{margin:0 0 8px;font-size:1.18rem;line-height:1.32;color:#3b2a15;letter-spacing:-.03em}.paid-family-phrases-lead{margin:0 0 14px;font-size:.94rem;line-height:1.58;color:#66533a}.paid-family-phrases-grid{display:grid;gap:10px}.paid-family-phrase-card{padding:12px;border:1px solid rgba(151,119,64,.17);border-radius:15px;background:rgba(255,255,255,.82)}.paid-family-phrase-card strong{display:block;margin:0 0 6px;font-size:.93rem;line-height:1.35;color:#4a3417}.paid-family-phrase-card p{margin:0;font-size:.86rem;line-height:1.5;color:#6b5a42}.paid-family-phrase-example{margin-top:8px;padding:10px;border-radius:13px;background:#fff;border:1px dashed rgba(151,119,64,.28);font-size:.85rem;line-height:1.5;color:#4f3b1f}.paid-family-phrase-example b{color:#3b2a15}.paid-family-phrases-note{margin:12px 0 0;padding:11px;border-radius:14px;background:rgba(255,255,255,.8);border:1px solid rgba(151,119,64,.16);font-size:.84rem;line-height:1.48;color:#6b5a42}@media(min-width:760px){.paid-family-phrases-wrap{padding:21px}.paid-family-phrases-wrap h2{font-size:1.3rem}.paid-family-phrases-grid{grid-template-columns:repeat(2,1fr)}}';document.head.appendChild(s);}
 function card(title,desc,example){var c=document.createElement('section');c.className='paid-family-phrase-card';var h=document.createElement('strong');h.textContent=title;var p=document.createElement('p');p.textContent=desc;var ex=document.createElement('div');ex.className='paid-family-phrase-example';ex.innerHTML='<b>이렇게 말해볼 수 있습니다</b><br>'+example;c.appendChild(h);c.appendChild(p);c.appendChild(ex);return c;}
 function panel(){var wrap=document.createElement('section');wrap.className='paid-family-phrases-wrap';wrap.setAttribute('aria-label','가족 공유용 문장 안내');var eyebrow=document.createElement('p');eyebrow.className='paid-family-phrases-eyebrow';eyebrow.textContent='가족 공유용 문장';var h=document.createElement('h2');h.textContent='가족에게 설명할 때 쓸 수 있는 문장입니다';var lead=document.createElement('p');lead.className='paid-family-phrases-lead';lead.textContent='상속 이야기는 말의 순서에 따라 부담이 커질 수 있습니다. 아래 문장은 결론을 정하기보다, 함께 확인할 자료와 다음 대화를 차분히 꺼내기 위한 표현입니다.';var grid=document.createElement('div');grid.className='paid-family-phrases-grid';grid.appendChild(card('대화를 시작할 때','바로 나누는 이야기보다, 먼저 확인할 자료를 함께 보자는 흐름으로 시작합니다.','우리끼리 결론을 먼저 내기보다, 확인해야 할 자료부터 같이 정리해보면 좋겠어요.'));grid.appendChild(card('자료 확인을 부탁할 때','누군가에게 책임을 묻는 말보다, 빠진 항목을 줄이자는 표현이 안전합니다.','혹시 빠진 재산이나 부채가 없도록 각자 알고 있는 자료를 한 번씩 모아보면 좋겠어요.'));grid.appendChild(card('가족에게 요약본을 공유할 때','긴 설명 대신, 현재 상황과 확인 순서를 함께 보는 자료라고 설명합니다.','이 자료는 누가 더 받는지를 정하려는 게 아니라, 지금 확인할 순서를 정리한 내용이에요.'));grid.appendChild(card('전문가 상담 전에 공유할 때','상담을 결정하기보다, 질문을 정리해보자는 단계로 말합니다.','상담이 필요할지 보려면 먼저 우리가 물어볼 질문을 정리해두는 게 좋겠어요.'));var note=document.createElement('p');note.className='paid-family-phrases-note';note.textContent='가족 공유용 문장은 갈등을 키우는 단정 표현을 피하고, 자료 확인과 대화 준비에 초점을 맞춘 문장으로 구성했습니다.';wrap.appendChild(eyebrow);wrap.appendChild(h);wrap.appendChild(lead);wrap.appendChild(grid);wrap.appendChild(note);return wrap;}
-function findPaidArea(){var els=Array.prototype.slice.call(document.querySelectorAll('section,article,div,main'));var best=null;els.forEach(function(el){var t=textOf(el);var score=0;if(t.indexOf('가족 공유용 요약')>=0)score+=8;if(t.indexOf('상속정리 리포트 자료 안내')>=0)score+=7;if(t.indexOf('상속 상황을 정리한 자료가 준비되었습니다')>=0)score+=6;if(t.indexOf('상세리포트 본문 정리')>=0)score+=5;if(t.indexOf('가족 대화 준비')>=0)score+=5;if(t.indexOf('인쇄용 1장 요약본')>=0)score+=4;if(!best||score>best.score)best={el:el,score:score};});return best&&best.score>=5?best.el:(document.querySelector('main')||document.body);}
+function findPaidArea(){var els=Array.prototype.slice.call(document.querySelectorAll('section,article,div,main'));var best=null;els.forEach(function(el){var t=textOf(el);var score=0;if(t.indexOf('가족 공유용 요약')>=0)score+=8;if(t.indexOf('상속정리 리포트 자료 안내')>=0)score+=7;if(t.indexOf('상속 상황을 정리한 자료가 준비되었습니다')>=0)score+=6;if(t.indexOf('상속정리 리포트 본문 정리')>=0)score+=5;if(t.indexOf('가족 대화 준비')>=0)score+=5;if(t.indexOf('인쇄용 1장 요약본')>=0)score+=4;if(!best||score>best.score)best={el:el,score:score};});return best&&best.score>=5?best.el:(document.querySelector('main')||document.body);}
 function install(){if(!isPaidView())return;if(document.querySelector('.paid-family-phrases-wrap'))return;style();var target=findPaidArea();var p=panel();var anchors=Array.prototype.slice.call(target.querySelectorAll('section,article,div,h1,h2,h3,p'));var placed=false;for(var i=0;i<anchors.length;i++){var t=textOf(anchors[i]);if(t.indexOf('가족 공유용 요약')>=0||t.indexOf('가족 대화 준비')>=0||t.indexOf('인쇄용 1장 요약본')>=0){anchors[i].insertAdjacentElement('afterend',p);placed=true;break;}}if(!placed)target.appendChild(p);}
 ready(function(){setTimeout(install,700);setTimeout(install,1700);setTimeout(install,3000);});
 })();
@@ -11152,8 +11332,8 @@ function textOf(el){return el?String(el.textContent||''):'';}
 function isPaidView(){try{var a=localStorage.getItem('ansim_payment_status')||'';var b=localStorage.getItem('ansim_paid_report_status')||'';var c=sessionStorage.getItem('ansim_payment_status')||'';var d=sessionStorage.getItem('ansim_paid_report_status')||'';return [a,b,c,d].join(' ').indexOf('paid_confirmed')>=0;}catch(e){return false;}}
 function style(){if(document.getElementById('paid-expert-question-list-v1-style'))return;var s=document.createElement('style');s.id='paid-expert-question-list-v1-style';s.textContent='.paid-expert-q-wrap{margin:16px 0 16px;padding:17px;border:1px solid rgba(151,119,64,.25);border-radius:22px;background:linear-gradient(180deg,#fff8ea 0%,#fffefb 100%);box-shadow:0 14px 30px rgba(43,31,18,.07)}.paid-expert-q-eyebrow{margin:0 0 6px;font-size:.8rem;font-weight:850;color:#8a6428}.paid-expert-q-wrap h2{margin:0 0 8px;font-size:1.18rem;line-height:1.32;color:#3b2a15;letter-spacing:-.03em}.paid-expert-q-lead{margin:0 0 14px;font-size:.94rem;line-height:1.58;color:#66533a}.paid-expert-q-grid{display:grid;gap:10px}.paid-expert-q-card{padding:12px;border:1px solid rgba(151,119,64,.17);border-radius:15px;background:rgba(255,255,255,.82)}.paid-expert-q-card strong{display:block;margin:0 0 6px;font-size:.93rem;line-height:1.35;color:#4a3417}.paid-expert-q-card ul{margin:0;padding-left:18px;display:grid;gap:5px}.paid-expert-q-card li{font-size:.85rem;line-height:1.44;color:#6b5a42}.paid-expert-q-docs{margin:12px 0 0;padding:12px;border-radius:15px;background:#fff;border:1px dashed rgba(151,119,64,.3);font-size:.86rem;line-height:1.5;color:#5b472a}.paid-expert-q-docs strong{color:#3b2a15}.paid-expert-q-note{margin:9px 0 0;font-size:.82rem;line-height:1.45;color:#7a674a}@media(min-width:760px){.paid-expert-q-wrap{padding:21px}.paid-expert-q-wrap h2{font-size:1.3rem}.paid-expert-q-grid{grid-template-columns:repeat(2,1fr)}}';document.head.appendChild(s);}
 function card(title,items){var c=document.createElement('section');c.className='paid-expert-q-card';var h=document.createElement('strong');h.textContent=title;var ul=document.createElement('ul');items.forEach(function(t){var li=document.createElement('li');li.textContent=t;ul.appendChild(li);});c.appendChild(h);c.appendChild(ul);return c;}
-function panel(){var wrap=document.createElement('section');wrap.className='paid-expert-q-wrap';wrap.setAttribute('aria-label','전문가 상담 전 질문 리스트');var eyebrow=document.createElement('p');eyebrow.className='paid-expert-q-eyebrow';eyebrow.textContent='전문가 상담 전 질문 리스트';var h=document.createElement('h2');h.textContent='상담 전에 물어볼 질문을 미리 정리했습니다';var lead=document.createElement('p');lead.className='paid-expert-q-lead';lead.textContent='상담을 바로 결정하기보다, 내 상황에서 어떤 부분을 확인해야 하는지 먼저 질문으로 정리하면 상담 시간이 훨씬 선명해집니다.';var grid=document.createElement('div');grid.className='paid-expert-q-grid';grid.appendChild(card('1. 상속인·가족관계 확인',['상속인 범위를 다시 확인해야 하는 가족관계가 있나요?','연락이 어려운 가족이 있으면 어떤 자료부터 준비하면 좋나요?','가족관계증명서와 기본증명서 중 어떤 자료를 먼저 보면 좋나요?']));grid.appendChild(card('2. 재산·부채 확인',['예금, 부동산, 보험, 차량 중 빠지기 쉬운 항목이 있나요?','채무나 병원비, 장례비 자료는 어떻게 따로 정리하면 좋나요?','재산 조회 후에도 추가로 확인할 수 있는 자료가 있나요?']));grid.appendChild(card('3. 유언·증여·가족 대화',['유언장이나 생전 증여 이야기가 있으면 어떤 자료를 먼저 모아야 하나요?','가족끼리 의견이 다를 때 자료 확인 순서를 어떻게 잡으면 좋나요?','가족에게 먼저 공유하면 좋은 요약 내용은 무엇인가요?']));grid.appendChild(card('4. 세금·신고 준비',['상속세 신고가 필요한지 확인하려면 어떤 자료가 필요하나요?','부동산이나 금융재산 자료는 어떤 기준으로 정리하면 좋나요?','세무 상담 전에 가져가면 좋은 기본 자료는 무엇인가요?']));grid.appendChild(card('5. 해외 거주 가족·해외 재산',['해외에 사는 가족이 있으면 어떤 확인이 먼저 필요할 수 있나요?','해외 재산 가능성이 있으면 국내 자료와 따로 정리해야 하나요?','국내 절차와 해외 관련 확인을 나누어 상담해야 하나요?']));grid.appendChild(card('6. 상담 후 다음 단계',['상담 후 가족에게 설명할 핵심 내용을 어떻게 정리하면 좋나요?','추가로 확인해야 할 자료가 생기면 어떤 순서로 모으면 좋나요?','다음 상담 전까지 가족이 함께 확인할 항목은 무엇인가요?']));var docs=document.createElement('p');docs.className='paid-expert-q-docs';docs.innerHTML='<strong>상담 전에 가져가면 좋은 자료</strong><br>가족관계증명서, 기본증명서, 재산 목록, 부채 관련 자료, 보험·예금·부동산 자료, 장례비·병원비 자료, 가족이 알고 있는 메모를 함께 준비하면 대화가 쉬워집니다.';var note=document.createElement('p');note.className='paid-expert-q-note';note.textContent='이 질문 리스트는 법적 결론이나 세금 금액을 정하는 자료가 아니라, 상담 전 확인할 항목을 놓치지 않도록 돕는 정리입니다.';wrap.appendChild(eyebrow);wrap.appendChild(h);wrap.appendChild(lead);wrap.appendChild(grid);wrap.appendChild(docs);wrap.appendChild(note);return wrap;}
-function findPaidArea(){var els=Array.prototype.slice.call(document.querySelectorAll('section,article,div,main'));var best=null;els.forEach(function(el){var t=textOf(el);var score=0;if(t.indexOf('전문가 상담 전에 공유할 때')>=0)score+=9;if(t.indexOf('상담 준비 메모')>=0)score+=8;if(t.indexOf('전문가에게 물어볼 질문 예시')>=0)score+=8;if(t.indexOf('가족 공유용 문장')>=0)score+=6;if(t.indexOf('상세리포트 본문 정리')>=0)score+=5;if(t.indexOf('상속정리 리포트 자료 안내')>=0)score+=4;if(!best||score>best.score)best={el:el,score:score};});return best&&best.score>=5?best.el:(document.querySelector('main')||document.body);}
+function panel(){var wrap=document.createElement('section');wrap.className='paid-expert-q-wrap';wrap.setAttribute('aria-label','전문가 상담 전 질문 리스트');var eyebrow=document.createElement('p');eyebrow.className='paid-expert-q-eyebrow';eyebrow.textContent='전문가 상담 전 질문 리스트';var h=document.createElement('h2');h.textContent='상담 전에 물어볼 질문을 미리 정리했습니다';var lead=document.createElement('p');lead.className='paid-expert-q-lead';lead.textContent='상담을 바로 결정하기보다, 내 상황에서 어떤 부분을 확인해야 하는지 먼저 질문으로 정리하면 상담 시간이 훨씬 선명해집니다.';var grid=document.createElement('div');grid.className='paid-expert-q-grid';grid.appendChild(card('1. 상속인·가족관계 확인',['상속인 범위를 다시 확인해야 하는 가족관계가 있나요?','연락이 어려운 가족이 있으면 어떤 자료부터 준비하면 좋나요?','가족관계증명서와 기본 확인 서류 중 어떤 자료를 먼저 보면 좋나요?']));grid.appendChild(card('2. 재산·부채 확인',['예금, 부동산, 보험, 차량 중 빠지기 쉬운 항목이 있나요?','채무나 병원비, 장례비 자료는 어떻게 따로 정리하면 좋나요?','재산 조회 후에도 추가로 확인할 수 있는 자료가 있나요?']));grid.appendChild(card('3. 유언·증여·가족 대화',['유언장이나 생전 증여 이야기가 있으면 어떤 자료를 먼저 모아야 하나요?','가족끼리 의견이 다를 때 자료 확인 순서를 어떻게 잡으면 좋나요?','가족에게 먼저 공유하면 좋은 요약 내용은 무엇인가요?']));grid.appendChild(card('4. 세금·신고 준비',['상속세 신고가 필요한지 확인하려면 어떤 자료가 필요하나요?','부동산이나 금융재산 자료는 어떤 기준으로 정리하면 좋나요?','세무 상담 전에 가져가면 좋은 기본 자료는 무엇인가요?']));grid.appendChild(card('5. 해외 거주 가족·해외 재산',['해외에 사는 가족이 있으면 어떤 확인이 먼저 필요할 수 있나요?','해외 재산 가능성이 있으면 국내 자료와 따로 정리해야 하나요?','국내 절차와 해외 관련 확인을 나누어 상담해야 하나요?']));grid.appendChild(card('6. 상담 후 다음 단계',['상담 후 가족에게 설명할 핵심 내용을 어떻게 정리하면 좋나요?','추가로 확인해야 할 자료가 생기면 어떤 순서로 모으면 좋나요?','다음 상담 전까지 가족이 함께 확인할 항목은 무엇인가요?']));var docs=document.createElement('p');docs.className='paid-expert-q-docs';docs.innerHTML='<strong>상담 전에 가져가면 좋은 자료</strong><br>가족관계증명서, 기본 확인 서류, 재산 목록, 부채 관련 자료, 보험·예금·부동산 자료, 장례비·병원비 자료, 가족이 알고 있는 메모를 함께 준비하면 대화가 쉬워집니다.';var note=document.createElement('p');note.className='paid-expert-q-note';note.textContent='이 질문 리스트는 법적 결론이나 세금 금액을 정하는 자료가 아니라, 상담 전 확인할 항목을 놓치지 않도록 돕는 정리입니다.';wrap.appendChild(eyebrow);wrap.appendChild(h);wrap.appendChild(lead);wrap.appendChild(grid);wrap.appendChild(docs);wrap.appendChild(note);return wrap;}
+function findPaidArea(){var els=Array.prototype.slice.call(document.querySelectorAll('section,article,div,main'));var best=null;els.forEach(function(el){var t=textOf(el);var score=0;if(t.indexOf('전문가 상담 전에 공유할 때')>=0)score+=9;if(t.indexOf('상담 준비 메모')>=0)score+=8;if(t.indexOf('전문가에게 물어볼 질문 예시')>=0)score+=8;if(t.indexOf('가족 공유용 문장')>=0)score+=6;if(t.indexOf('상속정리 리포트 본문 정리')>=0)score+=5;if(t.indexOf('상속정리 리포트 자료 안내')>=0)score+=4;if(!best||score>best.score)best={el:el,score:score};});return best&&best.score>=5?best.el:(document.querySelector('main')||document.body);}
 function install(){if(!isPaidView())return;if(document.querySelector('.paid-expert-q-wrap'))return;style();var target=findPaidArea();var p=panel();var anchors=Array.prototype.slice.call(target.querySelectorAll('section,article,div,h1,h2,h3,p'));var placed=false;for(var i=0;i<anchors.length;i++){var t=textOf(anchors[i]);if(t.indexOf('전문가 상담 전에 공유할 때')>=0||t.indexOf('상담 준비 메모')>=0||t.indexOf('전문가에게 물어볼 질문 예시')>=0){anchors[i].insertAdjacentElement('afterend',p);placed=true;break;}}if(!placed)target.appendChild(p);}
 ready(function(){setTimeout(install,700);setTimeout(install,1700);setTimeout(install,3000);});
 })();
@@ -11181,8 +11361,8 @@ function textOf(el){return el?String(el.textContent||''):'';}
 function isPaidView(){try{var a=localStorage.getItem('ansim_payment_status')||'';var b=localStorage.getItem('ansim_paid_report_status')||'';var c=sessionStorage.getItem('ansim_payment_status')||'';var d=sessionStorage.getItem('ansim_paid_report_status')||'';return [a,b,c,d].join(' ').indexOf('paid_confirmed')>=0;}catch(e){return false;}}
 function style(){if(document.getElementById('paid-document-checklist-v1-style'))return;var s=document.createElement('style');s.id='paid-document-checklist-v1-style';s.textContent='.paid-doc-check-wrap{margin:16px 0 16px;padding:17px;border:1px solid rgba(151,119,64,.25);border-radius:22px;background:linear-gradient(180deg,#fff8ea 0%,#fffefb 100%);box-shadow:0 14px 30px rgba(43,31,18,.07)}.paid-doc-check-eyebrow{margin:0 0 6px;font-size:.8rem;font-weight:850;color:#8a6428}.paid-doc-check-wrap h2{margin:0 0 8px;font-size:1.18rem;line-height:1.32;color:#3b2a15;letter-spacing:-.03em}.paid-doc-check-lead{margin:0 0 14px;font-size:.94rem;line-height:1.58;color:#66533a}.paid-doc-check-grid{display:grid;gap:10px}.paid-doc-check-card{padding:12px;border:1px solid rgba(151,119,64,.17);border-radius:15px;background:rgba(255,255,255,.82)}.paid-doc-check-card strong{display:block;margin:0 0 6px;font-size:.93rem;line-height:1.35;color:#4a3417}.paid-doc-check-card ul{margin:0;padding-left:18px;display:grid;gap:5px}.paid-doc-check-card li{font-size:.85rem;line-height:1.44;color:#6b5a42}.paid-doc-check-order{margin:12px 0 0;padding:12px;border-radius:15px;background:#fff;border:1px dashed rgba(151,119,64,.3);font-size:.86rem;line-height:1.5;color:#5b472a}.paid-doc-check-order strong{color:#3b2a15}.paid-doc-check-note{margin:9px 0 0;font-size:.82rem;line-height:1.45;color:#7a674a}@media(min-width:760px){.paid-doc-check-wrap{padding:21px}.paid-doc-check-wrap h2{font-size:1.3rem}.paid-doc-check-grid{grid-template-columns:repeat(2,1fr)}}';document.head.appendChild(s);}
 function card(title,items){var c=document.createElement('section');c.className='paid-doc-check-card';var h=document.createElement('strong');h.textContent=title;var ul=document.createElement('ul');items.forEach(function(t){var li=document.createElement('li');li.textContent=t;ul.appendChild(li);});c.appendChild(h);c.appendChild(ul);return c;}
-function panel(){var wrap=document.createElement('section');wrap.className='paid-doc-check-wrap';wrap.setAttribute('aria-label','상담 전 준비자료 체크리스트');var eyebrow=document.createElement('p');eyebrow.className='paid-doc-check-eyebrow';eyebrow.textContent='준비자료 체크리스트';var h=document.createElement('h2');h.textContent='자료를 모을 때는 이 순서로 확인해보세요';var lead=document.createElement('p');lead.className='paid-doc-check-lead';lead.textContent='상속 관련 자료는 한 번에 모두 모으려 하면 막막할 수 있습니다. 먼저 가족관계, 재산, 부채와 비용, 유언·증여, 해외 관련 항목으로 나누어 확인하면 빠뜨리는 부분을 줄일 수 있습니다.';var grid=document.createElement('div');grid.className='paid-doc-check-grid';grid.appendChild(card('1. 가족관계 기본 자료',['가족관계증명서와 기본증명서를 먼저 준비합니다.','상속인으로 보이는 가족의 연락 가능 여부를 확인합니다.','혼인, 이혼, 입양, 사망 등 가족관계 변동이 있으면 따로 표시합니다.']));grid.appendChild(card('2. 재산 확인 자료',['예금, 보험, 증권, 차량, 부동산처럼 종류별로 나누어 적습니다.','부동산은 주소, 등기부 확인 여부, 공동명의 여부를 함께 표시합니다.','가족이 알고 있는 통장, 보험, 임대차 자료도 따로 모아둡니다.']));grid.appendChild(card('3. 부채와 비용 자료',['대출, 카드, 보증, 미납금처럼 갚아야 할 가능성이 있는 항목을 분리합니다.','장례비, 병원비, 간병비처럼 이미 지출한 비용 자료를 모읍니다.','누가 먼저 비용을 냈는지 가족 간 확인이 필요한 항목을 표시합니다.']));grid.appendChild(card('4. 유언·증여 관련 자료',['유언장 이야기가 있으면 원본 위치와 보관자를 확인합니다.','생전 증여나 큰 금전 이동이 있었다면 날짜와 자료를 따로 적습니다.','가족 간 기억이 다른 내용은 단정하지 말고 확인 필요 항목으로 둡니다.']));grid.appendChild(card('5. 해외 가족·해외 재산 자료',['해외 거주 가족이 있으면 거주 국가와 연락 가능 여부를 적습니다.','해외 계좌, 부동산, 회사 지분 가능성이 있으면 국내 자료와 따로 표시합니다.','국내 절차와 해외 관련 확인이 섞이지 않도록 별도 묶음으로 둡니다.']));grid.appendChild(card('6. 상담 전 가져갈 묶음',['가족관계 자료, 재산 목록, 부채 자료, 비용 영수증을 한 묶음으로 준비합니다.','유언·증여·해외 관련 항목은 별도 메모로 정리합니다.','상담 전에 물어볼 질문 리스트와 함께 가져가면 대화가 쉬워집니다.']));var order=document.createElement('p');order.className='paid-doc-check-order';order.innerHTML='<strong>추천 준비 순서</strong><br>1. 가족관계 자료 → 2. 재산 목록 → 3. 부채·비용 자료 → 4. 유언·증여 메모 → 5. 해외 관련 항목 → 6. 상담 전 질문 리스트';var note=document.createElement('p');note.className='paid-doc-check-note';note.textContent='이 체크리스트는 필요한 자료를 빠뜨리지 않도록 돕는 정리이며, 법적 판단이나 신고 결과를 정하는 자료가 아닙니다.';wrap.appendChild(eyebrow);wrap.appendChild(h);wrap.appendChild(lead);wrap.appendChild(grid);wrap.appendChild(order);wrap.appendChild(note);return wrap;}
-function findPaidArea(){var els=Array.prototype.slice.call(document.querySelectorAll('section,article,div,main'));var best=null;els.forEach(function(el){var t=textOf(el);var score=0;if(t.indexOf('전문가 상담 전 질문 리스트')>=0)score+=9;if(t.indexOf('상담 전에 가져가면 좋은 자료')>=0)score+=8;if(t.indexOf('준비자료 체크')>=0)score+=7;if(t.indexOf('가족관계증명서, 기본증명서, 재산 목록')>=0)score+=6;if(t.indexOf('상세리포트 본문 정리')>=0)score+=5;if(t.indexOf('상담 준비 메모')>=0)score+=5;if(!best||score>best.score)best={el:el,score:score};});return best&&best.score>=5?best.el:(document.querySelector('main')||document.body);}
+function panel(){var wrap=document.createElement('section');wrap.className='paid-doc-check-wrap';wrap.setAttribute('aria-label','상담 전 준비자료 체크리스트');var eyebrow=document.createElement('p');eyebrow.className='paid-doc-check-eyebrow';eyebrow.textContent='준비자료 체크리스트';var h=document.createElement('h2');h.textContent='자료를 모을 때는 이 순서로 확인해보세요';var lead=document.createElement('p');lead.className='paid-doc-check-lead';lead.textContent='상속 관련 자료는 한 번에 모두 모으려 하면 막막할 수 있습니다. 먼저 가족관계, 재산, 부채와 비용, 유언·증여, 해외 관련 항목으로 나누어 확인하면 빠뜨리는 부분을 줄일 수 있습니다.';var grid=document.createElement('div');grid.className='paid-doc-check-grid';grid.appendChild(card('1. 가족관계 기본 자료',['가족관계증명서와 기본 확인 서류를 먼저 준비합니다.','상속인으로 보이는 가족의 연락 가능 여부를 확인합니다.','혼인, 이혼, 입양, 사망 등 가족관계 변동이 있으면 따로 표시합니다.']));grid.appendChild(card('2. 재산 확인 자료',['예금, 보험, 증권, 차량, 부동산처럼 종류별로 나누어 적습니다.','부동산은 주소, 등기부 확인 여부, 공동명의 여부를 함께 표시합니다.','가족이 알고 있는 통장, 보험, 임대차 자료도 따로 모아둡니다.']));grid.appendChild(card('3. 부채와 비용 자료',['대출, 카드, 보증, 미납금처럼 갚아야 할 가능성이 있는 항목을 분리합니다.','장례비, 병원비, 간병비처럼 이미 지출한 비용 자료를 모읍니다.','누가 먼저 비용을 냈는지 가족 간 확인이 필요한 항목을 표시합니다.']));grid.appendChild(card('4. 유언·증여 관련 자료',['유언장 이야기가 있으면 원본 위치와 보관자를 확인합니다.','생전 증여나 큰 금전 이동이 있었다면 날짜와 자료를 따로 적습니다.','가족 간 기억이 다른 내용은 단정하지 말고 확인 필요 항목으로 둡니다.']));grid.appendChild(card('5. 해외 가족·해외 재산 자료',['해외 거주 가족이 있으면 거주 국가와 연락 가능 여부를 적습니다.','해외 계좌, 부동산, 회사 지분 가능성이 있으면 국내 자료와 따로 표시합니다.','국내 절차와 해외 관련 확인이 섞이지 않도록 별도 묶음으로 둡니다.']));grid.appendChild(card('6. 상담 전 가져갈 묶음',['가족관계 자료, 재산 목록, 부채 자료, 비용 영수증을 한 묶음으로 준비합니다.','유언·증여·해외 관련 항목은 별도 메모로 정리합니다.','상담 전에 물어볼 질문 리스트와 함께 가져가면 대화가 쉬워집니다.']));var order=document.createElement('p');order.className='paid-doc-check-order';order.innerHTML='<strong>추천 준비 순서</strong><br>1. 가족관계 자료 → 2. 재산 목록 → 3. 부채·비용 자료 → 4. 유언·증여 메모 → 5. 해외 관련 항목 → 6. 상담 전 질문 리스트';var note=document.createElement('p');note.className='paid-doc-check-note';note.textContent='이 체크리스트는 필요한 자료를 빠뜨리지 않도록 돕고, 상담 전에 확인할 항목을 차분히 정리하는 데 초점을 둡니다.';wrap.appendChild(eyebrow);wrap.appendChild(h);wrap.appendChild(lead);wrap.appendChild(grid);wrap.appendChild(order);wrap.appendChild(note);return wrap;}
+function findPaidArea(){var els=Array.prototype.slice.call(document.querySelectorAll('section,article,div,main'));var best=null;els.forEach(function(el){var t=textOf(el);var score=0;if(t.indexOf('전문가 상담 전 질문 리스트')>=0)score+=9;if(t.indexOf('상담 전에 가져가면 좋은 자료')>=0)score+=8;if(t.indexOf('준비자료 체크')>=0)score+=7;if(t.indexOf('가족관계증명서, 기본 확인 서류, 재산 목록')>=0)score+=6;if(t.indexOf('상속정리 리포트 본문 정리')>=0)score+=5;if(t.indexOf('상담 준비 메모')>=0)score+=5;if(!best||score>best.score)best={el:el,score:score};});return best&&best.score>=5?best.el:(document.querySelector('main')||document.body);}
 function install(){if(!isPaidView())return;if(document.querySelector('.paid-doc-check-wrap'))return;style();var target=findPaidArea();var p=panel();var anchors=Array.prototype.slice.call(target.querySelectorAll('section,article,div,h1,h2,h3,p'));var placed=false;for(var i=0;i<anchors.length;i++){var t=textOf(anchors[i]);if(t.indexOf('상담 전에 가져가면 좋은 자료')>=0||t.indexOf('준비자료 체크')>=0||t.indexOf('상담 준비 메모')>=0){anchors[i].insertAdjacentElement('afterend',p);placed=true;break;}}if(!placed)target.appendChild(p);}
 ready(function(){setTimeout(install,700);setTimeout(install,1700);setTimeout(install,3000);});
 })();
@@ -11196,8 +11376,8 @@ function textOf(el){return el?String(el.textContent||''):'';}
 function isPaidView(){try{var a=localStorage.getItem('ansim_payment_status')||'';var b=localStorage.getItem('ansim_paid_report_status')||'';var c=sessionStorage.getItem('ansim_payment_status')||'';var d=sessionStorage.getItem('ansim_paid_report_status')||'';return [a,b,c,d].join(' ').indexOf('paid_confirmed')>=0;}catch(e){return false;}}
 function style(){if(document.getElementById('paid-priority-check-v1-style'))return;var s=document.createElement('style');s.id='paid-priority-check-v1-style';s.textContent='.paid-priority-wrap{margin:16px 0 16px;padding:17px;border:1px solid rgba(151,119,64,.25);border-radius:22px;background:linear-gradient(180deg,#fff8ea 0%,#fffefb 100%);box-shadow:0 14px 30px rgba(43,31,18,.07)}.paid-priority-eyebrow{margin:0 0 6px;font-size:.8rem;font-weight:850;color:#8a6428}.paid-priority-wrap h2{margin:0 0 8px;font-size:1.18rem;line-height:1.32;color:#3b2a15;letter-spacing:-.03em}.paid-priority-lead{margin:0 0 14px;font-size:.94rem;line-height:1.58;color:#66533a}.paid-priority-grid{display:grid;gap:10px}.paid-priority-card{padding:12px;border:1px solid rgba(151,119,64,.17);border-radius:15px;background:rgba(255,255,255,.82)}.paid-priority-card strong{display:block;margin:0 0 6px;font-size:.93rem;line-height:1.35;color:#4a3417}.paid-priority-card ol{margin:0;padding-left:18px;display:grid;gap:5px}.paid-priority-card li{font-size:.85rem;line-height:1.44;color:#6b5a42}.paid-priority-next{margin:12px 0 0;padding:12px;border-radius:15px;background:#fff;border:1px dashed rgba(151,119,64,.3);font-size:.86rem;line-height:1.5;color:#5b472a}.paid-priority-next strong{color:#3b2a15}.paid-priority-note{margin:9px 0 0;font-size:.82rem;line-height:1.45;color:#7a674a}@media(min-width:760px){.paid-priority-wrap{padding:21px}.paid-priority-wrap h2{font-size:1.3rem}.paid-priority-grid{grid-template-columns:repeat(2,1fr)}}';document.head.appendChild(s);}
 function card(title,items){var c=document.createElement('section');c.className='paid-priority-card';var h=document.createElement('strong');h.textContent=title;var ol=document.createElement('ol');items.forEach(function(t){var li=document.createElement('li');li.textContent=t;ol.appendChild(li);});c.appendChild(h);c.appendChild(ol);return c;}
-function panel(){var wrap=document.createElement('section');wrap.className='paid-priority-wrap';wrap.setAttribute('aria-label','내 상황별 우선 확인 항목');var eyebrow=document.createElement('p');eyebrow.className='paid-priority-eyebrow';eyebrow.textContent='내 상황별 우선 확인 항목';var h=document.createElement('h2');h.textContent='내 경우에는 무엇부터 볼지 정리했습니다';var lead=document.createElement('p');lead.className='paid-priority-lead';lead.textContent='상속 상황은 집마다 다르기 때문에 모든 항목을 같은 순서로 볼 필요는 없습니다. 아래에서 내 상황과 가까운 항목부터 확인하면 자료 준비와 가족 대화가 쉬워집니다.';var grid=document.createElement('div');grid.className='paid-priority-grid';grid.appendChild(card('부동산이 있는 경우',['부동산 주소와 등기부 확인 여부를 먼저 적습니다.','공동명의, 임대차, 대출 여부를 따로 표시합니다.','가족이 알고 있는 매매·전세·월세 자료를 함께 모읍니다.']));grid.appendChild(card('부채가 걱정되는 경우',['대출, 카드, 보증, 미납금 가능성을 먼저 나눕니다.','병원비, 장례비, 간병비처럼 이미 지출한 비용을 따로 둡니다.','재산보다 부채가 커 보이면 자료 확인 순서를 더 조심스럽게 잡습니다.']));grid.appendChild(card('가족 간 의견 차이가 있는 경우',['누가 받을지보다 어떤 자료가 있는지 먼저 확인합니다.','서로 기억이 다른 내용은 확인 필요 항목으로 적어둡니다.','가족 공유용 요약을 먼저 보고 대화 순서를 맞춥니다.']));grid.appendChild(card('유언·증여 이야기가 있는 경우',['유언장 원본 위치와 보관자를 먼저 확인합니다.','생전 증여나 큰 금전 이동은 날짜와 자료를 따로 적습니다.','가족 간 말이 다른 부분은 단정하지 않고 메모로 남깁니다.']));grid.appendChild(card('해외 가족·해외 재산 가능성이 있는 경우',['해외에 사는 가족의 거주 국가와 연락 가능 여부를 적습니다.','해외 계좌, 부동산, 회사 지분 가능성은 국내 자료와 분리합니다.','국내 확인과 해외 관련 확인을 섞지 않고 별도 묶음으로 둡니다.']));grid.appendChild(card('서류가 부족한 경우',['가족관계 자료부터 먼저 준비합니다.','재산 목록은 알고 있는 항목만 먼저 적고 빈칸을 남겨둡니다.','부족한 자료는 상담 전 질문 리스트에 함께 적어둡니다.']));var next=document.createElement('p');next.className='paid-priority-next';next.innerHTML='<strong>추천 사용 방법</strong><br>내 상황과 가까운 카드 1~2개를 먼저 읽고, 준비자료 체크리스트와 전문가 상담 전 질문 리스트를 함께 보면 다음 행동이 더 분명해집니다.';var note=document.createElement('p');note.className='paid-priority-note';note.textContent='이 항목은 상황별 확인 순서를 돕는 정리이며, 상속분·세금·법적 결론을 정하는 자료가 아닙니다.';wrap.appendChild(eyebrow);wrap.appendChild(h);wrap.appendChild(lead);wrap.appendChild(grid);wrap.appendChild(next);wrap.appendChild(note);return wrap;}
-function findPaidArea(){var els=Array.prototype.slice.call(document.querySelectorAll('section,article,div,main'));var best=null;els.forEach(function(el){var t=textOf(el);var score=0;if(t.indexOf('준비자료 체크리스트')>=0)score+=9;if(t.indexOf('자료를 모을 때는 이 순서로 확인해보세요')>=0)score+=8;if(t.indexOf('전문가 상담 전 질문 리스트')>=0)score+=7;if(t.indexOf('상세리포트 본문 정리')>=0)score+=6;if(t.indexOf('상담 전에 가져가면 좋은 자료')>=0)score+=6;if(t.indexOf('내 상황을 더 자세히 나누어 정리했습니다')>=0)score+=5;if(!best||score>best.score)best={el:el,score:score};});return best&&best.score>=5?best.el:(document.querySelector('main')||document.body);}
+function panel(){var wrap=document.createElement('section');wrap.className='paid-priority-wrap';wrap.setAttribute('aria-label','내 상황별 우선 확인 항목');var eyebrow=document.createElement('p');eyebrow.className='paid-priority-eyebrow';eyebrow.textContent='내 상황별 우선 확인 항목';var h=document.createElement('h2');h.textContent='내 경우에는 무엇부터 볼지 정리했습니다';var lead=document.createElement('p');lead.className='paid-priority-lead';lead.textContent='상속 상황은 집마다 다르기 때문에 모든 항목을 같은 순서로 볼 필요는 없습니다. 아래에서 내 상황과 가까운 항목부터 확인하면 자료 준비와 가족 대화가 쉬워집니다.';var grid=document.createElement('div');grid.className='paid-priority-grid';grid.appendChild(card('부동산이 있는 경우',['부동산 주소와 등기부 확인 여부를 먼저 적습니다.','공동명의, 임대차, 대출 여부를 따로 표시합니다.','가족이 알고 있는 매매·전세·월세 자료를 함께 모읍니다.']));grid.appendChild(card('부채가 걱정되는 경우',['대출, 카드, 보증, 미납금 가능성을 먼저 나눕니다.','병원비, 장례비, 간병비처럼 이미 지출한 비용을 따로 둡니다.','재산보다 부채가 커 보이면 자료 확인 순서를 더 조심스럽게 잡습니다.']));grid.appendChild(card('가족 간 의견 차이가 있는 경우',['누가 받을지보다 어떤 자료가 있는지 먼저 확인합니다.','서로 기억이 다른 내용은 확인 필요 항목으로 적어둡니다.','가족 공유용 요약을 먼저 보고 대화 순서를 맞춥니다.']));grid.appendChild(card('유언·증여 이야기가 있는 경우',['유언장 원본 위치와 보관자를 먼저 확인합니다.','생전 증여나 큰 금전 이동은 날짜와 자료를 따로 적습니다.','가족 간 말이 다른 부분은 단정하지 않고 메모로 남깁니다.']));grid.appendChild(card('해외 가족·해외 재산 가능성이 있는 경우',['해외에 사는 가족의 거주 국가와 연락 가능 여부를 적습니다.','해외 계좌, 부동산, 회사 지분 가능성은 국내 자료와 분리합니다.','국내 확인과 해외 관련 확인을 섞지 않고 별도 묶음으로 둡니다.']));grid.appendChild(card('서류가 부족한 경우',['가족관계 자료부터 먼저 준비합니다.','재산 목록은 알고 있는 항목만 먼저 적고 빈칸을 남겨둡니다.','부족한 자료는 상담 전 질문 리스트에 함께 적어둡니다.']));var next=document.createElement('p');next.className='paid-priority-next';next.innerHTML='<strong>추천 사용 방법</strong><br>내 상황과 가까운 카드 1~2개를 먼저 읽고, 준비자료 체크리스트와 전문가 상담 전 질문 리스트를 함께 보면 다음 행동이 더 분명해집니다.';var note=document.createElement('p');note.className='paid-priority-note';note.textContent='이 항목은 상황별 확인 순서를 돕고, 다음에 살펴볼 준비자료를 차분히 정리하는 데 초점을 둡니다.';wrap.appendChild(eyebrow);wrap.appendChild(h);wrap.appendChild(lead);wrap.appendChild(grid);wrap.appendChild(next);wrap.appendChild(note);return wrap;}
+function findPaidArea(){var els=Array.prototype.slice.call(document.querySelectorAll('section,article,div,main'));var best=null;els.forEach(function(el){var t=textOf(el);var score=0;if(t.indexOf('준비자료 체크리스트')>=0)score+=9;if(t.indexOf('자료를 모을 때는 이 순서로 확인해보세요')>=0)score+=8;if(t.indexOf('전문가 상담 전 질문 리스트')>=0)score+=7;if(t.indexOf('상속정리 리포트 본문 정리')>=0)score+=6;if(t.indexOf('상담 전에 가져가면 좋은 자료')>=0)score+=6;if(t.indexOf('내 상황을 더 자세히 나누어 정리했습니다')>=0)score+=5;if(!best||score>best.score)best={el:el,score:score};});return best&&best.score>=5?best.el:(document.querySelector('main')||document.body);}
 function install(){if(!isPaidView())return;if(document.querySelector('.paid-priority-wrap'))return;style();var target=findPaidArea();var p=panel();var anchors=Array.prototype.slice.call(target.querySelectorAll('section,article,div,h1,h2,h3,p'));var placed=false;for(var i=0;i<anchors.length;i++){var t=textOf(anchors[i]);if(t.indexOf('준비자료 체크리스트')>=0||t.indexOf('자료를 모을 때는 이 순서로 확인해보세요')>=0||t.indexOf('전문가 상담 전 질문 리스트')>=0){anchors[i].insertAdjacentElement('afterend',p);placed=true;break;}}if(!placed)target.appendChild(p);}
 ready(function(){setTimeout(install,700);setTimeout(install,1700);setTimeout(install,3000);});
 })();
@@ -11225,8 +11405,8 @@ function textOf(el){return el?String(el.textContent||''):'';}
 function isPaidView(){try{var a=localStorage.getItem('ansim_payment_status')||'';var b=localStorage.getItem('ansim_paid_report_status')||'';var c=sessionStorage.getItem('ansim_payment_status')||'';var d=sessionStorage.getItem('ansim_paid_report_status')||'';return [a,b,c,d].join(' ').indexOf('paid_confirmed')>=0;}catch(e){return false;}}
 function style(){if(document.getElementById('paid-after-consult-action-v1-style'))return;var s=document.createElement('style');s.id='paid-after-consult-action-v1-style';s.textContent='.paid-after-consult-wrap{margin:16px 0 16px;padding:17px;border:1px solid rgba(151,119,64,.25);border-radius:22px;background:linear-gradient(180deg,#fff8ea 0%,#fffefb 100%);box-shadow:0 14px 30px rgba(43,31,18,.07)}.paid-after-consult-eyebrow{margin:0 0 6px;font-size:.8rem;font-weight:850;color:#8a6428}.paid-after-consult-wrap h2{margin:0 0 8px;font-size:1.18rem;line-height:1.32;color:#3b2a15;letter-spacing:-.03em}.paid-after-consult-lead{margin:0 0 14px;font-size:.94rem;line-height:1.58;color:#66533a}.paid-after-consult-grid{display:grid;gap:10px}.paid-after-consult-card{padding:12px;border:1px solid rgba(151,119,64,.17);border-radius:15px;background:rgba(255,255,255,.82)}.paid-after-consult-card strong{display:block;margin:0 0 6px;font-size:.93rem;line-height:1.35;color:#4a3417}.paid-after-consult-card ul{margin:0;padding-left:18px;display:grid;gap:5px}.paid-after-consult-card li{font-size:.85rem;line-height:1.44;color:#6b5a42}.paid-after-consult-flow{margin:12px 0 0;padding:12px;border-radius:15px;background:#fff;border:1px dashed rgba(151,119,64,.3);font-size:.86rem;line-height:1.5;color:#5b472a}.paid-after-consult-flow strong{color:#3b2a15}.paid-after-consult-note{margin:9px 0 0;font-size:.82rem;line-height:1.45;color:#7a674a}@media(min-width:760px){.paid-after-consult-wrap{padding:21px}.paid-after-consult-wrap h2{font-size:1.3rem}.paid-after-consult-grid{grid-template-columns:repeat(2,1fr)}}';document.head.appendChild(s);}
 function card(title,items){var c=document.createElement('section');c.className='paid-after-consult-card';var h=document.createElement('strong');h.textContent=title;var ul=document.createElement('ul');items.forEach(function(t){var li=document.createElement('li');li.textContent=t;ul.appendChild(li);});c.appendChild(h);c.appendChild(ul);return c;}
-function panel(){var wrap=document.createElement('section');wrap.className='paid-after-consult-wrap';wrap.setAttribute('aria-label','상담 후 다음 행동 정리');var eyebrow=document.createElement('p');eyebrow.className='paid-after-consult-eyebrow';eyebrow.textContent='상담 후 다음 행동 정리';var h=document.createElement('h2');h.textContent='상담을 받은 뒤에는 이렇게 정리해보세요';var lead=document.createElement('p');lead.className='paid-after-consult-lead';lead.textContent='상담을 받고 나면 들은 내용이 많아져 오히려 더 헷갈릴 수 있습니다. 상담 직후에는 결론을 서두르기보다, 들은 내용과 추가로 확인할 자료를 나누어 정리하는 것이 좋습니다.';var grid=document.createElement('div');grid.className='paid-after-consult-grid';grid.appendChild(card('1. 상담 직후 메모',['상담에서 들은 핵심 내용을 같은 날 짧게 적습니다.','확실히 들은 내용과 다시 확인이 필요한 내용을 나눕니다.','상담자가 요청한 추가자료가 있으면 별도 목록으로 둡니다.']));grid.appendChild(card('2. 가족에게 공유할 내용',['가족에게 바로 결론을 말하기보다 확인된 사실부터 공유합니다.','의견이 갈릴 수 있는 내용은 자료 확인 후 다시 이야기할 항목으로 둡니다.','가족 공유용 요약과 상담 메모를 함께 보면 대화가 쉬워집니다.']));grid.appendChild(card('3. 추가로 모을 자료',['부족하다고 들은 가족관계 자료, 재산 자료, 부채 자료를 다시 표시합니다.','부동산, 보험, 예금, 병원비처럼 항목별로 폴더를 나눕니다.','누가 가지고 있는 자료인지 가족별로 표시해둡니다.']));grid.appendChild(card('4. 다시 확인할 질문',['상담 중 이해가 어려웠던 표현을 질문으로 바꿔 적습니다.','세금, 기한, 가족 동의, 해외 관련 항목은 따로 묶습니다.','다음 상담 전에 물어볼 질문을 3개 정도로 줄여둡니다.']));grid.appendChild(card('5. 다음 상담 전 준비',['새로 모은 자료를 날짜순 또는 항목별로 정리합니다.','이전 상담에서 들은 내용과 달라진 부분을 표시합니다.','가족이 추가로 묻고 싶은 내용을 함께 모읍니다.']));grid.appendChild(card('6. 가족 대화 후 정리',['가족이 동의한 내용과 아직 의견이 다른 내용을 나눕니다.','감정적으로 불편했던 표현은 줄이고 확인할 자료 중심으로 다시 씁니다.','다음에 함께 확인할 사람과 자료를 정리해둡니다.']));var flow=document.createElement('p');flow.className='paid-after-consult-flow';flow.innerHTML='<strong>추천 정리 순서</strong><br>1. 상담 직후 메모 → 2. 추가자료 표시 → 3. 가족 공유 → 4. 다시 확인할 질문 정리 → 5. 다음 상담 전 자료 묶기';var note=document.createElement('p');note.className='paid-after-consult-note';note.textContent='이 정리는 상담 후 내용을 잊지 않도록 돕는 메모이며, 상속분·세금·법적 결론을 대신 정하는 자료가 아닙니다.';wrap.appendChild(eyebrow);wrap.appendChild(h);wrap.appendChild(lead);wrap.appendChild(grid);wrap.appendChild(flow);wrap.appendChild(note);return wrap;}
-function findPaidArea(){var els=Array.prototype.slice.call(document.querySelectorAll('section,article,div,main'));var best=null;els.forEach(function(el){var t=textOf(el);var score=0;if(t.indexOf('내 상황별 우선 확인 항목')>=0)score+=9;if(t.indexOf('내 경우에는 무엇부터 볼지 정리했습니다')>=0)score+=8;if(t.indexOf('준비자료 체크리스트')>=0)score+=7;if(t.indexOf('전문가 상담 전 질문 리스트')>=0)score+=6;if(t.indexOf('가족 공유용 문장')>=0)score+=5;if(t.indexOf('상세리포트 본문 정리')>=0)score+=5;if(!best||score>best.score)best={el:el,score:score};});return best&&best.score>=5?best.el:(document.querySelector('main')||document.body);}
+function panel(){var wrap=document.createElement('section');wrap.className='paid-after-consult-wrap';wrap.setAttribute('aria-label','상담 후 다음 행동 정리');var eyebrow=document.createElement('p');eyebrow.className='paid-after-consult-eyebrow';eyebrow.textContent='상담 후 다음 행동 정리';var h=document.createElement('h2');h.textContent='상담을 받은 뒤에는 이렇게 정리해보세요';var lead=document.createElement('p');lead.className='paid-after-consult-lead';lead.textContent='상담을 받고 나면 들은 내용이 많아져 오히려 더 헷갈릴 수 있습니다. 상담 직후에는 결론을 서두르기보다, 들은 내용과 추가로 확인할 자료를 나누어 정리하는 것이 좋습니다.';var grid=document.createElement('div');grid.className='paid-after-consult-grid';grid.appendChild(card('1. 상담 직후 메모',['상담에서 들은 핵심 내용을 같은 날 짧게 적습니다.','확실히 들은 내용과 다시 확인이 필요한 내용을 나눕니다.','상담자가 요청한 추가자료가 있으면 별도 목록으로 둡니다.']));grid.appendChild(card('2. 가족에게 공유할 내용',['가족에게 바로 결론을 말하기보다 확인된 사실부터 공유합니다.','의견이 갈릴 수 있는 내용은 자료 확인 후 다시 이야기할 항목으로 둡니다.','가족 공유용 요약과 상담 메모를 함께 보면 대화가 쉬워집니다.']));grid.appendChild(card('3. 추가로 모을 자료',['부족하다고 들은 가족관계 자료, 재산 자료, 부채 자료를 다시 표시합니다.','부동산, 보험, 예금, 병원비처럼 항목별로 폴더를 나눕니다.','누가 가지고 있는 자료인지 가족별로 표시해둡니다.']));grid.appendChild(card('4. 다시 확인할 질문',['상담 중 이해가 어려웠던 표현을 질문으로 바꿔 적습니다.','세금, 기한, 가족 동의, 해외 관련 항목은 따로 묶습니다.','다음 상담 전에 물어볼 질문을 3개 정도로 줄여둡니다.']));grid.appendChild(card('5. 다음 상담 전 준비',['새로 모은 자료를 날짜순 또는 항목별로 정리합니다.','이전 상담에서 들은 내용과 달라진 부분을 표시합니다.','가족이 추가로 묻고 싶은 내용을 함께 모읍니다.']));grid.appendChild(card('6. 가족 대화 후 정리',['가족이 동의한 내용과 아직 의견이 다른 내용을 나눕니다.','감정적으로 불편했던 표현은 줄이고 확인할 자료 중심으로 다시 씁니다.','다음에 함께 확인할 사람과 자료를 정리해둡니다.']));var flow=document.createElement('p');flow.className='paid-after-consult-flow';flow.innerHTML='<strong>추천 정리 순서</strong><br>1. 상담 직후 메모 → 2. 추가자료 표시 → 3. 가족 공유 → 4. 다시 확인할 질문 정리 → 5. 다음 상담 전 자료 묶기';var note=document.createElement('p');note.className='paid-after-consult-note';note.textContent='이 정리는 상담 후 내용을 잊지 않도록 돕고, 다음에 확인할 항목과 준비자료를 차분히 정리하는 데 초점을 둡니다.';wrap.appendChild(eyebrow);wrap.appendChild(h);wrap.appendChild(lead);wrap.appendChild(grid);wrap.appendChild(flow);wrap.appendChild(note);return wrap;}
+function findPaidArea(){var els=Array.prototype.slice.call(document.querySelectorAll('section,article,div,main'));var best=null;els.forEach(function(el){var t=textOf(el);var score=0;if(t.indexOf('내 상황별 우선 확인 항목')>=0)score+=9;if(t.indexOf('내 경우에는 무엇부터 볼지 정리했습니다')>=0)score+=8;if(t.indexOf('준비자료 체크리스트')>=0)score+=7;if(t.indexOf('전문가 상담 전 질문 리스트')>=0)score+=6;if(t.indexOf('가족 공유용 문장')>=0)score+=5;if(t.indexOf('상속정리 리포트 본문 정리')>=0)score+=5;if(!best||score>best.score)best={el:el,score:score};});return best&&best.score>=5?best.el:(document.querySelector('main')||document.body);}
 function install(){if(!isPaidView())return;if(document.querySelector('.paid-after-consult-wrap'))return;style();var target=findPaidArea();var p=panel();var anchors=Array.prototype.slice.call(target.querySelectorAll('section,article,div,h1,h2,h3,p'));var placed=false;for(var i=0;i<anchors.length;i++){var t=textOf(anchors[i]);if(t.indexOf('내 상황별 우선 확인 항목')>=0||t.indexOf('내 경우에는 무엇부터 볼지 정리했습니다')>=0||t.indexOf('준비자료 체크리스트')>=0){anchors[i].insertAdjacentElement('afterend',p);placed=true;break;}}if(!placed)target.appendChild(p);}
 ready(function(){setTimeout(install,700);setTimeout(install,1700);setTimeout(install,3000);});
 })();
@@ -11268,8 +11448,8 @@ function textOf(el){return el?String(el.textContent||''):'';}
 function isPaidView(){try{var a=localStorage.getItem('ansim_payment_status')||'';var b=localStorage.getItem('ansim_paid_report_status')||'';var c=sessionStorage.getItem('ansim_payment_status')||'';var d=sessionStorage.getItem('ansim_paid_report_status')||'';return [a,b,c,d].join(' ').indexOf('paid_confirmed')>=0;}catch(e){return false;}}
 function style(){if(document.getElementById('paid-reading-order-v1-style'))return;var s=document.createElement('style');s.id='paid-reading-order-v1-style';s.textContent='.paid-reading-order-wrap{margin:14px 0 16px;padding:17px;border:1px solid rgba(151,119,64,.28);border-radius:22px;background:linear-gradient(180deg,#fff4dc 0%,#fffefb 100%);box-shadow:0 16px 34px rgba(43,31,18,.08)}.paid-reading-order-eyebrow{margin:0 0 6px;font-size:.8rem;font-weight:850;color:#8a6428}.paid-reading-order-wrap h2{margin:0 0 8px;font-size:1.2rem;line-height:1.32;color:#3b2a15;letter-spacing:-.03em}.paid-reading-order-lead{margin:0 0 13px;font-size:.94rem;line-height:1.58;color:#66533a}.paid-reading-order-list{display:grid;gap:8px;margin:0;padding:0;list-style:none}.paid-reading-order-list li{display:grid;grid-template-columns:auto 1fr;gap:8px;align-items:start;padding:10px 11px;border:1px solid rgba(151,119,64,.16);border-radius:14px;background:rgba(255,255,255,.86)}.paid-reading-order-no{display:inline-flex;align-items:center;justify-content:center;min-width:24px;height:24px;border-radius:999px;background:#8a6428;color:#fff;font-size:.78rem;font-weight:850}.paid-reading-order-title{display:block;margin:1px 0 3px;font-size:.9rem;font-weight:850;color:#3b2a15}.paid-reading-order-desc{display:block;font-size:.82rem;line-height:1.44;color:#6b5a42}.paid-reading-order-tip{margin:12px 0 0;padding:12px;border-radius:15px;background:#fff;border:1px dashed rgba(151,119,64,.3);font-size:.86rem;line-height:1.5;color:#5b472a}.paid-reading-order-tip strong{color:#3b2a15}.paid-reading-order-note{margin:9px 0 0;font-size:.82rem;line-height:1.45;color:#7a674a}@media(min-width:760px){.paid-reading-order-wrap{padding:21px}.paid-reading-order-wrap h2{font-size:1.34rem}.paid-reading-order-list{grid-template-columns:repeat(2,1fr)}}';document.head.appendChild(s);}
 function item(no,title,desc){var li=document.createElement('li');var n=document.createElement('span');n.className='paid-reading-order-no';n.textContent=String(no);var body=document.createElement('span');var t=document.createElement('span');t.className='paid-reading-order-title';t.textContent=title;var d=document.createElement('span');d.className='paid-reading-order-desc';d.textContent=desc;body.appendChild(t);body.appendChild(d);li.appendChild(n);li.appendChild(body);return li;}
-function panel(){var wrap=document.createElement('section');wrap.className='paid-reading-order-wrap';wrap.setAttribute('aria-label','상세리포트 읽는 순서');var eyebrow=document.createElement('p');eyebrow.className='paid-reading-order-eyebrow';eyebrow.textContent='상세리포트 읽는 순서';var h=document.createElement('h2');h.textContent='처음 열었다면 이 순서로 보시면 됩니다';var lead=document.createElement('p');lead.className='paid-reading-order-lead';lead.textContent='상세리포트는 한 번에 모두 읽지 않아도 괜찮습니다. 먼저 내 상황을 파악하고, 필요한 자료와 질문을 순서대로 확인하면 부담이 줄어듭니다.';var list=document.createElement('ol');list.className='paid-reading-order-list';list.appendChild(item(1,'내 상황 요약','현재 상속 상황과 큰 흐름을 먼저 확인합니다.'));list.appendChild(item(2,'내 상황별 우선 확인 항목','부동산, 부채, 가족 의견 차이, 해외 관련 항목 중 내 상황과 가까운 부분을 먼저 봅니다.'));list.appendChild(item(3,'준비자료 체크리스트','가족관계 자료, 재산 자료, 부채·비용 자료를 빠뜨리지 않도록 나누어 봅니다.'));list.appendChild(item(4,'가족 공유 문장','가족에게 설명할 때 부담이 적은 표현을 확인합니다.'));list.appendChild(item(5,'전문가 상담 전 질문 리스트','상담 전에 무엇을 물어볼지 질문 형태로 정리합니다.'));list.appendChild(item(6,'상담 후 다음 행동 정리','상담 뒤에 메모, 가족 공유, 추가자료 확인 순서를 다시 잡습니다.'));var tip=document.createElement('p');tip.className='paid-reading-order-tip';tip.innerHTML='<strong>추천 읽기 방법</strong><br>처음에는 1번과 2번만 먼저 보고, 자료를 모을 때 3번, 가족과 이야기할 때 4번, 상담 전후에는 5번과 6번을 보면 됩니다.';var note=document.createElement('p');note.className='paid-reading-order-note';note.textContent='이 목차는 리포트를 쉽게 읽기 위한 안내이며, 상속분·세금·법적 결론을 정하는 자료가 아닙니다.';wrap.appendChild(eyebrow);wrap.appendChild(h);wrap.appendChild(lead);wrap.appendChild(list);wrap.appendChild(tip);wrap.appendChild(note);return wrap;}
-function findPaidArea(){var els=Array.prototype.slice.call(document.querySelectorAll('section,article,div,main'));var best=null;els.forEach(function(el){var t=textOf(el);var score=0;if(t.indexOf('상속정리 리포트 자료 안내')>=0)score+=10;if(t.indexOf('상속 상황을 정리한 자료가 준비되었습니다')>=0)score+=9;if(t.indexOf('내 상황 요약')>=0)score+=8;if(t.indexOf('추천 확인 순서')>=0)score+=7;if(t.indexOf('상세리포트 본문 정리')>=0)score+=6;if(!best||score>best.score)best={el:el,score:score};});return best&&best.score>=6?best.el:(document.querySelector('main')||document.body);}
+function panel(){var wrap=document.createElement('section');wrap.className='paid-reading-order-wrap';wrap.setAttribute('aria-label','상속정리 리포트 읽는 순서');var eyebrow=document.createElement('p');eyebrow.className='paid-reading-order-eyebrow';eyebrow.textContent='상속정리 리포트 읽는 순서';var h=document.createElement('h2');h.textContent='처음 열었다면 이 순서로 보시면 됩니다';var lead=document.createElement('p');lead.className='paid-reading-order-lead';lead.textContent='상속정리 리포트는 한 번에 모두 읽지 않아도 괜찮습니다. 먼저 내 상황을 파악하고, 필요한 자료와 질문을 순서대로 확인하면 부담이 줄어듭니다.';var list=document.createElement('ol');list.className='paid-reading-order-list';list.appendChild(item(1,'내 상황 요약','현재 상속 상황과 큰 흐름을 먼저 확인합니다.'));list.appendChild(item(2,'내 상황별 우선 확인 항목','부동산, 부채, 가족 의견 차이, 해외 관련 항목 중 내 상황과 가까운 부분을 먼저 봅니다.'));list.appendChild(item(3,'준비자료 체크리스트','가족관계 자료, 재산 자료, 부채·비용 자료를 빠뜨리지 않도록 나누어 봅니다.'));list.appendChild(item(4,'가족 공유 문장','가족에게 설명할 때 부담이 적은 표현을 확인합니다.'));list.appendChild(item(5,'전문가 상담 전 질문 리스트','상담 전에 무엇을 물어볼지 질문 형태로 정리합니다.'));list.appendChild(item(6,'상담 후 다음 행동 정리','상담 뒤에 메모, 가족 공유, 추가자료 확인 순서를 다시 잡습니다.'));var tip=document.createElement('p');tip.className='paid-reading-order-tip';tip.innerHTML='<strong>추천 읽기 방법</strong><br>처음에는 1번과 2번만 먼저 보고, 자료를 모을 때 3번, 가족과 이야기할 때 4번, 상담 전후에는 5번과 6번을 보면 됩니다.';var note=document.createElement('p');note.className='paid-reading-order-note';note.textContent='이 목차는 리포트를 쉽게 읽고, 다음에 확인할 항목과 준비자료를 차분히 살펴보기 위한 안내입니다.';wrap.appendChild(eyebrow);wrap.appendChild(h);wrap.appendChild(lead);wrap.appendChild(list);wrap.appendChild(tip);wrap.appendChild(note);return wrap;}
+function findPaidArea(){var els=Array.prototype.slice.call(document.querySelectorAll('section,article,div,main'));var best=null;els.forEach(function(el){var t=textOf(el);var score=0;if(t.indexOf('상속정리 리포트 자료 안내')>=0)score+=10;if(t.indexOf('상속 상황을 정리한 자료가 준비되었습니다')>=0)score+=9;if(t.indexOf('내 상황 요약')>=0)score+=8;if(t.indexOf('추천 확인 순서')>=0)score+=7;if(t.indexOf('상속정리 리포트 본문 정리')>=0)score+=6;if(!best||score>best.score)best={el:el,score:score};});return best&&best.score>=6?best.el:(document.querySelector('main')||document.body);}
 function install(){if(!isPaidView())return;if(document.querySelector('.paid-reading-order-wrap'))return;style();var target=findPaidArea();var p=panel();var anchors=Array.prototype.slice.call(target.querySelectorAll('section,article,div,h1,h2,h3,p'));var placed=false;for(var i=0;i<anchors.length;i++){var t=textOf(anchors[i]);if(t.indexOf('상속정리 리포트 자료 안내')>=0||t.indexOf('상속 상황을 정리한 자료가 준비되었습니다')>=0||t.indexOf('내 상황 요약')>=0){anchors[i].insertAdjacentElement('afterend',p);placed=true;break;}}if(!placed&&target.firstElementChild){target.insertBefore(p,target.firstElementChild);placed=true;}if(!placed)target.appendChild(p);}
 ready(function(){setTimeout(install,700);setTimeout(install,1700);setTimeout(install,3000);});
 })();
@@ -11297,7 +11477,7 @@ function style(){if(document.getElementById('paid-received-premium-feel-v1-style
 function card(title,desc){var c=document.createElement('section');c.className='paid-premium-received-card';var h=document.createElement('strong');h.textContent=title;var d=document.createElement('span');d.textContent=desc;c.appendChild(h);c.appendChild(d);return c;}
 function panel(){var wrap=document.createElement('section');wrap.className='paid-premium-received-wrap';wrap.setAttribute('aria-label','유료 상속정리 리포트 받은 자료 안내');var eyebrow=document.createElement('p');eyebrow.className='paid-premium-received-eyebrow';eyebrow.textContent='상속정리 리포트가 준비되었습니다';var h=document.createElement('h2');h.textContent='내 상속 상황을 차분히 볼 수 있도록 정리된 자료입니다';var lead=document.createElement('p');lead.className='paid-premium-received-lead';lead.textContent='먼저 내 상황 요약을 보고, 필요한 부분만 차례로 확인하시면 됩니다.';var grid=document.createElement('div');grid.className='paid-premium-received-summary';grid.appendChild(card('내 상황 요약','큰 흐름과 먼저 볼 부분을 짧게 정리합니다.'));grid.appendChild(card('읽는 순서 안내','어디부터 볼지 쉽게 안내합니다.'));grid.appendChild(card('가족 공유용 요약','가족과 함께 볼 핵심 요약을 확인합니다.'));grid.appendChild(card('인쇄용 1장 요약','핵심 흐름을 한 장으로 볼 수 있습니다.'));grid.appendChild(card('준비자료 체크리스트','가족관계·재산·부채 자료를 나누어 봅니다.'));grid.appendChild(card('상담 전후 정리','상담 전후 확인할 질문을 정리합니다.'));var order=document.createElement('p');order.className='paid-premium-received-order';order.innerHTML='<strong>처음 보실 때 추천 순서</strong><br>내 상황 요약 → 읽는 순서 → 가족 공유용 요약 → 준비자료 체크리스트 순서로 보시면 됩니다.';var note=document.createElement('p');note.className='paid-premium-received-note';note.textContent='이 자료는 확인할 항목을 쉽게 정리해보는 자료입니다.';wrap.appendChild(eyebrow);wrap.appendChild(h);wrap.appendChild(lead);wrap.appendChild(grid);wrap.appendChild(order);wrap.appendChild(note);return wrap;}
 function findPaidArea(){var els=Array.prototype.slice.call(document.querySelectorAll('main,section,article,div'));var best=null;els.forEach(function(el){var t=textOf(el);var score=0;if(t.indexOf('상속정리 리포트가 준비되었습니다')>=0)score+=9;if(t.indexOf('상속정리 리포트')>=0)score+=6;if(t.indexOf('내 상황 요약')>=0)score+=5;if(t.indexOf('가족 공유용 요약')>=0)score+=5;if(t.indexOf('인쇄용 1장 요약')>=0)score+=5;if(t.indexOf('상담 전 질문')>=0)score+=4;if(!best||score>best.score)best={el:el,score:score};});return best&&best.score>=8?best.el:(document.querySelector('main')||document.body);}
-function install(){if(!isPaidConfirmed())return;if(document.querySelector('.paid-premium-received-wrap'))return;style();var target=findPaidArea();var p=panel();var anchors=Array.prototype.slice.call(target.querySelectorAll('section,article,div,h1,h2,h3,p'));var placed=false;for(var i=0;i<anchors.length;i++){var t=textOf(anchors[i]);if(t.indexOf('상속정리 리포트')>=0||t.indexOf('내 상황 요약')>=0||t.indexOf('상세리포트 읽는 순서')>=0){anchors[i].insertAdjacentElement('beforebegin',p);placed=true;break;}}if(!placed&&target.firstElementChild){target.insertBefore(p,target.firstElementChild);placed=true;}if(!placed)target.appendChild(p);}
+function install(){if(!isPaidConfirmed())return;if(document.querySelector('.paid-premium-received-wrap'))return;style();var target=findPaidArea();var p=panel();var anchors=Array.prototype.slice.call(target.querySelectorAll('section,article,div,h1,h2,h3,p'));var placed=false;for(var i=0;i<anchors.length;i++){var t=textOf(anchors[i]);if(t.indexOf('상속정리 리포트')>=0||t.indexOf('내 상황 요약')>=0||t.indexOf('상속정리 리포트 읽는 순서')>=0){anchors[i].insertAdjacentElement('beforebegin',p);placed=true;break;}}if(!placed&&target.firstElementChild){target.insertBefore(p,target.firstElementChild);placed=true;}if(!placed)target.appendChild(p);}
 ready(function(){setTimeout(install,700);setTimeout(install,1700);setTimeout(install,3000);});
 })();
 </script>
