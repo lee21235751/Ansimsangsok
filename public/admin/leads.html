@@ -251,6 +251,32 @@
     .ok { color: var(--good); font-weight: 800; }
     .small { font-size: 12px; color: var(--muted); }
 
+    .conversionSummary {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .summaryCard {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fffdf8;
+      padding: 10px 12px;
+    }
+
+    .summaryLabel {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 3px;
+    }
+
+    .summaryValue {
+      font-size: 21px;
+      font-weight: 800;
+      color: var(--accent-dark);
+    }
+
     .quickFilters {
       display: flex;
       flex-wrap: wrap;
@@ -334,6 +360,13 @@
         <span class="small">토큰은 이 브라우저 세션에만 보관됩니다.</span>
       </div>
 
+      <div class="conversionSummary" aria-label="전환관리 요약">
+        <div class="summaryCard"><div class="summaryLabel">새 리드</div><div class="summaryValue" id="summaryNew">0</div></div>
+        <div class="summaryCard"><div class="summaryLabel">결제 안내 대상</div><div class="summaryValue" id="summaryPaymentGuided">0</div></div>
+        <div class="summaryCard"><div class="summaryLabel">리포트 관심</div><div class="summaryValue" id="summaryInterested">0</div></div>
+        <div class="summaryCard"><div class="summaryLabel">구매 완료</div><div class="summaryValue" id="summaryPaid">0</div></div>
+      </div>
+
       <div class="quickFilters" aria-label="빠른 필터">
         <button type="button" data-followup="new" data-paid="">새 리드</button>
         <button type="button" data-followup="payment_guided" data-paid="">결제 안내 대상</button>
@@ -375,6 +408,10 @@
     var statusText = document.getElementById("statusText");
     var leadList = document.getElementById("leadList");
     var quickFilterButtons = document.querySelectorAll(".quickFilters button");
+    var summaryNew = document.getElementById("summaryNew");
+    var summaryPaymentGuided = document.getElementById("summaryPaymentGuided");
+    var summaryInterested = document.getElementById("summaryInterested");
+    var summaryPaid = document.getElementById("summaryPaid");
 
     var savedToken = sessionStorage.getItem("ansimsangsok_admin_token");
     if (savedToken) {
@@ -444,11 +481,42 @@
       return data;
     }
 
+    function setText(node, value) {
+      if (node) node.textContent = String(value);
+    }
+
+    function updateConversionSummary(leads) {
+      var items = Array.isArray(leads) ? leads : [];
+      var summary = items.reduce(function(acc, lead) {
+        var followupStatus = lead.followup_status || "new";
+        var paidReportStatus = lead.paid_report_status || "none";
+
+        if (followupStatus === "new") acc.newCount += 1;
+        if (followupStatus === "payment_guided") acc.paymentGuidedCount += 1;
+        if (paidReportStatus === "interested") acc.interestedCount += 1;
+        if (paidReportStatus === "paid") acc.paidCount += 1;
+
+        return acc;
+      }, {
+        newCount: 0,
+        paymentGuidedCount: 0,
+        interestedCount: 0,
+        paidCount: 0
+      });
+
+      setText(summaryNew, summary.newCount);
+      setText(summaryPaymentGuided, summary.paymentGuidedCount);
+      setText(summaryInterested, summary.interestedCount);
+      setText(summaryPaid, summary.paidCount);
+    }
+
     function renderEmpty(message) {
       leadList.innerHTML = "<div class=\"empty\">" + escapeHtml(message) + "</div>";
     }
 
     function renderLeads(leads) {
+      updateConversionSummary(leads);
+
       if (!Array.isArray(leads) || leads.length === 0) {
         renderEmpty("조건에 맞는 리드가 없습니다.");
         return;
@@ -586,6 +654,7 @@
         renderLeads(data.leads);
         setStatus("리드 " + (data.count || 0) + "건을 불러왔습니다.", "ok");
       } catch (error) {
+        updateConversionSummary([]);
         renderEmpty("리드를 불러오지 못했습니다.");
         setStatus("불러오기 실패: " + error.message, "error");
       }
