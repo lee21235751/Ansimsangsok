@@ -215,6 +215,29 @@
       border-color: var(--accent);
     }
 
+    .oneClickActions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .oneClickActions button {
+      width: auto;
+      padding: 9px 11px;
+      border-radius: 999px;
+      background: var(--accent-dark);
+      color: white;
+      border: 1px solid var(--accent-dark);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .oneClickActions button.hold {
+      background: #6c5c2f;
+      border-color: #6c5c2f;
+    }
+
     .empty {
       text-align: center;
       color: var(--muted);
@@ -476,6 +499,12 @@
           + "<button type=\"button\" class=\"js-copy-reply\" data-reply=\"payment\">결제 안내 복사</button>"
           + "<button type=\"button\" class=\"js-copy-reply\" data-reply=\"hold\">보류 안내 복사</button>"
           + "</div>"
+          + "<div class=\"oneClickActions\" aria-label=\"상태 변경과 응대 문구 복사\">"
+          + "<button type=\"button\" class=\"js-oneclick-reply\" data-reply=\"first\" data-followup=\"contacted\" data-paid=\"none\" data-note=\"첫 안내\">첫 안내 전환+복사</button>"
+          + "<button type=\"button\" class=\"js-oneclick-reply\" data-reply=\"report\" data-followup=\"contacted\" data-paid=\"guided\" data-note=\"리포트 안내\">리포트 안내 전환+복사</button>"
+          + "<button type=\"button\" class=\"js-oneclick-reply\" data-reply=\"payment\" data-followup=\"payment_guided\" data-paid=\"guided\" data-note=\"결제 안내\">결제 안내 전환+복사</button>"
+          + "<button type=\"button\" class=\"js-oneclick-reply hold\" data-reply=\"hold\" data-followup=\"hold\" data-paid=\"none\" data-note=\"보류 안내\">보류 전환+복사</button>"
+          + "</div>"
           + "</article>";
       });
 
@@ -492,6 +521,13 @@
         button.addEventListener("click", function(event) {
           var card = event.target.closest(".lead");
           if (card) copyReply(card, button.getAttribute("data-reply"));
+        });
+      });
+
+      Array.prototype.forEach.call(document.querySelectorAll(".js-oneclick-reply"), function(button) {
+        button.addEventListener("click", function(event) {
+          var card = event.target.closest(".lead");
+          if (card) oneClickReply(card, button);
         });
       });
     }
@@ -589,6 +625,38 @@
       textarea.select();
       document.execCommand("copy");
       document.body.removeChild(textarea);
+    }
+
+    function appendFollowupNote(card, noteLabel) {
+      var noteInput = card.querySelector(".js-note");
+      if (!noteInput) return;
+
+      var stamp = new Date().toLocaleString("ko-KR");
+      var addition = noteLabel + " / " + stamp;
+      var current = noteInput.value.trim();
+      noteInput.value = current ? current + " | " + addition : addition;
+    }
+
+    async function oneClickReply(card, button) {
+      var followupStatus = button.getAttribute("data-followup") || "contacted";
+      var paidReportStatus = button.getAttribute("data-paid") || "none";
+      var replyKind = button.getAttribute("data-reply") || "first";
+      var noteLabel = button.getAttribute("data-note") || "응대";
+      var followupSelect = card.querySelector(".js-followup");
+      var paidSelect = card.querySelector(".js-paid");
+
+      if (followupSelect) followupSelect.value = followupStatus;
+      if (paidSelect) paidSelect.value = paidReportStatus;
+      appendFollowupNote(card, noteLabel);
+
+      try {
+        await copyTextToClipboard(buildReplyText(card, replyKind));
+        setStatus("응대 문구를 복사하고 상태를 저장하는 중입니다.", "");
+      } catch (error) {
+        setStatus("복사는 실패했지만 상태 저장을 시도합니다.", "error");
+      }
+
+      await saveLead(card);
     }
 
     async function copyReply(card, kind) {
