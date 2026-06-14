@@ -2247,7 +2247,7 @@
 
             <div class="field">
               <label for="leadMemo">남기실 내용</label>
-              <textarea id="leadMemo" name="leadMemo" placeholder="궁금한 점이나 현재 상황을 간단히 적어주세요."></textarea>
+              <textarea id="leadMemo" name="leadMemo" placeholder="궁금한 점이나 현재 상황을 적어주세요."></textarea>
             </div>
 
             
@@ -2951,7 +2951,7 @@ render();
           ["상속인 관계 정리", "상속인 구성을 보기 쉽게 정리합니다."],
           ["재산·부채 체크표", "확인이 필요한 재산과 부채 항목을 나눕니다."],
           ["우선순위 안내", "먼저 확인할 일과 이후 준비할 일을 구분합니다."],
-          ["추가 확인 필요 신호", "혼자 정리하기 어려운 항목이 있는지 살펴볼 수 있게 정리합니다."]
+          ["확인할 항목", "추가로 확인할 부분이 있는지 정리합니다."]
         ]
       };
     }
@@ -3084,7 +3084,7 @@ render();
         '</div>',
         '<div style="border:1px solid #d6b45f;background:#fff7e0;border-radius:18px;padding:16px;">',
         '<strong style="display:block;color:#173c2f;margin-bottom:6px;">상속정리 리포트에서 이어지는 부분</strong>',
-        '<p style="margin:0;color:#4b5563;line-height:1.6;">상황 분석, 핵심 검토사항, 준비자료, 예상 진행순서, 도움 필요 여부를 더 구체적으로 정리합니다.</p>',
+        '<p style="margin:0;color:#4b5563;line-height:1.6;">현재 상황 요약, 준비자료, 상담 전 질문을 정리합니다.</p>',
         '</div>',
         '</div>',
         '<p style="margin:0;color:#6b7280;font-size:0.95rem;line-height:1.6;">안심상속은 고객님의 상속 상황을 정리하고, 지금 확인해야 할 항목과 다음 단계를 이해할 수 있도록 돕습니다.</p>'
@@ -3382,7 +3382,7 @@ document.addEventListener("DOMContentLoaded", function () {
         level: "주의 필요",
         headline: "확인 항목이 많은 상속 상황입니다.",
         freeRatio: "무료 리포트는 현재 상황 정리와 우선 확인 항목 중심으로 구성됩니다.",
-        paidRatio: "상속정리 리포트는 가족관계, 재산·부채, 준비서류, 진행순서까지 더 구체적으로 정리합니다."
+        paidRatio: "상속정리 리포트는 상속인 관계, 재산·채무, 준비서류, 다음 확인 순서를 정리합니다."
       };
     }
 
@@ -3457,10 +3457,10 @@ document.addEventListener("DOMContentLoaded", function () {
         "핵심 검토사항",
         "확인이 필요한 위험요소",
         "준비자료 체크리스트",
-        "예상 진행순서",
-        "추가 확인 필요 신호"
+        "다음 확인 순서",
+        "추가 확인 항목"
       ],
-      conversionMessage: "무료 리포트에서 확인되지 않는 부분은 상속정리 리포트에서 더 구체적으로 정리됩니다."
+      conversionMessage: "상속정리 리포트에는 확인할 순서와 준비자료가 정리됩니다."
     };
   }
 
@@ -3589,7 +3589,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const freeBoundary = [
       "무료 리포트는 현재 답변을 바탕으로 상황을 정리하는 자료입니다.",
-      "구체적인 진행순서, 위험요소별 우선순위, 준비자료 세부 목록은 상속정리 리포트에서 이어서 확인하도록 구성합니다."
+      "준비자료와 상담 전 질문은 상속정리 리포트에서 이어서 확인하도록 구성합니다."
     ];
 
     const nextSteps = [
@@ -3610,7 +3610,7 @@ document.addEventListener("DOMContentLoaded", function () {
       checkItems,
       nextSteps,
       freeBoundary,
-      paidBridge: "상속정리 리포트에서는 현재 상황 요약, 핵심 확인 항목, 준비자료, 예상 진행순서, 추가 확인 필요 신호를 더 구체적으로 정리합니다.",
+      paidBridge: "상속정리 리포트에서는 현재 상황 요약, 준비자료, 상담 전 질문을 정리합니다.",
       answers: a
     };
   }
@@ -3639,7 +3639,7 @@ document.addEventListener("DOMContentLoaded", function () {
         text: "먼저 확인할 일, 자료를 모을 일, 추가 확인이 필요한 일을 단계별로 구분합니다."
       },
       {
-        title: "추가 확인 필요 신호",
+        title: "추가 확인 항목",
         text: "가족 간 의견 차이, 해외 요소, 사업체, 복잡한 재산이 있을 때 따로 확인할 항목을 정리합니다."
       }
     ];
@@ -3663,7 +3663,7 @@ document.addEventListener("DOMContentLoaded", function () {
       score: currentScore,
       level,
       title: "안심상속 상속정리 리포트",
-      headline: "무료 리포트에서 보이지 않는 확인 순서와 준비자료를 더 구체적으로 정리합니다.",
+      headline: "상속정리 리포트에서 준비자료와 상담 전 질문을 정리합니다.",
       currentSituation: facts,
       modules,
       conversionMessage: "상속정리 리포트에는 확인할 순서와 준비자료가 정리됩니다."
@@ -3909,7 +3909,7 @@ document.addEventListener("DOMContentLoaded", function () {
     var printedAt = now.getFullYear() + "." + String(now.getMonth() + 1).padStart(2, "0") + "." + String(now.getDate()).padStart(2, "0");
     var paidHeadline = paidPreview && paidPreview.headline
       ? paidPreview.headline
-      : "무료 리포트에서 보이지 않는 확인 순서와 준비자료를 더 구체적으로 정리합니다.";
+      : "상속정리 리포트에서 준비자료와 상담 전 질문을 정리합니다.";
 
     panel.innerHTML = [
       "<div id='freeReportPrintableArea'>",
@@ -3963,7 +3963,7 @@ document.addEventListener("DOMContentLoaded", function () {
       escapeHtml(paidHeadline),
       "</p>",
       "<p style='margin:0;color:#6b7280;line-height:1.65;'>",
-      escapeHtml(report.paidBridge || "상속정리 리포트에서는 현재 상황 요약, 핵심 확인 항목, 준비자료, 예상 진행순서, 추가 확인 필요 신호를 더 구체적으로 정리합니다."),
+      escapeHtml(report.paidBridge || "상속정리 리포트에서는 현재 상황 요약, 준비자료, 상담 전 질문을 정리합니다."),
       "</p>",
       "</div>",
 
@@ -4242,7 +4242,7 @@ document.addEventListener("DOMContentLoaded", function () {
     panel.innerHTML = [
       '<div class="preview-eyebrow">상속정리 리포트 결제 안내</div>',
       '<h3>상속정리 리포트를 받아보려면</h3>',
-      '<p class="preview-lead">무료 리포트에서 확인되지 않는 준비자료, 진행순서, 추가 확인 필요 신호를 더 구체적으로 정리한 상속정리 리포트 안내입니다.</p>',
+      '<p class="preview-lead">상속정리 리포트에는 준비자료와 상담 전 질문이 정리됩니다.</p>',
 
       '<div style="margin:14px 0;padding:16px;border-radius:18px;background:#fff7e0;border:1px solid #d6b45f;">',
       '<strong style="display:block;color:#173c2f;font-size:1.05rem;margin-bottom:6px;">상속정리 리포트 안내 금액</strong>',
@@ -4258,8 +4258,8 @@ document.addEventListener("DOMContentLoaded", function () {
       '<li>핵심 검토사항</li>',
       '<li>위험요소와 확인 필요 항목</li>',
       '<li>준비자료 체크리스트</li>',
-      '<li>예상 진행순서</li>',
-      '<li>추가 확인 필요 신호</li>',
+      '<li>다음 확인 순서</li>',
+      '<li>추가 확인 항목</li>',
       '</ul>',
       '</div>',
       '</div>',
@@ -4271,7 +4271,7 @@ document.addEventListener("DOMContentLoaded", function () {
       '<li><strong>현재 상황 분석</strong><span>가족관계, 재산 항목, 준비 상태를 한눈에 정리합니다.</span></li>',
       '<li><strong>확인할 자료</strong><span>등기, 금융자료, 부채, 사전 증여 등 빠뜨리기 쉬운 항목을 정리합니다.</span></li>',
       '<li><strong>다음 확인 순서</strong><span>무엇부터 확인하고 어떤 자료를 준비할지 순서대로 정리합니다.</span></li>',
-      '<li><strong>도움 필요 여부</strong><span>분쟁 가능성, 해외 요소, 복잡한 재산이 있을 때 추가 도움 방향을 확인합니다.</span></li>',
+      '<li><strong>상담 전 질문</strong><span>해외 요소, 복잡한 재산, 추가 확인 항목을 질문 형태로 정리합니다.</span></li>',
       '</ul>',
       '<p class="paid-trust-note">입력하신 이름과 이메일은 상속정리 리포트 안내와 문의 확인에만 사용됩니다.</p>',
       '</div>',
@@ -4505,7 +4505,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     var lead = card.querySelector(".preview-lead");
     if (lead) {
-      lead.textContent = "상속정리 리포트에서는 준비자료, 진행순서, 추가 확인 필요 신호를 더 구체적으로 정리합니다.";
+      lead.textContent = "상속정리 리포트에서는 준비자료와 상담 전 질문을 정리합니다.";
     }
 
     var btn = document.getElementById("openPaidPaymentGuideBtn");
