@@ -11074,6 +11074,137 @@ document.addEventListener("DOMContentLoaded", function () {
 })();
 </script>
 
+<script>
+(function ansimPaidAiSearchQuestionsV2(){
+  if (window.__ansimPaidOnlyGuardV10 === undefined) {
+    window.__ansimPaidOnlyGuardV10 = function(){
+      try {
+        return localStorage.getItem("ansim_payment_status") === "paid_confirmed" ||
+          localStorage.getItem("ansim_paid_report_status") === "paid_confirmed" ||
+          sessionStorage.getItem("ansim_payment_status") === "paid_confirmed" ||
+          sessionStorage.getItem("ansim_paid_report_status") === "paid_confirmed";
+      } catch (error) {
+        return false;
+      }
+    };
+  }
+
+  if (!window.__ansimPaidOnlyGuardV10()) return;
+  if (window.__ansimPaidAiSearchQuestionsV2Installed) return;
+  window.__ansimPaidAiSearchQuestionsV2Installed = true;
+
+  function ready(fn) {
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", fn, { once: true });
+    } else {
+      fn();
+    }
+  }
+
+  function textOf(el) {
+    return el ? String(el.textContent || "").replace(/\\s+/g, " ").trim() : "";
+  }
+
+  function style() {
+    if (document.getElementById("ansim-paid-ai-search-questions-style-v2")) return;
+    var s = document.createElement("style");
+    s.id = "ansim-paid-ai-search-questions-style-v2";
+    s.textContent =
+      ".paid-ai-question-wrap{margin:18px 0;padding:18px;border-radius:22px;background:#fffdf5;border:1px solid rgba(214,180,95,.38);box-shadow:0 12px 28px rgba(20,30,40,.06)}" +
+      ".paid-ai-question-eyebrow{margin:0 0 6px;color:#9a6b13;font-size:.82rem;font-weight:800;letter-spacing:.02em}" +
+      ".paid-ai-question-wrap h2{margin:0 0 8px;color:#173c2f;font-size:1.18rem;line-height:1.35}" +
+      ".paid-ai-question-lead{margin:0 0 12px;color:#4b5563;line-height:1.65;font-size:.96rem}" +
+      ".paid-ai-question-list{margin:0;padding-left:20px;color:#263238;line-height:1.72}" +
+      ".paid-ai-question-list li{margin:5px 0}" +
+      ".paid-ai-question-note{margin:12px 0 0;color:#6b7280;font-size:.92rem;line-height:1.6}";
+    document.head.appendChild(s);
+  }
+
+  function panel() {
+    var wrap = document.createElement("section");
+    wrap.className = "paid-ai-question-wrap";
+    wrap.setAttribute("aria-label", "검색이나 AI에 물어볼 때 참고할 질문");
+
+    var eyebrow = document.createElement("p");
+    eyebrow.className = "paid-ai-question-eyebrow";
+    eyebrow.textContent = "참고 질문 정리";
+
+    var h = document.createElement("h2");
+    h.textContent = "검색이나 AI에 물어볼 때 참고할 질문";
+
+    var lead = document.createElement("p");
+    lead.className = "paid-ai-question-lead";
+    lead.textContent = "아래 질문은 내 상황을 차분히 정리해 확인하기 위한 참고 질문입니다.";
+
+    var ul = document.createElement("ul");
+    ul.className = "paid-ai-question-list";
+
+    [
+      "상속인 관계를 확인할 때 먼저 준비할 서류는 무엇인가요?",
+      "재산과 채무를 나눠 정리할 때 빠뜨리기 쉬운 항목은 무엇인가요?",
+      "부동산, 예금, 보험, 채무가 함께 있을 때 어떤 자료부터 모아야 하나요?",
+      "해외 거주자나 연락이 어려운 상속인이 있을 때 미리 정리할 내용은 무엇인가요?",
+      "상담 전에 준비하면 좋은 질문과 자료는 무엇인가요?"
+    ].forEach(function (text) {
+      var li = document.createElement("li");
+      li.textContent = text;
+      ul.appendChild(li);
+    });
+
+    var note = document.createElement("p");
+    note.className = "paid-ai-question-note";
+    note.textContent = "필요할 때 그대로 복사하기보다, 내 상황에 맞게 줄여서 확인하면 좋습니다.";
+
+    wrap.appendChild(eyebrow);
+    wrap.appendChild(h);
+    wrap.appendChild(lead);
+    wrap.appendChild(ul);
+    wrap.appendChild(note);
+    return wrap;
+  }
+
+  function findPaidArea() {
+    var els = Array.prototype.slice.call(document.querySelectorAll("section,article,div,main"));
+    var best = null;
+    els.forEach(function (el) {
+      var t = textOf(el);
+      var score = 0;
+      if (t.indexOf("상담 전 질문 리스트") >= 0) score += 10;
+      if (t.indexOf("상담 전에 물어볼 질문을 미리 정리했습니다") >= 0) score += 9;
+      if (t.indexOf("상담 시 물어볼 질문 예시") >= 0) score += 8;
+      if (t.indexOf("상속정리 리포트 본문 정리") >= 0) score += 5;
+      if (t.indexOf("상속정리 리포트 자료 안내") >= 0) score += 4;
+      if (!best || score > best.score) best = { el: el, score: score };
+    });
+    return best && best.score >= 5 ? best.el : (document.querySelector("main") || document.body);
+  }
+
+  function install() {
+    if (!window.__ansimPaidOnlyGuardV10()) return;
+    if (document.querySelector(".paid-ai-question-wrap")) return;
+    style();
+    var target = findPaidArea();
+    var p = panel();
+    var anchors = Array.prototype.slice.call(target.querySelectorAll("section,article,div,h1,h2,h3,p"));
+    var placed = false;
+    for (var i = 0; i < anchors.length; i++) {
+      var t = textOf(anchors[i]);
+      if (t.indexOf("상담 전 질문 리스트") >= 0 || t.indexOf("상담 전에 물어볼 질문을 미리 정리했습니다") >= 0 || t.indexOf("상담 시 물어볼 질문 예시") >= 0) {
+        anchors[i].insertAdjacentElement("afterend", p);
+        placed = true;
+        break;
+      }
+    }
+    if (!placed) target.appendChild(p);
+  }
+
+  ready(function(){
+    setTimeout(install, 800);
+    setTimeout(install, 1800);
+    setTimeout(install, 3200);
+  });
+})();
+</script>
 </body>",
 
 
