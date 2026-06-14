@@ -144,6 +144,25 @@
       padding: 14px;
     }
 
+    .lead.testLead {
+      background: #fff8e6;
+      border-color: #d7a934;
+      box-shadow: 0 0 0 1px rgba(215, 169, 52, 0.12);
+    }
+
+    .testBadge {
+      display: inline-flex;
+      align-items: center;
+      margin-left: 6px;
+      padding: 3px 7px;
+      border-radius: 999px;
+      background: #7a4f00;
+      color: white;
+      font-size: 11px;
+      font-weight: 800;
+      vertical-align: middle;
+    }
+
     .leadTop {
       display: grid;
       grid-template-columns: minmax(0, 1fr) auto;
@@ -432,6 +451,33 @@
         .replace(/'/g, "&#039;");
     }
 
+    function isTestLead(lead) {
+      var parts = [
+        lead && lead.name,
+        lead && lead.email,
+        lead && lead.memo,
+        lead && lead.note,
+        lead && lead.followup_note
+      ];
+
+      var text = parts
+        .filter(Boolean)
+        .map(function(value) { return String(value).toLowerCase(); })
+        .join(" ");
+
+      return (
+        text.indexOf("test") >= 0 ||
+        text.indexOf("테스트") >= 0 ||
+        text.indexOf("검증") >= 0 ||
+        text.indexOf("실제 고객 아님") >= 0 ||
+        String((lead && lead.email) || "").toLowerCase().indexOf("test+") >= 0
+      );
+    }
+
+    function testBadgeHtml(lead) {
+      return isTestLead(lead) ? " <span class=\"testBadge\">테스트</span>" : "";
+    }
+
     function formatDate(value) {
       if (!value) return "-";
       var date = new Date(value);
@@ -529,7 +575,7 @@
         var paidReportStatus = lead.paid_report_status || "none";
 
         html += ""
-          + "<article class=\"lead\" data-lead-id=\"" + escapeHtml(lead.id) + "\" data-lead-name=\"" + escapeHtml(lead.name || "") + "\" data-lead-email=\"" + escapeHtml(lead.email || "") + "\">"
+          + "<article class=\"lead" + (isTestLead(lead) ? " testLead" : "") + "\" data-lead-id=\"" + escapeHtml(lead.id) + "\" data-lead-name=\"" + escapeHtml(lead.name || "") + "\" data-lead-email=\"" + escapeHtml(lead.email || "") + "\">"
           + "<div class=\"leadTop\">"
           + "<div>"
           + "<div class=\"name\">" + escapeHtml(lead.name || "이름 없음") + "</div>"
