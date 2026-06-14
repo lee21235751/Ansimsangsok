@@ -83,7 +83,7 @@ const PAID_REPORT_STATUSES = new Set([
   "declined"
 ]);
 
-module.exports = async function handler(req, res) {
+export default async function handler(req, res) {
   if (req.method !== "POST") {
     res.setHeader("Allow", "POST");
     return json(res, 405, {
@@ -246,3 +246,4 @@ module.exports = async function handler(req, res) {
     lead: updated
   });
 };
+
