@@ -3048,7 +3048,7 @@ render();
         '<div class="preview-point-list">',
         makePointList(context.freePoints),
         '</div>',
-        '<p style="margin:14px 0 0;color:#6b7280;font-size:0.95rem;line-height:1.6;">무료 리포트는 상황을 먼저 정리하는 자료입니다. 더 구체적인 준비자료와 진행순서는 상속정리 리포트에서 이어서 확인하실 수 있습니다.</p>'
+        '<p style="margin:14px 0 0;color:#6b7280;font-size:0.95rem;line-height:1.6;">무료 리포트는 상황을 먼저 정리하는 자료입니다.</p>'
       ].join("");
 
       if (guide && guide.parentNode === resultArea) {
@@ -3071,23 +3071,7 @@ render();
         '<p class="preview-lead">',
         escapeHtml(context.paidLead),
         '</p>',
-        '<div class="paid-report-includes">',
-        '<p class="paid-report-includes-title">상속정리 리포트에는 이런 내용이 담깁니다</p>',
-        '<div class="preview-point-list">',
-        makePointList(context.paidPoints),
-        '</div>',
-        '</div>',
-        '<div class="paid-report-sample-cards" style="display:grid;grid-template-columns:1fr;gap:12px;margin:18px 0;">',
-        '<div style="border:1px solid #e7d7a8;background:#fffaf0;border-radius:18px;padding:16px;">',
-        '<strong style="display:block;color:#173c2f;margin-bottom:6px;">무료에서 확인되는 부분</strong>',
-        '<p style="margin:0;color:#4b5563;line-height:1.6;">현재 상황 요약, 확인 필요 항목, 놓치기 쉬운 부분을 한눈에 정리합니다.</p>',
-        '</div>',
-        '<div style="border:1px solid #d6b45f;background:#fff7e0;border-radius:18px;padding:16px;">',
-        '<strong style="display:block;color:#173c2f;margin-bottom:6px;">상속정리 리포트에서 이어지는 부분</strong>',
-        '<p style="margin:0;color:#4b5563;line-height:1.6;">현재 상황 요약, 준비자료, 상담 전 질문을 정리합니다.</p>',
-        '</div>',
-        '</div>',
-        '<p style="margin:0;color:#6b7280;font-size:0.95rem;line-height:1.6;">안심상속은 고객님의 상속 상황을 정리하고, 지금 확인해야 할 항목과 다음 단계를 이해할 수 있도록 돕습니다.</p>'
+        '<p style="margin:14px 0 0;color:#6b7280;font-size:0.95rem;line-height:1.6;">자세한 정리는 리포트 안에서 확인합니다.</p>'
       ].join("");
 
       if (guide && guide.parentNode === resultArea) {
@@ -3958,13 +3942,8 @@ document.addEventListener("DOMContentLoaded", function () {
       "</div>",
 
       "<div style='margin:14px 0;padding:14px;border-radius:18px;background:#fff7e0;border:1px solid #d6b45f;'>",
-      "<strong style='display:block;color:#173c2f;margin-bottom:8px;'>상속정리 리포트에서 이어지는 부분</strong>",
-      "<p style='margin:0 0 8px;color:#374151;line-height:1.65;'>",
-      escapeHtml(paidHeadline),
-      "</p>",
-      "<p style='margin:0;color:#6b7280;line-height:1.65;'>",
-      escapeHtml(report.paidBridge || "상속정리 리포트에서는 현재 상황 요약, 준비자료, 상담 전 질문을 정리합니다."),
-      "</p>",
+      "<strong style='display:block;color:#173c2f;margin-bottom:8px;'>상속정리 리포트</strong>",
+      "<p style='margin:0;color:#6b7280;line-height:1.65;'>자세한 정리는 리포트 안에서 확인합니다.</p>",
       "</div>",
 
       "<p style='margin:14px 0 0;color:#6b7280;font-size:0.92rem;line-height:1.6;'>",
@@ -4242,7 +4221,7 @@ document.addEventListener("DOMContentLoaded", function () {
     panel.innerHTML = [
       '<div class="preview-eyebrow">상속정리 리포트 결제 안내</div>',
       '<h3>상속정리 리포트를 받아보려면</h3>',
-      '<p class="preview-lead">상속정리 리포트에는 준비자료와 상담 전 질문이 정리됩니다.</p>',
+      '<p class="preview-lead">상속정리 리포트는 필요한 내용을 짧게 정리해 받아보는 자료입니다.</p>',
 
       '<div style="margin:14px 0;padding:16px;border-radius:18px;background:#fff7e0;border:1px solid #d6b45f;">',
       '<strong style="display:block;color:#173c2f;font-size:1.05rem;margin-bottom:6px;">상속정리 리포트 안내 금액</strong>',
@@ -4250,31 +4229,9 @@ document.addEventListener("DOMContentLoaded", function () {
       '<p style="margin:8px 0 0;color:#6b7280;line-height:1.6;">아직 결제 전입니다. 포함 내용을 확인한 뒤 다음 단계에서 결제수단을 선택하실 수 있습니다.</p>',
       '</div>',
 
-      '<div style="display:grid;grid-template-columns:1fr;gap:10px;margin:14px 0;">',
-      '<div style="padding:14px;border-radius:18px;background:#f8fafc;border:1px solid #dbe3ee;">',
-      '<strong style="display:block;color:#173c2f;margin-bottom:6px;">포함 내용</strong>',
-      '<ul style="margin:0;padding-left:20px;color:#374151;line-height:1.75;">',
-      '<li>현재 상황 분석</li>',
-      '<li>핵심 검토사항</li>',
-      '<li>위험요소와 확인 필요 항목</li>',
-      '<li>준비자료 체크리스트</li>',
-      '<li>다음 확인 순서</li>',
-      '<li>추가 확인 항목</li>',
-      '</ul>',
-      '</div>',
-      '</div>',
+      '<p style="margin:12px 0;color:#4b5563;line-height:1.6;">결제 후 리포트에서 자세한 정리 내용을 확인합니다.</p>',
 
-      '<div class="paid-trust-box" id="paidTrustBox">',
-      '<div class="paid-trust-eyebrow">결제 전 확인</div>',
-      '<h4>29,000원으로 받을 수 있는 내용</h4>',
-      '<ul>',
-      '<li><strong>현재 상황 분석</strong><span>가족관계, 재산 항목, 준비 상태를 한눈에 정리합니다.</span></li>',
-      '<li><strong>확인할 자료</strong><span>등기, 금융자료, 부채, 사전 증여 등 빠뜨리기 쉬운 항목을 정리합니다.</span></li>',
-      '<li><strong>다음 확인 순서</strong><span>무엇부터 확인하고 어떤 자료를 준비할지 순서대로 정리합니다.</span></li>',
-      '<li><strong>상담 전 질문</strong><span>해외 요소, 복잡한 재산, 추가 확인 항목을 질문 형태로 정리합니다.</span></li>',
-      '</ul>',
-      '<p class="paid-trust-note">입력하신 이름과 이메일은 상속정리 리포트 안내와 문의 확인에만 사용됩니다.</p>',
-      '</div>',
+      '<p class="paid-trust-note" style="margin:10px 0 14px;color:#6b7280;line-height:1.6;">입력하신 이름과 이메일은 상속정리 리포트 안내와 문의 확인에만 사용됩니다.</p>',
       '<button id="paidPaymentIntentBtn" type="button" class="btn btn-primary" style="width:100%;min-height:50px;">상속정리 리포트 29,000원 확인하고 결제하기</button>',
       '<p id="paidPaymentIntentStatus" style="margin:12px 0 0;color:#173c2f;font-weight:850;line-height:1.6;"></p>',
       '<p style="margin:10px 0 0;color:#6b7280;font-size:0.94rem;line-height:1.6;">입력하신 연락처로 상속정리 리포트 안내와 다음 절차를 이어갈 수 있습니다.</p>'
@@ -4313,9 +4270,9 @@ document.addEventListener("DOMContentLoaded", function () {
     card.innerHTML = [
       '<div class="preview-eyebrow">상속정리 리포트 다음 단계</div>',
       '<h3>상속정리 리포트 안내를 확인해보세요</h3>',
-      '<p class="preview-lead">현재 상황에 맞춘 준비자료와 진행순서를 더 구체적으로 보려면, 상속정리 리포트 구성을 확인하세요.</p>',
+      '<p class="preview-lead">금액과 수령 안내만 확인한 뒤 이어갈 수 있습니다.</p>',
       '<button id="openPaidPaymentGuideBtn" type="button" class="btn btn-primary" style="width:100%;margin-top:10px;">상속정리 리포트 안내 확인하기</button>',
-      '<p style="margin:12px 0 0;color:#6b7280;font-size:0.95rem;line-height:1.6;">실제 금액과 포함 내용을 먼저 확인한 뒤, 필요하시면 결제 단계로 이어집니다.</p>'
+      '<p style="margin:12px 0 0;color:#6b7280;font-size:0.95rem;line-height:1.6;">확인 후 결제 단계로 이어집니다.</p>'
     ].join("");
 
     if (intentCard && intentCard.parentNode) {
@@ -4557,7 +4514,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     var lead = panel.querySelector(".preview-lead");
     if (lead) {
-      lead.textContent = "상속정리 리포트는 현재 상황 요약, 준비자료, 확인할 항목, 예상 진행순서를 더 구체적으로 정리한 자료입니다.";
+      lead.textContent = "상속정리 리포트는 현재 상황을 정리해 필요할 때 확인할 수 있는 자료입니다.";
     }
 
     var btn = document.getElementById("paidPaymentIntentBtn");
@@ -5457,7 +5414,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       var lead = ctaCard.querySelector(".preview-lead");
       if (lead) {
-        lead.textContent = "상속정리 리포트는 현재 상황 요약, 준비자료, 확인할 항목, 예상 진행순서를 더 구체적으로 정리한 자료입니다.";
+        lead.textContent = "상속정리 리포트는 현재 상황을 정리해 필요할 때 확인할 수 있는 자료입니다.";
       }
 
       renderMethodBadges(ctaCard);
