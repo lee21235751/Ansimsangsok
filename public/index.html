@@ -2063,6 +2063,15 @@
 }
 </style>
 
+
+
+
+
+<style id="ansim-initial-paid-panel-hide-v4">
+  body:not(.ansim-paid-panel-allowed) .paid-auto-engine-panel {
+    display: none !important;
+  }
+</style>
 </head>
 <body>
   <div id="leadStatusBanner" class="lead-status-banner is-hidden" role="status" aria-live="polite"></div>
@@ -11565,6 +11574,74 @@ function scrubPrepurchaseText(){if(paid())return;var walker=document.createTreeW
 function removePaidOnlyPanelsBeforePurchase(){if(paid())return;Array.prototype.slice.call(document.querySelectorAll('.paid-premium-received-wrap,.paid-today-actions-wrap')).forEach(function(el){if(el&&el.parentNode)el.parentNode.removeChild(el);});}
 function run(){if(paid())return;addStyle();gatePreview();scrubPrepurchaseText();removePaidOnlyPanelsBeforePurchase();}
 ready(function(){run();var tries=0;var timer=setInterval(function(){tries++;run();if(tries>=30){clearInterval(timer);}},350);try{var observer=new MutationObserver(function(){run();});observer.observe(document.body,{childList:true,subtree:true,characterData:true});setTimeout(function(){observer.disconnect();},12000);}catch(e){}});
+})();
+</script>
+
+
+
+
+<script id="ansimInitialPaidPanelHideV4">
+(function () {
+  function isVisible(el) {
+    if (!el) return false;
+    var style = getComputedStyle(el);
+    var rect = el.getBoundingClientRect();
+    return style.display !== "none" &&
+      style.visibility !== "hidden" &&
+      Number(style.opacity || 1) !== 0 &&
+      rect.height > 0 &&
+      rect.width > 0;
+  }
+
+  function updatePaidPanelVisibility() {
+    try {
+      var body = document.body;
+      if (!body) return;
+
+      var panels = document.querySelectorAll(".paid-auto-engine-panel");
+      if (!panels.length) return;
+
+      var resultArea = document.getElementById("resultArea");
+      var allow = isVisible(resultArea);
+
+      body.classList.toggle("ansim-paid-panel-allowed", allow);
+
+      Array.prototype.forEach.call(panels, function (panel) {
+        if (allow) {
+          panel.removeAttribute("aria-hidden");
+        } else {
+          panel.setAttribute("aria-hidden", "true");
+        }
+      });
+    } catch (error) {}
+  }
+
+  function scheduleUpdate() {
+    updatePaidPanelVisibility();
+    setTimeout(updatePaidPanelVisibility, 80);
+    setTimeout(updatePaidPanelVisibility, 300);
+    setTimeout(updatePaidPanelVisibility, 900);
+    setTimeout(updatePaidPanelVisibility, 1800);
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", scheduleUpdate);
+  } else {
+    scheduleUpdate();
+  }
+
+  window.addEventListener("load", scheduleUpdate);
+  window.addEventListener("hashchange", scheduleUpdate);
+  window.addEventListener("popstate", scheduleUpdate);
+  document.addEventListener("click", scheduleUpdate, true);
+  document.addEventListener("change", scheduleUpdate, true);
+
+  var tries = 0;
+  var timer = setInterval(function () {
+    tries += 1;
+    updatePaidPanelVisibility();
+    if (tries >= 30) clearInterval(timer);
+  }, 300);
 })();
 </script>
 </body>
