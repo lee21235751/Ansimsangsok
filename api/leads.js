@@ -1,3 +1,94 @@
+const RESEND_API_URL = "https://api.resend.com/emails";
+
+function sanitizeLeadNotifyText(value, maxLength = 600) {
+  const text = String(value || "").replace(/\s+/g, " ").trim();
+  return text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
+}
+
+function escapeLeadNotifyHtml(value) {
+  return String(value || "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+async function sendLeadNotificationV1({ name, email, memo, score, createdAt }) {
+  const apiKey = process.env.RESEND_API_KEY;
+  const to = process.env.LEAD_NOTIFY_EMAIL || process.env.ADMIN_EMAIL || "";
+  const from = process.env.LEAD_NOTIFY_FROM || "안심상속 <leads@send.ansimsangsok.kr>";
+
+  if (!apiKey || !to || !from) {
+    console.warn("Lead notification skipped: missing Resend environment variables");
+    return { ok: false, skipped: true };
+  }
+
+  const safeName = sanitizeLeadNotifyText(name, 120) || "이름 없음";
+  const safeEmail = sanitizeLeadNotifyText(email, 180) || "이메일 없음";
+  const safeMemo = sanitizeLeadNotifyText(memo, 800) || "메모 없음";
+  const safeScore = score === null || score === undefined ? "없음" : String(score);
+  const safeCreatedAt = sanitizeLeadNotifyText(createdAt, 80);
+
+  const subject = "[안심상속] 신규 리드 접수 - " + safeName;
+
+  const text = [
+    "안심상속 신규 리드가 접수되었습니다.",
+    "",
+    "이름: " + safeName,
+    "이메일: " + safeEmail,
+    "진단 점수: " + safeScore,
+    "접수 시각: " + safeCreatedAt,
+    "",
+    "메모:",
+    safeMemo,
+    "",
+    "Supabase leads 테이블에서 상세 내용을 확인하세요."
+  ].join("\n");
+
+  const html = [
+    "<h2>안심상속 신규 리드 접수</h2>",
+    "<p>Supabase leads 테이블에 신규 리드가 저장되었습니다.</p>",
+    "<table cellpadding=\"8\" cellspacing=\"0\" style=\"border-collapse:collapse;border:1px solid #ddd\">",
+    "<tr><th align=\"left\" style=\"border:1px solid #ddd;background:#f7f7f7\">이름</th><td style=\"border:1px solid #ddd\">" + escapeLeadNotifyHtml(safeName) + "</td></tr>",
+    "<tr><th align=\"left\" style=\"border:1px solid #ddd;background:#f7f7f7\">이메일</th><td style=\"border:1px solid #ddd\">" + escapeLeadNotifyHtml(safeEmail) + "</td></tr>",
+    "<tr><th align=\"left\" style=\"border:1px solid #ddd;background:#f7f7f7\">진단 점수</th><td style=\"border:1px solid #ddd\">" + escapeLeadNotifyHtml(safeScore) + "</td></tr>",
+    "<tr><th align=\"left\" style=\"border:1px solid #ddd;background:#f7f7f7\">접수 시각</th><td style=\"border:1px solid #ddd\">" + escapeLeadNotifyHtml(safeCreatedAt) + "</td></tr>",
+    "</table>",
+    "<h3>메모</h3>",
+    "<p style=\"white-space:pre-wrap\">" + escapeLeadNotifyHtml(safeMemo) + "</p>",
+    "<p>Supabase leads 테이블에서 상세 내용을 확인하세요.</p>"
+  ].join("");
+
+  try {
+    const response = await fetch(RESEND_API_URL, {
+      method: "POST",
+      headers: {
+        "Authorization": "Bearer " + apiKey,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        from,
+        to: [to],
+        subject,
+        text,
+        html
+      })
+    });
+
+    const responseText = await response.text();
+
+    if (!response.ok) {
+      console.error("Lead notification email failed", response.status, responseText);
+      return { ok: false, status: response.status };
+    }
+
+    return { ok: true };
+  } catch (error) {
+    console.error("Lead notification email error", error);
+    return { ok: false, error: String(error && error.message ? error.message : error) };
+  }
+}
+
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     res.setHeader("Allow", "POST");
@@ -119,6 +210,8 @@ export default async function handler(req, res) {
         message: "안내자료 신청을 접수하지 못했습니다."
       });
     }
+
+    await sendLeadNotificationV1({ name, email, memo, score, createdAt });
 
     return res.status(200).json({
       ok: true,
