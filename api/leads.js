@@ -42,7 +42,20 @@ async function sendLeadNotificationV1({ name, email, memo, score, createdAt }) {
     "메모:",
     safeMemo,
     "",
-    "Supabase leads 테이블에서 상세 내용을 확인하세요."
+    "Supabase leads 테이블에서 상세 내용을 확인하세요.",
+    "",
+    "운영자 빠른 응대 문구:",
+    "안녕하세요. 안심상속입니다.",
+    "신청해주신 내용을 확인했습니다.",
+    "상속정리 리포트는 현재 상황을 정리하고, 확인할 항목과 상담 전 준비할 질문을 정리하는 자료입니다.",
+    "리포트 확인을 원하시면 안내드리는 순서에 따라 진행해 주세요.",
+    "",
+    "처리 체크리스트:",
+    "1. 이름과 이메일이 정상인지 확인",
+    "2. 메모에 급한 일정이나 특이사항이 있는지 확인",
+    "3. 리포트 안내 답장 발송",
+    "4. 결제/수령 안내 여부 기록",
+    "5. 실제 고객이 아닌 테스트 리드는 삭제 또는 테스트 표시"
   ].join("\n");
 
   const html = [
@@ -56,7 +69,23 @@ async function sendLeadNotificationV1({ name, email, memo, score, createdAt }) {
     "</table>",
     "<h3>메모</h3>",
     "<p style=\"white-space:pre-wrap\">" + escapeLeadNotifyHtml(safeMemo) + "</p>",
-    "<p>Supabase leads 테이블에서 상세 내용을 확인하세요.</p>"
+    "<p>Supabase leads 테이블에서 상세 내용을 확인하세요.</p>",
+    "<hr style=\"border:none;border-top:1px solid #e5e7eb;margin:18px 0\">",
+    "<h3>운영자 빠른 응대 문구</h3>",
+    "<div style=\"padding:12px 14px;border:1px solid #e5e7eb;background:#fafafa;border-radius:10px;line-height:1.7\">",
+    "<p>안녕하세요. 안심상속입니다.</p>",
+    "<p>신청해주신 내용을 확인했습니다.</p>",
+    "<p>상속정리 리포트는 현재 상황을 정리하고, 확인할 항목과 상담 전 준비할 질문을 정리하는 자료입니다.</p>",
+    "<p>리포트 확인을 원하시면 안내드리는 순서에 따라 진행해 주세요.</p>",
+    "</div>",
+    "<h3>처리 체크리스트</h3>",
+    "<ol style=\"line-height:1.8\">",
+    "<li>이름과 이메일이 정상인지 확인</li>",
+    "<li>메모에 급한 일정이나 특이사항이 있는지 확인</li>",
+    "<li>리포트 안내 답장 발송</li>",
+    "<li>결제/수령 안내 여부 기록</li>",
+    "<li>실제 고객이 아닌 테스트 리드는 삭제 또는 테스트 표시</li>",
+    "</ol>"
   ].join("");
 
   try {
