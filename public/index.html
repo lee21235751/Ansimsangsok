@@ -11276,46 +11276,73 @@ document.addEventListener("DOMContentLoaded", function () {
     ".paid-evidence-auto-update-pipeline-panel"
   ];
 
+  var guardScheduled = false;
+
+  function setGuardedHidden(node) {
+    if (node.getAttribute("data-ansim-paid-detail-guarded") !== "true") {
+      node.setAttribute("data-ansim-paid-detail-guarded", "true");
+    }
+    if (node.hidden !== true) {
+      node.hidden = true;
+    }
+    if (node.style.display !== "none") {
+      node.style.display = "none";
+    }
+  }
+
+  function restoreGuardedNode(node) {
+    if (node.getAttribute("data-ansim-paid-detail-guarded") === "true") {
+      node.removeAttribute("data-ansim-paid-detail-guarded");
+    }
+    if (node.hidden === true) {
+      node.hidden = false;
+    }
+    if (node.style.display === "none") {
+      node.style.display = "";
+    }
+  }
+
   function guardPaidDetailPanels() {
+    guardScheduled = false;
+
     var nodes = document.querySelectorAll(paidDetailSelectors.join(","));
 
     if (isPaidConfirmedForDetailPanels()) {
-      nodes.forEach(function (node) {
-        if (node.getAttribute("data-ansim-paid-detail-guarded") === "true") {
-          node.hidden = false;
-          node.style.display = "";
-          node.removeAttribute("data-ansim-paid-detail-guarded");
-        }
-      });
+      nodes.forEach(restoreGuardedNode);
       return;
     }
 
-    nodes.forEach(function (node) {
-      node.hidden = true;
-      node.style.display = "none";
-      node.setAttribute("data-ansim-paid-detail-guarded", "true");
-    });
+    nodes.forEach(setGuardedHidden);
+  }
+
+  function scheduleGuardPaidDetailPanels() {
+    if (guardScheduled) return;
+    guardScheduled = true;
+
+    if (typeof window.requestAnimationFrame === "function") {
+      window.requestAnimationFrame(guardPaidDetailPanels);
+    } else {
+      setTimeout(guardPaidDetailPanels, 0);
+    }
   }
 
   function installPaidDetailLeakSuppressor() {
     guardPaidDetailPanels();
 
     var observer = new MutationObserver(function () {
-      guardPaidDetailPanels();
+      scheduleGuardPaidDetailPanels();
     });
 
-    observer.observe(document.documentElement, {
+    observer.observe(document.body || document.documentElement, {
       childList: true,
-      subtree: true,
-      attributes: true,
-      attributeFilter: ["hidden", "style", "class"]
+      subtree: true
     });
 
-    window.addEventListener("storage", guardPaidDetailPanels);
-    window.addEventListener("pageshow", guardPaidDetailPanels);
-    setTimeout(guardPaidDetailPanels, 300);
-    setTimeout(guardPaidDetailPanels, 1000);
-    setTimeout(guardPaidDetailPanels, 2500);
+    window.addEventListener("storage", scheduleGuardPaidDetailPanels);
+    window.addEventListener("pageshow", scheduleGuardPaidDetailPanels);
+    setTimeout(scheduleGuardPaidDetailPanels, 300);
+    setTimeout(scheduleGuardPaidDetailPanels, 1000);
+    setTimeout(scheduleGuardPaidDetailPanels, 2500);
   }
 
   if (document.readyState === "loading") {
