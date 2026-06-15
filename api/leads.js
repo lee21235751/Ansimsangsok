@@ -179,7 +179,7 @@ export default async function handler(req, res) {
     }
 
     noteParts.push("유입 경로: 안심상속 안내자료 신청");
-    noteParts.push("신청 자료: 무료 리포트 요약 + 유료 상세자료 안내");
+    noteParts.push("신청 자료: 무료 리포트 요약 + 상속정리 리포트 안내");
     noteParts.push("보관 안내: 안내자료 발송 후 30일");
 
     if (reportRequestedAt) {
@@ -192,17 +192,17 @@ export default async function handler(req, res) {
     }
 
     if (paidReportPreview) {
-      noteParts.push("유료 상세자료 관심 항목:");
+      noteParts.push("상속정리 리포트 관심 항목:");
       noteParts.push(JSON.stringify(paidReportPreview, null, 2));
     }
 
     if (paidReportIntent) {
-      noteParts.push("유료 상세자료 안내 희망:");
+      noteParts.push("상속정리 리포트 안내 희망:");
       noteParts.push(JSON.stringify(paidReportIntent, null, 2));
     }
 
     if (paidReportPaymentIntent) {
-      noteParts.push("유료 상세자료 결제 안내 확인:");
+      noteParts.push("상속정리 리포트 결제 안내 확인:");
       noteParts.push(JSON.stringify(paidReportPaymentIntent, null, 2));
     }
 

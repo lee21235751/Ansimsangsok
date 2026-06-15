@@ -140,7 +140,7 @@ export default async function handler(req, res) {
     if (productType !== "paid-detail-report") {
       return sendJson(res, 400, {
         ok: false,
-        message: "지원하지 않는 상세자료 유형입니다."
+        message: "지원하지 않는 상속정리 리포트 유형입니다."
       });
     }
 
@@ -149,7 +149,7 @@ export default async function handler(req, res) {
       status: "payment_ready",
       orderId: makeOrderId(),
       productType,
-      productName: "안심상속 유료 상세자료",
+      productName: "안심상속 상속정리 리포트",
       amount,
       currency: "KRW",
       buyer: {
@@ -172,7 +172,7 @@ export default async function handler(req, res) {
         tossCheckout: (paymentConfig.provider === "toss" || tossTestAllowed) ? {
           clientKeyConfigured: paymentConfig.clientKeyConfigured,
           clientKey: paymentConfig.clientKeyConfigured ? normalizeEnvValue(process.env.PAYMENT_CLIENT_KEY) : null,
-          orderName: "안심상속 유료 상세자료",
+          orderName: "안심상속 상속정리 리포트",
           customerName: name || "",
           customerEmail: email || "",
           useEscrow: false,
