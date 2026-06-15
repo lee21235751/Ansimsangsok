@@ -11300,6 +11300,190 @@ document.addEventListener("DOMContentLoaded", function () {
 })();
 </script>
 
+
+<script>
+(function () {
+  if (window.__ansimPaymentCallbackVisibleNoticeInstalled) return;
+  window.__ansimPaymentCallbackVisibleNoticeInstalled = true;
+
+  function getParams() {
+    try {
+      return new URLSearchParams(window.location.search || "");
+    } catch (error) {
+      return new URLSearchParams("");
+    }
+  }
+
+  function hasPaymentCallback() {
+    var params = getParams();
+    var payment = params.get("payment");
+    return payment === "success" || payment === "fail" || payment === "cancel";
+  }
+
+  function sanitize(value, maxLength) {
+    return String(value || "")
+      .replace(/[\u0000-\u001f\u007f]/g, " ")
+      .replace(/\s+/g, " ")
+      .trim()
+      .slice(0, maxLength || 160);
+  }
+
+  function ensureBox() {
+    if (!hasPaymentCallback()) return null;
+
+    var existing = document.getElementById("paymentCallbackVisibleNotice");
+    if (existing) return existing;
+
+    var box = document.createElement("section");
+    box.id = "paymentCallbackVisibleNotice";
+    box.className = "paid-report-preview-card";
+    box.setAttribute("aria-live", "polite");
+    box.style.cssText = [
+      "margin:14px auto 12px",
+      "max-width:760px",
+      "border:1px solid #dbe3ee",
+      "background:#ffffff",
+      "box-shadow:0 10px 24px rgba(15,23,42,0.08)"
+    ].join(";");
+
+    var main = document.querySelector("main") || document.body;
+    if (main && main.firstChild) {
+      main.insertBefore(box, main.firstChild);
+    } else {
+      document.body.insertBefore(box, document.body.firstChild);
+    }
+
+    return box;
+  }
+
+  function renderNotice(state, detail) {
+    var box = ensureBox();
+    if (!box) return;
+
+    var params = getParams();
+    var payment = params.get("payment");
+    var orderId = sanitize((detail && detail.orderId) || params.get("orderId") || "", 120);
+    var amount = Number((detail && detail.amount) || params.get("amount") || "29000") || 29000;
+    var message = sanitize((detail && detail.message) || params.get("message") || "", 220);
+
+    var isSuccess = state === "confirmed";
+    var isChecking = state === "checking";
+    var isFailed = state === "failed" || payment === "fail" || payment === "cancel";
+
+    var eyebrow = isSuccess ? "결제 확인 완료" : isChecking ? "결제 확인 중" : "결제 확인 안내";
+    var title = isSuccess
+      ? "상속정리 리포트 안내가 준비되었습니다"
+      : isChecking
+        ? "결제 내용을 확인하고 있습니다"
+        : "결제 처리가 이어지지 않았습니다";
+
+    var lead = isSuccess
+      ? "입력하신 내용을 기준으로 상속정리 리포트 안내를 이어갈 수 있습니다."
+      : isChecking
+        ? "잠시만 기다려주세요. 결제 확인이 끝나면 리포트 안내가 이어집니다."
+        : "창을 닫았거나 결제 과정이 중단된 경우입니다. 필요하시면 다시 결제 안내를 확인하실 수 있습니다.";
+
+    var statusLine = isSuccess
+      ? "상태: 확인됨"
+      : isChecking
+        ? "상태: 확인 중"
+        : "상태: 다시 확인 가능";
+
+    box.innerHTML = [
+      '<div class="preview-eyebrow">' + eyebrow + '</div>',
+      '<h3>' + title + '</h3>',
+      '<p class="preview-lead">' + lead + '</p>',
+      '<div style="margin-top:12px;padding:13px;border-radius:16px;background:#f8fafc;border:1px solid #dbe3ee;color:#374151;line-height:1.6;">',
+      '<div>' + statusLine + '</div>',
+      '<div>상속정리 리포트 안내 금액: <strong>' + amount.toLocaleString("ko-KR") + '원</strong></div>',
+      orderId ? '<div>주문번호: <strong>' + orderId + '</strong></div>' : '',
+      message && isFailed ? '<div>안내: ' + message + '</div>' : '',
+      '</div>',
+      isFailed
+        ? '<button type="button" class="btn btn-secondary" id="paymentCallbackRetryNoticeBtn" style="width:100%;min-height:50px;margin-top:12px;">결제 안내 다시 확인</button>'
+        : '<button type="button" class="btn btn-primary" id="paymentCallbackReportNoticeBtn" style="width:100%;min-height:50px;margin-top:12px;">상속정리 리포트 안내 확인</button>'
+    ].join("");
+
+    var retryBtn = document.getElementById("paymentCallbackRetryNoticeBtn");
+    if (retryBtn) {
+      retryBtn.addEventListener("click", function () {
+        var target = document.getElementById("paidPaymentGuidePanel") || document.getElementById("guideRequestCard");
+        if (target && target.scrollIntoView) target.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    }
+
+    var reportBtn = document.getElementById("paymentCallbackReportNoticeBtn");
+    if (reportBtn) {
+      reportBtn.addEventListener("click", function () {
+        var target = document.getElementById("paymentResultGuidePanel") ||
+          document.getElementById("paidReportDeliveredCard") ||
+          document.getElementById("guideRequestCard");
+        if (target && target.scrollIntoView) target.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    }
+  }
+
+  function applyInitialNotice() {
+    if (!hasPaymentCallback()) return;
+
+    var params = getParams();
+    var payment = params.get("payment");
+
+    if (payment === "success") {
+      renderNotice("checking");
+      return;
+    }
+
+    renderNotice("failed", {
+      orderId: params.get("orderId"),
+      amount: params.get("amount"),
+      message: params.get("message")
+    });
+  }
+
+  function patchConfirmResult() {
+    if (!hasPaymentCallback()) return;
+
+    var original = window.ansimConfirmTossPaymentFromUrl;
+    if (typeof original !== "function" || original.__ansimVisibleNoticePatched) return;
+
+    var wrapped = async function () {
+      renderNotice("checking");
+
+      var result = await original.apply(this, arguments);
+
+      if (result && (result.status === "paid_confirmed" || result.status === "guide_confirmed")) {
+        renderNotice("confirmed", result);
+      } else if (result && result.status === "payment_confirm_failed") {
+        renderNotice("failed", {
+          orderId: result.orderId,
+          amount: result.amount,
+          message: "결제 확인이 완료되지 않았습니다. 필요하시면 다시 결제 안내를 확인할 수 있습니다."
+        });
+      }
+
+      return result;
+    };
+
+    wrapped.__ansimVisibleNoticePatched = true;
+    window.ansimConfirmTossPaymentFromUrl = wrapped;
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    applyInitialNotice();
+    patchConfirmResult();
+
+    setTimeout(applyInitialNotice, 300);
+    setTimeout(patchConfirmResult, 500);
+    setTimeout(function () {
+      if (!hasPaymentCallback()) return;
+      var box = ensureBox();
+      if (box && box.scrollIntoView) box.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 700);
+  });
+})();
+</script>
+
 </body>",
 
 
