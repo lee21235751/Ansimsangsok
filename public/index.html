@@ -11235,6 +11235,97 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 })();
 </script>
+
+<script id="ansim-paid-detail-leak-suppressor">
+(function () {
+  function isPaidConfirmedForDetailPanels() {
+    try {
+      if (window.__ansimPaidReportPaymentResult && window.__ansimPaidReportPaymentResult.status === "paid_confirmed") return true;
+      if (window.__ansimPaidReportPaymentIntent && window.__ansimPaidReportPaymentIntent.status === "paid_confirmed") return true;
+
+      if (typeof window.ansimGetPaidReportPaymentResult === "function") {
+        var result = window.ansimGetPaidReportPaymentResult();
+        if (result && result.status === "paid_confirmed") return true;
+      }
+
+      var values = [
+        localStorage.getItem("ansim_payment_status") || "",
+        localStorage.getItem("ansim_paid_report_status") || "",
+        sessionStorage.getItem("ansim_payment_status") || "",
+        sessionStorage.getItem("ansim_paid_report_status") || ""
+      ];
+
+      return values.join(" ").indexOf("paid_confirmed") >= 0;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  var paidDetailSelectors = [
+    "#paidAutoEnginePanel",
+    "#paidInternationalPanel",
+    "#paidDomesticEvidencePanel",
+    "#paidEvidenceFreshnessPanel",
+    "#paidOfficialUpdateWatchPanel",
+    "#paidEvidenceAutoUpdatePipelinePanel",
+    ".paid-auto-engine-panel",
+    ".paid-international-panel",
+    ".paid-domestic-evidence-panel",
+    ".paid-evidence-freshness-panel",
+    ".paid-official-update-watch-panel",
+    ".paid-evidence-auto-update-pipeline-panel"
+  ];
+
+  function guardPaidDetailPanels() {
+    var nodes = document.querySelectorAll(paidDetailSelectors.join(","));
+
+    if (isPaidConfirmedForDetailPanels()) {
+      nodes.forEach(function (node) {
+        if (node.getAttribute("data-ansim-paid-detail-guarded") === "true") {
+          node.hidden = false;
+          node.style.display = "";
+          node.removeAttribute("data-ansim-paid-detail-guarded");
+        }
+      });
+      return;
+    }
+
+    nodes.forEach(function (node) {
+      node.hidden = true;
+      node.style.display = "none";
+      node.setAttribute("data-ansim-paid-detail-guarded", "true");
+    });
+  }
+
+  function installPaidDetailLeakSuppressor() {
+    guardPaidDetailPanels();
+
+    var observer = new MutationObserver(function () {
+      guardPaidDetailPanels();
+    });
+
+    observer.observe(document.documentElement, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ["hidden", "style", "class"]
+    });
+
+    window.addEventListener("storage", guardPaidDetailPanels);
+    window.addEventListener("pageshow", guardPaidDetailPanels);
+    setTimeout(guardPaidDetailPanels, 300);
+    setTimeout(guardPaidDetailPanels, 1000);
+    setTimeout(guardPaidDetailPanels, 2500);
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", installPaidDetailLeakSuppressor);
+  } else {
+    installPaidDetailLeakSuppressor();
+  }
+})();
+</script>
+
 </body>",
 
 
