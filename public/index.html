@@ -2162,77 +2162,24 @@
 </div>
 
 
-<div class="final-request-reason-box">
-  <h4>지금 신청하시면</h4>
 
-  <ul>
-    <li>현재 상황 정리표</li>
-    <li>확인이 필요한 재산 항목</li>
-    <li>준비 자료 체크리스트</li>
-    <li>다음 단계 안내</li>
-  </ul>
 
-  <p>
-    이메일로 받아보실 수 있습니다.
-  </p>
-</div>
 
-<div class="guide-delivery-box">
-  <h4>신청 후 이메일로 안내</h4>
-  <ul>
-    <li>현재 상황 정리표</li>
-    <li>확인해야 할 재산 항목</li>
-    <li>준비 자료 체크리스트</li>
-    <li>다음 단계 안내</li>
-  </ul>
-</div>
 
-<div class="detail-report-value-preview" aria-label="상속정리 리포트에서 확인할 수 있는 내용">
-            <h4>상속정리 리포트에서 확인할 수 있는 내용</h4>
+<div class="detail-report-value-preview" aria-label="상속정리 리포트 안내">
+            <h4>상속정리 리포트에서 정리해드립니다</h4>
+            <p style="margin:8px 0 0;color:#4b5563;line-height:1.65;">
+              입력하신 내용을 기준으로 지금 확인할 항목, 준비자료, 상담 전 질문을 짧게 정리합니다.
+            </p>
             <div class="detail-report-checks">
-              <div>✓ 상속인 관계 정리표</div>
-              <div>✓ 재산 확인표</div>
-              <div>✓ 준비자료 체크리스트</div>
-              <div>✓ 다음 단계 안내</div>
-            </div>
-
-
-            
-
-            <div class="detail-report-help-box">
-              <h4>상속정리 리포트에 포함되는 내용</h4>
-              <ul>
-                <li>현재 상황 요약</li>
-                <li>상속인 관계 정리</li>
-                <li>재산·채무 정리</li>
-                <li>준비자료 체크리스트</li>
-                <li>상담 시 물어볼 질문</li>
-              </ul>
-            </div>
-<div class="detail-report-sample-grid">
-              <div class="detail-report-sample-card">
-                <strong>상속인 관계 정리표 예시</strong>
-                <div class="detail-report-chip-row">
-                  <span>배우자</span>
-                  <span>자녀</span>
-                  <span>손자녀</span><span>형제자매</span>
-                </div>
-              </div>
-
-              <div class="detail-report-sample-card">
-                <strong>재산 확인표 예시</strong>
-                <div class="detail-report-chip-row">
-                  <span>주택</span>
-                  <span>토지</span>
-                  <span>예금</span>
-                  <span>사업체</span>
-                </div>
-              </div>
+              <div>✓ 지금 확인할 항목</div>
+              <div>✓ 준비자료</div>
+              <div>✓ 상담 전 질문</div>
             </div>
           </div>
 
-          <h3>내 상황 상속정리 리포트를 받아보시려면</h3>
-          <p>이름과 이메일 주소를 입력해주세요.<br />입력하신 이름과 이메일은 상속정리 리포트 안내 발송과 문의 확인에만 사용합니다.<br />보관 기간: 상속정리 리포트 안내 발송 후 30일</p>
+          <h3>상속정리 리포트 안내를 받아보시려면</h3>
+          <p>이름과 이메일 주소를 남겨주시면 상속정리 리포트 안내를 이메일로 보내드립니다.<br />보관 기간: 상속정리 리포트 안내 발송 후 30일</p>
 
           <div class="form-grid">
             <div class="field">
@@ -2259,14 +2206,14 @@
 </label>
 
 <div class="final-cta-message">
-  <strong>상속 상황을 정리하는 첫 단계입니다.</strong>
+  <strong>결제 전 안내를 먼저 받아보실 수 있습니다.</strong>
   <p>
     이메일로 상속정리 리포트 안내를 받아보시고<br>
     확인해야 할 사항을 순서대로 살펴보세요.
   </p>
 </div>
 
-<button class="primary-btn" type="button" id="saveLead">내 상황 상속정리 리포트 안내 신청하기</button>
+<button class="primary-btn" type="button" id="saveLead">상속정리 리포트 안내 신청하기</button>
             <div class="save-status" id="saveStatus" role="status" aria-live="polite"></div>
           </div>
         </section>
@@ -2805,7 +2752,7 @@ document.getElementById("saveLead").addEventListener("click", async () => {
         saveStatus.scrollIntoView({ behavior: "smooth", block: "center" });
       } finally {
         saveButton.disabled = false;
-        saveButton.textContent = "내 상황 상속정리 리포트 안내 신청하기";
+        saveButton.textContent = "상속정리 리포트 안내 신청하기";
       }
     });
 
@@ -3120,7 +3067,7 @@ document.addEventListener("DOMContentLoaded", function () {
     var buttons = Array.prototype.slice.call(document.querySelectorAll("button, input[type='submit']"));
     return buttons.find(function (el) {
       var text = (el.innerText || el.value || "").trim();
-      return text.indexOf("내 상황 상속정리 리포트 안내 신청하기") >= 0;
+      return text.indexOf("상속정리 리포트 안내 신청하기") >= 0;
     });
   }
 
@@ -3314,7 +3261,7 @@ document.addEventListener("DOMContentLoaded", function () {
         sendFunnelEvent("result_button_click", { score: window.__ansimFinalScore });
       }
 
-      if (text.indexOf("내 상황 상속정리 리포트 안내 신청하기") >= 0 || text.indexOf("상속정리 리포트") >= 0) {
+      if (text.indexOf("상속정리 리포트 안내 신청하기") >= 0 || text.indexOf("상속정리 리포트") >= 0) {
         sendFunnelEvent("report_cta_click", {
           score: getScoreForFunnel()
         });
@@ -4071,7 +4018,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     var btn = document.getElementById("paidReportIntentInlineBtn");
     if (btn) {
-      btn.textContent = "상속정리 리포트 안내 희망 표시 완료";
+      btn.textContent = "상속정리 리포트 안내 받기 완료";
       btn.setAttribute("aria-pressed", "true");
     }
 
@@ -4221,15 +4168,15 @@ document.addEventListener("DOMContentLoaded", function () {
     panel.innerHTML = [
       '<div class="preview-eyebrow">상속정리 리포트 결제 안내</div>',
       '<h3>상속정리 리포트를 받아보려면</h3>',
-      '<p class="preview-lead">상속정리 리포트는 필요한 내용을 짧게 정리해 받아보는 자료입니다.</p>',
+      '<p class="preview-lead">입력하신 내용을 기준으로 지금 확인할 항목, 준비자료, 상담 전 질문을 정리합니다.</p>',
 
       '<div style="margin:14px 0;padding:16px;border-radius:18px;background:#fff7e0;border:1px solid #d6b45f;">',
       '<strong style="display:block;color:#173c2f;font-size:1.05rem;margin-bottom:6px;">상속정리 리포트 안내 금액</strong>',
       '<div style="font-size:1.65rem;font-weight:950;color:#173c2f;line-height:1.2;">29,000원</div>',
-      '<p style="margin:8px 0 0;color:#6b7280;line-height:1.6;">아직 결제 전입니다. 포함 내용을 확인한 뒤 다음 단계에서 결제수단을 선택하실 수 있습니다.</p>',
+      '<p style="margin:8px 0 0;color:#6b7280;line-height:1.6;">금액을 확인한 뒤 필요하시면 결제 단계로 이어집니다.</p>',
       '</div>',
 
-      '<p style="margin:12px 0;color:#4b5563;line-height:1.6;">결제 후 리포트에서 자세한 정리 내용을 확인합니다.</p>',
+      '<p style="margin:12px 0;color:#4b5563;line-height:1.6;">구체적인 정리 내용은 결제 후 리포트에서 확인합니다.</p>',
 
       '<p class="paid-trust-note" style="margin:10px 0 14px;color:#6b7280;line-height:1.6;">입력하신 이름과 이메일은 상속정리 리포트 안내와 문의 확인에만 사용됩니다.</p>',
       '<button id="paidPaymentIntentBtn" type="button" class="btn btn-primary" style="width:100%;min-height:50px;">상속정리 리포트 29,000원 확인하고 결제하기</button>',
@@ -4467,13 +4414,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
     var btn = document.getElementById("openPaidPaymentGuideBtn");
     if (btn) {
-      btn.textContent = "상속정리 리포트 구성과 금액 확인하기";
+      btn.textContent = "상속정리 리포트 29,000원 확인하기";
       btn.style.minHeight = "50px";
     }
 
     var small = card.querySelector("p[style]");
     if (small) {
-      small.textContent = "금액과 포함 내용을 먼저 확인한 뒤, 필요하시면 결제 단계로 이어집니다.";
+      small.textContent = "금액을 확인한 뒤 필요하시면 결제 단계로 이어집니다.";
     }
   }
 
@@ -4485,17 +4432,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
     var strong = card.querySelector("strong");
     if (strong) {
-      strong.textContent = "상속정리 리포트 안내를 함께 받아보시겠습니까?";
+      strong.textContent = "상속정리 리포트 안내를 받아보시겠습니까?";
     }
 
     var paragraph = card.querySelector("p");
     if (paragraph) {
-      paragraph.textContent = "필요 여부를 바로 결정하기 어려우시면, 신청 내용에 관심 여부만 먼저 표시할 수 있습니다.";
+      paragraph.textContent = "결제 전 안내를 먼저 받아보고 결정하실 수 있습니다.";
     }
 
     var btn = document.getElementById("paidReportIntentInlineBtn");
     if (btn) {
-      btn.textContent = "상속정리 리포트 안내 희망 표시";
+      btn.textContent = "상속정리 리포트 안내 받기";
       btn.style.minHeight = "50px";
     }
   }
@@ -10718,7 +10665,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         var applyButton = Array.prototype.slice.call(document.querySelectorAll("button,a")).find(function(el){
           var text = clean(el.innerText || el.textContent || "");
-          return text.indexOf("내 상황 상속정리 리포트 안내 신청하기") >= 0;
+          return text.indexOf("상속정리 리포트 안내 신청하기") >= 0;
         });
 
         if(applyButton && applyButton.scrollIntoView){
