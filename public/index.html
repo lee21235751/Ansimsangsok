@@ -2496,42 +2496,80 @@
       return "";
     }
 
+    let lastQuestionOptionTap = { time: 0, value: "", step: -1 };
+
+    function applyQuestionAnswer(question, button) {
+      if (!question || !button) return;
+
+      const value = button.dataset.value;
+      const now = Date.now();
+      const tapKey = [state.step, question.key, button.dataset.asset || "", value || ""].join("|");
+
+      if (lastQuestionOptionTap.value === tapKey && now - lastQuestionOptionTap.time < 280) {
+        return;
+      }
+
+      lastQuestionOptionTap = { time: now, value: tapKey, step: state.step };
+
+      if (question.type === "single") {
+        state.answers[question.key] = value;
+      }
+
+      if (question.type === "assetCounts") {
+        const assetKey = button.dataset.asset;
+        if (!assetKey) return;
+        state.answers[question.key] = state.answers[question.key] || {};
+        state.answers[question.key][assetKey] = value;
+      }
+
+      if (question.type === "multiSimple") {
+        const exclusive = question.exclusive || [];
+        let selected = Array.isArray(state.answers[question.key]) ? [...state.answers[question.key]] : [];
+
+        if (exclusive.includes(value)) {
+          selected = selected.includes(value) ? [] : [value];
+        } else {
+          selected = selected.filter((item) => !exclusive.includes(item));
+          selected = selected.includes(value)
+            ? selected.filter((item) => item !== value)
+            : [...selected, value];
+        }
+
+        state.answers[question.key] = selected;
+      }
+
+      saveState();
+      syncReportAnswersSnapshot();
+      render();
+    }
+
     function bindQuestionEvents(question) {
-      questionArea.querySelectorAll(".option-btn").forEach((button) => {
-        button.addEventListener("click", () => {
-          const value = button.dataset.value;
+      questionArea.__ansimCurrentQuestion = question;
 
-          if (question.type === "single") {
-            state.answers[question.key] = value;
-          }
+      if (questionArea.__ansimDelegatedOptionHandlerInstalled) {
+        return;
+      }
 
-          if (question.type === "assetCounts") {
-            const assetKey = button.dataset.asset;
-            state.answers[question.key] = state.answers[question.key] || {};
-            state.answers[question.key][assetKey] = value;
-          }
+      const handleOptionEvent = (event) => {
+        const target = event.target && event.target.closest
+          ? event.target.closest(".option-btn")
+          : null;
 
-          if (question.type === "multiSimple") {
-            const exclusive = question.exclusive || [];
-            let selected = Array.isArray(state.answers[question.key]) ? [...state.answers[question.key]] : [];
+        if (!target || !questionArea.contains(target)) {
+          return;
+        }
 
-            if (exclusive.includes(value)) {
-              selected = selected.includes(value) ? [] : [value];
-            } else {
-              selected = selected.filter((item) => !exclusive.includes(item));
-              selected = selected.includes(value)
-                ? selected.filter((item) => item !== value)
-                : [...selected, value];
-            }
+        event.preventDefault();
+        event.stopPropagation();
 
-            state.answers[question.key] = selected;
-          }
+        const currentQuestion = questionArea.__ansimCurrentQuestion || questions[state.step];
+        applyQuestionAnswer(currentQuestion, target);
+      };
 
-          saveState();
-          syncReportAnswersSnapshot();
-          render();
-        });
-      });
+      questionArea.addEventListener("pointerdown", handleOptionEvent, true);
+      questionArea.addEventListener("touchend", handleOptionEvent, true);
+      questionArea.addEventListener("click", handleOptionEvent, true);
+      questionArea.__ansimDelegatedOptionHandlerInstalled = true;
     }
 
     
