@@ -364,6 +364,165 @@
       color: rgba(255, 248, 220, 0.74);
     }
 
+    .survey-question-form {
+      display: block;
+      margin: 0;
+      padding: 0;
+    }
+
+    .survey-options {
+      display: grid;
+      gap: 10px;
+      overflow: visible;
+    }
+
+    .survey-option-label {
+      display: block;
+      position: relative;
+      width: 100%;
+      margin: 0;
+      cursor: pointer;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: rgba(14, 53, 41, 0.08);
+      background: var(--survey-label-bg, transparent);
+      background-color: var(--survey-label-bg, transparent);
+      border-radius: 18px;
+    }
+
+    .survey-option-input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+      inset: 0 auto auto 0;
+      width: 1px;
+      height: 1px;
+      margin: 0;
+    }
+
+    .survey-option-card {
+      display: block;
+      width: 100%;
+      min-height: 56px;
+      border: 2px solid var(--survey-card-border, rgba(14, 53, 41, 0.18));
+      background: var(--survey-card-bg, #ffffff);
+      background-color: var(--survey-card-bg, #ffffff);
+      color: var(--survey-card-color, var(--forest-deep));
+      border-radius: 18px;
+      padding: 14px 15px;
+      font-weight: 900;
+      text-align: left;
+      line-height: 1.45;
+      box-sizing: border-box;
+      box-shadow: var(--survey-card-shadow, none);
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    .survey-option-input:checked + .survey-option-card {
+      background: var(--forest-deep) !important;
+      background-color: var(--forest-deep) !important;
+      color: #fff8dc !important;
+      border-color: var(--gold) !important;
+      box-shadow: 0 9px 20px rgba(14, 53, 41, 0.16) !important;
+    }
+
+    .survey-option-input[checked] + .survey-option-card {
+      background: var(--forest-deep) !important;
+      background-color: var(--forest-deep) !important;
+      color: #fff8dc !important;
+      border-color: var(--gold) !important;
+      box-shadow: 0 9px 20px rgba(14, 53, 41, 0.16) !important;
+    }
+
+    .survey-option-input[type="checkbox"][checked] + .survey-option-card {
+      background: var(--forest-deep) !important;
+      background-color: var(--forest-deep) !important;
+      color: #fff8dc !important;
+      border-color: var(--gold) !important;
+      box-shadow: 0 9px 20px rgba(14, 53, 41, 0.16) !important;
+    }
+
+    .survey-option-label:has(.survey-option-input:checked) .survey-option-card {
+      background: transparent !important;
+      background-color: transparent !important;
+      color: #fff8dc !important;
+      border-color: var(--gold) !important;
+      box-shadow: 0 9px 20px rgba(14, 53, 41, 0.16) !important;
+    }
+
+    .survey-option-label:has(.survey-option-input:checked) {
+      background: var(--forest-deep) !important;
+      background-color: var(--forest-deep) !important;
+      border-radius: 18px;
+    }
+
+    .survey-option-label[aria-checked="true"] {
+      background: var(--forest-deep) !important;
+      background-color: var(--forest-deep) !important;
+      border-radius: 18px;
+    }
+
+    .survey-option-label[aria-checked="true"] .survey-option-card {
+      background: transparent !important;
+      background-color: transparent !important;
+      color: #fff8dc !important;
+      border-color: var(--gold) !important;
+      box-shadow: 0 9px 20px rgba(14, 53, 41, 0.16) !important;
+    }
+
+    .survey-option-label:focus-within {
+      background: var(--forest-deep) !important;
+      background-color: var(--forest-deep) !important;
+      border-radius: 18px;
+    }
+
+    .survey-option-label:focus-within .survey-option-card {
+      background: transparent !important;
+      background-color: transparent !important;
+      color: #fff8dc !important;
+      border-color: var(--gold) !important;
+      box-shadow: 0 9px 20px rgba(14, 53, 41, 0.16) !important;
+    }
+
+    .survey-option-title {
+      display: block;
+    }
+
+    .survey-options.multiSimple .survey-option-card::after {
+      content: "복수 선택 가능";
+      display: block;
+      margin-top: 4px;
+      color: rgba(14, 53, 41, 0.58);
+      font-size: 0.78rem;
+      font-weight: 800;
+    }
+
+    .survey-options.multiSimple .survey-option-input:checked + .survey-option-card::after {
+      color: rgba(255, 248, 220, 0.74) !important;
+    }
+
+    .survey-options.multiSimple .survey-option-input[checked] + .survey-option-card::after {
+      color: rgba(255, 248, 220, 0.74) !important;
+    }
+
+    .survey-options.multiSimple .survey-option-label:has(.survey-option-input:checked) .survey-option-card::after {
+      color: rgba(255, 248, 220, 0.74) !important;
+    }
+
+    .survey-options.multiSimple .survey-option-label[aria-checked="true"] .survey-option-card::after {
+      color: rgba(255, 248, 220, 0.74) !important;
+    }
+
+    body .page main#diagnosis,
+    body .page #diagnosis,
+    body .page .diagnosis,
+    body .page #questionArea,
+    body .page #questionArea .question-card,
+    body .page #diagnosisQuestionForm {
+      min-height: 0 !important;
+      overflow: visible !important;
+    }
+
     .nav-buttons {
       display: flex;
       justify-content: space-between;
@@ -2449,21 +2608,43 @@
         <article class="question-card">
           <h3 class="question-title">${question.title}</h3>
           <p class="question-help">${question.help || ""}</p>
-          ${renderQuestionBody(question)}
+          <form id="diagnosisQuestionForm" class="survey-question-form" autocomplete="off">
+            ${renderQuestionBody(question)}
+          </form>
         </article>
       `;
 
+      syncSurveyCheckedAttributes();
+    }
+
+    function getSurveyInputName(question, extraKey) {
+      return ["question", state.step, question.key, extraKey || ""].filter(Boolean).join("-");
+    }
+
+    function renderSurveyOption({ inputType, name, value, label, dataValue, checked, assetKey }) {
+      const inputId = `${name}-${value}`;
+      return `
+        <label class="survey-option-label" for="${inputId}" aria-checked="${checked ? "true" : "false"}">
+          <input id="${inputId}" class="survey-option-input" type="${inputType}" name="${name}" value="${value}" data-value="${dataValue || label}" ${assetKey ? `data-asset="${assetKey}"` : ""} ${checked ? "checked" : ""} />
+          <span class="survey-option-card">
+            <span class="survey-option-title">${label}</span>
+          </span>
+        </label>
+      `;
     }
 
     function renderQuestionBody(question) {
       if (question.type === "single") {
         const answer = state.answers[question.key];
-        return `<div class="options">${question.options.map((option, index) => `
-          <label class="option-btn ${answer === option.label ? "selected" : ""}">
-            <input class="option-input" type="radio" name="ansim-q-${state.step}-${question.key}" value="${index}" data-value="${option.label}" ${answer === option.label ? "checked" : ""} />
-            ${option.label}
-          </label>
-        `).join("")}</div>`;
+        const name = getSurveyInputName(question);
+        return `<div class="survey-options">${question.options.map((option, index) => renderSurveyOption({
+          inputType: "radio",
+          name,
+          value: index,
+          label: option.label,
+          dataValue: option.label,
+          checked: answer === option.label
+        })).join("")}</div>`;
       }
 
       if (question.type === "assetCounts") {
@@ -2486,13 +2667,16 @@
           <div class="asset-group">
             <div class="asset-title">${asset.title}</div>
             <p class="asset-question">${asset.question}</p>
-            <div class="options">
-              ${asset.labels.map((label, index) => `
-                <label class="option-btn ${answer[asset.key] === label ? "selected" : ""}">
-                  <input class="option-input" type="radio" name="ansim-q-${state.step}-${question.key}-${asset.key}" value="${index}" data-asset="${asset.key}" data-value="${label}" ${answer[asset.key] === label ? "checked" : ""} />
-                  ${label}
-                </label>
-              `).join("")}
+            <div class="survey-options">
+              ${asset.labels.map((label, index) => renderSurveyOption({
+                inputType: "radio",
+                name: getSurveyInputName(question, asset.key),
+                value: index,
+                label,
+                dataValue: label,
+                checked: answer[asset.key] === label,
+                assetKey: asset.key
+              })).join("")}
             </div>
           </div>
         `).join("");
@@ -2500,65 +2684,35 @@
 
       if (question.type === "multiSimple") {
         const answer = Array.isArray(state.answers[question.key]) ? state.answers[question.key] : [];
-        return `<div class="options multiSimple">${question.options.map((option, index) => `
-          <label class="option-btn ${answer.includes(option.value) ? "selected" : ""}">
-            <input class="option-input" type="checkbox" name="ansim-q-${state.step}-${question.key}" value="${index}" data-value="${option.value}" ${answer.includes(option.value) ? "checked" : ""} />
-            ${option.label}
-          </label>
-        `).join("")}</div>`;
+        const name = getSurveyInputName(question);
+        return `<div class="survey-options multiSimple">${question.options.map((option, index) => renderSurveyOption({
+          inputType: "checkbox",
+          name,
+          value: index,
+          label: option.label,
+          dataValue: option.value,
+          checked: answer.includes(option.value)
+        })).join("")}</div>`;
       }
 
       return "";
     }
 
-    function syncQuestionOptionVisuals(question) {
-      if (!question) return;
-
-      if (question.type === "single") {
-        const answer = state.answers[question.key];
-        questionArea.querySelectorAll(".option-input").forEach((input) => {
-          const selected = input.dataset.value === answer;
-          input.checked = selected;
-          input.closest(".option-btn")?.classList.toggle("selected", selected);
-        });
-        return;
-      }
-
-      if (question.type === "assetCounts") {
-        const answer = state.answers[question.key] || {};
-        questionArea.querySelectorAll(".option-input[data-asset]").forEach((input) => {
-          const assetKey = input.dataset.asset;
-          const selected = answer[assetKey] === input.dataset.value;
-          input.checked = selected;
-          input.closest(".option-btn")?.classList.toggle("selected", selected);
-        });
-        return;
-      }
-
-      if (question.type === "multiSimple") {
-        const answer = Array.isArray(state.answers[question.key]) ? state.answers[question.key] : [];
-        questionArea.querySelectorAll(".option-input").forEach((input) => {
-          const selected = answer.includes(input.dataset.value);
-          input.checked = selected;
-          input.closest(".option-btn")?.classList.toggle("selected", selected);
-        });
-      }
-    }
-
-    function applyQuestionAnswer(question, input) {
-      if (!question || !input) return;
-
+    function applyCheckedInputToAnswer(question, input) {
+      if (!question || !input) return false;
       const value = input.dataset.value;
 
       if (question.type === "single") {
         state.answers[question.key] = value;
+        return true;
       }
 
       if (question.type === "assetCounts") {
         const assetKey = input.dataset.asset;
-        if (!assetKey) return;
+        if (!assetKey) return false;
         state.answers[question.key] = state.answers[question.key] || {};
         state.answers[question.key][assetKey] = value;
+        return true;
       }
 
       if (question.type === "multiSimple") {
@@ -2575,23 +2729,104 @@
         }
 
         state.answers[question.key] = selected;
+        return true;
       }
 
-      syncQuestionOptionVisuals(question);
+      return false;
+    }
+
+    function syncSurveyCheckedAttributes() {
+      questionArea.querySelectorAll(".survey-option-input").forEach((input) => {
+        const label = input.closest(".survey-option-label");
+        if (input.checked) {
+          input.setAttribute("checked", "checked");
+          if (label) {
+            label.setAttribute("aria-checked", "true");
+            label.style.setProperty("--survey-label-bg", "#06251d");
+            label.style.setProperty("--survey-card-bg", "transparent");
+            label.style.setProperty("--survey-card-color", "#fff8dc");
+            label.style.setProperty("--survey-card-border", "#d7ad55");
+            label.style.setProperty("--survey-card-shadow", "0 9px 20px rgba(14, 53, 41, 0.16)");
+            label.style.backgroundColor = "#06251d";
+            const card = label.querySelector(".survey-option-card");
+            if (card) {
+              card.style.backgroundColor = "transparent";
+              card.style.color = "#fff8dc";
+              card.style.borderColor = "#d7ad55";
+              card.style.boxShadow = "0 9px 20px rgba(14, 53, 41, 0.16)";
+            }
+          }
+        } else {
+          input.removeAttribute("checked");
+          if (label) {
+            label.setAttribute("aria-checked", "false");
+            label.style.removeProperty("--survey-label-bg");
+            label.style.removeProperty("--survey-card-bg");
+            label.style.removeProperty("--survey-card-color");
+            label.style.removeProperty("--survey-card-border");
+            label.style.removeProperty("--survey-card-shadow");
+            label.style.backgroundColor = "";
+            const card = label.querySelector(".survey-option-card");
+            if (card) {
+              card.style.backgroundColor = "";
+              card.style.color = "";
+              card.style.borderColor = "";
+              card.style.boxShadow = "";
+            }
+          }
+        }
+      });
+    }
+
+    function syncCurrentAnswerFromForm() {
+      const question = questions[state.step];
+      const form = document.getElementById("diagnosisQuestionForm");
+      if (!question || !form) return;
+
+      if (question.type === "single") {
+        const input = form.querySelector(".survey-option-input:checked");
+        if (input) applyCheckedInputToAnswer(question, input);
+      }
+
+      if (question.type === "assetCounts") {
+        form.querySelectorAll(".survey-option-input[data-asset]:checked").forEach((input) => {
+          applyCheckedInputToAnswer(question, input);
+        });
+      }
+
+      if (question.type === "multiSimple") {
+        let selected = [];
+        const exclusive = question.exclusive || [];
+        form.querySelectorAll(".survey-option-input:checked").forEach((input) => {
+          const value = input.dataset.value;
+          if (exclusive.includes(value)) {
+            selected = [value];
+          } else if (!selected.some((item) => exclusive.includes(item))) {
+            selected.push(value);
+          }
+        });
+        state.answers[question.key] = Array.from(new Set(selected));
+      }
+
       saveState();
       syncReportAnswersSnapshot();
+      syncSurveyCheckedAttributes();
     }
 
     function handleQuestionOptionChange(event) {
       const input = event.target && event.target.closest
-        ? event.target.closest(".option-input")
+        ? event.target.closest(".survey-option-input")
         : null;
 
       if (!input || !questionArea.contains(input)) {
         return;
       }
 
-      applyQuestionAnswer(questions[state.step], input);
+      if (applyCheckedInputToAnswer(questions[state.step], input)) {
+        saveState();
+        syncReportAnswersSnapshot();
+        syncSurveyCheckedAttributes();
+      }
     }
 
     questionArea.addEventListener("change", handleQuestionOptionChange, false);
@@ -2672,6 +2907,7 @@ function saveState() {
     }
 
     function runPrevNav() {
+      syncCurrentAnswerFromForm();
       if (state.step > 0) {
         state.step -= 1;
         saveState();
@@ -2680,6 +2916,7 @@ function saveState() {
     }
 
     function runNextNav() {
+      syncCurrentAnswerFromForm();
       if (questionArea.classList.contains("hidden")) {
         state.step = 0;
         state.answers = {};
