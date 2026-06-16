@@ -580,6 +580,27 @@
       color: rgba(255, 248, 220, 0.74) !important;
     }
 
+    .survey-debug-panel {
+      position: fixed;
+      left: 8px;
+      right: 8px;
+      bottom: max(8px, env(safe-area-inset-bottom));
+      z-index: 99999;
+      max-height: 36vh;
+      overflow: auto;
+      padding: 10px;
+      border: 3px solid #e11d48;
+      border-radius: 12px;
+      background: #ffffff;
+      color: #111111;
+      font-size: 12px;
+      line-height: 1.45;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      box-shadow: 0 10px 26px rgba(0, 0, 0, 0.22);
+      pointer-events: none;
+      white-space: pre-wrap;
+    }
+
     body .page main#diagnosis,
     body .page #diagnosis,
     body .page .diagnosis,
@@ -2605,6 +2626,132 @@
     const scoreText = document.getElementById("scoreText");
     const prevBtn = document.getElementById("prevBtn");
     const nextBtn = document.getElementById("nextBtn");
+    const surveyDebugEnabled = (() => {
+      try {
+        return new URLSearchParams(window.location.search || "").get("surveyDebug") === "1";
+      } catch (error) {
+        return false;
+      }
+    })();
+    const surveyDebugState = {
+      renderCount: 0,
+      lastRenderAt: "",
+      lastReason: "init",
+      lastEventType: "none",
+      lastTarget: null,
+      lastPoint: null,
+      lastElementFromPoint: null
+    };
+
+    function getDebugText(value, maxLength = 80) {
+      return String(value || "").replace(/\s+/g, " ").trim().slice(0, maxLength);
+    }
+
+    function describeDebugElement(el) {
+      if (!el) return null;
+      const style = window.getComputedStyle ? window.getComputedStyle(el) : null;
+      const labelText = el.closest
+        ? getDebugText(el.closest(".survey-option-label")?.querySelector(".survey-option-title")?.textContent, 80)
+        : "";
+      return {
+        tag: el.tagName || "",
+        id: el.id || "",
+        className: typeof el.className === "string" ? el.className : String(el.className || ""),
+        text: getDebugText(el.textContent, 80) || labelText,
+        position: style ? style.position : "",
+        zIndex: style ? style.zIndex : "",
+        pointerEvents: style ? style.pointerEvents : "",
+        display: style ? style.display : ""
+      };
+    }
+
+    function getSurveyDebugPanel() {
+      if (!surveyDebugEnabled) return null;
+
+      let panel = document.getElementById("surveyDebugPanel");
+      if (panel) return panel;
+
+      panel = document.createElement("pre");
+      panel.id = "surveyDebugPanel";
+      panel.className = "survey-debug-panel";
+      panel.setAttribute("aria-live", "polite");
+
+      const diagnosis = document.getElementById("diagnosis") || questionArea?.parentNode || document.body;
+      diagnosis.appendChild(panel);
+      return panel;
+    }
+
+    function getCurrentQuestionCheckedLabels() {
+      return Array.from(questionArea.querySelectorAll(".survey-option-label"))
+        .filter((label) => {
+          const input = label.querySelector(".survey-option-input");
+          return input && input.checked;
+        })
+        .map((label) => getDebugText(label.querySelector(".survey-option-title")?.textContent || label.textContent, 80));
+    }
+
+    function updateSurveyDebugPanel(reason = "update") {
+      if (!surveyDebugEnabled) return;
+
+      const panel = getSurveyDebugPanel();
+      if (!panel) return;
+
+      const question = questions[state.step];
+      const inputs = Array.from(questionArea.querySelectorAll(".survey-option-input"));
+      const labels = Array.from(questionArea.querySelectorAll(".survey-option-label"));
+      const badges = Array.from(questionArea.querySelectorAll(".survey-selected-badge"))
+        .filter((badge) => {
+          const style = window.getComputedStyle ? window.getComputedStyle(badge) : null;
+          return style && style.display !== "none" && style.visibility !== "hidden";
+        });
+
+      const selectedAnswer = question ? state.answers[question.key] : undefined;
+      const lines = [
+        "SURVEY DEBUG: ON",
+        `reason: ${reason}`,
+        `questionIndex: ${state.step}`,
+        `questionKey: ${question ? question.key : ""}`,
+        `lastEventType: ${surveyDebugState.lastEventType}`,
+        `lastTarget: ${JSON.stringify(surveyDebugState.lastTarget)}`,
+        `lastPoint: ${JSON.stringify(surveyDebugState.lastPoint)}`,
+        `elementFromPoint: ${JSON.stringify(surveyDebugState.lastElementFromPoint)}`,
+        `checkedCount: ${inputs.filter((input) => input.checked).length}`,
+        `checkedLabels: ${JSON.stringify(getCurrentQuestionCheckedLabels())}`,
+        `selectedAnswer: ${JSON.stringify(selectedAnswer)}`,
+        `nextDisabled: ${nextBtn ? Boolean(nextBtn.disabled) : ""}`,
+        `renderCount: ${surveyDebugState.renderCount}`,
+        `lastRenderAt: ${surveyDebugState.lastRenderAt}`,
+        `badgeVisibleCount: ${badges.length}`,
+        `labelCount: ${labels.length}`,
+        `inputCount: ${inputs.length}`
+      ];
+
+      panel.textContent = lines.join("\n");
+    }
+
+    function recordSurveyDebugEvent(event) {
+      if (!surveyDebugEnabled) return;
+
+      const touch = event.changedTouches && event.changedTouches[0]
+        ? event.changedTouches[0]
+        : event.touches && event.touches[0]
+          ? event.touches[0]
+          : null;
+      const point = touch
+        ? { x: Math.round(touch.clientX), y: Math.round(touch.clientY) }
+        : typeof event.clientX === "number"
+          ? { x: Math.round(event.clientX), y: Math.round(event.clientY) }
+          : null;
+
+      surveyDebugState.lastEventType = event.type;
+      surveyDebugState.lastTarget = describeDebugElement(event.target);
+      if (point) {
+        surveyDebugState.lastPoint = point;
+        surveyDebugState.lastElementFromPoint = describeDebugElement(document.elementFromPoint(point.x, point.y));
+      }
+
+      window.requestAnimationFrame(() => updateSurveyDebugPanel(`event:${event.type}`));
+    }
 
     function getAnswerScore(question) {
       const answer = state.answers[question.key];
@@ -2681,7 +2828,10 @@
         </article>
       `;
 
+      surveyDebugState.renderCount += 1;
+      surveyDebugState.lastRenderAt = new Date().toLocaleTimeString("ko-KR", { hour12: false });
       syncSurveyCheckedAttributes();
+      updateSurveyDebugPanel("render");
     }
 
     function getSurveyInputName(question, extraKey) {
@@ -2849,6 +2999,7 @@
           }
         }
       });
+      updateSurveyDebugPanel("syncSurveyCheckedAttributes");
     }
 
     function syncCurrentAnswerFromForm() {
@@ -2899,10 +3050,14 @@
         saveState();
         syncReportAnswersSnapshot();
         syncSurveyCheckedAttributes();
+        updateSurveyDebugPanel("change");
       }
     }
 
     questionArea.addEventListener("change", handleQuestionOptionChange, false);
+    ["click", "change", "input", "pointerdown", "touchstart", "touchend"].forEach((eventName) => {
+      questionArea.addEventListener(eventName, recordSurveyDebugEvent, { capture: true, passive: true });
+    });
 
     
     function setHomeReturnButtonVisible(visible) {
@@ -2986,6 +3141,7 @@ function saveState() {
         saveState();
         render();
       }
+      updateSurveyDebugPanel("prev");
     }
 
     function runNextNav() {
@@ -2995,6 +3151,7 @@ function saveState() {
         state.answers = {};
         saveState();
         render();
+        updateSurveyDebugPanel("next-reset");
         return;
       }
 
@@ -3002,10 +3159,12 @@ function saveState() {
         state.step += 1;
         saveState();
         render();
+        updateSurveyDebugPanel("next");
       } else {
         saveState();
         syncReportAnswersSnapshot();
         showResult();
+        updateSurveyDebugPanel("showResult");
       }
     }
 
