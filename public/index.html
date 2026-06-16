@@ -401,6 +401,7 @@
 
     .survey-option-card {
       display: block;
+      position: relative;
       width: 100%;
       min-height: 56px;
       border: 2px solid var(--survey-card-border, rgba(14, 53, 41, 0.18));
@@ -419,73 +420,116 @@
     }
 
     .survey-option-input:checked + .survey-option-card {
-      background: var(--forest-deep) !important;
-      background-color: var(--forest-deep) !important;
+      background: #06251d !important;
+      background-color: #06251d !important;
       color: #fff8dc !important;
-      border-color: var(--gold) !important;
-      box-shadow: 0 9px 20px rgba(14, 53, 41, 0.16) !important;
+      border-color: #d7ad55 !important;
+      border-width: 2px !important;
+      box-shadow: 0 0 0 2px rgba(215, 173, 85, 0.35), inset 5px 0 0 #d7ad55, 0 9px 20px rgba(14, 53, 41, 0.16) !important;
     }
 
     .survey-option-input[checked] + .survey-option-card {
-      background: var(--forest-deep) !important;
-      background-color: var(--forest-deep) !important;
+      background: #06251d !important;
+      background-color: #06251d !important;
       color: #fff8dc !important;
-      border-color: var(--gold) !important;
-      box-shadow: 0 9px 20px rgba(14, 53, 41, 0.16) !important;
+      border-color: #d7ad55 !important;
+      border-width: 2px !important;
+      box-shadow: 0 0 0 2px rgba(215, 173, 85, 0.35), inset 5px 0 0 #d7ad55, 0 9px 20px rgba(14, 53, 41, 0.16) !important;
     }
 
     .survey-option-input[type="checkbox"][checked] + .survey-option-card {
-      background: var(--forest-deep) !important;
-      background-color: var(--forest-deep) !important;
+      background: #06251d !important;
+      background-color: #06251d !important;
       color: #fff8dc !important;
-      border-color: var(--gold) !important;
-      box-shadow: 0 9px 20px rgba(14, 53, 41, 0.16) !important;
+      border-color: #d7ad55 !important;
+      border-width: 2px !important;
+      box-shadow: 0 0 0 2px rgba(215, 173, 85, 0.35), inset 5px 0 0 #d7ad55, 0 9px 20px rgba(14, 53, 41, 0.16) !important;
     }
 
     .survey-option-label:has(.survey-option-input:checked) .survey-option-card {
-      background: transparent !important;
-      background-color: transparent !important;
+      background: #06251d !important;
+      background-color: #06251d !important;
       color: #fff8dc !important;
-      border-color: var(--gold) !important;
-      box-shadow: 0 9px 20px rgba(14, 53, 41, 0.16) !important;
+      border-color: #d7ad55 !important;
+      border-width: 2px !important;
+      box-shadow: 0 0 0 2px rgba(215, 173, 85, 0.35), inset 5px 0 0 #d7ad55, 0 9px 20px rgba(14, 53, 41, 0.16) !important;
     }
 
     .survey-option-label:has(.survey-option-input:checked) {
-      background: var(--forest-deep) !important;
-      background-color: var(--forest-deep) !important;
+      background: transparent !important;
+      background-color: transparent !important;
       border-radius: 18px;
     }
 
     .survey-option-label[aria-checked="true"] {
-      background: var(--forest-deep) !important;
-      background-color: var(--forest-deep) !important;
+      background: transparent !important;
+      background-color: transparent !important;
       border-radius: 18px;
     }
 
     .survey-option-label[aria-checked="true"] .survey-option-card {
-      background: transparent !important;
-      background-color: transparent !important;
+      background: #06251d !important;
+      background-color: #06251d !important;
       color: #fff8dc !important;
-      border-color: var(--gold) !important;
-      box-shadow: 0 9px 20px rgba(14, 53, 41, 0.16) !important;
+      border-color: #d7ad55 !important;
+      border-width: 2px !important;
+      box-shadow: 0 0 0 2px rgba(215, 173, 85, 0.35), inset 5px 0 0 #d7ad55, 0 9px 20px rgba(14, 53, 41, 0.16) !important;
     }
 
     .survey-option-label:focus-within {
-      background: var(--forest-deep) !important;
-      background-color: var(--forest-deep) !important;
+      background: transparent !important;
+      background-color: transparent !important;
       border-radius: 18px;
     }
 
     .survey-option-label:focus-within .survey-option-card {
-      background: transparent !important;
-      background-color: transparent !important;
+      background: #06251d !important;
+      background-color: #06251d !important;
       color: #fff8dc !important;
-      border-color: var(--gold) !important;
-      box-shadow: 0 9px 20px rgba(14, 53, 41, 0.16) !important;
+      border-color: #d7ad55 !important;
+      border-width: 2px !important;
+      box-shadow: 0 0 0 2px rgba(215, 173, 85, 0.35), inset 5px 0 0 #d7ad55, 0 9px 20px rgba(14, 53, 41, 0.16) !important;
     }
 
     .survey-option-title {
       display: block;
+      padding-right: 66px;
+    }
+
+    .survey-option-card::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 0;
+      border-radius: 16px 0 0 16px;
+    }
+
+    .survey-option-card::after {
+      content: "";
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      min-width: 0;
+      color: transparent;
+      font-size: 0.82rem;
+      font-weight: 950;
+      line-height: 1;
+    }
+
+    .survey-option-input:checked + .survey-option-card::after,
+    .survey-option-input[checked] + .survey-option-card::after,
+    .survey-option-label[aria-checked="true"] .survey-option-card::after,
+    .survey-option-label:has(.survey-option-input:checked) .survey-option-card::after,
+    .survey-option-label:focus-within .survey-option-card::after {
+      content: "✓ 선택됨";
+      color: #f6dc86 !important;
+      padding: 7px 9px;
+      border-radius: 999px;
+      background: rgba(255, 248, 220, 0.08);
+      border: 1px solid rgba(246, 220, 134, 0.55);
     }
 
     .survey-options.multiSimple .survey-option-card::after {
@@ -2742,18 +2786,19 @@
           input.setAttribute("checked", "checked");
           if (label) {
             label.setAttribute("aria-checked", "true");
-            label.style.setProperty("--survey-label-bg", "#06251d");
-            label.style.setProperty("--survey-card-bg", "transparent");
+            label.style.setProperty("--survey-label-bg", "transparent");
+            label.style.setProperty("--survey-card-bg", "#06251d");
             label.style.setProperty("--survey-card-color", "#fff8dc");
             label.style.setProperty("--survey-card-border", "#d7ad55");
-            label.style.setProperty("--survey-card-shadow", "0 9px 20px rgba(14, 53, 41, 0.16)");
-            label.style.backgroundColor = "#06251d";
+            label.style.setProperty("--survey-card-shadow", "0 0 0 2px rgba(215, 173, 85, 0.35), inset 5px 0 0 #d7ad55, 0 9px 20px rgba(14, 53, 41, 0.16)");
+            label.style.backgroundColor = "";
             const card = label.querySelector(".survey-option-card");
             if (card) {
-              card.style.backgroundColor = "transparent";
+              card.style.backgroundColor = "#06251d";
               card.style.color = "#fff8dc";
               card.style.borderColor = "#d7ad55";
-              card.style.boxShadow = "0 9px 20px rgba(14, 53, 41, 0.16)";
+              card.style.borderWidth = "2px";
+              card.style.boxShadow = "0 0 0 2px rgba(215, 173, 85, 0.35), inset 5px 0 0 #d7ad55, 0 9px 20px rgba(14, 53, 41, 0.16)";
             }
           }
         } else {
@@ -2771,6 +2816,7 @@
               card.style.backgroundColor = "";
               card.style.color = "";
               card.style.borderColor = "";
+              card.style.borderWidth = "";
               card.style.boxShadow = "";
             }
           }
