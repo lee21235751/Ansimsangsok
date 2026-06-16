@@ -2366,6 +2366,11 @@
     const scoreText = document.getElementById("scoreText");
     const prevBtn = document.getElementById("prevBtn");
     const nextBtn = document.getElementById("nextBtn");
+    const surveyActivateEvent = (navigator.maxTouchPoints > 0 || "ontouchstart" in window)
+      ? "touchend"
+      : window.PointerEvent
+        ? "pointerup"
+        : "click";
 
     function getAnswerScore(question) {
       const answer = state.answers[question.key];
@@ -2440,7 +2445,6 @@
         </article>
       `;
 
-      bindQuestionEvents(question);
     }
 
     function renderQuestionBody(question) {
@@ -2496,20 +2500,38 @@
       return "";
     }
 
-    let lastQuestionOptionTap = { time: 0, value: "", step: -1 };
+    function syncQuestionOptionVisuals(question) {
+      if (!question) return;
+
+      if (question.type === "single") {
+        const answer = state.answers[question.key];
+        questionArea.querySelectorAll(".option-btn").forEach((btn) => {
+          btn.classList.toggle("selected", btn.dataset.value === answer);
+        });
+        return;
+      }
+
+      if (question.type === "assetCounts") {
+        const answer = state.answers[question.key] || {};
+        questionArea.querySelectorAll(".option-btn[data-asset]").forEach((btn) => {
+          const assetKey = btn.dataset.asset;
+          btn.classList.toggle("selected", answer[assetKey] === btn.dataset.value);
+        });
+        return;
+      }
+
+      if (question.type === "multiSimple") {
+        const answer = Array.isArray(state.answers[question.key]) ? state.answers[question.key] : [];
+        questionArea.querySelectorAll(".option-btn").forEach((btn) => {
+          btn.classList.toggle("selected", answer.includes(btn.dataset.value));
+        });
+      }
+    }
 
     function applyQuestionAnswer(question, button) {
       if (!question || !button) return;
 
       const value = button.dataset.value;
-      const now = Date.now();
-      const tapKey = [state.step, question.key, button.dataset.asset || "", value || ""].join("|");
-
-      if (lastQuestionOptionTap.value === tapKey && now - lastQuestionOptionTap.time < 280) {
-        return;
-      }
-
-      lastQuestionOptionTap = { time: now, value: tapKey, step: state.step };
 
       if (question.type === "single") {
         state.answers[question.key] = value;
@@ -2538,34 +2560,34 @@
         state.answers[question.key] = selected;
       }
 
+      syncQuestionOptionVisuals(question);
       saveState();
       syncReportAnswersSnapshot();
-      render();
     }
 
-    function bindQuestionEvents(question) {
-      questionArea.__ansimCurrentQuestion = question;
-
-      if (questionArea.__ansimPointerUpOptionHandlerInstalled) {
+    function handleQuestionOptionActivate(event) {
+      if (surveyActivateEvent === "pointerup" && event.pointerType === "mouse" && event.button !== 0) {
         return;
       }
 
-      const handleOptionActivate = (event) => {
-        const target = event.target && event.target.closest
-          ? event.target.closest(".option-btn")
-          : null;
+      const target = event.target && event.target.closest
+        ? event.target.closest(".option-btn")
+        : null;
 
-        if (!target || !questionArea.contains(target)) {
-          return;
-        }
+      if (!target || !questionArea.contains(target)) {
+        return;
+      }
 
-        const currentQuestion = questionArea.__ansimCurrentQuestion || questions[state.step];
-        applyQuestionAnswer(currentQuestion, target);
-      };
+      applyQuestionAnswer(questions[state.step], target);
+    }
 
-      questionArea.addEventListener("pointerup", handleOptionActivate, false);
-      questionArea.addEventListener("click", handleOptionActivate, false);
-      questionArea.__ansimPointerUpOptionHandlerInstalled = true;
+    questionArea.addEventListener(surveyActivateEvent, handleQuestionOptionActivate, false);
+
+    function runSurveyNav(event, handler) {
+      if (surveyActivateEvent === "pointerup" && event.pointerType === "mouse" && event.button !== 0) {
+        return;
+      }
+      handler();
     }
 
     
@@ -2643,8 +2665,6 @@ function saveState() {
       scoreText.textContent = "진단 완료";
     }
 
-    let lastNavActivation = { target: "", time: 0 };
-
     function runPrevNav() {
       if (state.step > 0) {
         state.step -= 1;
@@ -2673,42 +2693,13 @@ function saveState() {
       }
     }
 
-    function activateNavButton(kind, handler) {
-      const now = Date.now();
+    prevBtn.addEventListener(surveyActivateEvent, (event) => {
+      runSurveyNav(event, runPrevNav);
+    }, false);
 
-      if (lastNavActivation.target === kind && now - lastNavActivation.time < 180) {
-        return;
-      }
-
-      lastNavActivation = { target: kind, time: now };
-      handler();
-    }
-
-    function bindPointerUpNavButtons() {
-      if (window.__ansimPointerUpNavHandlerInstalled) {
-        return;
-      }
-
-      prevBtn.addEventListener("pointerup", function () {
-        activateNavButton("prev", runPrevNav);
-      }, false);
-
-      prevBtn.addEventListener("click", function () {
-        activateNavButton("prev", runPrevNav);
-      }, false);
-
-      nextBtn.addEventListener("pointerup", function () {
-        activateNavButton("next", runNextNav);
-      }, false);
-
-      nextBtn.addEventListener("click", function () {
-        activateNavButton("next", runNextNav);
-      }, false);
-
-      window.__ansimPointerUpNavHandlerInstalled = true;
-    }
-
-    bindPointerUpNavButtons();
+    nextBtn.addEventListener(surveyActivateEvent, (event) => {
+      runSurveyNav(event, runNextNav);
+    }, false);
 
     function showLeadStatusBanner(message, type = "success") {
       const banner = document.getElementById("leadStatusBanner");
