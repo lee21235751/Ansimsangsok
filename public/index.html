@@ -4034,7 +4034,12 @@ document.addEventListener("DOMContentLoaded", function () {
       setTimeout(ensureFinalButton, 120);
     }, true);
 
-    setInterval(ensureFinalButton, 500);
+    var finalButtonInterval = setInterval(function () {
+      ensureFinalButton();
+      if (document.getElementById("openFreeReportFinalBtn")) {
+        clearInterval(finalButtonInterval);
+      }
+    }, 500);
     setTimeout(ensureFinalButton, 500);
     setTimeout(ensureFinalButton, 1500);
   });
@@ -4144,7 +4149,15 @@ document.addEventListener("DOMContentLoaded", function () {
       setTimeout(insertPaidIntentInlineCard, 250);
     }, true);
 
-    setInterval(insertPaidIntentInlineCard, 700);
+    var paidIntentCardInterval = setInterval(function () {
+      insertPaidIntentInlineCard();
+      if (
+        document.getElementById("paidReportIntentInlineCard") &&
+        document.getElementById("paidReportIntentInlineBtn")
+      ) {
+        clearInterval(paidIntentCardInterval);
+      }
+    }, 700);
     setTimeout(insertPaidIntentInlineCard, 500);
     setTimeout(insertPaidIntentInlineCard, 1500);
   });
@@ -4316,7 +4329,15 @@ document.addEventListener("DOMContentLoaded", function () {
       setTimeout(insertPaymentCta, 150);
     }, true);
 
-    setInterval(insertPaymentCta, 700);
+    var paymentCtaInterval = setInterval(function () {
+      insertPaymentCta();
+      if (
+        document.getElementById("paidPaymentCtaCard") &&
+        document.getElementById("openPaidPaymentGuideBtn")
+      ) {
+        clearInterval(paymentCtaInterval);
+      }
+    }, 700);
     setTimeout(insertPaymentCta, 700);
     setTimeout(insertPaymentCta, 1600);
   });
