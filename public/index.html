@@ -2546,11 +2546,11 @@
     function bindQuestionEvents(question) {
       questionArea.__ansimCurrentQuestion = question;
 
-      if (questionArea.__ansimClickOnlyOptionHandlerInstalled) {
+      if (questionArea.__ansimPointerUpOptionHandlerInstalled) {
         return;
       }
 
-      const handleOptionClick = (event) => {
+      const handleOptionActivate = (event) => {
         const target = event.target && event.target.closest
           ? event.target.closest(".option-btn")
           : null;
@@ -2563,8 +2563,9 @@
         applyQuestionAnswer(currentQuestion, target);
       };
 
-      questionArea.addEventListener("click", handleOptionClick, false);
-      questionArea.__ansimClickOnlyOptionHandlerInstalled = true;
+      questionArea.addEventListener("pointerup", handleOptionActivate, false);
+      questionArea.addEventListener("click", handleOptionActivate, false);
+      questionArea.__ansimPointerUpOptionHandlerInstalled = true;
     }
 
     
