@@ -6723,8 +6723,14 @@ document.addEventListener("DOMContentLoaded", function () {
     window.ansimConfirmTossPaymentFromUrl = wrappedConfirm;
   }
 
-  setInterval(function () {
-    if (isPaidConfirmed()) renderPaidReport();
+  var paidReportInterval = setInterval(function () {
+    if (isPaidConfirmed()) {
+      renderPaidReport();
+      var card = document.getElementById("paidReportDeliveredCard");
+      if (card && card.hidden !== true && card.style.display !== "none") {
+        clearInterval(paidReportInterval);
+      }
+    }
   }, 1200);
 
   scheduleRender();
