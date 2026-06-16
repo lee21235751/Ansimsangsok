@@ -7706,28 +7706,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   document.addEventListener("DOMContentLoaded", schedule);
   document.addEventListener("click", schedule, true);
-  var casePackReadyCount = 0;
-  var casePackInterval = setInterval(function () {
-    renderCasePack();
-    var delivered = document.getElementById("paidReportDeliveredCard");
-    var reference = document.getElementById("paidReferencePackPanel");
-    var panel = document.getElementById("paidCasePackPanel");
-
-    if (
-      delivered &&
-      delivered.hidden !== true &&
-      reference &&
-      panel &&
-      panel.parentNode
-    ) {
-      casePackReadyCount += 1;
-      if (casePackReadyCount >= 2) {
-        clearInterval(casePackInterval);
-      }
-    } else {
-      casePackReadyCount = 0;
-    }
-  }, 1000);
+  setInterval(renderCasePack, 1000);
   schedule();
 })();
 </script>
