@@ -2546,11 +2546,11 @@
     function bindQuestionEvents(question) {
       questionArea.__ansimCurrentQuestion = question;
 
-      if (questionArea.__ansimDelegatedOptionHandlerInstalled) {
+      if (questionArea.__ansimClickOnlyOptionHandlerInstalled) {
         return;
       }
 
-      const handleOptionEvent = (event) => {
+      const handleOptionClick = (event) => {
         const target = event.target && event.target.closest
           ? event.target.closest(".option-btn")
           : null;
@@ -2559,17 +2559,12 @@
           return;
         }
 
-        event.preventDefault();
-        event.stopPropagation();
-
         const currentQuestion = questionArea.__ansimCurrentQuestion || questions[state.step];
         applyQuestionAnswer(currentQuestion, target);
       };
 
-      questionArea.addEventListener("pointerdown", handleOptionEvent, true);
-      questionArea.addEventListener("touchend", handleOptionEvent, true);
-      questionArea.addEventListener("click", handleOptionEvent, true);
-      questionArea.__ansimDelegatedOptionHandlerInstalled = true;
+      questionArea.addEventListener("click", handleOptionClick, false);
+      questionArea.__ansimClickOnlyOptionHandlerInstalled = true;
     }
 
     
