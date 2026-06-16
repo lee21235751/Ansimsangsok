@@ -11246,6 +11246,7 @@ document.addEventListener("DOMContentLoaded", function () {
 })();
 </script>
 
+<!-- paid detail leak guard / do not remove without regression test -->
 <script id="ansim-paid-detail-leak-suppressor">
 (function () {
   function isPaidConfirmedForDetailPanels() {
@@ -11547,60 +11548,6 @@ document.addEventListener("DOMContentLoaded", function () {
 })();
 </script>
 
-</body>",
-
-
-
-<script>
-(function ansimPaidReportPrintFamilySummaryV1c(){
-  if (window.__ansimPaidPhraseGuardV11 === undefined) {
-    window.__ansimPaidPhraseGuardV11 = function(){
-      try {
-        return localStorage.getItem("ansim_payment_status") === "paid_confirmed" ||
-          localStorage.getItem("ansim_paid_report_status") === "paid_confirmed" ||
-          sessionStorage.getItem("ansim_payment_status") === "paid_confirmed" ||
-          sessionStorage.getItem("ansim_paid_report_status") === "paid_confirmed";
-      } catch (error) {
-        return false;
-      }
-    };
-  }
-  if (!window.__ansimPaidPhraseGuardV11()) return;
-
-  if (window.__ansimPaidOnlyGuardV10 === undefined) {
-    window.__ansimPaidOnlyGuardV10 = function(){
-      try {
-        return localStorage.getItem("ansim_payment_status") === "paid_confirmed" ||
-          localStorage.getItem("ansim_paid_report_status") === "paid_confirmed" ||
-          sessionStorage.getItem("ansim_payment_status") === "paid_confirmed" ||
-          sessionStorage.getItem("ansim_paid_report_status") === "paid_confirmed";
-      } catch (error) {
-        return false;
-      }
-    };
-  }
-  if (!window.__ansimPaidOnlyGuardV10()) return;
-
-window.__ansimPaidReportPrintFamilySummaryV1cInstalled=true;
-function ready(fn){if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',fn,{once:true});}else{fn();}}
-function textOf(el){return el?String(el.textContent||''):'';}
-function style(){if(document.getElementById('paid-print-family-summary-v1c-style'))return;var s=document.createElement('style');s.id='paid-print-family-summary-v1c-style';s.textContent='.paid-print-family-wrap{margin:22px 0 8px;display:grid;gap:12px}.paid-print-family-panel{border:1px solid rgba(151,119,64,.24);background:linear-gradient(180deg,#fffaf0 0%,#fffdf8 100%);border-radius:18px;padding:17px 16px;box-shadow:0 10px 26px rgba(43,31,18,.07)}.paid-print-family-panel h3{margin:0 0 7px;font-size:1.06rem;line-height:1.32;color:#3b2a15;letter-spacing:-.02em}.paid-print-family-lead{margin:0 0 13px;color:#66533a;font-size:.94rem;line-height:1.55}.paid-print-family-list{display:grid;gap:9px}.paid-print-family-row{display:grid;gap:3px;padding:10px 11px;border-radius:13px;background:rgba(255,255,255,.72);border:1px solid rgba(151,119,64,.16)}.paid-print-family-row strong{font-size:.93rem;color:#4a3417;line-height:1.35}.paid-print-family-row span{font-size:.88rem;color:#6b5a42;line-height:1.45}.paid-print-family-print-note{margin:2px 0 0;font-size:.84rem;line-height:1.45;color:#7b6747}.paid-print-family-print-button{appearance:none;border:1px solid rgba(151,119,64,.35);background:#fff;color:#4a3417;border-radius:999px;padding:9px 13px;font-weight:700;font-size:.9rem;line-height:1;cursor:pointer;width:fit-content}@media(min-width:760px){.paid-print-family-wrap{grid-template-columns:1fr 1fr;gap:14px}.paid-print-family-panel{padding:20px}.paid-print-family-panel h3{font-size:1.12rem}}@media print{.paid-print-family-panel{break-inside:avoid;box-shadow:none;background:#fff;border-color:#c9b27f}.paid-print-family-print-button{display:none!important}.paid-print-family-print-note{color:#444}}';document.head.appendChild(s);}
-function row(title,desc){var r=document.createElement('div');r.className='paid-print-family-row';var a=document.createElement('strong');a.textContent=title;var b=document.createElement('span');b.textContent=desc;r.appendChild(a);r.appendChild(b);return r;}
-function card(cls,title,lead,items){var sec=document.createElement('section');sec.className='paid-print-family-panel '+cls;var h=document.createElement('h3');h.textContent=title;var p=document.createElement('p');p.className='paid-print-family-lead';p.textContent=lead;var list=document.createElement('div');list.className='paid-print-family-list';items.forEach(function(it){list.appendChild(row(it[0],it[1]));});sec.appendChild(h);sec.appendChild(p);sec.appendChild(list);return sec;}
-function area(){return document.querySelector('main')||document.body;}
-function install(){return;}
-ready(function(){setTimeout(install,700);setTimeout(install,1700);setTimeout(install,3000);});
-})();
-</script>
-
-
-<!-- ansim removed one prepurchase conversion script -->
-
-
-
-<!-- ansim removed one prepurchase conversion script -->
-
-
 <script>
 (function ansimPaidReportReceivedFeelV1(){
   if (window.__ansimPaidPhraseGuardV11 === undefined) {
@@ -11641,57 +11588,6 @@ function card(title,items){var c=document.createElement('section');c.className='
 function panel(){var wrap=document.createElement('section');wrap.className='paid-density-wrap';wrap.setAttribute('aria-label','상속정리 리포트 본문 정리 강화');var eyebrow=document.createElement('p');eyebrow.className='paid-density-eyebrow';eyebrow.textContent='상속정리 리포트 본문 정리';var h=document.createElement('h2');h.textContent='내 상황을 더 자세히 나누어 정리했습니다';var lead=document.createElement('p');lead.className='paid-density-lead';lead.textContent='아래 항목은 필요할 때 다시 확인할 수 있도록 나누어 정리한 내용입니다.';var grid=document.createElement('div');grid.className='paid-density-grid';grid.appendChild(card('1. 현재 상황 정리',['상속인이 누구인지 먼저 확인합니다.','재산과 부채를 따로 나누어 봅니다.','예금, 부동산, 보험, 차량처럼 확인 경로가 다른 항목을 분리합니다.']));grid.appendChild(card('2. 먼저 확인할 쟁점',['연락이 어려운 상속인이 있는지 확인합니다.','해외 거주 상속인이나 해외 재산 가능성을 따로 봅니다.','유언장, 증여, 생전 관리 내역처럼 따로 확인할 항목을 표시합니다.']));grid.appendChild(card('3. 준비자료 체크',['가족관계증명서와 기본 확인 서류처럼 시작 자료를 구분합니다.','등기부, 금융거래, 보험 내역처럼 재산 확인 자료를 나누어 봅니다.','장례비, 병원비, 채무 관련 자료처럼 빠뜨리기 쉬운 항목을 확인합니다.']));grid.appendChild(card('4. 상담 전 질문 정리',['상속인 범위 확인 질문을 정리합니다.','재산 조회에서 빠질 수 있는 항목을 정리합니다.','해외 거주 상속인이나 해외 재산 확인 질문을 정리합니다.']));var question=document.createElement('p');question.className='paid-density-question';question.innerHTML='<strong>상담 시 물어볼 질문 예시</strong><br>상속인 범위 확인이 필요한가요? · 재산 조회에서 빠질 수 있는 항목이 있나요? · 준비하면 좋은 자료가 있나요? · 해외 거주 상속인이나 해외 재산은 따로 확인해야 하나요?';var note=document.createElement('p');note.className='paid-density-note';note.textContent='지금 정리해두면, 필요할 때 바로 확인할 수 있습니다.';wrap.appendChild(eyebrow);wrap.appendChild(h);wrap.appendChild(lead);wrap.appendChild(grid);wrap.appendChild(question);wrap.appendChild(note);return wrap;}
 function findPaidArea(){var els=Array.prototype.slice.call(document.querySelectorAll('section,article,div,main'));var best=null;els.forEach(function(el){var t=textOf(el);var score=0;if(t.indexOf('상속정리 리포트 자료 안내')>=0)score+=8;if(t.indexOf('상속 상황을 정리한 리포트가 완성되었습니다')>=0)score+=7;if(t.indexOf('안심상속 상속정리 리포트')>=0)score+=6;if(t.indexOf('내 상속 상황 요약')>=0)score+=5;if(t.indexOf('추천 확인 순서')>=0)score+=4;if(!best||score>best.score)best={el:el,score:score};});return best&&best.score>=5?best.el:(document.querySelector('main')||document.body);}
 function install(){if(!isPaidView())return;if(document.querySelector('.paid-density-wrap'))return;style();var target=findPaidArea();var p=panel();var anchors=Array.prototype.slice.call(target.querySelectorAll('section,article,div,h1,h2,h3,p'));var placed=false;for(var i=0;i<anchors.length;i++){var t=textOf(anchors[i]);if(t.indexOf('추천 확인 순서')>=0||t.indexOf('내 상속 상황 요약')>=0){anchors[i].insertAdjacentElement('afterend',p);placed=true;break;}}if(!placed)target.appendChild(p);}
-ready(function(){setTimeout(install,700);setTimeout(install,1700);setTimeout(install,3000);});
-})();
-</script>
-
-
-<!-- ansim removed one prepurchase conversion script -->
-
-
-
-<!-- ansim removed one prepurchase conversion script -->
-
-
-<script>
-(function ansimPaidFamilySharePhrasesV1(){
-  if (window.__ansimPaidPhraseGuardV11 === undefined) {
-    window.__ansimPaidPhraseGuardV11 = function(){
-      try {
-        return localStorage.getItem("ansim_payment_status") === "paid_confirmed" ||
-          localStorage.getItem("ansim_paid_report_status") === "paid_confirmed" ||
-          sessionStorage.getItem("ansim_payment_status") === "paid_confirmed" ||
-          sessionStorage.getItem("ansim_paid_report_status") === "paid_confirmed";
-      } catch (error) {
-        return false;
-      }
-    };
-  }
-  if (!window.__ansimPaidPhraseGuardV11()) return;
-
-  if (window.__ansimPaidOnlyGuardV10 === undefined) {
-    window.__ansimPaidOnlyGuardV10 = function(){
-      try {
-        return localStorage.getItem("ansim_payment_status") === "paid_confirmed" ||
-          localStorage.getItem("ansim_paid_report_status") === "paid_confirmed" ||
-          sessionStorage.getItem("ansim_payment_status") === "paid_confirmed" ||
-          sessionStorage.getItem("ansim_paid_report_status") === "paid_confirmed";
-      } catch (error) {
-        return false;
-      }
-    };
-  }
-  if (!window.__ansimPaidOnlyGuardV10()) return;
-
-window.__ansimPaidFamilySharePhrasesV1Installed=true;
-function ready(fn){if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',fn,{once:true});}else{fn();}}
-function textOf(el){return el?String(el.textContent||''):'';}
-function isPaidView(){try{var a=localStorage.getItem('ansim_payment_status')||'';var b=localStorage.getItem('ansim_paid_report_status')||'';var c=sessionStorage.getItem('ansim_payment_status')||'';var d=sessionStorage.getItem('ansim_paid_report_status')||'';return [a,b,c,d].join(' ').indexOf('paid_confirmed')>=0;}catch(e){return false;}}
-function style(){if(document.getElementById('paid-family-share-phrases-v1-style'))return;var s=document.createElement('style');s.id='paid-family-share-phrases-v1-style';s.textContent='.paid-family-phrases-wrap{margin:16px 0 16px;padding:17px;border:1px solid rgba(151,119,64,.25);border-radius:22px;background:linear-gradient(180deg,#fff8ea 0%,#fffefb 100%);box-shadow:0 14px 30px rgba(43,31,18,.07)}.paid-family-phrases-eyebrow{margin:0 0 6px;font-size:.8rem;font-weight:850;color:#8a6428}.paid-family-phrases-wrap h2{margin:0 0 8px;font-size:1.18rem;line-height:1.32;color:#3b2a15;letter-spacing:-.03em}.paid-family-phrases-lead{margin:0 0 14px;font-size:.94rem;line-height:1.58;color:#66533a}.paid-family-phrases-grid{display:grid;gap:10px}.paid-family-phrase-card{padding:12px;border:1px solid rgba(151,119,64,.17);border-radius:15px;background:rgba(255,255,255,.82)}.paid-family-phrase-card strong{display:block;margin:0 0 6px;font-size:.93rem;line-height:1.35;color:#4a3417}.paid-family-phrase-card p{margin:0;font-size:.86rem;line-height:1.5;color:#6b5a42}.paid-family-phrase-example{margin-top:8px;padding:10px;border-radius:13px;background:#fff;border:1px dashed rgba(151,119,64,.28);font-size:.85rem;line-height:1.5;color:#4f3b1f}.paid-family-phrase-example b{color:#3b2a15}.paid-family-phrases-note{margin:12px 0 0;padding:11px;border-radius:14px;background:rgba(255,255,255,.8);border:1px solid rgba(151,119,64,.16);font-size:.84rem;line-height:1.48;color:#6b5a42}@media(min-width:760px){.paid-family-phrases-wrap{padding:21px}.paid-family-phrases-wrap h2{font-size:1.3rem}.paid-family-phrases-grid{grid-template-columns:repeat(2,1fr)}}';document.head.appendChild(s);}
-function card(title,desc,example){var c=document.createElement('section');c.className='paid-family-phrase-card';var h=document.createElement('strong');h.textContent=title;var p=document.createElement('p');p.textContent=desc;var ex=document.createElement('div');ex.className='paid-family-phrase-example';ex.innerHTML='<b>이렇게 말해볼 수 있습니다</b><br>'+example;c.appendChild(h);c.appendChild(p);c.appendChild(ex);return c;}
-function panel(){var wrap=document.createElement('section');wrap.className='paid-family-phrases-wrap';return wrap;}
-function findPaidArea(){return document.querySelector('main')||document.body;}
-function install(){return;}
 ready(function(){setTimeout(install,700);setTimeout(install,1700);setTimeout(install,3000);});
 })();
 </script>
@@ -11855,18 +11751,6 @@ ready(function(){setTimeout(install,700);setTimeout(install,1700);setTimeout(ins
 })();
 </script>
 
-
-<!-- ansim removed one prepurchase conversion script -->
-
-
-
-
-
-
-
-
-
-
 <script>
 (function ansimPaidReceivedPremiumFeelV1(){
 window.__ansimPaidReceivedPremiumFeelV1Installed=true;
@@ -11929,16 +11813,6 @@ ready(function(){setTimeout(run,500);setTimeout(run,1500);setTimeout(run,3000);}
 </script>
 
 <script>
-(function ansimMobileDensityCopyCompressV1(){
-window.__ansimMobileDensityCopyCompressV1Installed=true;
-})();
-</script>
-
-
-
-
-
-<script>
 (function ansimPrepurchaseTeaserGateV1c(){
   if (window.__ansimPaidPhraseGuardV11 === undefined) {
     window.__ansimPaidPhraseGuardV11 = function(){
@@ -11971,6 +11845,7 @@ ready(function(){run();var tries=0;var timer=setInterval(function(){tries++;run(
 
 
 
+<!-- paid initial panel visibility guard / do not remove without regression test -->
 <script id="ansimInitialPaidPanelHideV4">
 (function () {
   function isVisible(el) {
