@@ -2643,15 +2643,17 @@ function saveState() {
       scoreText.textContent = "진단 완료";
     }
 
-    prevBtn.addEventListener("click", () => {
+    let lastNavActivation = { target: "", time: 0 };
+
+    function runPrevNav() {
       if (state.step > 0) {
         state.step -= 1;
         saveState();
         render();
       }
-    });
+    }
 
-    nextBtn.addEventListener("click", () => {
+    function runNextNav() {
       if (questionArea.classList.contains("hidden")) {
         state.step = 0;
         state.answers = {};
@@ -2669,9 +2671,45 @@ function saveState() {
         syncReportAnswersSnapshot();
         showResult();
       }
-    });
+    }
 
-    
+    function activateNavButton(kind, handler) {
+      const now = Date.now();
+
+      if (lastNavActivation.target === kind && now - lastNavActivation.time < 180) {
+        return;
+      }
+
+      lastNavActivation = { target: kind, time: now };
+      handler();
+    }
+
+    function bindPointerUpNavButtons() {
+      if (window.__ansimPointerUpNavHandlerInstalled) {
+        return;
+      }
+
+      prevBtn.addEventListener("pointerup", function () {
+        activateNavButton("prev", runPrevNav);
+      }, false);
+
+      prevBtn.addEventListener("click", function () {
+        activateNavButton("prev", runPrevNav);
+      }, false);
+
+      nextBtn.addEventListener("pointerup", function () {
+        activateNavButton("next", runNextNav);
+      }, false);
+
+      nextBtn.addEventListener("click", function () {
+        activateNavButton("next", runNextNav);
+      }, false);
+
+      window.__ansimPointerUpNavHandlerInstalled = true;
+    }
+
+    bindPointerUpNavButtons();
+
     function showLeadStatusBanner(message, type = "success") {
       const banner = document.getElementById("leadStatusBanner");
       if (!banner) return;
