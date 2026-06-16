@@ -496,6 +496,29 @@
       padding-right: 66px;
     }
 
+    .survey-selected-badge {
+      display: none;
+      width: fit-content;
+      margin-top: 8px;
+      border-radius: 999px;
+      padding: 6px 10px;
+      background: #d7ad55;
+      color: #06251d;
+      font-weight: 950;
+      font-size: 13px;
+      line-height: 1;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .survey-option-input:checked + .survey-option-card .survey-selected-badge,
+    .survey-option-input[checked] + .survey-option-card .survey-selected-badge,
+    .survey-option-label[aria-checked="true"] .survey-selected-badge,
+    .survey-option-label:has(.survey-option-input:checked) .survey-selected-badge,
+    .survey-option-label:focus-within .survey-selected-badge {
+      display: inline-flex !important;
+    }
+
     .survey-option-card::before {
       content: "";
       position: absolute;
@@ -2672,6 +2695,7 @@
           <input id="${inputId}" class="survey-option-input" type="${inputType}" name="${name}" value="${value}" data-value="${dataValue || label}" ${assetKey ? `data-asset="${assetKey}"` : ""} ${checked ? "checked" : ""} />
           <span class="survey-option-card">
             <span class="survey-option-title">${label}</span>
+            <span class="survey-selected-badge" aria-hidden="true">✓ 선택됨</span>
           </span>
         </label>
       `;
@@ -2794,11 +2818,16 @@
             label.style.backgroundColor = "";
             const card = label.querySelector(".survey-option-card");
             if (card) {
-              card.style.backgroundColor = "#06251d";
-              card.style.color = "#fff8dc";
-              card.style.borderColor = "#d7ad55";
-              card.style.borderWidth = "2px";
-              card.style.boxShadow = "0 0 0 2px rgba(215, 173, 85, 0.35), inset 5px 0 0 #d7ad55, 0 9px 20px rgba(14, 53, 41, 0.16)";
+              card.setAttribute("style", [
+                "background:#06251d !important",
+                "background-color:#06251d !important",
+                "color:#fff8dc !important",
+                "border-color:#d7ad55 !important",
+                "border-width:2px !important",
+                "box-shadow:0 0 0 2px rgba(215, 173, 85, 0.35), inset 5px 0 0 #d7ad55, 0 9px 20px rgba(14, 53, 41, 0.16) !important"
+              ].join(";"));
+              const badge = card.querySelector(".survey-selected-badge");
+              if (badge) badge.style.display = "inline-flex";
             }
           }
         } else {
@@ -2813,11 +2842,9 @@
             label.style.backgroundColor = "";
             const card = label.querySelector(".survey-option-card");
             if (card) {
-              card.style.backgroundColor = "";
-              card.style.color = "";
-              card.style.borderColor = "";
-              card.style.borderWidth = "";
-              card.style.boxShadow = "";
+              card.removeAttribute("style");
+              const badge = card.querySelector(".survey-selected-badge");
+              if (badge) badge.style.display = "none";
             }
           }
         }
