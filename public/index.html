@@ -318,6 +318,7 @@
     }
 
     .option-btn {
+      display: block;
       width: 100%;
       min-height: 56px;
       border: 2px solid rgba(14, 53, 41, 0.18);
@@ -329,6 +330,18 @@
       text-align: left;
       cursor: pointer;
       line-height: 1.45;
+    }
+
+    .option-input {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      margin: -1px;
+      padding: 0;
+      border: 0;
+      clip: rect(0 0 0 0);
+      overflow: hidden;
+      white-space: nowrap;
     }
 
     .option-btn.selected {
@@ -2366,11 +2379,6 @@
     const scoreText = document.getElementById("scoreText");
     const prevBtn = document.getElementById("prevBtn");
     const nextBtn = document.getElementById("nextBtn");
-    const surveyActivateEvent = (navigator.maxTouchPoints > 0 || "ontouchstart" in window)
-      ? "touchend"
-      : window.PointerEvent
-        ? "pointerup"
-        : "click";
 
     function getAnswerScore(question) {
       const answer = state.answers[question.key];
@@ -2450,10 +2458,11 @@
     function renderQuestionBody(question) {
       if (question.type === "single") {
         const answer = state.answers[question.key];
-        return `<div class="options">${question.options.map((option) => `
-          <button type="button" class="option-btn ${answer === option.label ? "selected" : ""}" data-value="${option.label}">
+        return `<div class="options">${question.options.map((option, index) => `
+          <label class="option-btn ${answer === option.label ? "selected" : ""}">
+            <input class="option-input" type="radio" name="ansim-q-${state.step}-${question.key}" value="${index}" data-value="${option.label}" ${answer === option.label ? "checked" : ""} />
             ${option.label}
-          </button>
+          </label>
         `).join("")}</div>`;
       }
 
@@ -2478,10 +2487,11 @@
             <div class="asset-title">${asset.title}</div>
             <p class="asset-question">${asset.question}</p>
             <div class="options">
-              ${asset.labels.map((label) => `
-                <button type="button" class="option-btn ${answer[asset.key] === label ? "selected" : ""}" data-asset="${asset.key}" data-value="${label}">
+              ${asset.labels.map((label, index) => `
+                <label class="option-btn ${answer[asset.key] === label ? "selected" : ""}">
+                  <input class="option-input" type="radio" name="ansim-q-${state.step}-${question.key}-${asset.key}" value="${index}" data-asset="${asset.key}" data-value="${label}" ${answer[asset.key] === label ? "checked" : ""} />
                   ${label}
-                </button>
+                </label>
               `).join("")}
             </div>
           </div>
@@ -2490,10 +2500,11 @@
 
       if (question.type === "multiSimple") {
         const answer = Array.isArray(state.answers[question.key]) ? state.answers[question.key] : [];
-        return `<div class="options multiSimple">${question.options.map((option) => `
-          <button type="button" class="option-btn ${answer.includes(option.value) ? "selected" : ""}" data-value="${option.value}">
+        return `<div class="options multiSimple">${question.options.map((option, index) => `
+          <label class="option-btn ${answer.includes(option.value) ? "selected" : ""}">
+            <input class="option-input" type="checkbox" name="ansim-q-${state.step}-${question.key}" value="${index}" data-value="${option.value}" ${answer.includes(option.value) ? "checked" : ""} />
             ${option.label}
-          </button>
+          </label>
         `).join("")}</div>`;
       }
 
@@ -2505,40 +2516,46 @@
 
       if (question.type === "single") {
         const answer = state.answers[question.key];
-        questionArea.querySelectorAll(".option-btn").forEach((btn) => {
-          btn.classList.toggle("selected", btn.dataset.value === answer);
+        questionArea.querySelectorAll(".option-input").forEach((input) => {
+          const selected = input.dataset.value === answer;
+          input.checked = selected;
+          input.closest(".option-btn")?.classList.toggle("selected", selected);
         });
         return;
       }
 
       if (question.type === "assetCounts") {
         const answer = state.answers[question.key] || {};
-        questionArea.querySelectorAll(".option-btn[data-asset]").forEach((btn) => {
-          const assetKey = btn.dataset.asset;
-          btn.classList.toggle("selected", answer[assetKey] === btn.dataset.value);
+        questionArea.querySelectorAll(".option-input[data-asset]").forEach((input) => {
+          const assetKey = input.dataset.asset;
+          const selected = answer[assetKey] === input.dataset.value;
+          input.checked = selected;
+          input.closest(".option-btn")?.classList.toggle("selected", selected);
         });
         return;
       }
 
       if (question.type === "multiSimple") {
         const answer = Array.isArray(state.answers[question.key]) ? state.answers[question.key] : [];
-        questionArea.querySelectorAll(".option-btn").forEach((btn) => {
-          btn.classList.toggle("selected", answer.includes(btn.dataset.value));
+        questionArea.querySelectorAll(".option-input").forEach((input) => {
+          const selected = answer.includes(input.dataset.value);
+          input.checked = selected;
+          input.closest(".option-btn")?.classList.toggle("selected", selected);
         });
       }
     }
 
-    function applyQuestionAnswer(question, button) {
-      if (!question || !button) return;
+    function applyQuestionAnswer(question, input) {
+      if (!question || !input) return;
 
-      const value = button.dataset.value;
+      const value = input.dataset.value;
 
       if (question.type === "single") {
         state.answers[question.key] = value;
       }
 
       if (question.type === "assetCounts") {
-        const assetKey = button.dataset.asset;
+        const assetKey = input.dataset.asset;
         if (!assetKey) return;
         state.answers[question.key] = state.answers[question.key] || {};
         state.answers[question.key][assetKey] = value;
@@ -2549,12 +2566,12 @@
         let selected = Array.isArray(state.answers[question.key]) ? [...state.answers[question.key]] : [];
 
         if (exclusive.includes(value)) {
-          selected = selected.includes(value) ? [] : [value];
+          selected = input.checked ? [value] : [];
         } else {
           selected = selected.filter((item) => !exclusive.includes(item));
-          selected = selected.includes(value)
-            ? selected.filter((item) => item !== value)
-            : [...selected, value];
+          selected = input.checked
+            ? Array.from(new Set([...selected, value]))
+            : selected.filter((item) => item !== value);
         }
 
         state.answers[question.key] = selected;
@@ -2565,30 +2582,19 @@
       syncReportAnswersSnapshot();
     }
 
-    function handleQuestionOptionActivate(event) {
-      if (surveyActivateEvent === "pointerup" && event.pointerType === "mouse" && event.button !== 0) {
-        return;
-      }
-
-      const target = event.target && event.target.closest
-        ? event.target.closest(".option-btn")
+    function handleQuestionOptionChange(event) {
+      const input = event.target && event.target.closest
+        ? event.target.closest(".option-input")
         : null;
 
-      if (!target || !questionArea.contains(target)) {
+      if (!input || !questionArea.contains(input)) {
         return;
       }
 
-      applyQuestionAnswer(questions[state.step], target);
+      applyQuestionAnswer(questions[state.step], input);
     }
 
-    questionArea.addEventListener(surveyActivateEvent, handleQuestionOptionActivate, false);
-
-    function runSurveyNav(event, handler) {
-      if (surveyActivateEvent === "pointerup" && event.pointerType === "mouse" && event.button !== 0) {
-        return;
-      }
-      handler();
-    }
+    questionArea.addEventListener("change", handleQuestionOptionChange, false);
 
     
     function setHomeReturnButtonVisible(visible) {
@@ -2693,13 +2699,9 @@ function saveState() {
       }
     }
 
-    prevBtn.addEventListener(surveyActivateEvent, (event) => {
-      runSurveyNav(event, runPrevNav);
-    }, false);
+    prevBtn.addEventListener("click", runPrevNav, false);
 
-    nextBtn.addEventListener(surveyActivateEvent, (event) => {
-      runSurveyNav(event, runNextNav);
-    }, false);
+    nextBtn.addEventListener("click", runNextNav, false);
 
     function showLeadStatusBanner(message, type = "success") {
       const banner = document.getElementById("leadStatusBanner");
