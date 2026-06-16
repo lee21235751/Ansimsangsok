@@ -2413,12 +2413,6 @@
       window.__ansimCurrentAnswers = JSON.parse(JSON.stringify(state.answers || {}));
     }
 
-    function syncNavButtonsState() {
-      nextBtn.textContent = state.step === questions.length - 1 ? "결과 확인하기" : "다음";
-      prevBtn.disabled = state.step === 0;
-      prevBtn.style.opacity = state.step === 0 ? "0.45" : "1";
-    }
-
     function render() {
       const total = getTotalScore();
       setHomeReturnButtonVisible(false);
@@ -2434,7 +2428,9 @@
 
       resultArea.classList.add("hidden");
       questionArea.classList.remove("hidden");
-      syncNavButtonsState();
+      nextBtn.textContent = state.step === questions.length - 1 ? "결과 확인하기" : "다음";
+      prevBtn.disabled = state.step === 0;
+      prevBtn.style.opacity = state.step === 0 ? "0.45" : "1";
 
       questionArea.innerHTML = `
         <article class="question-card">
@@ -2500,38 +2496,20 @@
       return "";
     }
 
-    function syncOptionButtonsVisual(question) {
-      if (!question || !questionArea) return;
-
-      if (question.type === "single") {
-        const answer = state.answers[question.key];
-        questionArea.querySelectorAll(".option-btn").forEach((btn) => {
-          btn.classList.toggle("selected", btn.dataset.value === answer);
-        });
-        return;
-      }
-
-      if (question.type === "assetCounts") {
-        const answer = state.answers[question.key] || {};
-        questionArea.querySelectorAll(".option-btn[data-asset]").forEach((btn) => {
-          const assetKey = btn.dataset.asset;
-          btn.classList.toggle("selected", answer[assetKey] === btn.dataset.value);
-        });
-        return;
-      }
-
-      if (question.type === "multiSimple") {
-        const answer = Array.isArray(state.answers[question.key]) ? state.answers[question.key] : [];
-        questionArea.querySelectorAll(".option-btn").forEach((btn) => {
-          btn.classList.toggle("selected", answer.includes(btn.dataset.value));
-        });
-      }
-    }
+    let lastQuestionOptionTap = { time: 0, value: "", step: -1 };
 
     function applyQuestionAnswer(question, button) {
       if (!question || !button) return;
 
       const value = button.dataset.value;
+      const now = Date.now();
+      const tapKey = [state.step, question.key, button.dataset.asset || "", value || ""].join("|");
+
+      if (lastQuestionOptionTap.value === tapKey && now - lastQuestionOptionTap.time < 280) {
+        return;
+      }
+
+      lastQuestionOptionTap = { time: now, value: tapKey, step: state.step };
 
       if (question.type === "single") {
         state.answers[question.key] = value;
@@ -2560,19 +2538,19 @@
         state.answers[question.key] = selected;
       }
 
-      syncOptionButtonsVisual(question);
       saveState();
       syncReportAnswersSnapshot();
+      render();
     }
 
     function bindQuestionEvents(question) {
       questionArea.__ansimCurrentQuestion = question;
 
-      if (questionArea.__ansimQuestionClickHandlerInstalled) {
+      if (questionArea.__ansimPointerUpOptionHandlerInstalled) {
         return;
       }
 
-      questionArea.addEventListener("click", (event) => {
+      const handleOptionActivate = (event) => {
         const target = event.target && event.target.closest
           ? event.target.closest(".option-btn")
           : null;
@@ -2583,9 +2561,11 @@
 
         const currentQuestion = questionArea.__ansimCurrentQuestion || questions[state.step];
         applyQuestionAnswer(currentQuestion, target);
-      }, false);
+      };
 
-      questionArea.__ansimQuestionClickHandlerInstalled = true;
+      questionArea.addEventListener("pointerup", handleOptionActivate, false);
+      questionArea.addEventListener("click", handleOptionActivate, false);
+      questionArea.__ansimPointerUpOptionHandlerInstalled = true;
     }
 
     
@@ -2663,6 +2643,8 @@ function saveState() {
       scoreText.textContent = "진단 완료";
     }
 
+    let lastNavActivation = { target: "", time: 0 };
+
     function runPrevNav() {
       if (state.step > 0) {
         state.step -= 1;
@@ -2691,40 +2673,42 @@ function saveState() {
       }
     }
 
-    function bindNavButtonPointerUp(btn, handler) {
-      if (btn.__ansimNavPointerUpInstalled) {
+    function activateNavButton(kind, handler) {
+      const now = Date.now();
+
+      if (lastNavActivation.target === kind && now - lastNavActivation.time < 180) {
         return;
       }
 
-      let lastPointerUpAt = 0;
-
-      btn.addEventListener("pointerup", (event) => {
-        if (event.pointerType === "mouse" && event.button !== 0) {
-          return;
-        }
-        lastPointerUpAt = Date.now();
-        handler();
-      }, false);
-
-      btn.addEventListener("click", (event) => {
-        if (event.detail === 0) {
-          handler();
-          return;
-        }
-        if (Date.now() - lastPointerUpAt < 400) {
-          return;
-        }
-        handler();
-      }, false);
-
-      btn.__ansimNavPointerUpInstalled = true;
+      lastNavActivation = { target: kind, time: now };
+      handler();
     }
 
-    if (!window.__ansimNavHandlerInstalled) {
-      bindNavButtonPointerUp(prevBtn, runPrevNav);
-      bindNavButtonPointerUp(nextBtn, runNextNav);
-      window.__ansimNavHandlerInstalled = true;
+    function bindPointerUpNavButtons() {
+      if (window.__ansimPointerUpNavHandlerInstalled) {
+        return;
+      }
+
+      prevBtn.addEventListener("pointerup", function () {
+        activateNavButton("prev", runPrevNav);
+      }, false);
+
+      prevBtn.addEventListener("click", function () {
+        activateNavButton("prev", runPrevNav);
+      }, false);
+
+      nextBtn.addEventListener("pointerup", function () {
+        activateNavButton("next", runNextNav);
+      }, false);
+
+      nextBtn.addEventListener("click", function () {
+        activateNavButton("next", runNextNav);
+      }, false);
+
+      window.__ansimPointerUpNavHandlerInstalled = true;
     }
+
+    bindPointerUpNavButtons();
 
     function showLeadStatusBanner(message, type = "success") {
       const banner = document.getElementById("leadStatusBanner");
