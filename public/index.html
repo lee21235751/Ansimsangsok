@@ -7219,7 +7219,20 @@ document.addEventListener("DOMContentLoaded", function () {
 
   document.addEventListener("DOMContentLoaded", schedule);
   document.addEventListener("click", schedule, true);
-  setInterval(renderReferencePack, 1800);
+  var referencePackInterval = setInterval(function () {
+    renderReferencePack();
+    var delivered = document.getElementById("paidReportDeliveredCard");
+    var panel = document.getElementById("paidReferencePackPanel");
+
+    if (
+      delivered &&
+      delivered.hidden !== true &&
+      panel &&
+      panel.parentNode
+    ) {
+      clearInterval(referencePackInterval);
+    }
+  }, 1800);
   schedule();
 })();
 </script>
