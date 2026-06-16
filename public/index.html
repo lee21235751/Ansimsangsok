@@ -4409,7 +4409,15 @@ document.addEventListener("DOMContentLoaded", function () {
       setTimeout(cleanVisibleOrphanText, 900);
     }, true);
 
-    setInterval(cleanVisibleOrphanText, 700);
+    var orphanCleanupAttempts = 0;
+    var orphanCleanupTimer = setInterval(function () {
+      orphanCleanupAttempts += 1;
+      cleanVisibleOrphanText();
+
+      if (orphanCleanupAttempts >= 30) {
+        clearInterval(orphanCleanupTimer);
+      }
+    }, 700);
     setTimeout(cleanVisibleOrphanText, 500);
     setTimeout(cleanVisibleOrphanText, 1500);
     setTimeout(cleanVisibleOrphanText, 3000);
