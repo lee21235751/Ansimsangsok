@@ -2201,7 +2201,7 @@
 
         <div id="simpleSurveyRoot">
           <iframe id="surveyFrame" src="diagnosis" title="무료진단 설문"
-            style="width:100%;border:0;display:block;min-height:560px;overflow:hidden;background:transparent;"
+            style="width:100%;border:0;display:block;height:760px;min-height:760px;overflow:hidden;background:transparent;"
             scrolling="no"></iframe>
           <!-- 설문은 diagnosis.html(iframe)에서 처리. 기존 설문 입력 요소는 제거됨. -->
           <div style="display:none;">
@@ -2929,7 +2929,10 @@ syncReportAnswersSnapshot();
         // iframe 높이 자동 조절 (스크롤 없는 매끄러운 표시)
         if (data.type === "ansim-survey-height" && surveyFrame) {
           var h = Number(data.height) || 0;
-          if (h > 200) surveyFrame.style.height = h + "px";
+          if (h > 200) {
+            surveyFrame.style.height = h + "px";
+            surveyFrame.style.minHeight = h + "px";
+          }
           return;
         }
 

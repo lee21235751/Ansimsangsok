@@ -432,7 +432,7 @@
     elNext.textContent = state.step === total - 1 ? "결과 확인하기" : "다음";
     elPrev.disabled = state.step === 0;
 
-    notifyHeight();
+    notifyHeightRepeated();
   }
 
   // 선택지: 컨테이너에 위임으로 한 번만 바인딩 (재렌더돼도 리스너 유지)
@@ -486,9 +486,24 @@
 
   function notifyHeight() {
     try {
-      var h = document.getElementById("survey").offsetHeight;
-      window.parent.postMessage({ type: "ansim-survey-height", height: h + 8 }, "*");
+      var el = document.getElementById("survey");
+      var h = Math.max(
+        el ? el.offsetHeight : 0,
+        document.body ? document.body.scrollHeight : 0,
+        document.documentElement ? document.documentElement.scrollHeight : 0
+      );
+      if (h > 0) {
+        window.parent.postMessage({ type: "ansim-survey-height", height: h + 16 }, "*");
+      }
     } catch (e) {}
+  }
+
+  // iOS Safari 는 첫 레이아웃 계산이 부정확하므로 여러 시점에 높이를 다시 보고한다.
+  function notifyHeightRepeated() {
+    notifyHeight();
+    [50, 150, 350, 600, 1000].forEach(function (ms) {
+      setTimeout(notifyHeight, ms);
+    });
   }
 
   function finish() {
@@ -514,8 +529,9 @@
   });
 
   render();
-  window.addEventListener("load", notifyHeight);
+  window.addEventListener("load", notifyHeightRepeated);
   window.addEventListener("resize", notifyHeight);
+  if (document.readyState === "complete") notifyHeightRepeated();
 })();
 </script>
 </body>
