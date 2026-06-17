@@ -432,22 +432,31 @@
     elNext.textContent = state.step === total - 1 ? "결과 확인하기" : "다음";
     elPrev.disabled = state.step === 0;
 
-    // 각 선택지 버튼에 직접 바인딩 (click + touchend, 중복 방지) — iOS 안전
-    var btns = elOptions.querySelectorAll(".survey-option");
-    for (var i = 0; i < btns.length; i++) {
-      bindTap(btns[i], (function (b) { return function () { onOptionTap(b); }; })(btns[i]));
-    }
     notifyHeight();
   }
 
+  // 선택지: 컨테이너에 위임으로 한 번만 바인딩 (재렌더돼도 리스너 유지)
+  var optionLock = false;
+  function handleOptionEvent(ev) {
+    var btn = ev.target.closest ? ev.target.closest(".survey-option") : null;
+    if (!btn || !elOptions.contains(btn)) return;
+    if (ev) { ev.preventDefault(); ev.stopPropagation(); }
+    if (optionLock) return;          // touchend+click 중복 방지
+    optionLock = true;
+    setTimeout(function () { optionLock = false; }, 350);
+    onOptionTap(btn);
+  }
+  elOptions.addEventListener("click", handleOptionEvent, false);
+  elOptions.addEventListener("touchend", handleOptionEvent, false);
+
   function bindTap(el, handler) {
     if (!el) return;
-    var fired = false;
+    var locked = false;
     function fire(ev) {
       if (ev) { ev.preventDefault(); ev.stopPropagation(); }
-      if (fired) return;
-      fired = true;
-      setTimeout(function () { fired = false; }, 350);
+      if (locked) return;
+      locked = true;
+      setTimeout(function () { locked = false; }, 350);
       handler();
     }
     el.addEventListener("click", fire, false);
