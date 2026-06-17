@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="ko">
 <head>
   <meta charset="utf-8" />
@@ -2588,27 +2588,55 @@
       // assetCounts 는 그룹마다 자체 .simple-survey-options 를 생성하므로 컨테이너는 단순 래퍼로 둔다.
       simpleSurveyOptionsEl.className = "simple-survey-options";
       simpleSurveyOptionsEl.innerHTML = renderSimpleQuestionOptions(question);
+
+      // iOS Safari 호환: 각 버튼에 직접 리스너 바인딩 (이벤트 위임이 iOS에서 새는 문제 회피)
+      var optionButtons = simpleSurveyOptionsEl.querySelectorAll(".simple-survey-option");
+      for (var bi = 0; bi < optionButtons.length; bi++) {
+        (function (btn) {
+          var fired = false;
+          function fire(ev) {
+            if (ev) { ev.preventDefault(); ev.stopPropagation(); }
+            if (fired) return;
+            fired = true;
+            setTimeout(function () { fired = false; }, 350);
+            handleSimpleSurveyOptionClick(btn);
+          }
+          btn.addEventListener("click", fire, false);
+          btn.addEventListener("touchend", fire, false);
+        })(optionButtons[bi]);
+      }
     }
 
-    // 실제 버튼 클릭만 사용 (touchend/pointerup bridge 없음)
-    simpleSurveyOptionsEl.addEventListener("click", function (event) {
-      const button = event.target.closest(".simple-survey-option");
-      if (!button || !simpleSurveyOptionsEl.contains(button)) return;
-      handleSimpleSurveyOptionClick(button);
-    }, false);
+    // 옵션 클릭은 renderSimpleSurvey 에서 각 버튼에 직접 바인딩한다 (iOS 호환).
+    // 기존 컨테이너 이벤트 위임은 직접 바인딩과 중복 실행되므로 제거함.
 
-    // 이전: 이전 질문으로 이동 (state 기준, 선택 상태 자동 복원 — state 에 그대로 있음)
-    simpleSurveyPrev.addEventListener("click", function () {
+    // iOS 호환: 버튼에 click+touchend 둘 다 바인딩하되 중복 실행 방지
+    function bindTap(el, handler) {
+      if (!el) return;
+      var fired = false;
+      function fire(ev) {
+        if (ev) { ev.preventDefault(); ev.stopPropagation(); }
+        if (fired) return;
+        fired = true;
+        setTimeout(function () { fired = false; }, 350);
+        handler();
+      }
+      el.addEventListener("click", fire, false);
+      el.addEventListener("touchend", fire, false);
+    }
+
+    // 이전: 이전 질문으로 이동 (state 기준, 선택 상태는 state 에 그대로 있음)
+    bindTap(simpleSurveyPrev, function () {
       if (state.step > 0) {
         state.step -= 1;
         saveState();
         syncReportAnswersSnapshot();
         renderSimpleSurvey();
       }
-    }, false);
+    });
 
     // 다음: state 기준 이동. 마지막이면 showResult().
-    simpleSurveyNext.addEventListener("click", function () {
+    bindTap(simpleSurveyNext, function () {
       if (simpleSurveyRoot.classList.contains("hidden")) {
         state.step = 0;
         state.answers = {};
@@ -2628,7 +2656,7 @@
         syncReportAnswersSnapshot();
         showResult();
       }
-    }, false);
+    });
 
     function render() {
       renderSimpleSurvey();
@@ -12027,5 +12055,6 @@ ready(function(){run();var tries=0;var timer=setInterval(function(){tries++;run(
 </script>
 </body>
 </html>
+
 
 
