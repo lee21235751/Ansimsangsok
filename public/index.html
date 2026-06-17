@@ -542,19 +542,6 @@
       line-height: 1;
     }
 
-    .survey-option-input:checked + .survey-option-card::after,
-    .survey-option-input[checked] + .survey-option-card::after,
-    .survey-option-label[aria-checked="true"] .survey-option-card::after,
-    .survey-option-label:has(.survey-option-input:checked) .survey-option-card::after,
-    .survey-option-label:focus-within .survey-option-card::after {
-      content: "✓ 선택됨";
-      color: #f6dc86 !important;
-      padding: 7px 9px;
-      border-radius: 999px;
-      background: rgba(255, 248, 220, 0.08);
-      border: 1px solid rgba(246, 220, 134, 0.55);
-    }
-
     .survey-options.multiSimple .survey-option-card::after {
       content: "복수 선택 가능";
       display: block;
@@ -1057,6 +1044,7 @@
 
       .nav-buttons {
         flex-direction: column;
+        padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px));
       }
 
       .nav-buttons button {
@@ -2753,7 +2741,15 @@
       window.requestAnimationFrame(() => updateSurveyDebugPanel(`event:${event.type}`));
     }
 
-    const lastSurveyBridge = { key: "", at: 0, checked: false };
+    const SURVEY_BRIDGE_DEDUPE_MS = 800;
+    const lastSurveyBridge = { key: "", at: 0, handledBy: "" };
+
+    function shouldSkipSurveyBridgeFollowUp(event, key) {
+      if (lastSurveyBridge.key !== key) return false;
+      if (Date.now() - lastSurveyBridge.at >= SURVEY_BRIDGE_DEDUPE_MS) return false;
+      if (event.type === "touchend") return false;
+      return true;
+    }
 
     function getSurveyBridgePoint(event) {
       const touch = event.changedTouches && event.changedTouches[0]
@@ -2798,17 +2794,23 @@
       }
     }
 
-    function reapplySurveyBridgeChecked(input, checked, reason) {
-      if (!input || !questionArea || !questionArea.contains(input)) return;
-
-      input.checked = checked;
-      syncInputCheckedAttribute(input);
-      syncSurveyCheckedAttributes();
-      input.dispatchEvent(new Event("change", { bubbles: true }));
-      updateSurveyDebugPanel(reason);
-    }
-
     function bridgeSurveyChoiceTap(event) {
+      const target = event.target;
+      if (target && target.closest) {
+        if (
+          target.closest(".nav-buttons") ||
+          target.closest("#nextBtn") ||
+          target.closest("#prevBtn") ||
+          target.id === "nextBtn" ||
+          target.id === "prevBtn"
+        ) {
+          return;
+        }
+        if (target.tagName === "BUTTON" && !target.closest(".survey-option-label")) {
+          return;
+        }
+      }
+
       const label = findSurveyBridgeLabel(event);
       if (!label || !questionArea || !questionArea.contains(label)) return;
 
@@ -2816,39 +2818,8 @@
       if (!input || input.disabled) return;
 
       const key = `${input.name}:${input.value}`;
-      const now = Date.now();
-      if (lastSurveyBridge.key === key && now - lastSurveyBridge.at < 650) {
-        if (event.type === "click" && input.type === "checkbox") {
-          window.requestAnimationFrame(() => {
-            reapplySurveyBridgeChecked(input, lastSurveyBridge.checked, `bridge:${event.type}:dedupe`);
-            window.requestAnimationFrame(() => {
-              reapplySurveyBridgeChecked(input, lastSurveyBridge.checked, `bridge:${event.type}:dedupe-frame`);
-            });
-            window.setTimeout(() => {
-              reapplySurveyBridgeChecked(input, lastSurveyBridge.checked, `bridge:${event.type}:dedupe-settle`);
-            }, 80);
-          });
-        }
-        return;
-      }
-      lastSurveyBridge.key = key;
-      lastSurveyBridge.at = now;
-
-      if (input.type === "checkbox") {
-        lastSurveyBridge.checked = !input.checked;
-
-        const point = getSurveyBridgePoint(event);
-        surveyDebugState.lastEventType = `bridge:${event.type}`;
-        surveyDebugState.lastTarget = describeDebugElement(event.target);
-        if (point) {
-          surveyDebugState.lastPoint = point;
-          surveyDebugState.lastElementFromPoint = describeDebugElement(document.elementFromPoint(point.x, point.y));
-        }
-
-        window.setTimeout(() => {
-          reapplySurveyBridgeChecked(input, lastSurveyBridge.checked, `bridge:${event.type}:settle`);
-        }, 80);
-        updateSurveyDebugPanel(`bridge:${event.type}:scheduled`);
+      if (shouldSkipSurveyBridgeFollowUp(event, key)) {
+        updateSurveyDebugPanel(`bridge:${event.type}:dedupe`);
         return;
       }
 
@@ -2861,10 +2832,16 @@
         });
         input.checked = true;
         syncInputCheckedAttribute(input);
+      } else if (input.type === "checkbox") {
+        input.checked = !input.checked;
+        syncInputCheckedAttribute(input);
       } else {
         return;
       }
-      lastSurveyBridge.checked = input.checked;
+
+      lastSurveyBridge.key = key;
+      lastSurveyBridge.at = Date.now();
+      lastSurveyBridge.handledBy = event.type;
 
       syncSurveyCheckedAttributes();
 
