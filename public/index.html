@@ -2753,6 +2753,133 @@
       window.requestAnimationFrame(() => updateSurveyDebugPanel(`event:${event.type}`));
     }
 
+    const lastSurveyBridge = { key: "", at: 0, checked: false };
+
+    function getSurveyBridgePoint(event) {
+      const touch = event.changedTouches && event.changedTouches[0]
+        ? event.changedTouches[0]
+        : event.touches && event.touches[0]
+          ? event.touches[0]
+          : null;
+
+      if (touch) {
+        return { x: Math.round(touch.clientX), y: Math.round(touch.clientY) };
+      }
+
+      if (typeof event.clientX === "number" && typeof event.clientY === "number") {
+        return { x: Math.round(event.clientX), y: Math.round(event.clientY) };
+      }
+
+      return null;
+    }
+
+    function findSurveyBridgeLabel(event) {
+      let label = event.target && event.target.closest
+        ? event.target.closest(".survey-option-label")
+        : null;
+
+      if (label) return label;
+
+      const point = getSurveyBridgePoint(event);
+      if (!point) return null;
+
+      const elementAtPoint = document.elementFromPoint(point.x, point.y);
+      return elementAtPoint && elementAtPoint.closest
+        ? elementAtPoint.closest(".survey-option-label")
+        : null;
+    }
+
+    function syncInputCheckedAttribute(input) {
+      if (!input) return;
+      if (input.checked) {
+        input.setAttribute("checked", "checked");
+      } else {
+        input.removeAttribute("checked");
+      }
+    }
+
+    function reapplySurveyBridgeChecked(input, checked, reason) {
+      if (!input || !questionArea || !questionArea.contains(input)) return;
+
+      input.checked = checked;
+      syncInputCheckedAttribute(input);
+      syncSurveyCheckedAttributes();
+      input.dispatchEvent(new Event("change", { bubbles: true }));
+      updateSurveyDebugPanel(reason);
+    }
+
+    function bridgeSurveyChoiceTap(event) {
+      const label = findSurveyBridgeLabel(event);
+      if (!label || !questionArea || !questionArea.contains(label)) return;
+
+      const input = label.querySelector(".survey-option-input");
+      if (!input || input.disabled) return;
+
+      const key = `${input.name}:${input.value}`;
+      const now = Date.now();
+      if (lastSurveyBridge.key === key && now - lastSurveyBridge.at < 650) {
+        if (event.type === "click" && input.type === "checkbox") {
+          window.requestAnimationFrame(() => {
+            reapplySurveyBridgeChecked(input, lastSurveyBridge.checked, `bridge:${event.type}:dedupe`);
+            window.requestAnimationFrame(() => {
+              reapplySurveyBridgeChecked(input, lastSurveyBridge.checked, `bridge:${event.type}:dedupe-frame`);
+            });
+            window.setTimeout(() => {
+              reapplySurveyBridgeChecked(input, lastSurveyBridge.checked, `bridge:${event.type}:dedupe-settle`);
+            }, 80);
+          });
+        }
+        return;
+      }
+      lastSurveyBridge.key = key;
+      lastSurveyBridge.at = now;
+
+      if (input.type === "checkbox") {
+        lastSurveyBridge.checked = !input.checked;
+
+        const point = getSurveyBridgePoint(event);
+        surveyDebugState.lastEventType = `bridge:${event.type}`;
+        surveyDebugState.lastTarget = describeDebugElement(event.target);
+        if (point) {
+          surveyDebugState.lastPoint = point;
+          surveyDebugState.lastElementFromPoint = describeDebugElement(document.elementFromPoint(point.x, point.y));
+        }
+
+        window.setTimeout(() => {
+          reapplySurveyBridgeChecked(input, lastSurveyBridge.checked, `bridge:${event.type}:settle`);
+        }, 80);
+        updateSurveyDebugPanel(`bridge:${event.type}:scheduled`);
+        return;
+      }
+
+      if (input.type === "radio") {
+        questionArea.querySelectorAll(".survey-option-input").forEach((other) => {
+          if (other.type === "radio" && other.name === input.name) {
+            other.checked = false;
+            syncInputCheckedAttribute(other);
+          }
+        });
+        input.checked = true;
+        syncInputCheckedAttribute(input);
+      } else {
+        return;
+      }
+      lastSurveyBridge.checked = input.checked;
+
+      syncSurveyCheckedAttributes();
+
+      const point = getSurveyBridgePoint(event);
+      surveyDebugState.lastEventType = `bridge:${event.type}`;
+      surveyDebugState.lastTarget = describeDebugElement(event.target);
+      if (point) {
+        surveyDebugState.lastPoint = point;
+        surveyDebugState.lastElementFromPoint = describeDebugElement(document.elementFromPoint(point.x, point.y));
+      }
+
+      input.dispatchEvent(new Event("change", { bubbles: true }));
+      updateSurveyDebugPanel(`bridge:${event.type}`);
+    }
+
     function getAnswerScore(question) {
       const answer = state.answers[question.key];
 
@@ -3057,6 +3184,9 @@
     questionArea.addEventListener("change", handleQuestionOptionChange, false);
     ["click", "change", "input", "pointerdown", "touchstart", "touchend"].forEach((eventName) => {
       questionArea.addEventListener(eventName, recordSurveyDebugEvent, { capture: true, passive: true });
+    });
+    ["touchend", "pointerup", "click"].forEach((eventName) => {
+      document.addEventListener(eventName, bridgeSurveyChoiceTap, { capture: true, passive: true });
     });
 
     
