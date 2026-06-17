@@ -312,131 +312,85 @@
       line-height: 1.45;
     }
 
-    .options {
-      display: grid;
-      gap: 10px;
-    }
 
-    .option-btn {
-      display: block;
-      width: 100%;
-      min-height: 56px;
-      border: 2px solid rgba(14, 53, 41, 0.18);
-      background: #ffffff;
-      color: var(--forest-deep);
-      border-radius: 18px;
-      padding: 14px 15px;
-      font-weight: 900;
-      text-align: left;
-      cursor: pointer;
-      line-height: 1.45;
-    }
-
-    .option-input {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      margin: -1px;
-      padding: 0;
-      border: 0;
-      clip: rect(0 0 0 0);
-      overflow: hidden;
-      white-space: nowrap;
-    }
-
-    .option-btn.selected {
-      background: var(--forest-deep);
-      color: #fff8dc;
-      border-color: var(--gold);
-      box-shadow: 0 9px 20px rgba(14, 53, 41, 0.16);
-    }
-
-    .multiSimple .option-btn::after {
-      content: "복수 선택 가능";
-      display: block;
-      margin-top: 4px;
-      color: rgba(14, 53, 41, 0.58);
-      font-size: 0.78rem;
-      font-weight: 800;
-    }
-
-    .multiSimple .option-btn.selected::after {
-      color: rgba(255, 248, 220, 0.74);
-    }
-
+    /* ===== 무료진단 설문 — 단순 재작성 CSS (state 기반, pseudo/hidden 미사용) ===== */
     .simple-survey-question {
       margin: 0 0 12px;
     }
 
     .simple-survey-options {
-      display: grid;
+      display: flex;
+      flex-direction: column;
       gap: 10px;
-      overflow: visible;
     }
 
+    /* 실제 보이는 버튼만 사용. 안에 문구 + (선택 시) 작은 보조텍스트. */
     .simple-survey-option {
-      display: block;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 4px;
       width: 100%;
       margin: 0;
-      padding: 14px 15px;
+      box-sizing: border-box;
       min-height: 56px;
-      border: 2px solid rgba(14, 53, 41, 0.18);
-      border-radius: 18px;
+      padding: 14px 16px;
+      border: 2px solid rgba(14, 53, 41, 0.20);
+      border-radius: 16px;
       background: #ffffff;
       color: var(--forest-deep);
-      font-weight: 900;
+      font-family: inherit;
+      font-size: 1.02rem;
+      font-weight: 800;
       text-align: left;
-      line-height: 1.45;
+      line-height: 1.4;
       cursor: pointer;
       touch-action: manipulation;
-      -webkit-tap-highlight-color: rgba(14, 53, 41, 0.08);
-      box-sizing: border-box;
-      font-family: inherit;
-      font-size: inherit;
-      user-select: none;
+      -webkit-tap-highlight-color: transparent;
       -webkit-user-select: none;
+      user-select: none;
+      transition: background-color 0.12s ease, border-color 0.12s ease, color 0.12s ease;
     }
 
+    /* 선택됨: 진한 초록 배경 + 금색 테두리 + 흰 글씨. 높이 변동 없음. */
     .simple-survey-option.is-selected {
-      background: #06251d;
+      background: #0e3529;
       color: #fff8dc;
       border-color: #d7ad55;
-      border-width: 2px;
-      box-shadow: 0 0 0 2px rgba(215, 173, 85, 0.35), inset 5px 0 0 #d7ad55, 0 9px 20px rgba(14, 53, 41, 0.16);
     }
 
+    /* 원래 선택지 문구 — 선택 후에도 그대로 보임 */
     .simple-survey-option-text {
       display: block;
-    }
-
-    .simple-survey-options-multi .simple-survey-option-text::after {
-      content: "복수 선택 가능";
-      display: block;
-      margin-top: 4px;
-      color: rgba(14, 53, 41, 0.58);
-      font-size: 0.78rem;
       font-weight: 800;
     }
 
-    .simple-survey-options-multi .simple-survey-option.is-selected .simple-survey-option-text::after {
-      color: rgba(255, 248, 220, 0.74);
-    }
-
+    /* '✓ 선택됨' — 문구 아래 작은 보조 텍스트로 1번만. 선택 시에만 표시. */
     .simple-survey-selected-text {
       display: none;
-      width: fit-content;
-      margin-top: 8px;
-      border-radius: 999px;
-      padding: 6px 10px;
-      background: #d7ad55;
-      color: #06251d;
-      font-weight: 950;
-      font-size: 13px;
+      font-size: 0.8rem;
+      font-weight: 800;
+      color: #d7ad55;
       line-height: 1;
     }
 
     .simple-survey-option.is-selected .simple-survey-selected-text {
-      display: inline-flex;
+      display: block;
+    }
+
+    /* assetCounts(부동산 수량) 그룹 — 동적 표시 유지 */
+    .simple-survey-asset-group {
+      margin-top: 14px;
+    }
+    .simple-survey-asset-group .simple-survey-options {
+      margin-top: 8px;
+    }
+
+    .simple-survey-empty-note {
+      margin: 8px 0 0;
+      color: #536058;
+      font-weight: 700;
+      line-height: 1.6;
     }
 
     .simple-survey-nav {
@@ -444,7 +398,8 @@
       justify-content: space-between;
       gap: 10px;
       margin-top: 18px;
-      padding-bottom: calc(110px + env(safe-area-inset-bottom, 0px));
+      /* iPhone Safari 하단 주소창에 다음 버튼이 가리지 않도록 충분한 하단 여백 */
+      padding-bottom: calc(120px + env(safe-area-inset-bottom, 0px));
     }
 
     body .page main#diagnosis,
@@ -895,11 +850,6 @@
         padding: 14px;
       }
 
-      .option-btn {
-        min-height: 58px;
-        font-size: 1.02rem;
-      }
-
       .nav-buttons {
         flex-direction: column;
         padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px));
@@ -907,6 +857,12 @@
 
       .nav-buttons button {
         width: 100%;
+      }
+
+      .simple-survey-option {
+        min-height: 60px;
+        padding: 15px 16px;
+        font-size: 1.04rem;
       }
 
       .simple-survey-nav {
@@ -2494,6 +2450,11 @@
         .replace(/"/g, "&quot;");
     }
 
+    // ===== 무료진단 설문 — 단순 재작성 JS =====
+    // 원칙: 선택 상태는 state.answers 에만 저장. DOM checked/클래스를 "읽지" 않음.
+    //       클릭 → state 변경 → 해당 질문 다시 렌더. 실제 <button> 클릭만 사용.
+
+    // 선택지 버튼 1개를 그린다. selected 는 state 기준으로 호출부에서 계산해 넘긴다.
     function renderSimpleOptionButton({ value, label, assetKey, selected }) {
       const assetAttr = assetKey ? ` data-asset="${escapeSurveyHtml(assetKey)}"` : "";
       const selectedClass = selected ? " is-selected" : "";
@@ -2501,10 +2462,10 @@
         <button type="button" class="simple-survey-option${selectedClass}" data-value="${escapeSurveyHtml(value)}"${assetAttr}>
           <span class="simple-survey-option-text">${escapeSurveyHtml(label)}</span>
           <span class="simple-survey-selected-text">✓ 선택됨</span>
-        </button>
-      `;
+        </button>`;
     }
 
+    // 현재 질문의 선택지 HTML 을 state 기준으로 생성
     function renderSimpleQuestionOptions(question) {
       if (question.type === "single") {
         const answer = state.answers[question.key];
@@ -2513,38 +2474,6 @@
           label: option.label,
           selected: answer === option.label
         })).join("");
-      }
-
-      if (question.type === "assetCounts") {
-        const answer = state.answers[question.key] || {};
-        const selectedAssetKeys = Array.isArray(state.answers[question.presenceKey])
-          ? state.answers[question.presenceKey].filter((key) => !["none", "unknown"].includes(key))
-          : [];
-
-        const assetsToAsk = question.assets.filter((asset) => selectedAssetKeys.includes(asset.key));
-
-        if (assetsToAsk.length === 0) {
-          return `
-            <div class="result-item">
-              앞 질문에서 선택한 부동산이 없습니다. 다음으로 넘어가시면 됩니다.
-            </div>
-          `;
-        }
-
-        return assetsToAsk.map((asset) => `
-          <div class="asset-group simple-survey-asset-group" data-asset-group="${escapeSurveyHtml(asset.key)}">
-            <div class="asset-title">${escapeSurveyHtml(asset.title)}</div>
-            <p class="asset-question">${escapeSurveyHtml(asset.question)}</p>
-            <div class="simple-survey-options">
-              ${asset.labels.map((label) => renderSimpleOptionButton({
-                value: label,
-                label,
-                assetKey: asset.key,
-                selected: answer[asset.key] === label
-              })).join("")}
-            </div>
-          </div>
-        `).join("");
       }
 
       if (question.type === "multiSimple") {
@@ -2556,108 +2485,119 @@
         })).join("");
       }
 
+      if (question.type === "assetCounts") {
+        const answer = state.answers[question.key] || {};
+        const selectedAssetKeys = Array.isArray(state.answers[question.presenceKey])
+          ? state.answers[question.presenceKey].filter((key) => !["none", "unknown"].includes(key))
+          : [];
+        const assetsToAsk = question.assets.filter((asset) => selectedAssetKeys.includes(asset.key));
+
+        if (assetsToAsk.length === 0) {
+          return `<p class="simple-survey-empty-note">앞 질문에서 보유한 부동산을 선택하면 여기서 수량을 확인합니다. 선택한 항목이 없으면 다음으로 넘어가세요.</p>`;
+        }
+
+        return assetsToAsk.map((asset) => {
+          const optionsHtml = asset.labels.map((label) => renderSimpleOptionButton({
+            value: label,
+            label: label,
+            assetKey: asset.key,
+            selected: answer[asset.key] === label
+          })).join("");
+          return `
+            <div class="simple-survey-asset-group" data-asset-group="${escapeSurveyHtml(asset.key)}">
+              <div class="asset-title">${escapeSurveyHtml(asset.title)}</div>
+              <p class="asset-question">${escapeSurveyHtml(asset.question)}</p>
+              <div class="simple-survey-options">${optionsHtml}</div>
+            </div>`;
+        }).join("");
+      }
+
       return "";
     }
 
-    function applySimpleSingleSelection(button) {
-      simpleSurveyOptionsEl.querySelectorAll(".simple-survey-option").forEach((optionButton) => {
-        optionButton.classList.remove("is-selected");
-      });
-      button.classList.add("is-selected");
-    }
-
-    function applySimpleAssetGroupSelection(button) {
-      const group = button.closest(".simple-survey-asset-group");
-      if (!group) return;
-      group.querySelectorAll(".simple-survey-option").forEach((optionButton) => {
-        optionButton.classList.remove("is-selected");
-      });
-      button.classList.add("is-selected");
-    }
-
-    function applySimpleMultiSelectionUI(question) {
-      const selected = Array.isArray(state.answers[question.key]) ? state.answers[question.key] : [];
-      simpleSurveyOptionsEl.querySelectorAll(".simple-survey-option").forEach((optionButton) => {
-        const value = optionButton.dataset.value;
-        optionButton.classList.toggle("is-selected", selected.includes(value));
-      });
-    }
-
+    // 클릭 처리 — state 만 갱신하고, 그 질문을 다시 렌더한다. DOM 클래스는 읽지 않는다.
     function handleSimpleSurveyOptionClick(button) {
       const question = questions[state.step];
       if (!question || !button) return;
-
-      const value = button.dataset.value;
-      const assetKey = button.dataset.asset;
+      const value = button.getAttribute("data-value");
 
       if (question.type === "single") {
+        // radio: 항상 클릭한 값으로 교체
         state.answers[question.key] = value;
-        applySimpleSingleSelection(button);
+
       } else if (question.type === "assetCounts") {
+        // 자산별 radio: 해당 asset 키에 클릭한 값으로 교체
+        const assetKey = button.getAttribute("data-asset");
         if (!assetKey) return;
         state.answers[question.key] = state.answers[question.key] || {};
         state.answers[question.key][assetKey] = value;
-        applySimpleAssetGroupSelection(button);
-      } else if (question.type === "multiSimple") {
-        const exclusive = question.exclusive || [];
-        let selected = Array.isArray(state.answers[question.key]) ? [...state.answers[question.key]] : [];
-        const isSelected = button.classList.contains("is-selected");
 
-        if (exclusive.includes(value)) {
-          selected = isSelected ? [] : [value];
-        } else if (isSelected) {
+      } else if (question.type === "multiSimple") {
+        // checkbox: state 배열 기준 on/off 토글 (DOM 클래스 안 읽음)
+        const exclusive = question.exclusive || [];
+        let selected = Array.isArray(state.answers[question.key]) ? state.answers[question.key].slice() : [];
+        const alreadyOn = selected.indexOf(value) !== -1;
+
+        if (exclusive.indexOf(value) !== -1) {
+          // 단독 선택 항목(해당없음/모름): 켜져 있으면 끄고, 아니면 단독 선택
+          selected = alreadyOn ? [] : [value];
+        } else if (alreadyOn) {
+          // 이미 켜진 일반 항목 재탭 → 해제
           selected = selected.filter((item) => item !== value);
         } else {
-          selected = selected.filter((item) => !exclusive.includes(item));
+          // 새로 켜기 → 단독 선택 항목은 제거하고 추가
+          selected = selected.filter((item) => exclusive.indexOf(item) === -1);
           selected.push(value);
-          selected = Array.from(new Set(selected));
         }
-
         state.answers[question.key] = selected;
-        applySimpleMultiSelectionUI(question);
       } else {
         return;
       }
 
       saveState();
       syncReportAnswersSnapshot();
+      renderSimpleSurvey();
     }
 
+    // 현재 step 의 질문을 화면에 렌더
     function renderSimpleSurvey() {
-      setHomeReturnButtonVisible(false);
       const question = questions[state.step];
+
       const guideRequestCard = document.getElementById("guideRequestCard");
       if (guideRequestCard) {
         guideRequestCard.classList.add("hidden");
       }
 
+      if (resultArea) {
+        resultArea.classList.add("hidden");
+      }
+      simpleSurveyRoot.classList.remove("hidden");
+
+      // funnel 추적이 stepText 의 "N / M" 텍스트를 읽으므로 형식 유지
       stepText.textContent = `${Math.min(state.step + 1, questions.length)} / ${questions.length}`;
-      scoreText.textContent = "약 2분 소요";
       progressBar.style.width = `${((state.step + 1) / questions.length) * 100}%`;
 
-      resultArea.classList.add("hidden");
-      simpleSurveyRoot.classList.remove("hidden");
       simpleSurveyNext.textContent = state.step === questions.length - 1 ? "결과 확인하기" : "다음";
       simpleSurveyPrev.disabled = state.step === 0;
       simpleSurveyPrev.style.opacity = state.step === 0 ? "0.45" : "1";
 
       simpleSurveyQuestionEl.innerHTML = `
         <h3 class="question-title">${escapeSurveyHtml(question.title)}</h3>
-        <p class="question-help">${escapeSurveyHtml(question.help || "")}</p>
-      `;
+        <p class="question-help">${escapeSurveyHtml(question.help || "")}</p>`;
 
-      simpleSurveyOptionsEl.className = question.type === "multiSimple"
-        ? "simple-survey-options simple-survey-options-multi"
-        : "simple-survey-options";
+      // assetCounts 는 그룹마다 자체 .simple-survey-options 를 생성하므로 컨테이너는 단순 래퍼로 둔다.
+      simpleSurveyOptionsEl.className = "simple-survey-options";
       simpleSurveyOptionsEl.innerHTML = renderSimpleQuestionOptions(question);
     }
 
+    // 실제 버튼 클릭만 사용 (touchend/pointerup bridge 없음)
     simpleSurveyOptionsEl.addEventListener("click", function (event) {
       const button = event.target.closest(".simple-survey-option");
       if (!button || !simpleSurveyOptionsEl.contains(button)) return;
       handleSimpleSurveyOptionClick(button);
     }, false);
 
+    // 이전: 이전 질문으로 이동 (state 기준, 선택 상태 자동 복원 — state 에 그대로 있음)
     simpleSurveyPrev.addEventListener("click", function () {
       if (state.step > 0) {
         state.step -= 1;
@@ -2667,6 +2607,7 @@
       }
     }, false);
 
+    // 다음: state 기준 이동. 마지막이면 showResult().
     simpleSurveyNext.addEventListener("click", function () {
       if (simpleSurveyRoot.classList.contains("hidden")) {
         state.step = 0;
