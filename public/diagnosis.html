@@ -435,32 +435,23 @@
     notifyHeightRepeated();
   }
 
-  // 선택지: 컨테이너에 위임으로 한 번만 바인딩 (재렌더돼도 리스너 유지)
-  var optionLock = false;
+  // 선택지: 컨테이너에 click 위임으로 한 번만 바인딩 (재렌더돼도 리스너 유지)
+  // iOS Safari 도 viewport meta 가 있으면 click 지연이 없으므로 click 단독 사용.
+  // (touchend 병행 + lock 방식은 중복/잠금 문제를 유발해 제거함)
   function handleOptionEvent(ev) {
-    var btn = ev.target.closest ? ev.target.closest(".survey-option") : null;
+    var t = ev.target;
+    var btn = (t && t.closest) ? t.closest(".survey-option") : null;
     if (!btn || !elOptions.contains(btn)) return;
-    if (ev) { ev.preventDefault(); ev.stopPropagation(); }
-    if (optionLock) return;          // touchend+click 중복 방지
-    optionLock = true;
-    setTimeout(function () { optionLock = false; }, 350);
     onOptionTap(btn);
   }
   elOptions.addEventListener("click", handleOptionEvent, false);
-  elOptions.addEventListener("touchend", handleOptionEvent, false);
 
   function bindTap(el, handler) {
     if (!el) return;
-    var locked = false;
-    function fire(ev) {
-      if (ev) { ev.preventDefault(); ev.stopPropagation(); }
-      if (locked) return;
-      locked = true;
-      setTimeout(function () { locked = false; }, 350);
+    el.addEventListener("click", function (ev) {
+      if (ev && ev.preventDefault) ev.preventDefault();
       handler();
-    }
-    el.addEventListener("click", fire, false);
-    el.addEventListener("touchend", fire, false);
+    }, false);
   }
 
   function goNext() {
