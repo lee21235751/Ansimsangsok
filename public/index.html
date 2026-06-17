@@ -364,139 +364,65 @@
       color: rgba(255, 248, 220, 0.74);
     }
 
-    .survey-question-form {
-      display: block;
-      margin: 0;
-      padding: 0;
+    .simple-survey-question {
+      margin: 0 0 12px;
     }
 
-    .survey-options {
+    .simple-survey-options {
       display: grid;
       gap: 10px;
       overflow: visible;
     }
 
-    .survey-option-label {
+    .simple-survey-option {
       display: block;
-      position: relative;
       width: 100%;
       margin: 0;
-      cursor: pointer;
-      touch-action: manipulation;
-      -webkit-tap-highlight-color: rgba(14, 53, 41, 0.08);
-      background: var(--survey-label-bg, transparent);
-      background-color: var(--survey-label-bg, transparent);
-      border-radius: 18px;
-    }
-
-    .survey-option-input {
-      position: absolute;
-      opacity: 0;
-      pointer-events: none;
-      inset: 0 auto auto 0;
-      width: 1px;
-      height: 1px;
-      margin: 0;
-    }
-
-    .survey-option-card {
-      display: block;
-      position: relative;
-      width: 100%;
-      min-height: 56px;
-      border: 2px solid var(--survey-card-border, rgba(14, 53, 41, 0.18));
-      background: var(--survey-card-bg, #ffffff);
-      background-color: var(--survey-card-bg, #ffffff);
-      color: var(--survey-card-color, var(--forest-deep));
-      border-radius: 18px;
       padding: 14px 15px;
+      min-height: 56px;
+      border: 2px solid rgba(14, 53, 41, 0.18);
+      border-radius: 18px;
+      background: #ffffff;
+      color: var(--forest-deep);
       font-weight: 900;
       text-align: left;
       line-height: 1.45;
+      cursor: pointer;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: rgba(14, 53, 41, 0.08);
       box-sizing: border-box;
-      box-shadow: var(--survey-card-shadow, none);
+      font-family: inherit;
+      font-size: inherit;
       user-select: none;
       -webkit-user-select: none;
     }
 
-    .survey-option-input:checked + .survey-option-card {
-      background: #06251d !important;
-      background-color: #06251d !important;
-      color: #fff8dc !important;
-      border-color: #d7ad55 !important;
-      border-width: 2px !important;
-      box-shadow: 0 0 0 2px rgba(215, 173, 85, 0.35), inset 5px 0 0 #d7ad55, 0 9px 20px rgba(14, 53, 41, 0.16) !important;
+    .simple-survey-option.is-selected {
+      background: #06251d;
+      color: #fff8dc;
+      border-color: #d7ad55;
+      border-width: 2px;
+      box-shadow: 0 0 0 2px rgba(215, 173, 85, 0.35), inset 5px 0 0 #d7ad55, 0 9px 20px rgba(14, 53, 41, 0.16);
     }
 
-    .survey-option-input[checked] + .survey-option-card {
-      background: #06251d !important;
-      background-color: #06251d !important;
-      color: #fff8dc !important;
-      border-color: #d7ad55 !important;
-      border-width: 2px !important;
-      box-shadow: 0 0 0 2px rgba(215, 173, 85, 0.35), inset 5px 0 0 #d7ad55, 0 9px 20px rgba(14, 53, 41, 0.16) !important;
-    }
-
-    .survey-option-input[type="checkbox"][checked] + .survey-option-card {
-      background: #06251d !important;
-      background-color: #06251d !important;
-      color: #fff8dc !important;
-      border-color: #d7ad55 !important;
-      border-width: 2px !important;
-      box-shadow: 0 0 0 2px rgba(215, 173, 85, 0.35), inset 5px 0 0 #d7ad55, 0 9px 20px rgba(14, 53, 41, 0.16) !important;
-    }
-
-    .survey-option-label:has(.survey-option-input:checked) .survey-option-card {
-      background: #06251d !important;
-      background-color: #06251d !important;
-      color: #fff8dc !important;
-      border-color: #d7ad55 !important;
-      border-width: 2px !important;
-      box-shadow: 0 0 0 2px rgba(215, 173, 85, 0.35), inset 5px 0 0 #d7ad55, 0 9px 20px rgba(14, 53, 41, 0.16) !important;
-    }
-
-    .survey-option-label:has(.survey-option-input:checked) {
-      background: transparent !important;
-      background-color: transparent !important;
-      border-radius: 18px;
-    }
-
-    .survey-option-label[aria-checked="true"] {
-      background: transparent !important;
-      background-color: transparent !important;
-      border-radius: 18px;
-    }
-
-    .survey-option-label[aria-checked="true"] .survey-option-card {
-      background: #06251d !important;
-      background-color: #06251d !important;
-      color: #fff8dc !important;
-      border-color: #d7ad55 !important;
-      border-width: 2px !important;
-      box-shadow: 0 0 0 2px rgba(215, 173, 85, 0.35), inset 5px 0 0 #d7ad55, 0 9px 20px rgba(14, 53, 41, 0.16) !important;
-    }
-
-    .survey-option-label:focus-within {
-      background: transparent !important;
-      background-color: transparent !important;
-      border-radius: 18px;
-    }
-
-    .survey-option-label:focus-within .survey-option-card {
-      background: #06251d !important;
-      background-color: #06251d !important;
-      color: #fff8dc !important;
-      border-color: #d7ad55 !important;
-      border-width: 2px !important;
-      box-shadow: 0 0 0 2px rgba(215, 173, 85, 0.35), inset 5px 0 0 #d7ad55, 0 9px 20px rgba(14, 53, 41, 0.16) !important;
-    }
-
-    .survey-option-title {
+    .simple-survey-option-text {
       display: block;
-      padding-right: 66px;
     }
 
-    .survey-selected-badge {
+    .simple-survey-options-multi .simple-survey-option-text::after {
+      content: "복수 선택 가능";
+      display: block;
+      margin-top: 4px;
+      color: rgba(14, 53, 41, 0.58);
+      font-size: 0.78rem;
+      font-weight: 800;
+    }
+
+    .simple-survey-options-multi .simple-survey-option.is-selected .simple-survey-option-text::after {
+      color: rgba(255, 248, 220, 0.74);
+    }
+
+    .simple-survey-selected-text {
       display: none;
       width: fit-content;
       margin-top: 8px;
@@ -507,93 +433,25 @@
       font-weight: 950;
       font-size: 13px;
       line-height: 1;
-      align-items: center;
-      gap: 4px;
     }
 
-    .survey-option-input:checked + .survey-option-card .survey-selected-badge,
-    .survey-option-input[checked] + .survey-option-card .survey-selected-badge,
-    .survey-option-label[aria-checked="true"] .survey-selected-badge,
-    .survey-option-label:has(.survey-option-input:checked) .survey-selected-badge,
-    .survey-option-label:focus-within .survey-selected-badge {
-      display: inline-flex !important;
+    .simple-survey-option.is-selected .simple-survey-selected-text {
+      display: inline-flex;
     }
 
-    .survey-option-card::before {
-      content: "";
-      position: absolute;
-      left: 0;
-      top: 0;
-      bottom: 0;
-      width: 0;
-      border-radius: 16px 0 0 16px;
-    }
-
-    .survey-option-card::after {
-      content: "";
-      position: absolute;
-      right: 12px;
-      top: 50%;
-      transform: translateY(-50%);
-      min-width: 0;
-      color: transparent;
-      font-size: 0.82rem;
-      font-weight: 950;
-      line-height: 1;
-    }
-
-    .survey-options.multiSimple .survey-option-card::after {
-      content: "복수 선택 가능";
-      display: block;
-      margin-top: 4px;
-      color: rgba(14, 53, 41, 0.58);
-      font-size: 0.78rem;
-      font-weight: 800;
-    }
-
-    .survey-options.multiSimple .survey-option-input:checked + .survey-option-card::after {
-      color: rgba(255, 248, 220, 0.74) !important;
-    }
-
-    .survey-options.multiSimple .survey-option-input[checked] + .survey-option-card::after {
-      color: rgba(255, 248, 220, 0.74) !important;
-    }
-
-    .survey-options.multiSimple .survey-option-label:has(.survey-option-input:checked) .survey-option-card::after {
-      color: rgba(255, 248, 220, 0.74) !important;
-    }
-
-    .survey-options.multiSimple .survey-option-label[aria-checked="true"] .survey-option-card::after {
-      color: rgba(255, 248, 220, 0.74) !important;
-    }
-
-    .survey-debug-panel {
-      position: fixed;
-      left: 8px;
-      right: 8px;
-      bottom: max(8px, env(safe-area-inset-bottom));
-      z-index: 99999;
-      max-height: 36vh;
-      overflow: auto;
-      padding: 10px;
-      border: 3px solid #e11d48;
-      border-radius: 12px;
-      background: #ffffff;
-      color: #111111;
-      font-size: 12px;
-      line-height: 1.45;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-      box-shadow: 0 10px 26px rgba(0, 0, 0, 0.22);
-      pointer-events: none;
-      white-space: pre-wrap;
+    .simple-survey-nav {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 18px;
+      padding-bottom: calc(110px + env(safe-area-inset-bottom, 0px));
     }
 
     body .page main#diagnosis,
     body .page #diagnosis,
     body .page .diagnosis,
-    body .page #questionArea,
-    body .page #questionArea .question-card,
-    body .page #diagnosisQuestionForm {
+    body .page #simpleSurveyRoot,
+    body .page #simpleSurveyRoot .question-card {
       min-height: 0 !important;
       overflow: visible !important;
     }
@@ -1048,6 +906,14 @@
       }
 
       .nav-buttons button {
+        width: 100%;
+      }
+
+      .simple-survey-nav {
+        flex-direction: column;
+      }
+
+      .simple-survey-nav button {
         width: 100%;
       }
 
@@ -2377,11 +2243,15 @@
           <div class="progress-bar" id="progressBar"></div>
         </div>
 
-        <div id="questionArea"></div>
-
-        <div class="nav-buttons">
-          <button class="plain-btn" type="button" id="prevBtn">이전</button>
-          <button class="primary-btn" type="button" id="nextBtn">다음</button>
+        <div id="simpleSurveyRoot">
+          <article class="question-card">
+            <div id="simpleSurveyQuestion" class="simple-survey-question"></div>
+            <div id="simpleSurveyOptions" class="simple-survey-options"></div>
+          </article>
+          <div class="simple-survey-nav">
+            <button class="plain-btn" type="button" id="simpleSurveyPrev">이전</button>
+            <button class="primary-btn" type="button" id="simpleSurveyNext">다음</button>
+          </div>
         </div>
 
         <div id="resultArea" class="hidden"></div>
@@ -2607,255 +2477,224 @@
       answers: {}
     };
 
-    const questionArea = document.getElementById("questionArea");
+    const simpleSurveyRoot = document.getElementById("simpleSurveyRoot");
+    const simpleSurveyQuestionEl = document.getElementById("simpleSurveyQuestion");
+    const simpleSurveyOptionsEl = document.getElementById("simpleSurveyOptions");
+    const simpleSurveyPrev = document.getElementById("simpleSurveyPrev");
+    const simpleSurveyNext = document.getElementById("simpleSurveyNext");
     const resultArea = document.getElementById("resultArea");
     const progressBar = document.getElementById("progressBar");
     const stepText = document.getElementById("stepText");
     const scoreText = document.getElementById("scoreText");
-    const prevBtn = document.getElementById("prevBtn");
-    const nextBtn = document.getElementById("nextBtn");
-    const surveyDebugEnabled = (() => {
-      try {
-        return new URLSearchParams(window.location.search || "").get("surveyDebug") === "1";
-      } catch (error) {
-        return false;
+
+    function escapeSurveyHtml(value) {
+      return String(value || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    function renderSimpleOptionButton({ value, label, assetKey, selected }) {
+      const assetAttr = assetKey ? ` data-asset="${escapeSurveyHtml(assetKey)}"` : "";
+      const selectedClass = selected ? " is-selected" : "";
+      return `
+        <button type="button" class="simple-survey-option${selectedClass}" data-value="${escapeSurveyHtml(value)}"${assetAttr}>
+          <span class="simple-survey-option-text">${escapeSurveyHtml(label)}</span>
+          <span class="simple-survey-selected-text">✓ 선택됨</span>
+        </button>
+      `;
+    }
+
+    function renderSimpleQuestionOptions(question) {
+      if (question.type === "single") {
+        const answer = state.answers[question.key];
+        return question.options.map((option) => renderSimpleOptionButton({
+          value: option.label,
+          label: option.label,
+          selected: answer === option.label
+        })).join("");
       }
-    })();
-    const surveyDebugState = {
-      renderCount: 0,
-      lastRenderAt: "",
-      lastReason: "init",
-      lastEventType: "none",
-      lastTarget: null,
-      lastPoint: null,
-      lastElementFromPoint: null
-    };
 
-    function getDebugText(value, maxLength = 80) {
-      return String(value || "").replace(/\s+/g, " ").trim().slice(0, maxLength);
+      if (question.type === "assetCounts") {
+        const answer = state.answers[question.key] || {};
+        const selectedAssetKeys = Array.isArray(state.answers[question.presenceKey])
+          ? state.answers[question.presenceKey].filter((key) => !["none", "unknown"].includes(key))
+          : [];
+
+        const assetsToAsk = question.assets.filter((asset) => selectedAssetKeys.includes(asset.key));
+
+        if (assetsToAsk.length === 0) {
+          return `
+            <div class="result-item">
+              앞 질문에서 선택한 부동산이 없습니다. 다음으로 넘어가시면 됩니다.
+            </div>
+          `;
+        }
+
+        return assetsToAsk.map((asset) => `
+          <div class="asset-group simple-survey-asset-group" data-asset-group="${escapeSurveyHtml(asset.key)}">
+            <div class="asset-title">${escapeSurveyHtml(asset.title)}</div>
+            <p class="asset-question">${escapeSurveyHtml(asset.question)}</p>
+            <div class="simple-survey-options">
+              ${asset.labels.map((label) => renderSimpleOptionButton({
+                value: label,
+                label,
+                assetKey: asset.key,
+                selected: answer[asset.key] === label
+              })).join("")}
+            </div>
+          </div>
+        `).join("");
+      }
+
+      if (question.type === "multiSimple") {
+        const answer = Array.isArray(state.answers[question.key]) ? state.answers[question.key] : [];
+        return question.options.map((option) => renderSimpleOptionButton({
+          value: option.value,
+          label: option.label,
+          selected: answer.includes(option.value)
+        })).join("");
+      }
+
+      return "";
     }
 
-    function describeDebugElement(el) {
-      if (!el) return null;
-      const style = window.getComputedStyle ? window.getComputedStyle(el) : null;
-      const labelText = el.closest
-        ? getDebugText(el.closest(".survey-option-label")?.querySelector(".survey-option-title")?.textContent, 80)
-        : "";
-      return {
-        tag: el.tagName || "",
-        id: el.id || "",
-        className: typeof el.className === "string" ? el.className : String(el.className || ""),
-        text: getDebugText(el.textContent, 80) || labelText,
-        position: style ? style.position : "",
-        zIndex: style ? style.zIndex : "",
-        pointerEvents: style ? style.pointerEvents : "",
-        display: style ? style.display : ""
-      };
+    function applySimpleSingleSelection(button) {
+      simpleSurveyOptionsEl.querySelectorAll(".simple-survey-option").forEach((optionButton) => {
+        optionButton.classList.remove("is-selected");
+      });
+      button.classList.add("is-selected");
     }
 
-    function getSurveyDebugPanel() {
-      if (!surveyDebugEnabled) return null;
-
-      let panel = document.getElementById("surveyDebugPanel");
-      if (panel) return panel;
-
-      panel = document.createElement("pre");
-      panel.id = "surveyDebugPanel";
-      panel.className = "survey-debug-panel";
-      panel.setAttribute("aria-live", "polite");
-
-      const diagnosis = document.getElementById("diagnosis") || questionArea?.parentNode || document.body;
-      diagnosis.appendChild(panel);
-      return panel;
+    function applySimpleAssetGroupSelection(button) {
+      const group = button.closest(".simple-survey-asset-group");
+      if (!group) return;
+      group.querySelectorAll(".simple-survey-option").forEach((optionButton) => {
+        optionButton.classList.remove("is-selected");
+      });
+      button.classList.add("is-selected");
     }
 
-    function getCurrentQuestionCheckedLabels() {
-      return Array.from(questionArea.querySelectorAll(".survey-option-label"))
-        .filter((label) => {
-          const input = label.querySelector(".survey-option-input");
-          return input && input.checked;
-        })
-        .map((label) => getDebugText(label.querySelector(".survey-option-title")?.textContent || label.textContent, 80));
+    function applySimpleMultiSelectionUI(question) {
+      const selected = Array.isArray(state.answers[question.key]) ? state.answers[question.key] : [];
+      simpleSurveyOptionsEl.querySelectorAll(".simple-survey-option").forEach((optionButton) => {
+        const value = optionButton.dataset.value;
+        optionButton.classList.toggle("is-selected", selected.includes(value));
+      });
     }
 
-    function updateSurveyDebugPanel(reason = "update") {
-      if (!surveyDebugEnabled) return;
-
-      const panel = getSurveyDebugPanel();
-      if (!panel) return;
-
+    function handleSimpleSurveyOptionClick(button) {
       const question = questions[state.step];
-      const inputs = Array.from(questionArea.querySelectorAll(".survey-option-input"));
-      const labels = Array.from(questionArea.querySelectorAll(".survey-option-label"));
-      const badges = Array.from(questionArea.querySelectorAll(".survey-selected-badge"))
-        .filter((badge) => {
-          const style = window.getComputedStyle ? window.getComputedStyle(badge) : null;
-          return style && style.display !== "none" && style.visibility !== "hidden";
-        });
+      if (!question || !button) return;
 
-      const selectedAnswer = question ? state.answers[question.key] : undefined;
-      const lines = [
-        "SURVEY DEBUG: ON",
-        `reason: ${reason}`,
-        `questionIndex: ${state.step}`,
-        `questionKey: ${question ? question.key : ""}`,
-        `lastEventType: ${surveyDebugState.lastEventType}`,
-        `lastTarget: ${JSON.stringify(surveyDebugState.lastTarget)}`,
-        `lastPoint: ${JSON.stringify(surveyDebugState.lastPoint)}`,
-        `elementFromPoint: ${JSON.stringify(surveyDebugState.lastElementFromPoint)}`,
-        `checkedCount: ${inputs.filter((input) => input.checked).length}`,
-        `checkedLabels: ${JSON.stringify(getCurrentQuestionCheckedLabels())}`,
-        `selectedAnswer: ${JSON.stringify(selectedAnswer)}`,
-        `nextDisabled: ${nextBtn ? Boolean(nextBtn.disabled) : ""}`,
-        `renderCount: ${surveyDebugState.renderCount}`,
-        `lastRenderAt: ${surveyDebugState.lastRenderAt}`,
-        `badgeVisibleCount: ${badges.length}`,
-        `labelCount: ${labels.length}`,
-        `inputCount: ${inputs.length}`
-      ];
+      const value = button.dataset.value;
+      const assetKey = button.dataset.asset;
 
-      panel.textContent = lines.join("\n");
-    }
+      if (question.type === "single") {
+        state.answers[question.key] = value;
+        applySimpleSingleSelection(button);
+      } else if (question.type === "assetCounts") {
+        if (!assetKey) return;
+        state.answers[question.key] = state.answers[question.key] || {};
+        state.answers[question.key][assetKey] = value;
+        applySimpleAssetGroupSelection(button);
+      } else if (question.type === "multiSimple") {
+        const exclusive = question.exclusive || [];
+        let selected = Array.isArray(state.answers[question.key]) ? [...state.answers[question.key]] : [];
+        const isSelected = button.classList.contains("is-selected");
 
-    function recordSurveyDebugEvent(event) {
-      if (!surveyDebugEnabled) return;
-
-      const touch = event.changedTouches && event.changedTouches[0]
-        ? event.changedTouches[0]
-        : event.touches && event.touches[0]
-          ? event.touches[0]
-          : null;
-      const point = touch
-        ? { x: Math.round(touch.clientX), y: Math.round(touch.clientY) }
-        : typeof event.clientX === "number"
-          ? { x: Math.round(event.clientX), y: Math.round(event.clientY) }
-          : null;
-
-      surveyDebugState.lastEventType = event.type;
-      surveyDebugState.lastTarget = describeDebugElement(event.target);
-      if (point) {
-        surveyDebugState.lastPoint = point;
-        surveyDebugState.lastElementFromPoint = describeDebugElement(document.elementFromPoint(point.x, point.y));
-      }
-
-      window.requestAnimationFrame(() => updateSurveyDebugPanel(`event:${event.type}`));
-    }
-
-    const SURVEY_BRIDGE_DEDUPE_MS = 800;
-    const lastSurveyBridge = { key: "", at: 0, handledBy: "" };
-
-    function shouldSkipSurveyBridgeFollowUp(event, key) {
-      if (lastSurveyBridge.key !== key) return false;
-      if (Date.now() - lastSurveyBridge.at >= SURVEY_BRIDGE_DEDUPE_MS) return false;
-      if (event.type === "touchend") return false;
-      return true;
-    }
-
-    function getSurveyBridgePoint(event) {
-      const touch = event.changedTouches && event.changedTouches[0]
-        ? event.changedTouches[0]
-        : event.touches && event.touches[0]
-          ? event.touches[0]
-          : null;
-
-      if (touch) {
-        return { x: Math.round(touch.clientX), y: Math.round(touch.clientY) };
-      }
-
-      if (typeof event.clientX === "number" && typeof event.clientY === "number") {
-        return { x: Math.round(event.clientX), y: Math.round(event.clientY) };
-      }
-
-      return null;
-    }
-
-    function findSurveyBridgeLabel(event) {
-      let label = event.target && event.target.closest
-        ? event.target.closest(".survey-option-label")
-        : null;
-
-      if (label) return label;
-
-      const point = getSurveyBridgePoint(event);
-      if (!point) return null;
-
-      const elementAtPoint = document.elementFromPoint(point.x, point.y);
-      return elementAtPoint && elementAtPoint.closest
-        ? elementAtPoint.closest(".survey-option-label")
-        : null;
-    }
-
-    function syncInputCheckedAttribute(input) {
-      if (!input) return;
-      if (input.checked) {
-        input.setAttribute("checked", "checked");
-      } else {
-        input.removeAttribute("checked");
-      }
-    }
-
-    function bridgeSurveyChoiceTap(event) {
-      const target = event.target;
-      if (target && target.closest) {
-        if (
-          target.closest(".nav-buttons") ||
-          target.closest("#nextBtn") ||
-          target.closest("#prevBtn") ||
-          target.id === "nextBtn" ||
-          target.id === "prevBtn"
-        ) {
-          return;
+        if (exclusive.includes(value)) {
+          selected = isSelected ? [] : [value];
+        } else if (isSelected) {
+          selected = selected.filter((item) => item !== value);
+        } else {
+          selected = selected.filter((item) => !exclusive.includes(item));
+          selected.push(value);
+          selected = Array.from(new Set(selected));
         }
-        if (target.tagName === "BUTTON" && !target.closest(".survey-option-label")) {
-          return;
-        }
-      }
 
-      const label = findSurveyBridgeLabel(event);
-      if (!label || !questionArea || !questionArea.contains(label)) return;
-
-      const input = label.querySelector(".survey-option-input");
-      if (!input || input.disabled) return;
-
-      const key = `${input.name}:${input.value}`;
-      if (shouldSkipSurveyBridgeFollowUp(event, key)) {
-        updateSurveyDebugPanel(`bridge:${event.type}:dedupe`);
-        return;
-      }
-
-      if (input.type === "radio") {
-        questionArea.querySelectorAll(".survey-option-input").forEach((other) => {
-          if (other.type === "radio" && other.name === input.name) {
-            other.checked = false;
-            syncInputCheckedAttribute(other);
-          }
-        });
-        input.checked = true;
-        syncInputCheckedAttribute(input);
-      } else if (input.type === "checkbox") {
-        input.checked = !input.checked;
-        syncInputCheckedAttribute(input);
+        state.answers[question.key] = selected;
+        applySimpleMultiSelectionUI(question);
       } else {
         return;
       }
 
-      lastSurveyBridge.key = key;
-      lastSurveyBridge.at = Date.now();
-      lastSurveyBridge.handledBy = event.type;
+      saveState();
+      syncReportAnswersSnapshot();
+    }
 
-      syncSurveyCheckedAttributes();
-
-      const point = getSurveyBridgePoint(event);
-      surveyDebugState.lastEventType = `bridge:${event.type}`;
-      surveyDebugState.lastTarget = describeDebugElement(event.target);
-      if (point) {
-        surveyDebugState.lastPoint = point;
-        surveyDebugState.lastElementFromPoint = describeDebugElement(document.elementFromPoint(point.x, point.y));
+    function renderSimpleSurvey() {
+      setHomeReturnButtonVisible(false);
+      const question = questions[state.step];
+      const guideRequestCard = document.getElementById("guideRequestCard");
+      if (guideRequestCard) {
+        guideRequestCard.classList.add("hidden");
       }
 
-      input.dispatchEvent(new Event("change", { bubbles: true }));
-      updateSurveyDebugPanel(`bridge:${event.type}`);
+      stepText.textContent = `${Math.min(state.step + 1, questions.length)} / ${questions.length}`;
+      scoreText.textContent = "약 2분 소요";
+      progressBar.style.width = `${((state.step + 1) / questions.length) * 100}%`;
+
+      resultArea.classList.add("hidden");
+      simpleSurveyRoot.classList.remove("hidden");
+      simpleSurveyNext.textContent = state.step === questions.length - 1 ? "결과 확인하기" : "다음";
+      simpleSurveyPrev.disabled = state.step === 0;
+      simpleSurveyPrev.style.opacity = state.step === 0 ? "0.45" : "1";
+
+      simpleSurveyQuestionEl.innerHTML = `
+        <h3 class="question-title">${escapeSurveyHtml(question.title)}</h3>
+        <p class="question-help">${escapeSurveyHtml(question.help || "")}</p>
+      `;
+
+      simpleSurveyOptionsEl.className = question.type === "multiSimple"
+        ? "simple-survey-options simple-survey-options-multi"
+        : "simple-survey-options";
+      simpleSurveyOptionsEl.innerHTML = renderSimpleQuestionOptions(question);
     }
+
+    simpleSurveyOptionsEl.addEventListener("click", function (event) {
+      const button = event.target.closest(".simple-survey-option");
+      if (!button || !simpleSurveyOptionsEl.contains(button)) return;
+      handleSimpleSurveyOptionClick(button);
+    }, false);
+
+    simpleSurveyPrev.addEventListener("click", function () {
+      if (state.step > 0) {
+        state.step -= 1;
+        saveState();
+        syncReportAnswersSnapshot();
+        renderSimpleSurvey();
+      }
+    }, false);
+
+    simpleSurveyNext.addEventListener("click", function () {
+      if (simpleSurveyRoot.classList.contains("hidden")) {
+        state.step = 0;
+        state.answers = {};
+        saveState();
+        syncReportAnswersSnapshot();
+        renderSimpleSurvey();
+        return;
+      }
+
+      if (state.step < questions.length - 1) {
+        state.step += 1;
+        saveState();
+        syncReportAnswersSnapshot();
+        renderSimpleSurvey();
+      } else {
+        saveState();
+        syncReportAnswersSnapshot();
+        showResult();
+      }
+    }, false);
+
+    function render() {
+      renderSimpleSurvey();
+    }
+
+    window.renderSimpleSurvey = renderSimpleSurvey;
+    window.render = render;
 
     function getAnswerScore(question) {
       const answer = state.answers[question.key];
@@ -2903,270 +2742,8 @@
       window.__ansimCurrentAnswers = JSON.parse(JSON.stringify(state.answers || {}));
     }
 
-    function render() {
-      const total = getTotalScore();
-      setHomeReturnButtonVisible(false);
-      const question = questions[state.step];
-      const guideRequestCard = document.getElementById("guideRequestCard");
-      if (guideRequestCard) {
-        guideRequestCard.classList.add("hidden");
-      }
+    window.getTotalScore = getTotalScore;
 
-      stepText.textContent = `${Math.min(state.step + 1, questions.length)} / ${questions.length}`;
-      scoreText.textContent = "약 2분 소요";
-      progressBar.style.width = `${((state.step + 1) / questions.length) * 100}%`;
-
-      resultArea.classList.add("hidden");
-      questionArea.classList.remove("hidden");
-      nextBtn.textContent = state.step === questions.length - 1 ? "결과 확인하기" : "다음";
-      prevBtn.disabled = state.step === 0;
-      prevBtn.style.opacity = state.step === 0 ? "0.45" : "1";
-
-      questionArea.innerHTML = `
-        <article class="question-card">
-          <h3 class="question-title">${question.title}</h3>
-          <p class="question-help">${question.help || ""}</p>
-          <form id="diagnosisQuestionForm" class="survey-question-form" autocomplete="off">
-            ${renderQuestionBody(question)}
-          </form>
-        </article>
-      `;
-
-      surveyDebugState.renderCount += 1;
-      surveyDebugState.lastRenderAt = new Date().toLocaleTimeString("ko-KR", { hour12: false });
-      syncSurveyCheckedAttributes();
-      updateSurveyDebugPanel("render");
-    }
-
-    function getSurveyInputName(question, extraKey) {
-      return ["question", state.step, question.key, extraKey || ""].filter(Boolean).join("-");
-    }
-
-    function renderSurveyOption({ inputType, name, value, label, dataValue, checked, assetKey }) {
-      const inputId = `${name}-${value}`;
-      return `
-        <label class="survey-option-label" for="${inputId}" aria-checked="${checked ? "true" : "false"}">
-          <input id="${inputId}" class="survey-option-input" type="${inputType}" name="${name}" value="${value}" data-value="${dataValue || label}" ${assetKey ? `data-asset="${assetKey}"` : ""} ${checked ? "checked" : ""} />
-          <span class="survey-option-card">
-            <span class="survey-option-title">${label}</span>
-            <span class="survey-selected-badge" aria-hidden="true">✓ 선택됨</span>
-          </span>
-        </label>
-      `;
-    }
-
-    function renderQuestionBody(question) {
-      if (question.type === "single") {
-        const answer = state.answers[question.key];
-        const name = getSurveyInputName(question);
-        return `<div class="survey-options">${question.options.map((option, index) => renderSurveyOption({
-          inputType: "radio",
-          name,
-          value: index,
-          label: option.label,
-          dataValue: option.label,
-          checked: answer === option.label
-        })).join("")}</div>`;
-      }
-
-      if (question.type === "assetCounts") {
-        const answer = state.answers[question.key] || {};
-        const selectedAssetKeys = Array.isArray(state.answers[question.presenceKey])
-          ? state.answers[question.presenceKey].filter((key) => !["none", "unknown"].includes(key))
-          : [];
-
-        const assetsToAsk = question.assets.filter((asset) => selectedAssetKeys.includes(asset.key));
-
-        if (assetsToAsk.length === 0) {
-          return `
-            <div class="result-item">
-              앞 질문에서 선택한 부동산이 없습니다. 다음으로 넘어가시면 됩니다.
-            </div>
-          `;
-        }
-
-        return assetsToAsk.map((asset) => `
-          <div class="asset-group">
-            <div class="asset-title">${asset.title}</div>
-            <p class="asset-question">${asset.question}</p>
-            <div class="survey-options">
-              ${asset.labels.map((label, index) => renderSurveyOption({
-                inputType: "radio",
-                name: getSurveyInputName(question, asset.key),
-                value: index,
-                label,
-                dataValue: label,
-                checked: answer[asset.key] === label,
-                assetKey: asset.key
-              })).join("")}
-            </div>
-          </div>
-        `).join("");
-      }
-
-      if (question.type === "multiSimple") {
-        const answer = Array.isArray(state.answers[question.key]) ? state.answers[question.key] : [];
-        const name = getSurveyInputName(question);
-        return `<div class="survey-options multiSimple">${question.options.map((option, index) => renderSurveyOption({
-          inputType: "checkbox",
-          name,
-          value: index,
-          label: option.label,
-          dataValue: option.value,
-          checked: answer.includes(option.value)
-        })).join("")}</div>`;
-      }
-
-      return "";
-    }
-
-    function applyCheckedInputToAnswer(question, input) {
-      if (!question || !input) return false;
-      const value = input.dataset.value;
-
-      if (question.type === "single") {
-        state.answers[question.key] = value;
-        return true;
-      }
-
-      if (question.type === "assetCounts") {
-        const assetKey = input.dataset.asset;
-        if (!assetKey) return false;
-        state.answers[question.key] = state.answers[question.key] || {};
-        state.answers[question.key][assetKey] = value;
-        return true;
-      }
-
-      if (question.type === "multiSimple") {
-        const exclusive = question.exclusive || [];
-        let selected = Array.isArray(state.answers[question.key]) ? [...state.answers[question.key]] : [];
-
-        if (exclusive.includes(value)) {
-          selected = input.checked ? [value] : [];
-        } else {
-          selected = selected.filter((item) => !exclusive.includes(item));
-          selected = input.checked
-            ? Array.from(new Set([...selected, value]))
-            : selected.filter((item) => item !== value);
-        }
-
-        state.answers[question.key] = selected;
-        return true;
-      }
-
-      return false;
-    }
-
-    function syncSurveyCheckedAttributes() {
-      questionArea.querySelectorAll(".survey-option-input").forEach((input) => {
-        const label = input.closest(".survey-option-label");
-        if (input.checked) {
-          input.setAttribute("checked", "checked");
-          if (label) {
-            label.setAttribute("aria-checked", "true");
-            label.style.setProperty("--survey-label-bg", "transparent");
-            label.style.setProperty("--survey-card-bg", "#06251d");
-            label.style.setProperty("--survey-card-color", "#fff8dc");
-            label.style.setProperty("--survey-card-border", "#d7ad55");
-            label.style.setProperty("--survey-card-shadow", "0 0 0 2px rgba(215, 173, 85, 0.35), inset 5px 0 0 #d7ad55, 0 9px 20px rgba(14, 53, 41, 0.16)");
-            label.style.backgroundColor = "";
-            const card = label.querySelector(".survey-option-card");
-            if (card) {
-              card.setAttribute("style", [
-                "background:#06251d !important",
-                "background-color:#06251d !important",
-                "color:#fff8dc !important",
-                "border-color:#d7ad55 !important",
-                "border-width:2px !important",
-                "box-shadow:0 0 0 2px rgba(215, 173, 85, 0.35), inset 5px 0 0 #d7ad55, 0 9px 20px rgba(14, 53, 41, 0.16) !important"
-              ].join(";"));
-              const badge = card.querySelector(".survey-selected-badge");
-              if (badge) badge.style.display = "inline-flex";
-            }
-          }
-        } else {
-          input.removeAttribute("checked");
-          if (label) {
-            label.setAttribute("aria-checked", "false");
-            label.style.removeProperty("--survey-label-bg");
-            label.style.removeProperty("--survey-card-bg");
-            label.style.removeProperty("--survey-card-color");
-            label.style.removeProperty("--survey-card-border");
-            label.style.removeProperty("--survey-card-shadow");
-            label.style.backgroundColor = "";
-            const card = label.querySelector(".survey-option-card");
-            if (card) {
-              card.removeAttribute("style");
-              const badge = card.querySelector(".survey-selected-badge");
-              if (badge) badge.style.display = "none";
-            }
-          }
-        }
-      });
-      updateSurveyDebugPanel("syncSurveyCheckedAttributes");
-    }
-
-    function syncCurrentAnswerFromForm() {
-      const question = questions[state.step];
-      const form = document.getElementById("diagnosisQuestionForm");
-      if (!question || !form) return;
-
-      if (question.type === "single") {
-        const input = form.querySelector(".survey-option-input:checked");
-        if (input) applyCheckedInputToAnswer(question, input);
-      }
-
-      if (question.type === "assetCounts") {
-        form.querySelectorAll(".survey-option-input[data-asset]:checked").forEach((input) => {
-          applyCheckedInputToAnswer(question, input);
-        });
-      }
-
-      if (question.type === "multiSimple") {
-        let selected = [];
-        const exclusive = question.exclusive || [];
-        form.querySelectorAll(".survey-option-input:checked").forEach((input) => {
-          const value = input.dataset.value;
-          if (exclusive.includes(value)) {
-            selected = [value];
-          } else if (!selected.some((item) => exclusive.includes(item))) {
-            selected.push(value);
-          }
-        });
-        state.answers[question.key] = Array.from(new Set(selected));
-      }
-
-      saveState();
-      syncReportAnswersSnapshot();
-      syncSurveyCheckedAttributes();
-    }
-
-    function handleQuestionOptionChange(event) {
-      const input = event.target && event.target.closest
-        ? event.target.closest(".survey-option-input")
-        : null;
-
-      if (!input || !questionArea.contains(input)) {
-        return;
-      }
-
-      if (applyCheckedInputToAnswer(questions[state.step], input)) {
-        saveState();
-        syncReportAnswersSnapshot();
-        syncSurveyCheckedAttributes();
-        updateSurveyDebugPanel("change");
-      }
-    }
-
-    questionArea.addEventListener("change", handleQuestionOptionChange, false);
-    ["click", "change", "input", "pointerdown", "touchstart", "touchend"].forEach((eventName) => {
-      questionArea.addEventListener(eventName, recordSurveyDebugEvent, { capture: true, passive: true });
-    });
-    ["touchend", "pointerup", "click"].forEach((eventName) => {
-      document.addEventListener(eventName, bridgeSurveyChoiceTap, { capture: true, passive: true });
-    });
-
-    
     function setHomeReturnButtonVisible(visible) {
       const button = document.getElementById("homeReturnButton");
       if (!button) return;
@@ -3235,49 +2812,11 @@ function saveState() {
       if (guideRequestCard) {
         guideRequestCard.classList.remove("hidden");
       }
-      questionArea.classList.add("hidden");
-      nextBtn.textContent = "다시 확인하기";
+      simpleSurveyRoot.classList.add("hidden");
+      simpleSurveyNext.textContent = "다시 확인하기";
       progressBar.style.width = "100%";
       scoreText.textContent = "진단 완료";
     }
-
-    function runPrevNav() {
-      syncCurrentAnswerFromForm();
-      if (state.step > 0) {
-        state.step -= 1;
-        saveState();
-        render();
-      }
-      updateSurveyDebugPanel("prev");
-    }
-
-    function runNextNav() {
-      syncCurrentAnswerFromForm();
-      if (questionArea.classList.contains("hidden")) {
-        state.step = 0;
-        state.answers = {};
-        saveState();
-        render();
-        updateSurveyDebugPanel("next-reset");
-        return;
-      }
-
-      if (state.step < questions.length - 1) {
-        state.step += 1;
-        saveState();
-        render();
-        updateSurveyDebugPanel("next");
-      } else {
-        saveState();
-        syncReportAnswersSnapshot();
-        showResult();
-        updateSurveyDebugPanel("showResult");
-      }
-    }
-
-    prevBtn.addEventListener("click", runPrevNav, false);
-
-    nextBtn.addEventListener("click", runNextNav, false);
 
     function showLeadStatusBanner(message, type = "success") {
       const banner = document.getElementById("leadStatusBanner");
@@ -3445,11 +2984,12 @@ render();
         document.querySelector("[data-diagnosis-area]");
 
       var result = document.getElementById("resultArea");
-      var question = document.getElementById("questionArea");
+      var question = document.getElementById("simpleSurveyRoot");
 
       try {
         if (typeof state === "object" && state) {
           state.step = 0;
+          state.answers = {};
         }
       } catch (error) {}
 
@@ -3465,8 +3005,10 @@ render();
         result.classList.add("hidden");
       }
 
-      if (typeof renderQuestion === "function") {
-        renderQuestion();
+      if (typeof renderSimpleSurvey === "function") {
+        renderSimpleSurvey();
+      } else if (typeof render === "function") {
+        render();
       }
 
       if (question && question.scrollIntoView) {
@@ -3863,7 +3405,7 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
       if (step && step.current >= step.total && !completed) {
-        var nextBtn = document.getElementById("nextBtn");
+        var nextBtn = document.getElementById("simpleSurveyNext");
         var nextText = nextBtn ? (nextBtn.textContent || "") : "";
         if (nextText.indexOf("결과") >= 0 || nextText.indexOf("다시") >= 0) {
           completed = true;
