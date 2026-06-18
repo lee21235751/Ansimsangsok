@@ -32,7 +32,18 @@
   .survey-question-title { margin: 0 0 6px; font-size: 1.22rem; line-height: 1.4; font-weight: 900; color: var(--forest-deep); }
   .survey-question-help { margin: 0 0 16px; font-size: 0.96rem; line-height: 1.55; color: var(--muted); font-weight: 600; }
   .survey-options { display: flex; flex-direction: column; gap: 10px; }
-  .survey-option { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; width: 100%; margin: 0; min-height: 60px; padding: 15px 16px; border: 2px solid rgba(14,53,41,0.20); border-radius: 16px; background: #ffffff; color: var(--forest-deep); font-family: inherit; font-size: 1.04rem; font-weight: 800; text-align: left; line-height: 1.4; cursor: pointer; touch-action: manipulation; -webkit-tap-highlight-color: rgba(215,173,85,0.25); -webkit-user-select: none; user-select: none; transition: background-color 0.12s ease, border-color 0.12s ease, color 0.12s ease; }
+  .survey-option {
+    display: flex; flex-direction: column; align-items: flex-start; gap: 4px;
+    width: 100%; margin: 0; min-height: 60px; padding: 15px 16px;
+    border: 2px solid rgba(14,53,41,0.20); border-radius: 16px;
+    background: #ffffff; color: var(--forest-deep);
+    font-family: inherit; font-size: 1.04rem; font-weight: 800;
+    text-align: left; line-height: 1.4; cursor: pointer;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(215,173,85,0.25);
+    -webkit-user-select: none; user-select: none;
+    transition: background-color 0.12s ease, border-color 0.12s ease, color 0.12s ease;
+  }
   .survey-option:active { transform: scale(0.995); }
   .survey-option.is-selected { background: #0e3529; color: #fff8dc; border-color: #d7ad55; }
   .survey-option-text { display: block; font-weight: 800; }
@@ -44,7 +55,13 @@
   .survey-asset-question { margin: 0 0 8px; color: var(--muted); font-size: 0.92rem; font-weight: 600; }
   .survey-empty-note { margin: 4px 0 0; color: var(--muted); font-weight: 700; line-height: 1.6; }
   .survey-nav { display: flex; flex-direction: column; gap: 10px; margin-top: 18px; }
-  .survey-btn { width: 100%; min-height: 56px; border-radius: 16px; font-family: inherit; font-size: 1.08rem; font-weight: 900; cursor: pointer; touch-action: manipulation; -webkit-tap-highlight-color: transparent; border: 2px solid transparent; transition: opacity 0.12s ease; }
+  .survey-btn {
+    width: 100%; min-height: 56px; border-radius: 16px;
+    font-family: inherit; font-size: 1.08rem; font-weight: 900;
+    cursor: pointer; touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    border: 2px solid transparent; transition: opacity 0.12s ease;
+  }
   .survey-btn-next { background: linear-gradient(135deg,#f5dc8a,#c99938); color: var(--forest-deep); border-color: #c99938; }
   .survey-btn-prev { background: #ffffff; color: var(--muted); border-color: var(--line); }
   .survey-btn:disabled { opacity: 0.45; cursor: default; }
@@ -73,6 +90,7 @@
 <script>
 (function () {
   "use strict";
+
   var questions = [
     {
       type: "single", key: "family",
@@ -117,11 +135,11 @@
       help: "위에서 있다고 선택한 항목별로 개수를 확인해주세요.",
       presenceKey: "assetPresence",
       assets: [
-        { key: "house", title: "주택", question: "주택을 몇 채 소유하세요?", labels: ["1채","2채","3채 이상"], scores: [7,13,18] },
-        { key: "land", title: "토지", question: "토지를 몇 필지 갖고 있나요?", labels: ["1필지","2필지","3필지 이상"], scores: [8,14,20] },
+        { key: "house",            title: "주택",          question: "주택을 몇 채 소유하세요?",                       labels: ["1채","2채","3채 이상"],             scores: [7,13,18] },
+        { key: "land",             title: "토지",          question: "토지를 몇 필지 갖고 있나요?",               labels: ["1필지","2필지","3필지 이상"], scores: [8,14,20] },
         { key: "incomeRealEstate", title: "수익형 부동산", question: "상가/오피스텔/빌딩을 몇 개 보유하고 있나요?", labels: ["1개","2개","3개 이상"], scores: [8,14,20] },
-        { key: "factory", title: "공장/창고", question: "공장/창고를 몇 곳 갖고 있나요?", labels: ["1곳","2곳","3곳 이상"], scores: [8,14,20] },
-        { key: "otherRealEstate", title: "기타 부동산", question: "기타 부동산을 몇 개 소유하세요?", labels: ["1개","2개","3개 이상"], scores: [6,11,16] }
+        { key: "factory",          title: "공장/창고", question: "공장/창고를 몇 곳 갖고 있나요?",   labels: ["1곳","2곳","3곳 이상"],             scores: [8,14,20] },
+        { key: "otherRealEstate",  title: "기타 부동산", question: "기타 부동산을 몇 개 소유하세요?", labels: ["1개","2개","3개 이상"], scores: [6,11,16] }
       ]
     },
     {
@@ -152,12 +170,12 @@
       help: "여러 개를 동시에 선택할 수 있습니다. 해당 없음과 잘 모르겠습니다는 하나만 선택해주세요.",
       exclusive: ["none","unknown"],
       options: [
-        { value: "self_abroad", label: "본인이 해외 거주 중", score: 16 },
-        { value: "family_abroad", label: "배우자 또는 자녀가 해외 거주 중", score: 14 },
-        { value: "family_foreign_nationality", label: "배우자 또는 자녀가 외국 국적", score: 16 },
-        { value: "overseas_asset", label: "해외 부동산 또는 해외 금융자산이 있음", score: 18 },
-        { value: "none", label: "해당 없음", score: 0 },
-        { value: "unknown", label: "잘 모르겠습니다", score: 10 }
+        { value: "self_abroad",              label: "본인이 해외 거주 중",                    score: 16 },
+        { value: "family_abroad",            label: "배우자 또는 자녀가 해외 거주 중",    score: 14 },
+        { value: "family_foreign_nationality", label: "배우자 또는 자녀가 외국 국적",         score: 16 },
+        { value: "overseas_asset",           label: "해외 부동산 또는 해외 금융자산이 있음", score: 18 },
+        { value: "none",                     label: "해당 없음",           score: 0 },
+        { value: "unknown",                  label: "잘 모르겠습니다", score: 10 }
       ]
     },
     {
@@ -185,13 +203,13 @@
   ];
 
   var state = { step: 0, answers: {} };
-  var elStep = document.getElementById("progressStep");
-  var elBar = document.getElementById("progressBar");
-  var elTitle = document.getElementById("questionTitle");
-  var elHelp = document.getElementById("questionHelp");
+  var elStep    = document.getElementById("progressStep");
+  var elBar     = document.getElementById("progressBar");
+  var elTitle   = document.getElementById("questionTitle");
+  var elHelp    = document.getElementById("questionHelp");
   var elOptions = document.getElementById("options");
-  var elNext = document.getElementById("nextBtn");
-  var elPrev = document.getElementById("prevBtn");
+  var elNext    = document.getElementById("nextBtn");
+  var elPrev    = document.getElementById("prevBtn");
 
   function esc(s) {
     return String(s == null ? "" : s)
@@ -218,7 +236,7 @@
       return q.options.map(function(o){ return optionButton(o.value,o.label,null,arr.indexOf(o.value)!==-1); }).join("");
     }
     if (q.type === "assetCounts") {
-      var counts = state.answers[q.key] || {};
+      var counts   = state.answers[q.key] || {};
       var presence = Array.isArray(state.answers[q.presenceKey])
         ? state.answers[q.presenceKey].filter(function(k){ return k!=="none"&&k!=="unknown"; }) : [];
       var assets = q.assets.filter(function(a){ return presence.indexOf(a.key)!==-1; });
@@ -238,84 +256,129 @@
 
   function onOptionTap(btn) {
     var q = questions[state.step];
-    if (!q||!btn) return;
+    if (!q || !btn) return;
     var value = btn.getAttribute("data-value");
-    if (q.type==="single") {
-      state.answers[q.key]=value;
-    } else if (q.type==="assetCounts") {
-      var assetKey=btn.getAttribute("data-asset");
+    if (q.type === "single") {
+      state.answers[q.key] = value;
+    } else if (q.type === "assetCounts") {
+      var assetKey = btn.getAttribute("data-asset");
       if (!assetKey) return;
-      if (!state.answers[q.key]) state.answers[q.key]={};
-      state.answers[q.key][assetKey]=value;
-    } else if (q.type==="multiSimple") {
-      var exclusive=q.exclusive||[];
-      var sel=Array.isArray(state.answers[q.key])?state.answers[q.key].slice():[];
-      var on=sel.indexOf(value)!==-1;
-      if (exclusive.indexOf(value)!==-1) { sel=on?[]:[value]; }
-      else if (on) { sel=sel.filter(function(v){return v!==value;}); }
-      else { sel=sel.filter(function(v){return exclusive.indexOf(v)===-1;}); sel.push(value); }
-      state.answers[q.key]=sel;
+      if (!state.answers[q.key]) state.answers[q.key] = {};
+      state.answers[q.key][assetKey] = value;
+    } else if (q.type === "multiSimple") {
+      var exclusive = q.exclusive || [];
+      var sel = Array.isArray(state.answers[q.key]) ? state.answers[q.key].slice() : [];
+      var on  = sel.indexOf(value) !== -1;
+      if (exclusive.indexOf(value) !== -1) {
+        sel = on ? [] : [value];
+      } else if (on) {
+        sel = sel.filter(function(v){ return v !== value; });
+      } else {
+        sel = sel.filter(function(v){ return exclusive.indexOf(v) === -1; });
+        sel.push(value);
+      }
+      state.answers[q.key] = sel;
     }
     render();
   }
 
+  // iOS Safari iframe 에서 이벤트 위임(delegation)이 동작하지 않는 문제 해결:
+  // 렌더링 후 각 버튼에 click + touchend 를 직접 바인딩한다.
+  function bindOptionButtons() {
+    var btns = elOptions.querySelectorAll(".survey-option");
+    for (var i = 0; i < btns.length; i++) {
+      (function(btn) {
+        var fired = false;
+        function fire(ev) {
+          if (ev) { ev.preventDefault(); ev.stopPropagation(); }
+          if (fired) return;
+          fired = true;
+          setTimeout(function(){ fired = false; }, 350);
+          onOptionTap(btn);
+        }
+        btn.addEventListener("click",    fire, false);
+        btn.addEventListener("touchend", fire, false);
+      })(btns[i]);
+    }
+  }
+
   function render() {
-    var q=questions[state.step];
-    var total=questions.length;
-    elStep.textContent=(state.step+1)+" / "+total;
-    elBar.style.width=(((state.step+1)/total)*100)+"%";
-    elTitle.textContent=q.title;
-    elHelp.textContent=q.help||"";
-    elOptions.innerHTML=renderOptions(q);
-    elNext.textContent=state.step===total-1?"결과 확인하기":"다음";
-    elPrev.disabled=state.step===0;
+    var q     = questions[state.step];
+    var total = questions.length;
+    elStep.textContent = (state.step + 1) + " / " + total;
+    elBar.style.width  = (((state.step + 1) / total) * 100) + "%";
+    elTitle.textContent = q.title;
+    elHelp.textContent  = q.help || "";
+    elOptions.innerHTML = renderOptions(q);
+    bindOptionButtons();   // iOS 호환 직접 바인딩
+    elNext.textContent  = state.step === total - 1 ? "결과 확인하기" : "다음";
+    elPrev.disabled     = state.step === 0;
     notifyHeightRepeated();
   }
 
-  elOptions.addEventListener("click", function(ev){
-    var t=ev.target;
-    var btn=(t&&t.closest)?t.closest(".survey-option"):null;
-    if (!btn||!elOptions.contains(btn)) return;
-    onOptionTap(btn);
-  }, false);
-
-  function bindTap(el,handler) {
+  // iOS Safari 호환: next/prev 도 click + touchend 직접 바인딩
+  function bindTap(el, handler) {
     if (!el) return;
-    el.addEventListener("click",function(ev){ if(ev&&ev.preventDefault)ev.preventDefault(); handler(); },false);
+    var fired = false;
+    function fire(ev) {
+      if (ev) { ev.preventDefault(); ev.stopPropagation(); }
+      if (fired) return;
+      fired = true;
+      setTimeout(function(){ fired = false; }, 350);
+      handler();
+    }
+    el.addEventListener("click",    fire, false);
+    el.addEventListener("touchend", fire, false);
   }
 
   function goNext() {
-    if (state.step<questions.length-1){state.step+=1;render();scrollTop();}else{finish();}
+    if (state.step < questions.length - 1) { state.step += 1; render(); scrollTop(); }
+    else { finish(); }
   }
   function goPrev() {
-    if (state.step>0){state.step-=1;render();scrollTop();}
+    if (state.step > 0) { state.step -= 1; render(); scrollTop(); }
   }
+
   function scrollTop() {
-    try{window.parent.postMessage({type:"ansim-survey-scrolltop"},"*");}catch(e){}
+    try { window.parent.postMessage({ type: "ansim-survey-scrolltop" }, "*"); } catch(e) {}
   }
   function notifyHeight() {
-    try{
-      var el=document.getElementById("survey");
-      var h=Math.max(el?el.offsetHeight:0,document.body?document.body.scrollHeight:0,document.documentElement?document.documentElement.scrollHeight:0);
-      if(h>0)window.parent.postMessage({type:"ansim-survey-height",height:h+16},"*");
-    }catch(e){}
+    try {
+      var el = document.getElementById("survey");
+      var h  = Math.max(
+        el ? el.offsetHeight : 0,
+        document.body ? document.body.scrollHeight : 0,
+        document.documentElement ? document.documentElement.scrollHeight : 0
+      );
+      if (h > 0) window.parent.postMessage({ type: "ansim-survey-height", height: h + 16 }, "*");
+    } catch(e) {}
   }
-  function notifyHeightRepeated(){
+  function notifyHeightRepeated() {
     notifyHeight();
-    [50,150,350,600,1000].forEach(function(ms){setTimeout(notifyHeight,ms);});
+    [50, 150, 350, 600, 1000].forEach(function(ms){ setTimeout(notifyHeight, ms); });
   }
-  function finish(){
-    try{window.parent.postMessage({type:"ansim-survey-complete",answers:JSON.parse(JSON.stringify(state.answers))},"*");}catch(e){}
+  function finish() {
+    try {
+      window.parent.postMessage({
+        type: "ansim-survey-complete",
+        answers: JSON.parse(JSON.stringify(state.answers))
+      }, "*");
+    } catch(e) {}
   }
-  bindTap(elNext,goNext);
-  bindTap(elPrev,goPrev);
-  window.addEventListener("message",function(ev){
-    if(ev.data&&ev.data.type==="ansim-survey-reset"){state.step=0;state.answers={};render();scrollTop();}
+
+  bindTap(elNext, goNext);
+  bindTap(elPrev, goPrev);
+
+  window.addEventListener("message", function(ev) {
+    if (ev.data && ev.data.type === "ansim-survey-reset") {
+      state.step = 0; state.answers = {}; render(); scrollTop();
+    }
   });
+
   render();
-  window.addEventListener("load",notifyHeightRepeated);
-  window.addEventListener("resize",notifyHeight);
-  if(document.readyState==="complete")notifyHeightRepeated();
+  window.addEventListener("load",   notifyHeightRepeated);
+  window.addEventListener("resize", notifyHeight);
+  if (document.readyState === "complete") notifyHeightRepeated();
 })();
 </script>
 </body>
