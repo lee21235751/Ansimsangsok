@@ -428,7 +428,7 @@ async function callClaudeAPI(systemPrompt, userPrompt) {
     },
     body: JSON.stringify({
       model: 'claude-haiku-4-5-20251001',
-      max_tokens: 2000,
+      max_tokens: 3500,
       system: systemPrompt,
       messages: [{ role: 'user', content: userPrompt }]
     })
