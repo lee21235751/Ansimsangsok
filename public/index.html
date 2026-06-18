@@ -2600,17 +2600,37 @@
       var optionButtons = simpleSurveyOptionsEl.querySelectorAll(".simple-survey-option");
       for (var bi = 0; bi < optionButtons.length; bi++) {
         (function (btn) {
-          // touchstart: 손가락 닿는 순간 즉각 반응 (지연 제노)
-          var tapped = false;
+          var fired = false;
+          // touchstart: 시각 피드백만 즉시 (상태 업데이트 안 함)
           btn.addEventListener("touchstart", function() {
-            tapped = true;
-            handleSimpleSurveyOptionClick(btn);
-            setTimeout(function() { tapped = false; }, 500);
+            var q = questions[state.step];
+            if (!q) return;
+            if (q.type === "single") {
+              var all = simpleSurveyOptionsEl.querySelectorAll(".simple-survey-option");
+              for (var x = 0; x < all.length; x++) all[x].classList.remove("is-selected");
+              btn.classList.add("is-selected");
+            } else if (q.type === "assetCounts") {
+              var ak = btn.getAttribute("data-asset");
+              if (ak) {
+                var gb = simpleSurveyOptionsEl.querySelectorAll('.simple-survey-option[data-asset="' + ak + '"]');
+                for (var y = 0; y < gb.length; y++) gb[y].classList.remove("is-selected");
+                btn.classList.add("is-selected");
+              }
+            } else if (q.type === "multiSimple") {
+              if (btn.classList.contains("is-selected")) btn.classList.remove("is-selected");
+              else btn.classList.add("is-selected");
+            }
           }, { passive: true });
-          // click: \ub370스크탑/안드로이드 포방 (touch치 분은 tapped flag로 중복 방지)
-          btn.addEventListener("click", function() {
-            if (!tapped) handleSimpleSurveyOptionClick(btn);
-          }, false);
+          // touchend/click: 샹태 업데이트 (중복 방지)
+          function fire(ev) {
+            if (ev && ev.preventDefault) ev.preventDefault();
+            if (fired) return;
+            fired = true;
+            setTimeout(function() { fired = false; }, 400);
+            handleSimpleSurveyOptionClick(btn);
+          }
+          btn.addEventListener("touchend", fire, false);
+          btn.addEventListener("click", fire, false);
         })(optionButtons[bi]);
       }
     }
