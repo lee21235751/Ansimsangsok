@@ -926,6 +926,7 @@
         { value: 'self_abroad',              label: '본인이 해외 거주 중',            score: 16 },
         { value: 'family_abroad',            label: '배우자 또는 자녀가 해외 거주 중', score: 14 },
         { value: 'family_foreign_nationality', label: '배우자 또는 자녀가 외국 국적',  score: 16 },
+        { value: 'dual_nationality',          label: '본인 또는 가족이 복수국적',       score: 18 },
         { value: 'overseas_asset',           label: '해외 부동산 또는 해외 금융자산',  score: 18 },
         { value: 'none',                     label: '해당 없음',                      score: 0  },
         { value: 'unknown',                  label: '정확히 모르겠음',               score: 10 }
@@ -1267,7 +1268,7 @@
     html += '<div class="paid-cta-card">'
       + '<div class="paid-cta-eyebrow">유료 상세리포트에서 확인하세요</div>'
       + '<h3>변호사·세무사 상담 1회보다 저렴하게,<br>내 상속 설계의 전체 그림을 잡으세요.</h3>'
-      + '<p class="paid-cta-lead">특가 ₩69,000 (정가 99,000원) — 본인만 확인하는 비공개 자료입니다.</p>'
+      + '<p class="paid-cta-lead">특가 ₩69,000 <span style="text-decoration:line-through;opacity:.6;font-weight:700;">정가 99,000원</span> — 본인만 확인하는 비공개 자료입니다.</p>'
       + '<div class="paid-checks">'
       + ['내 상황에서 가능한 상속 설계 선택지',
          '유류분 리스크 최소화 방법 (2026 최신 판례 반영)',
