@@ -436,18 +436,19 @@
     notifyHeightRepeated();
   }
 
-  // iOS Safari 근본 해결책:
-  // 버튼에 직접 바인딩하면 render() 후 DOM 교체로 꼬임.
-  // document에서 touchend를 잡아 좌표로 버튼을 찾는 방식으로 완전히 우회.
+  // ── 이벤트 처리 ──────────────────────────────────────────────
+  // iOS Safari 근본 해결: document 레벨 touchend 단일 위임.
+  // render()로 DOM이 매번 새로 그려져도 리스너는 document에 딱 한 번만 등록.
+  // touchend 후 iOS가 발생시키는 click은 preventDefault로 차단.
   document.addEventListener("touchend", function(ev) {
     var touch = ev.changedTouches && ev.changedTouches[0];
     if (!touch) return;
     var el = document.elementFromPoint(touch.clientX, touch.clientY);
     if (!el) return;
-    // 버튼 자체 또는 버튼 안 자식 요소를 탭한 경우
+
+    // 선택지 버튼
     var btn = el.closest ? el.closest(".survey-option") : null;
     if (!btn) {
-      // closest 미지원 폴백
       var cur = el;
       while (cur && cur !== document.body) {
         if (cur.classList && cur.classList.contains("survey-option")) { btn = cur; break; }
@@ -459,27 +460,31 @@
       onOptionTap(btn);
       return;
     }
-    // 다음/이전 버튼
-    var nextEl = el.closest ? el.closest("#nextBtn") : null;
-    if (!nextEl && el.id === "nextBtn") nextEl = el;
-    if (nextEl) { ev.preventDefault(); goNext(); return; }
 
-    var prevEl = el.closest ? el.closest("#prevBtn") : null;
-    if (!prevEl && el.id === "prevBtn") prevEl = el;
-    if (prevEl && !elPrev.disabled) { ev.preventDefault(); goPrev(); return; }
+    // 다음 버튼
+    var isNext = el === elNext || (el.closest && el.closest("#nextBtn") === elNext);
+    if (isNext) { ev.preventDefault(); goNext(); return; }
+
+    // 이전 버튼
+    var isPrev = el === elPrev || (el.closest && el.closest("#prevBtn") === elPrev);
+    if (isPrev && !elPrev.disabled) { ev.preventDefault(); goPrev(); return; }
   }, false);
 
-  function attachOptionListeners() {
-    // document 레벨 위임 방식 사용하므로 개별 바인딩 불필요
-  }
+  // 데스크탑 마우스 click 위임 (iOS에서는 preventDefault로 도달 안 함)
+  document.addEventListener("click", function(ev) {
+    var t = ev.target;
 
-  function bindTap(el, handler) {
-    if (!el) return;
-    // 데스크탑 click만 처리 (모바일은 document touchend로 처리)
-    el.addEventListener("click", function() {
-      handler();
-    }, false);
-  }
+    var btn = t && t.closest ? t.closest(".survey-option") : null;
+    if (btn && elOptions.contains(btn)) { onOptionTap(btn); return; }
+
+    if (t === elNext || (t.closest && t.closest("#nextBtn") === elNext)) { goNext(); return; }
+    if (t === elPrev || (t.closest && t.closest("#prevBtn") === elPrev)) {
+      if (!elPrev.disabled) goPrev();
+    }
+  }, false);
+
+  function attachOptionListeners() { /* document 위임 사용, 개별 바인딩 불필요 */ }
+  function bindTap() { /* document 위임으로 대체됨 */ }
 
   function goNext() {
     if (state.step < questions.length - 1) {
@@ -533,9 +538,6 @@
       }, "*");
     } catch (e) {}
   }
-
-  bindTap(elNext, goNext);
-  bindTap(elPrev, goPrev);
 
   // 부모가 "다시 하기"를 요청하면 초기화
   window.addEventListener("message", function (ev) {
