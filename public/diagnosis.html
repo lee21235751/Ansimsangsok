@@ -436,34 +436,47 @@
     notifyHeightRepeated();
   }
 
-  // render()마다 elOptions.innerHTML이 완전히 새로 그려지므로
-  // 새 버튼들은 리스너가 전혀 없는 깨끗한 DOM.
-  // touchend 한 가지만 쓴다. click은 touchend 후 iOS가 추가로 발생시키므로 무시.
-  function attachOptionListeners() {
-    var btns = elOptions.querySelectorAll(".survey-option");
-    for (var i = 0; i < btns.length; i++) {
-      (function(btn) {
-        btn.addEventListener("touchend", function(ev) {
-          ev.preventDefault();
-          onOptionTap(btn);
-        }, false);
-        // 데스크탑(마우스) 지원용 click
-        btn.addEventListener("click", function(ev) {
-          if (ev.sourceCapabilities && ev.sourceCapabilities.firesTouchEvents) return;
-          onOptionTap(btn);
-        }, false);
-      })(btns[i]);
+  // iOS Safari 근본 해결책:
+  // 버튼에 직접 바인딩하면 render() 후 DOM 교체로 꼬임.
+  // document에서 touchend를 잡아 좌표로 버튼을 찾는 방식으로 완전히 우회.
+  document.addEventListener("touchend", function(ev) {
+    var touch = ev.changedTouches && ev.changedTouches[0];
+    if (!touch) return;
+    var el = document.elementFromPoint(touch.clientX, touch.clientY);
+    if (!el) return;
+    // 버튼 자체 또는 버튼 안 자식 요소를 탭한 경우
+    var btn = el.closest ? el.closest(".survey-option") : null;
+    if (!btn) {
+      // closest 미지원 폴백
+      var cur = el;
+      while (cur && cur !== document.body) {
+        if (cur.classList && cur.classList.contains("survey-option")) { btn = cur; break; }
+        cur = cur.parentNode;
+      }
     }
+    if (btn && elOptions.contains(btn)) {
+      ev.preventDefault();
+      onOptionTap(btn);
+      return;
+    }
+    // 다음/이전 버튼
+    var nextEl = el.closest ? el.closest("#nextBtn") : null;
+    if (!nextEl && el.id === "nextBtn") nextEl = el;
+    if (nextEl) { ev.preventDefault(); goNext(); return; }
+
+    var prevEl = el.closest ? el.closest("#prevBtn") : null;
+    if (!prevEl && el.id === "prevBtn") prevEl = el;
+    if (prevEl && !elPrev.disabled) { ev.preventDefault(); goPrev(); return; }
+  }, false);
+
+  function attachOptionListeners() {
+    // document 레벨 위임 방식 사용하므로 개별 바인딩 불필요
   }
 
   function bindTap(el, handler) {
     if (!el) return;
-    el.addEventListener("touchend", function(ev) {
-      ev.preventDefault();
-      handler();
-    }, false);
-    el.addEventListener("click", function(ev) {
-      if (ev.sourceCapabilities && ev.sourceCapabilities.firesTouchEvents) return;
+    // 데스크탑 click만 처리 (모바일은 document touchend로 처리)
+    el.addEventListener("click", function() {
       handler();
     }, false);
   }
