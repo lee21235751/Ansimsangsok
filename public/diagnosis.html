@@ -436,31 +436,21 @@
     notifyHeightRepeated();
   }
 
-  // render() 마다 innerHTML이 새로 그려지므로 새 버튼 DOM에 직접 바인딩.
-  // cloneNode로 혹시 남은 리스너를 완전히 제거한 뒤 touchend+click 바인딩.
-  // touchstart 대신 touchend 사용: touchstart+preventDefault는 스크롤을 막아
-  // iOS에서 선택 후 페이지가 튀는 문제를 유발함.
+  // render()마다 elOptions.innerHTML이 완전히 새로 그려지므로
+  // 새 버튼들은 리스너가 전혀 없는 깨끗한 DOM.
+  // touchend 한 가지만 쓴다. click은 touchend 후 iOS가 추가로 발생시키므로 무시.
   function attachOptionListeners() {
     var btns = elOptions.querySelectorAll(".survey-option");
     for (var i = 0; i < btns.length; i++) {
       (function(btn) {
-        // cloneNode로 기존 이벤트 리스너 완전 제거
-        var fresh = btn.cloneNode(true);
-        btn.parentNode.replaceChild(fresh, btn);
-
-        var fired = false;
-        fresh.addEventListener("touchend", function(ev) {
+        btn.addEventListener("touchend", function(ev) {
           ev.preventDefault();
-          if (fired) return;
-          fired = true;
-          setTimeout(function() { fired = false; }, 400);
-          onOptionTap(fresh);
+          onOptionTap(btn);
         }, false);
-        fresh.addEventListener("click", function(ev) {
-          if (fired) return;
-          fired = true;
-          setTimeout(function() { fired = false; }, 400);
-          onOptionTap(fresh);
+        // 데스크탑(마우스) 지원용 click
+        btn.addEventListener("click", function(ev) {
+          if (ev.sourceCapabilities && ev.sourceCapabilities.firesTouchEvents) return;
+          onOptionTap(btn);
         }, false);
       })(btns[i]);
     }
@@ -468,18 +458,12 @@
 
   function bindTap(el, handler) {
     if (!el) return;
-    var fired = false;
     el.addEventListener("touchend", function(ev) {
       ev.preventDefault();
-      if (fired) return;
-      fired = true;
-      setTimeout(function() { fired = false; }, 400);
       handler();
     }, false);
     el.addEventListener("click", function(ev) {
-      if (fired) return;
-      fired = true;
-      setTimeout(function() { fired = false; }, 400);
+      if (ev.sourceCapabilities && ev.sourceCapabilities.firesTouchEvents) return;
       handler();
     }, false);
   }
@@ -523,7 +507,7 @@
   // iOS Safari 는 첫 레이아웃 계산이 부정확하므로 여러 시점에 높이를 다시 보고한다.
   function notifyHeightRepeated() {
     notifyHeight();
-    [50, 150, 350, 600, 1000].forEach(function (ms) {
+    [30, 100, 250, 500].forEach(function (ms) {
       setTimeout(notifyHeight, ms);
     });
   }
