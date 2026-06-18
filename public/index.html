@@ -2199,15 +2199,11 @@
         </div>
 
         <div id="simpleSurveyRoot">
-          <iframe id="surveyFrame" src="diagnosis" title="무료진단 설문"
-            style="width:100%;border:0;display:block;height:900px;min-height:900px;overflow:hidden;background:transparent;"
-            scrolling="no"></iframe>
-          <!-- 설문은 diagnosis.html(iframe)에서 처리. 기존 설문 입력 요소는 제거됨. -->
-          <div style="display:none;">
-            <div id="simpleSurveyQuestion"></div>
-            <div id="simpleSurveyOptions"></div>
-            <button type="button" id="simpleSurveyPrev"></button>
-            <button type="button" id="simpleSurveyNext"></button>
+          <div id="simpleSurveyQuestion"></div>
+          <div id="simpleSurveyOptions"></div>
+          <div class="simple-survey-nav">
+            <button type="button" class="primary-btn" id="simpleSurveyNext" style="width:100%;font-family:inherit;font-size:1.08rem;font-weight:900;touch-action:manipulation;-webkit-tap-highlight-color:transparent;border-radius:18px;min-height:54px;"></button>
+            <button type="button" id="simpleSurveyPrev" style="width:100%;min-height:54px;border-radius:18px;border:1px solid rgba(14,53,41,0.18);background:#fff;color:#5e6b64;font-family:inherit;font-size:1.08rem;font-weight:900;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent;"></button>
           </div>
         </div>
 
@@ -2917,73 +2913,7 @@ document.getElementById("saveLead").addEventListener("click", async () => {
     }
 syncReportAnswersSnapshot();
 
-    // ===== iframe 설문 연동 =====
-    // 설문은 diagnosis.html(iframe)에서 처리한다.
-    // iframe 완료 시 답변을 받아 state 에 주입하고 기존 showResult() 로 결과를 표시한다.
-    (function () {
-      var surveyFrame = document.getElementById("surveyFrame");
-
-      window.addEventListener("message", function (ev) {
-        var data = ev.data;
-        if (!data || typeof data !== "object") return;
-
-        // iframe 높이 자동 조절 (스크롤 없는 매끄러운 표시)
-        if (data.type === "ansim-survey-height" && surveyFrame) {
-          var h = Number(data.height) || 0;
-          if (h > 200) {
-            surveyFrame.style.height = h + "px";
-            surveyFrame.style.minHeight = h + "px";
-          }
-          return;
-        }
-
-        // iframe 안에서 질문 전환 시 진단 영역 상단으로 스크롤
-        if (data.type === "ansim-survey-scrolltop") {
-          var diag = document.getElementById("diagnosis");
-          if (diag && diag.scrollIntoView) diag.scrollIntoView({ behavior: "smooth", block: "start" });
-          return;
-        }
-
-        // 설문 완료: 답변 주입 후 결과 표시
-        if (data.type === "ansim-survey-complete") {
-          state.step = questions.length - 1;
-          state.answers = data.answers || {};
-          syncReportAnswersSnapshot();
-
-          // iframe 숨기고 결과 표시
-          if (surveyFrame) surveyFrame.style.display = "none";
-          showResult();
-
-          var resultArea = document.getElementById("resultArea");
-          if (resultArea && resultArea.scrollIntoView) {
-            resultArea.scrollIntoView({ behavior: "smooth", block: "start" });
-          }
-        }
-      });
-
-      // "다시 확인하기" (showResult 가 simpleSurveyNext 텍스트를 바꾸는 흐름) 대응:
-      // 다시 시작하면 iframe 을 다시 보여주고 초기화 메시지를 보낸다.
-      var nextBtn = document.getElementById("simpleSurveyNext");
-      if (nextBtn) {
-        nextBtn.addEventListener("click", function () {
-          if (nextBtn.textContent && nextBtn.textContent.indexOf("다시") !== -1) {
-            var ra = document.getElementById("resultArea");
-            if (ra) ra.classList.add("hidden");
-            var guide = document.getElementById("guideRequestCard");
-            if (guide) guide.classList.add("hidden");
-            if (surveyFrame) {
-              surveyFrame.style.display = "block";
-              try { surveyFrame.contentWindow.postMessage({ type: "ansim-survey-reset" }, "*"); } catch (e) {}
-            }
-            state.step = 0;
-            state.answers = {};
-            syncReportAnswersSnapshot();
-            var diag = document.getElementById("diagnosis");
-            if (diag && diag.scrollIntoView) diag.scrollIntoView({ behavior: "smooth", block: "start" });
-          }
-        });
-      }
-    })();
+    
   </script>
 
   <div class="v0104-mobile-fix-markers" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;" aria-hidden="true">
