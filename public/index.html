@@ -2516,38 +2516,46 @@
 
     // 클릭 처리 — state 만 갱신하고, 그 질문을 다시 렌더한다. DOM 클래스는 읽지 않는다.
     function handleSimpleSurveyOptionClick(button) {
-      const question = questions[state.step];
+      var question = questions[state.step];
       if (!question || !button) return;
-      const value = button.getAttribute("data-value");
+      var value = button.getAttribute("data-value");
+      if (!value) return;
 
       if (question.type === "single") {
-        // radio: 항상 클릭한 값으로 교체
+        // DOM 전체 재생성 없이 클래스만 즉시 토글 → 딜레이 없음
+        var allBtns = simpleSurveyOptionsEl.querySelectorAll(".simple-survey-option");
+        for (var i = 0; i < allBtns.length; i++) allBtns[i].classList.remove("is-selected");
+        button.classList.add("is-selected");
         state.answers[question.key] = value;
 
       } else if (question.type === "assetCounts") {
-        // 자산별 radio: 해당 asset 키에 클릭한 값으로 교체
-        const assetKey = button.getAttribute("data-asset");
+        var assetKey = button.getAttribute("data-asset");
         if (!assetKey) return;
+        var groupBtns = simpleSurveyOptionsEl.querySelectorAll('.simple-survey-option[data-asset="' + assetKey + '"]');
+        for (var n = 0; n < groupBtns.length; n++) groupBtns[n].classList.remove("is-selected");
+        button.classList.add("is-selected");
         state.answers[question.key] = state.answers[question.key] || {};
         state.answers[question.key][assetKey] = value;
 
       } else if (question.type === "multiSimple") {
-        // checkbox: state 배열 기준 on/off 토글 (DOM 클래스 안 읽음)
-        const exclusive = question.exclusive || [];
-        let selected = Array.isArray(state.answers[question.key]) ? state.answers[question.key].slice() : [];
-        const alreadyOn = selected.indexOf(value) !== -1;
-
-        if (exclusive.indexOf(value) !== -1) {
-          // 단독 선택 항목(해당없음/모름): 켜져 있으면 끄고, 아니면 단독 선택
-          selected = alreadyOn ? [] : [value];
-        } else if (alreadyOn) {
-          // 이미 켜진 일반 항목 재탭 → 해제
-          selected = selected.filter((item) => item !== value);
+        var exclusive = question.exclusive || [];
+        var isExcl = exclusive.indexOf(value) !== -1;
+        var wasOn = button.classList.contains("is-selected");
+        var allBtns2 = simpleSurveyOptionsEl.querySelectorAll(".simple-survey-option");
+        if (isExcl) {
+          for (var j = 0; j < allBtns2.length; j++) allBtns2[j].classList.remove("is-selected");
+          if (!wasOn) button.classList.add("is-selected");
         } else {
-          // 새로 켜기 → 단독 선택 항목은 제거하고 추가
-          selected = selected.filter((item) => exclusive.indexOf(item) === -1);
-          selected.push(value);
+          for (var k = 0; k < allBtns2.length; k++) {
+            if (exclusive.indexOf(allBtns2[k].getAttribute("data-value")) !== -1)
+              allBtns2[k].classList.remove("is-selected");
+          }
+          if (wasOn) button.classList.remove("is-selected");
+          else button.classList.add("is-selected");
         }
+        var selected = [];
+        var selBtns = simpleSurveyOptionsEl.querySelectorAll(".simple-survey-option.is-selected");
+        for (var m = 0; m < selBtns.length; m++) selected.push(selBtns[m].getAttribute("data-value"));
         state.answers[question.key] = selected;
       } else {
         return;
@@ -2555,7 +2563,7 @@
 
       saveState();
       syncReportAnswersSnapshot();
-      renderSimpleSurvey();
+      // renderSimpleSurvey() 제거 — DOM 직접 업데이트로 즉각 반응
     }
 
     // 현재 step 의 질문을 화면에 렌더
