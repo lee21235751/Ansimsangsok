@@ -2482,7 +2482,7 @@
           var presence = Array.isArray(state.answers[q.presenceKey])
             ? state.answers[q.presenceKey].filter(function(k) { return k !== 'none' && k !== 'unknown'; }) : [];
           var assets = q.assets.filter(function(a) { return presence.indexOf(a.key) !== -1; });
-          if (!assets.length) return '<p class="simple-survey-empty-note">\uc555 \xuc9c8\ubb38\uc5d0\uc11c \ubd80\ub3d9\uc0b0\uc744 \uc120\ud0dd\ud558\uba74 \uc5ec\uae30\uc11c \uac1c\uc218\ub97c \ud655\uc778\ud569\ub2c8\ub2e4. \uc120\ud0dd\ud55c \ud56d\ubaa9\uc774 \uc5c6\uc73c\uba74 \ub2e4\uc74c\uc73c\ub85c \ub118\uc5b4\uac00\uc138\uc694.</p>';
+          if (!assets.length) return '<p class="simple-survey-empty-note">앞 질문에서 부동산을 선택하면 여기서 개수를 확인합니다. 선택한 항목이 없으면 다음으로 넘어가세요.</p>';
           var counts = state.answers[q.key] || {};
           return assets.map(function(a) {
             return '<div class="simple-survey-asset-group" data-asset-group="' + esc(a.key) + '">'
