@@ -432,24 +432,43 @@
     elNext.textContent = state.step === total - 1 ? "결과 확인하기" : "다음";
     elPrev.disabled = state.step === 0;
 
+    attachOptionListeners();
     notifyHeightRepeated();
   }
 
-  // 선택지: 컨테이너에 click 위임으로 한 번만 바인딩 (재렌더돼도 리스너 유지)
-  // iOS Safari 도 viewport meta 가 있으면 click 지연이 없으므로 click 단독 사용.
-  // (touchend 병행 + lock 방식은 중복/잠금 문제를 유발해 제거함)
-  function handleOptionEvent(ev) {
-    var t = ev.target;
-    var btn = (t && t.closest) ? t.closest(".survey-option") : null;
-    if (!btn || !elOptions.contains(btn)) return;
-    onOptionTap(btn);
+  // iOS Safari 는 <div> 컨테이너의 click 이벤트 위임이 버블링되지 않는 버그가 있음.
+  // 해결: render() 후 각 버튼에 직접 바인딩. touchstart로 즉각 반응하고,
+  // 뒤따르는 click은 data-handled 플래그로 중복 방지.
+  function attachOptionListeners() {
+    var btns = elOptions.querySelectorAll(".survey-option");
+    for (var i = 0; i < btns.length; i++) {
+      (function(btn) {
+        btn.addEventListener("touchstart", function(ev) {
+          ev.preventDefault();
+          btn.setAttribute("data-handled", "1");
+          onOptionTap(btn);
+        }, { passive: false });
+        btn.addEventListener("click", function(ev) {
+          if (btn.getAttribute("data-handled") === "1") {
+            btn.removeAttribute("data-handled");
+            return;
+          }
+          onOptionTap(btn);
+        }, false);
+      })(btns[i]);
+    }
   }
-  elOptions.addEventListener("click", handleOptionEvent, false);
 
   function bindTap(el, handler) {
     if (!el) return;
-    el.addEventListener("click", function (ev) {
-      if (ev && ev.preventDefault) ev.preventDefault();
+    var handled = false;
+    el.addEventListener("touchstart", function(ev) {
+      ev.preventDefault();
+      handled = true;
+      handler();
+    }, { passive: false });
+    el.addEventListener("click", function(ev) {
+      if (handled) { handled = false; return; }
       handler();
     }, false);
   }
@@ -460,7 +479,8 @@
       render();
       scrollTop();
     } else {
-      finish();
+      // iOS Safari: touchstart 이벤트 처리가 완전히 끝난 후 postMessage 전송
+      setTimeout(function() { finish(); }, 50);
     }
   }
   function goPrev() {
