@@ -2519,53 +2519,41 @@
       var question = questions[state.step];
       if (!question || !button) return;
       var value = button.getAttribute("data-value");
-      if (!value) return;
 
       if (question.type === "single") {
-        // DOM 전체 재생성 없이 클래스만 즉시 토글 → 딜레이 없음
-        var allBtns = simpleSurveyOptionsEl.querySelectorAll(".simple-survey-option");
-        for (var i = 0; i < allBtns.length; i++) allBtns[i].classList.remove("is-selected");
-        button.classList.add("is-selected");
         state.answers[question.key] = value;
 
       } else if (question.type === "assetCounts") {
         var assetKey = button.getAttribute("data-asset");
         if (!assetKey) return;
-        var groupBtns = simpleSurveyOptionsEl.querySelectorAll('.simple-survey-option[data-asset="' + assetKey + '"]');
-        for (var n = 0; n < groupBtns.length; n++) groupBtns[n].classList.remove("is-selected");
-        button.classList.add("is-selected");
         state.answers[question.key] = state.answers[question.key] || {};
         state.answers[question.key][assetKey] = value;
 
       } else if (question.type === "multiSimple") {
         var exclusive = question.exclusive || [];
-        var isExcl = exclusive.indexOf(value) !== -1;
-        var wasOn = button.classList.contains("is-selected");
-        var allBtns2 = simpleSurveyOptionsEl.querySelectorAll(".simple-survey-option");
-        if (isExcl) {
-          for (var j = 0; j < allBtns2.length; j++) allBtns2[j].classList.remove("is-selected");
-          if (!wasOn) button.classList.add("is-selected");
+        var selected = Array.isArray(state.answers[question.key]) ? state.answers[question.key].slice() : [];
+        var alreadyOn = selected.indexOf(value) !== -1;
+        if (exclusive.indexOf(value) !== -1) {
+          selected = alreadyOn ? [] : [value];
+        } else if (alreadyOn) {
+          selected = selected.filter(function(item) { return item !== value; });
         } else {
-          for (var k = 0; k < allBtns2.length; k++) {
-            if (exclusive.indexOf(allBtns2[k].getAttribute("data-value")) !== -1)
-              allBtns2[k].classList.remove("is-selected");
-          }
-          if (wasOn) button.classList.remove("is-selected");
-          else button.classList.add("is-selected");
+          selected = selected.filter(function(item) { return exclusive.indexOf(item) === -1; });
+          selected.push(value);
         }
-        var selected = [];
-        var selBtns = simpleSurveyOptionsEl.querySelectorAll(".simple-survey-option.is-selected");
-        for (var m = 0; m < selBtns.length; m++) selected.push(selBtns[m].getAttribute("data-value"));
         state.answers[question.key] = selected;
+        var allMs = simpleSurveyOptionsEl.querySelectorAll(".simple-survey-option");
+        for (var mi = 0; mi < allMs.length; mi++) {
+          if (selected.indexOf(allMs[mi].getAttribute("data-value")) !== -1) allMs[mi].classList.add("is-selected");
+          else allMs[mi].classList.remove("is-selected");
+        }
       } else {
         return;
       }
 
       saveState();
       syncReportAnswersSnapshot();
-      // renderSimpleSurvey() 제거 — DOM 직접 업데이트로 즉각 반응
     }
-
     // 현재 step 의 질문을 화면에 렌더
     function renderSimpleSurvey() {
       const question = questions[state.step];
@@ -2600,31 +2588,31 @@
       var optionButtons = simpleSurveyOptionsEl.querySelectorAll(".simple-survey-option");
       for (var bi = 0; bi < optionButtons.length; bi++) {
         (function (btn) {
-          // touchstart: 손가락 닿는 순간 즉각 시각 피드백
           btn.addEventListener("touchstart", function() {
             var q = questions[state.step]; if (!q) return;
-            var all = simpleSurveyOptionsEl.querySelectorAll(".simple-survey-option");
             if (q.type === "single") {
+              var all = simpleSurveyOptionsEl.querySelectorAll(".simple-survey-option");
               for (var x = 0; x < all.length; x++) all[x].classList.remove("is-selected");
               btn.classList.add("is-selected");
             } else if (q.type === "assetCounts") {
               var ak = btn.getAttribute("data-asset");
-              if (ak) { var gb = simpleSurveyOptionsEl.querySelectorAll('.simple-survey-option[data-asset="' + ak + '"]'); for (var y=0;y<gb.length;y++) gb[y].classList.remove("is-selected"); btn.classList.add("is-selected"); }
-            } else if (q.type === "multiSimple") {
-              btn.classList.toggle("is-selected");
+              if (ak) {
+                var gb = simpleSurveyOptionsEl.querySelectorAll('.simple-survey-option[data-asset="' + ak + '"]');
+                for (var y = 0; y < gb.length; y++) gb[y].classList.remove("is-selected");
+                btn.classList.add("is-selected");
+              }
             }
           }, { passive: true });
-          // touchend: 샹태 확정 + click 중복 방지
-          var _t = false;
-          btn.addEventListener("touchend", function(ev) {
-            ev.preventDefault();
-            if (_t) return; _t = true; setTimeout(function(){_t=false;},400);
+          var fired = false;
+          function fire(ev) {
+            if (ev) { ev.preventDefault(); ev.stopPropagation(); }
+            if (fired) return;
+            fired = true;
+            setTimeout(function () { fired = false; }, 350);
             handleSimpleSurveyOptionClick(btn);
-          }, false);
-          // click: PC 포방
-          btn.addEventListener("click", function() {
-            if (!_t) handleSimpleSurveyOptionClick(btn);
-          }, false);
+          }
+          btn.addEventListener("click", fire, false);
+          btn.addEventListener("touchend", fire, false);
         })(optionButtons[bi]);
       }
     }
@@ -11249,20 +11237,14 @@ ready(function(){setTimeout(run,500);setTimeout(run,1500);setTimeout(run,3000);}
 </script>
 
 <script>
-// 설문 초기화 — iframe 제거 후 인라인 설문 자동 렌데링
 (function() {
   function startSurvey() {
     var root = document.getElementById("simpleSurveyRoot");
     if (root) root.classList.remove("hidden");
-    if (typeof window.renderSimpleSurvey === "function") {
-      window.renderSimpleSurvey();
-    }
+    if (typeof window.renderSimpleSurvey === "function") window.renderSimpleSurvey();
   }
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", startSurvey);
-  } else {
-    startSurvey();
-  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", startSurvey);
+  else startSurvey();
 })();
 </script>
 </body>
