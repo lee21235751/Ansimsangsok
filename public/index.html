@@ -4354,7 +4354,7 @@ document.addEventListener("DOMContentLoaded", function () {
       type: "paid-detail-report-payment",
       status: status || "payment-guide-viewed",
       label: "유료 상세리포트 결제 안내 확인",
-      amount: 29000,
+      amount: 69000,
       currency: "KRW",
       requestedAt: new Date().toISOString(),
       score: getScore(),
@@ -4364,7 +4364,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (typeof window.ansimTrackFunnel === "function") {
       window.ansimTrackFunnel("paid_report_payment_intent", {
         score: getScore(),
-        amount: 29000,
+        amount: 69000,
         status: window.__ansimPaidReportPaymentIntent.status
       });
     }
@@ -4402,19 +4402,34 @@ document.addEventListener("DOMContentLoaded", function () {
 
     panel.innerHTML = [
       '<div class="preview-eyebrow">유료 상세리포트 결제 안내</div>',
-      '<h3>유료 상세리포트를 받아보려면</h3>',
-      '<p class="preview-lead">입력하신 내용을 기준으로 지금 확인할 항목, 준비자료, 상담 전 질문을 정리합니다.</p>',
+      '<h3>내 뜻대로 상속 설계하기</h3>',
+      '<p class="preview-lead">내 상황에서 가능한 방법과 순서를 정리해드립니다. 전문가 상담 전에 먼저 확인하세요.</p>',
 
-      '<div style="margin:14px 0;padding:16px;border-radius:18px;background:#fff7e0;border:1px solid #d6b45f;">',
-      '<strong style="display:block;color:#173c2f;font-size:1.05rem;margin-bottom:6px;">유료 상세리포트 안내 금액</strong>',
-      '<div style="font-size:1.65rem;font-weight:950;color:#173c2f;line-height:1.2;">29,000원</div>',
-      '<p style="margin:8px 0 0;color:#6b7280;line-height:1.6;">금액을 확인한 뒤 필요하시면 결제 단계로 이어집니다.</p>',
+      '<div style="margin:14px 0;padding:18px;border-radius:18px;background:#fff7e0;border:2px solid #d6b45f;">',
+      '<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">',
+      '<span style="background:#dc2626;color:#fff;font-size:0.78rem;font-weight:900;padding:3px 8px;border-radius:6px;">런칭 특가</span>',
+      '<strong style="color:#173c2f;font-size:1.05rem;">유료 상세리포트</strong>',
+      '</div>',
+      '<div style="display:flex;align-items:baseline;gap:10px;">',
+      '<div style="font-size:2rem;font-weight:950;color:#173c2f;line-height:1.1;">69,000원</div>',
+      '<div style="font-size:1rem;color:#9ca3af;text-decoration:line-through;">99,000원</div>',
+      '</div>',
+      '<p style="margin:6px 0 0;color:#6b7280;font-size:0.88rem;line-height:1.6;">변호사·세무사 상담 1회보다 저렴하게 전체 그림을 잡으세요.</p>',
       '</div>',
 
-      '<p style="margin:12px 0;color:#4b5563;line-height:1.6;">구체적인 정리 내용은 결제 후 리포트에서 확인합니다.</p>',
+      '<div style="margin:12px 0;padding:14px;background:#f0fdf4;border-radius:14px;border:1px solid #bbf7d0;">',
+      '<div style="font-weight:900;color:#166534;margin-bottom:8px;">이 리포트에서 확인하는 것</div>',
+      '<div style="color:#374151;font-size:0.9rem;line-height:1.8;">',
+      '✓ 내 상황에서 가능한 상속 설계 선택지<br>',
+      '✓ 유류분 리스크 최소화 방법 (2026 최신 판례 반영)<br>',
+      '✓ 절세 시뮬레이션 — 준비했을 때 vs 안 했을 때<br>',
+      '✓ 지금 당장 해야 할 것, 순서대로<br>',
+      '✓ 전문가 상담 전 반드시 확인할 질문 목록',
+      '</div>',
+      '</div>',
 
-      '<p class="paid-trust-note" style="margin:10px 0 14px;color:#6b7280;line-height:1.6;">입력하신 이름과 이메일은 유료 상세리포트 안내와 문의 확인에만 사용됩니다.</p>',
-      '<button id="paidPaymentIntentBtn" type="button" class="btn btn-primary" style="width:100%;min-height:50px;">유료 상세리포트 29,000원 확인하고 결제하기</button>',
+      '<p class="paid-trust-note" style="margin:10px 0 14px;color:#6b7280;font-size:0.88rem;line-height:1.6;">본인만 확인하는 비공개 리포트입니다. 입력하신 정보는 외부에 공개되지 않습니다.</p>',
+      '<button id="paidPaymentIntentBtn" type="button" class="btn btn-primary" style="width:100%;min-height:54px;font-size:1.05rem;">지금 69,000원으로 시작하기</button>',
       '<p id="paidPaymentIntentStatus" style="margin:12px 0 0;color:#173c2f;font-weight:850;line-height:1.6;"></p>',
       '<p style="margin:10px 0 0;color:#6b7280;font-size:0.94rem;line-height:1.6;">입력하신 연락처로 유료 상세리포트 안내와 다음 절차를 이어갈 수 있습니다.</p>'
     ].join("");
@@ -4471,7 +4486,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (typeof window.ansimTrackFunnel === "function") {
           window.ansimTrackFunnel("paid_report_payment_cta_click", {
             score: getScore(),
-            amount: 29000
+            amount: 69000
           });
         }
         openPaymentGuide();
@@ -4665,7 +4680,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     var btn = document.getElementById("openPaidPaymentGuideBtn");
     if (btn) {
-      btn.textContent = "유료 상세리포트 29,000원 확인하기";
+      btn.textContent = "유료 상세리포트 69,000원 (런칭 특가)";
       btn.style.minHeight = "50px";
     }
 
@@ -4708,7 +4723,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (eyebrow) eyebrow.textContent = "유료 상세리포트 안내";
 
     var title = panel.querySelector("h3");
-    if (title) title.textContent = "유료 상세리포트 29,000원";
+    if (title) title.textContent = "유료 상세리포트 69,000원 (런칭 특가)";
 
     var lead = panel.querySelector(".preview-lead");
     if (lead) {
@@ -4717,7 +4732,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     var btn = document.getElementById("paidPaymentIntentBtn");
     if (btn) {
-      btn.textContent = "유료 상세리포트 29,000원 확인하고 결제하기";
+      btn.textContent = "유료 상세리포트 69,000원 결제하기 (정가 99,000원)";
       btn.style.minHeight = "50px";
     }
 
@@ -4892,7 +4907,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (typeof window.ansimTrackFunnel === "function") {
       window.ansimTrackFunnel("payment_order_create_start", {
         score: payload.score,
-        amount: 29000
+        amount: 69000
       });
     }
 
@@ -4942,7 +4957,7 @@ document.addEventListener("DOMContentLoaded", function () {
     } catch (error) {
       window.__ansimPaidReportPaymentOrder = {
         status: "payment_order_failed",
-        amount: 29000,
+        amount: 69000,
         currency: "KRW",
         errorMessage: error && error.message ? error.message : "결제 준비 실패",
         createdAt: new Date().toISOString()
@@ -4958,7 +4973,7 @@ document.addEventListener("DOMContentLoaded", function () {
       if (typeof window.ansimTrackFunnel === "function") {
         window.ansimTrackFunnel("payment_order_create_failed", {
           score: payload.score,
-          amount: 29000
+          amount: 69000
         });
       }
 
@@ -4987,7 +5002,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (!btn || btn.dataset.paymentOrderWired === "1") return;
 
     btn.dataset.paymentOrderWired = "1";
-    btn.textContent = "유료 상세리포트 29,000원 확인하고 결제하기";
+    btn.textContent = "유료 상세리포트 69,000원 결제하기 (정가 99,000원)";
 
     btn.addEventListener("click", function () {
       setTimeout(createPaymentOrder, 80);
@@ -5076,7 +5091,7 @@ document.addEventListener("DOMContentLoaded", function () {
     var order = getPaymentOrder();
     var intent = getPaymentIntent();
     var orderId = order && order.orderId ? order.orderId : "아직 생성 전";
-    var amount = order && order.amount ? order.amount : 29000;
+    var amount = order && order.amount ? order.amount : 69000;
 
     var isSuccess = status === "success";
     var isFail = status === "failed";
@@ -5131,7 +5146,7 @@ document.addEventListener("DOMContentLoaded", function () {
     window.__ansimPaidReportPaymentResult = {
       status: status || "ready",
       orderId: order && order.orderId ? order.orderId : null,
-      amount: order && order.amount ? order.amount : 29000,
+      amount: order && order.amount ? order.amount : 69000,
       currency: order && order.currency ? order.currency : "KRW",
       productType: "paid-detail-report",
       checkedAt: new Date().toISOString(),
@@ -5389,7 +5404,7 @@ document.addEventListener("DOMContentLoaded", function () {
       status: safeStatus,
       originalRequestedStatus: status || "ready",
       orderId: order && order.orderId ? order.orderId : null,
-      amount: order && order.amount ? order.amount : 29000,
+      amount: order && order.amount ? order.amount : 69000,
       currency: order && order.currency ? order.currency : "KRW",
       productType: "paid-detail-report",
       checkedAt: new Date().toISOString(),
@@ -5472,7 +5487,7 @@ document.addEventListener("DOMContentLoaded", function () {
     var successBtn = document.getElementById("paymentResultSuccessBtn");
     if (successBtn && successBtn.dataset.mockSafetyWired !== "1") {
       successBtn.dataset.mockSafetyWired = "1";
-      successBtn.textContent = "유료 상세리포트 29,000원 확인하고 결제하기";
+      successBtn.textContent = "유료 상세리포트 69,000원 결제하기 (정가 99,000원)";
 
       successBtn.addEventListener("click", function (event) {
         if (getPaymentMode() === "payment_ready_only") {
@@ -5621,7 +5636,7 @@ document.addEventListener("DOMContentLoaded", function () {
     var guide = document.getElementById("paidPaymentGuidePanel");
     if (guide) {
       var title2 = guide.querySelector("h3");
-      if (title2) title2.textContent = "유료 상세리포트 29,000원";
+      if (title2) title2.textContent = "유료 상세리포트 69,000원 (런칭 특가)";
 
       var lead2 = guide.querySelector(".preview-lead");
       if (lead2) {
@@ -5633,7 +5648,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     var btn = document.getElementById("paidPaymentIntentBtn");
     if (btn && btn.textContent.indexOf("결제") >= 0) {
-      btn.textContent = "유료 상세리포트 29,000원 확인하고 결제하기";
+      btn.textContent = "유료 상세리포트 69,000원 결제하기 (정가 99,000원)";
     }
   }
 
@@ -6083,7 +6098,7 @@ document.addEventListener("DOMContentLoaded", function () {
       '<div style="margin:14px 0;padding:14px;border-radius:18px;background:#f8fafc;border:1px solid #dbe3ee;color:#374151;line-height:1.65;">',
       '<strong style="display:block;color:#173c2f;margin-bottom:6px;">상태: ' + (ready ? '테스트 결제창 준비됨' : '테스트 결제창 준비 전') + '</strong>',
       '<div>주문번호: ' + (order && order.orderId ? order.orderId : '아직 생성 전') + '</div>',
-      '<div>금액: 29,000원</div>',
+      '<div>금액: 69,000원 (런칭 특가, 정가 99,000원)</div>',
       '<div>결제수단: 신용카드·체크카드, 카카오페이, 네이버페이</div>',
       '</div>',
       '<button id="openTossTestCheckoutBtn" type="button" class="btn btn-primary" style="width:100%;min-height:52px;" ' + (ready ? '' : 'disabled') + '>Toss 테스트 결제창 열기</button>',
@@ -6264,7 +6279,7 @@ document.addEventListener("DOMContentLoaded", function () {
       window.ansimTrackFunnel("toss_test_mode_ready", {
         ready: true,
         orderId: order && order.orderId ? order.orderId : null,
-        amount: order && order.amount ? order.amount : 29000
+        amount: order && order.amount ? order.amount : 69000
       });
     }
   }
@@ -6437,7 +6452,7 @@ document.addEventListener("DOMContentLoaded", function () {
       window.ansimTrackFunnel("toss_test_mode_ready", {
         ready: true,
         orderId: order && order.orderId ? order.orderId : null,
-        amount: order && order.amount ? order.amount : 29000
+        amount: order && order.amount ? order.amount : 69000
       });
     }
   }
@@ -8823,7 +8838,7 @@ document.addEventListener("DOMContentLoaded", function () {
       {
         id: "senior-conversion",
         title: "유료 리포트 만족도",
-        text: "내 상황에 맞는 법령·판례·세무·국제상속·전문가 신호가 한 번에 정리되면 29,000원 유료 상세리포트의 체감 가치가 올라갑니다.",
+        text: "내 상황에 맞는 법령·판례·세무·국제상속·전문가 신호가 한 번에 정리되면 69,000원 유료 상세리포트의 체감 가치가 올라갑니다.",
         meta: "수익성 · 전환 강화"
       },
       {
@@ -10830,7 +10845,7 @@ document.addEventListener("DOMContentLoaded", function () {
     var params = getParams();
     var payment = params.get("payment");
     var orderId = sanitize((detail && detail.orderId) || params.get("orderId") || "", 120);
-    var amount = Number((detail && detail.amount) || params.get("amount") || "29000") || 29000;
+    var amount = Number((detail && detail.amount) || params.get("amount") || "69000") || 69000;
     var message = sanitize((detail && detail.message) || params.get("message") || "", 220);
 
     var isSuccess = state === "confirmed";
@@ -10973,7 +10988,7 @@ function textOf(el){return el?String(el.textContent||''):'';}
 function isPaidView(){try{var a=localStorage.getItem('ansim_payment_status')||'';var b=localStorage.getItem('ansim_paid_report_status')||'';var c=sessionStorage.getItem('ansim_payment_status')||'';var d=sessionStorage.getItem('ansim_paid_report_status')||'';return [a,b,c,d].join(' ').indexOf('paid_confirmed')>=0;}catch(e){return false;}}
 function style(){if(document.getElementById('paid-report-received-feel-v1-style'))return;var s=document.createElement('style');s.id='paid-report-received-feel-v1-style';s.textContent='.paid-received-wrap{margin:16px 0 16px;padding:17px;border:1px solid rgba(151,119,64,.28);border-radius:22px;background:linear-gradient(180deg,#fff7e8 0%,#fffdf8 100%);box-shadow:0 14px 32px rgba(43,31,18,.08)}.paid-received-eyebrow{margin:0 0 6px;font-size:.8rem;font-weight:850;color:#8a6428;letter-spacing:-.01em}.paid-received-wrap h2{margin:0 0 8px;font-size:1.22rem;line-height:1.32;color:#3b2a15;letter-spacing:-.03em}.paid-received-lead{margin:0 0 14px;font-size:.95rem;line-height:1.58;color:#66533a}.paid-received-badge-row{display:flex;flex-wrap:wrap;gap:7px;margin:0 0 14px}.paid-received-badge{display:inline-flex;align-items:center;border:1px solid rgba(151,119,64,.24);border-radius:999px;background:rgba(255,255,255,.76);padding:7px 10px;font-size:.8rem;font-weight:750;color:#5b421d}.paid-received-grid{display:grid;gap:10px}.paid-received-card{padding:12px;border:1px solid rgba(151,119,64,.17);border-radius:15px;background:rgba(255,255,255,.78)}.paid-received-card strong{display:block;margin:0 0 4px;font-size:.93rem;line-height:1.35;color:#4a3417}.paid-received-card span{display:block;font-size:.87rem;line-height:1.48;color:#6b5a42}.paid-received-order{margin:12px 0 0;padding:12px;border-radius:15px;background:#fff;border:1px dashed rgba(151,119,64,.32);font-size:.88rem;line-height:1.5;color:#5b472a}.paid-received-order strong{color:#3b2a15}.paid-received-note{margin:9px 0 0;font-size:.82rem;line-height:1.45;color:#7a674a}@media(min-width:760px){.paid-received-wrap{padding:21px}.paid-received-wrap h2{font-size:1.34rem}.paid-received-grid{grid-template-columns:repeat(4,1fr)}}';document.head.appendChild(s);}
 function card(title,desc){var c=document.createElement('div');c.className='paid-received-card';var a=document.createElement('strong');a.textContent=title;var b=document.createElement('span');b.textContent=desc;c.appendChild(a);c.appendChild(b);return c;}
-function panel(){var wrap=document.createElement('section');wrap.className='paid-received-wrap';wrap.setAttribute('aria-label','유료 상세리포트 자료 안내');var eyebrow=document.createElement('p');eyebrow.className='paid-received-eyebrow';eyebrow.textContent='유료 상세리포트 자료 안내';var h=document.createElement('h2');h.textContent='상속 상황을 정리한 리포트가 완성되었습니다';var lead=document.createElement('p');lead.className='paid-received-lead';lead.textContent='혼자 먼저 확인할 수 있도록 필요한 자료와 질문을 나누어 정리했습니다.';var badges=document.createElement('div');badges.className='paid-received-badge-row';['유료 상세리포트 29,000원','현재 상황 요약','준비자료 체크리스트','상담 준비 메모'].forEach(function(t){var b=document.createElement('span');b.className='paid-received-badge';b.textContent=t;badges.appendChild(b);});var grid=document.createElement('div');grid.className='paid-received-grid';grid.appendChild(card('내 상황 요약','상속인, 재산, 채무, 일정처럼 먼저 볼 항목을 묶었습니다.'));grid.appendChild(card('확인할 항목','유언, 생전 증여, 세금 일정, 해외 요소를 나누어 봅니다.'));grid.appendChild(card('요약본','휴대폰 화면이 불편할 때 출력하거나 PDF로 저장해 볼 수 있습니다.'));grid.appendChild(card('상담 준비 메모','상담 시 물어볼 질문과 가져갈 자료를 확인할 수 있습니다.'));var order=document.createElement('p');order.className='paid-received-order';order.innerHTML='<strong>추천 확인 순서</strong><br>1. 내 상황 요약 → 2. 먼저 확인할 질문 → 3. 준비자료 체크리스트 → 4. 요약본 → 5. 상담 준비 메모';var note=document.createElement('p');note.className='paid-received-note';note.textContent='지금 정리해두면, 필요할 때 바로 확인할 수 있습니다.';wrap.appendChild(eyebrow);wrap.appendChild(h);wrap.appendChild(lead);wrap.appendChild(badges);wrap.appendChild(grid);wrap.appendChild(order);wrap.appendChild(note);return wrap;}
+function panel(){var wrap=document.createElement('section');wrap.className='paid-received-wrap';wrap.setAttribute('aria-label','유료 상세리포트 자료 안내');var eyebrow=document.createElement('p');eyebrow.className='paid-received-eyebrow';eyebrow.textContent='유료 상세리포트 자료 안내';var h=document.createElement('h2');h.textContent='상속 상황을 정리한 리포트가 완성되었습니다';var lead=document.createElement('p');lead.className='paid-received-lead';lead.textContent='혼자 먼저 확인할 수 있도록 필요한 자료와 질문을 나누어 정리했습니다.';var badges=document.createElement('div');badges.className='paid-received-badge-row';['유료 상세리포트 69,000원 (런칭 특가)','현재 상황 요약','준비자료 체크리스트','상담 준비 메모'].forEach(function(t){var b=document.createElement('span');b.className='paid-received-badge';b.textContent=t;badges.appendChild(b);});var grid=document.createElement('div');grid.className='paid-received-grid';grid.appendChild(card('내 상황 요약','상속인, 재산, 채무, 일정처럼 먼저 볼 항목을 묶었습니다.'));grid.appendChild(card('확인할 항목','유언, 생전 증여, 세금 일정, 해외 요소를 나누어 봅니다.'));grid.appendChild(card('요약본','휴대폰 화면이 불편할 때 출력하거나 PDF로 저장해 볼 수 있습니다.'));grid.appendChild(card('상담 준비 메모','상담 시 물어볼 질문과 가져갈 자료를 확인할 수 있습니다.'));var order=document.createElement('p');order.className='paid-received-order';order.innerHTML='<strong>추천 확인 순서</strong><br>1. 내 상황 요약 → 2. 먼저 확인할 질문 → 3. 준비자료 체크리스트 → 4. 요약본 → 5. 상담 준비 메모';var note=document.createElement('p');note.className='paid-received-note';note.textContent='지금 정리해두면, 필요할 때 바로 확인할 수 있습니다.';wrap.appendChild(eyebrow);wrap.appendChild(h);wrap.appendChild(lead);wrap.appendChild(badges);wrap.appendChild(grid);wrap.appendChild(order);wrap.appendChild(note);return wrap;}
 function findPaidArea(){var els=Array.prototype.slice.call(document.querySelectorAll('section,article,div,main'));var best=null;els.forEach(function(el){var t=textOf(el);var score=0;if(t.indexOf('안심상속 유료 상세리포트')>=0)score+=7;if(t.indexOf('내 상속 상황 요약')>=0)score+=5;if(t.indexOf('전문가 상담 전 준비 메모')>=0)score+=4;if(t.indexOf('인쇄용 1장 요약본')>=0)score+=3;if(!best||score>best.score)best={el:el,score:score};});return best&&best.score>=5?best.el:(document.querySelector('main')||document.body);}
 function install(){if(!isPaidView())return;if(document.querySelector('.paid-received-wrap'))return;style();var target=findPaidArea();var p=panel();var anchors=Array.prototype.slice.call(target.querySelectorAll('section,article,div,h1,h2,h3'));var placed=false;for(var i=0;i<anchors.length;i++){var t=textOf(anchors[i]);if(t.indexOf('안심상속 유료 상세리포트')>=0||t.indexOf('내 상속 상황 요약')>=0){anchors[i].insertAdjacentElement('beforebegin',p);placed=true;break;}}if(!placed)target.insertBefore(p,target.firstChild||null);}
 ready(function(){setTimeout(install,600);setTimeout(install,1600);setTimeout(install,3000);});
