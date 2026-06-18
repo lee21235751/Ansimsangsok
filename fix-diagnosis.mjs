@@ -1,9 +1,12 @@
-<!DOCTYPE html>
+import fs from "node:fs";
+import path from "node:path";
+
+const html = `<!DOCTYPE html>
 <html lang="ko">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-<title>안심상속 설문진단</title>
+<title>\uC548\uC2EC\uC0C1\uC18D \uC124\uBB38\uC9C4\uB2E8</title>
 <style>
   :root {
     --forest-deep: #06251d;
@@ -89,7 +92,7 @@
 <div class="survey" id="survey">
   <div class="progress-row">
     <span class="progress-step" id="pStep">1 / 9</span>
-    <span class="progress-time">약 2분 소요</span>
+    <span class="progress-time">\uC57D 2\uBD84 \uC18C\uC694</span>
   </div>
   <div class="progress-track">
     <div class="progress-bar" id="pBar" style="width:11%"></div>
@@ -100,8 +103,8 @@
     <div class="options" id="opts"></div>
   </div>
   <div class="nav">
-    <button class="btn btn-next" id="btnNext" type="button">다음</button>
-    <button class="btn btn-prev" id="btnPrev" type="button" disabled>이전</button>
+    <button class="btn btn-next" id="btnNext" type="button">\uB2E4\uC74C</button>
+    <button class="btn btn-prev" id="btnPrev" type="button" disabled>\uC774\uC804</button>
   </div>
 </div>
 <script>
@@ -110,94 +113,94 @@
 
 var Q = [
   { type:"single", key:"family",
-    title:"현재 상속과 관련된 가족의 구성은 어떻게 되나요?",
-    help:"해당하는 구성을 선택해주세요.",
+    title:"\uD604\uC7AC \uC0C1\uC18D\uACFC \uAD00\uB828\uB41C \uAC00\uC871\uC758 \uAD6C\uC131\uC740 \uC5B4\uB5BB\uAC8C \uB418\uB098\uC694?",
+    help:"\uD574\uB2F9\uD558\uB294 \uAD6C\uC131\uC744 \uC120\uD0DD\uD574\uC8FC\uC138\uC694.",
     options:[
-      {label:"배우자와 자녀가 있음", score:8},
-      {label:"전혼 자녀 또는 혼외 자녀가 있음", score:22},
-      {label:"자녀가 해외에 거주하거나 연락이 안 되는 상황이 있음", score:18},
-      {label:"잘 모르겠습니다", score:12}
+      {label:"\uBC30\uC6B0\uC790\uC640 \uC790\uB140\uAC00 \uC788\uC74C", score:8},
+      {label:"\uC804\uD63C \uC790\uB140 \uB610\uB294 \uD63C\uC678 \uC790\uB140\uAC00 \uC788\uC74C", score:22},
+      {label:"\uC790\uB140\uAC00 \uD574\uC678\uC5D0 \uAC70\uC8FC\uD558\uAC70\uB098 \uC5F0\uB77D\uC774 \uC548 \uB418\uB294 \uC0C1\uD669\uC774 \uC788\uC74C", score:18},
+      {label:"\uC798 \uBAA8\uB974\uACA0\uC2B5\uB2C8\uB2E4", score:12}
     ]},
   { type:"single", key:"will",
-    title:"유언장이나 상속 관련 공증을 받아두셨나요?",
-    help:"문서 상태보다 지금 준비 상황을 기준으로 생각해주세요.",
+    title:"\uC720\uC5B8\uC7A5\uC774\uB098 \uC0C1\uC18D \uAD00\uB828 \uACF5\uC99D\uC744 \uBC1B\uC544\uB450\uC168\uB098\uC694?",
+    help:"\uBB38\uC11C \uC0C1\uD0DC\uBCF4\uB2E4 \uC9C0\uAE08 \uC900\uBE44 \uC0C1\uD669\uC744 \uAE30\uC900\uC73C\uB85C \uC0DD\uAC01\uD574\uC8FC\uC138\uC694.",
     options:[
-      {label:"잘 준비되어 활용하고 있음", score:6},
-      {label:"내용은 있지만 문서로 준비하지 않음", score:14},
-      {label:"전혜 준비하지 않음", score:22},
-      {label:"잘 모르겠습니다", score:12}
+      {label:"\uC798 \uC900\uBE44\uB418\uC5B4 \uD65C\uC6A9\uD558\uACE0 \uC788\uC74C", score:6},
+      {label:"\uB0B4\uC6A9\uC740 \uC788\uC9C0\uB9CC \uBB38\uC11C\uB85C \uC900\uBE44\uD558\uC9C0 \uC54A\uC74C", score:14},
+      {label:"\uC804\uD61C \uC900\uBE44\uD558\uC9C0 \uC54A\uC74C", score:22},
+      {label:"\uC798 \uBAA8\uB974\uACA0\uC2B5\uB2C8\uB2E4", score:12}
     ]},
   { type:"multiSimple", key:"assetPresence",
-    title:"보유한 부동산이 있나요?",
-    help:"해당하는 항목을 모두 선택해주세요. 여러 개를 동시에 선택할 수 있습니다.",
+    title:"\uBCF4\uC720\uD55C \uBD80\uB3D9\uC0B0\uC774 \uC788\uB098\uC694?",
+    help:"\uD574\uB2F9\uD558\uB294 \uD56D\uBAA9\uC744 \uBAA8\uB450 \uC120\uD0DD\uD574\uC8FC\uC138\uC694. \uC5EC\uB7EC \uAC1C\uB97C \uB3D9\uC2DC\uC5D0 \uC120\uD0DD\uD560 \uC218 \uC788\uC2B5\uB2C8\uB2E4.",
     exclusive:["none","unknown"],
     options:[
-      {value:"house",            label:"주택", score:0},
-      {value:"land",             label:"토지", score:0},
-      {value:"incomeRealEstate", label:"수익형 부동산 (상가/오피스텔/빌딩)", score:0},
-      {value:"factory",          label:"공장/창고", score:0},
-      {value:"otherRealEstate",  label:"기타 부동산", score:0},
-      {value:"none",             label:"해당 없음", score:0},
-      {value:"unknown",          label:"잘 모르겠습니다", score:8}
+      {value:"house",            label:"\uC8FC\uD0DD", score:0},
+      {value:"land",             label:"\uD1A0\uC9C0", score:0},
+      {value:"incomeRealEstate", label:"\uC218\uC775\uD615 \uBD80\uB3D9\uC0B0 (\uC0C1\uAC00/\uC624\uD53C\uC2A4\uD154/\uBE4C\uB529)", score:0},
+      {value:"factory",          label:"\uACF5\uC7A5/\uCC3D\uACE0", score:0},
+      {value:"otherRealEstate",  label:"\uAE30\uD0C0 \uBD80\uB3D9\uC0B0", score:0},
+      {value:"none",             label:"\uD574\uB2F9 \uC5C6\uC74C", score:0},
+      {value:"unknown",          label:"\uC798 \uBAA8\uB974\uACA0\uC2B5\uB2C8\uB2E4", score:8}
     ]},
   { type:"assetCounts", key:"assetCounts",
-    title:"선택한 부동산을 각각 몇 개 보유하고 있나요?",
-    help:"위에서 있다고 선택한 항목별로 개수를 확인해주세요.",
+    title:"\uC120\uD0DD\uD55C \uBD80\uB3D9\uC0B0\uC744 \uAC01\uAC01 \uBA87 \uAC1C \uBCF4\uC720\uD558\uACE0 \uC788\uB098\uC694?",
+    help:"\uC704\uC5D0\uC11C \uC788\uB2E4\uACE0 \uC120\uD0DD\uD55C \uD56D\uBAA9\uBCC4\uB85C \uAC1C\uC218\uB97C \uD655\uC778\uD574\uC8FC\uC138\uC694.",
     presenceKey:"assetPresence",
     assets:[
-      {key:"house",            title:"주택",          q:"주택을 몇 채 소유하세요?",                           labels:["1채","2채","3채 이상"],             scores:[7,13,18]},
-      {key:"land",             title:"토지",          q:"토지를 몇 필지 갖고 있나요?",                   labels:["1필지","2필지","3필지 이상"], scores:[8,14,20]},
-      {key:"incomeRealEstate", title:"수익형 부동산", q:"상가/오피스텔/빌딩을 몇 개 보유하고 있나요?", labels:["1개","2개","3개 이상"], scores:[8,14,20]},
-      {key:"factory",          title:"공장/창고", q:"공장/창고를 몇 곳 갖고 있나요?",       labels:["1곳","2곳","3곳 이상"],             scores:[8,14,20]},
-      {key:"otherRealEstate",  title:"기타 부동산", q:"기타 부동산을 몇 개 소유하세요?", labels:["1개","2개","3개 이상"], scores:[6,11,16]}
+      {key:"house",            title:"\uC8FC\uD0DD",          q:"\uC8FC\uD0DD\uC744 \uBA87 \uCC44 \uC18C\uC720\uD558\uC138\uC694?",                           labels:["1\uCC44","2\uCC44","3\uCC44 \uC774\uC0C1"],             scores:[7,13,18]},
+      {key:"land",             title:"\uD1A0\uC9C0",          q:"\uD1A0\uC9C0\uB97C \uBA87 \uD544\uC9C0 \uAC16\uACE0 \uC788\uB098\uC694?",                   labels:["1\uD544\uC9C0","2\uD544\uC9C0","3\uD544\uC9C0 \uC774\uC0C1"], scores:[8,14,20]},
+      {key:"incomeRealEstate", title:"\uC218\uC775\uD615 \uBD80\uB3D9\uC0B0", q:"\uC0C1\uAC00/\uC624\uD53C\uC2A4\uD154/\uBE4C\uB529\uC744 \uBA87 \uAC1C \uBCF4\uC720\uD558\uACE0 \uC788\uB098\uC694?", labels:["1\uAC1C","2\uAC1C","3\uAC1C \uC774\uC0C1"], scores:[8,14,20]},
+      {key:"factory",          title:"\uACF5\uC7A5/\uCC3D\uACE0", q:"\uACF5\uC7A5/\uCC3D\uACE0\uB97C \uBA87 \uACF3 \uAC16\uACE0 \uC788\uB098\uC694?",       labels:["1\uACF3","2\uACF3","3\uACF3 \uC774\uC0C1"],             scores:[8,14,20]},
+      {key:"otherRealEstate",  title:"\uAE30\uD0C0 \uBD80\uB3D9\uC0B0", q:"\uAE30\uD0C0 \uBD80\uB3D9\uC0B0\uC744 \uBA87 \uAC1C \uC18C\uC720\uD558\uC138\uC694?", labels:["1\uAC1C","2\uAC1C","3\uAC1C \uC774\uC0C1"], scores:[6,11,16]}
     ]},
   { type:"single", key:"gift",
-    title:"최근에 특정 가족에게만 더 많이 줄 의향이 있나요?",
-    help:"예를 들어, 사업 양도, 집 증여, 땅 증여 등을 생각하며 답해주세요.",
+    title:"\uCD5C\uADFC\uC5D0 \uD2B9\uC815 \uAC00\uC871\uC5D0\uAC8C\uB9CC \uB354 \uB9CE\uC774 \uC904 \uC758\uD5A5\uC774 \uC788\uB098\uC694?",
+    help:"\uC608\uB97C \uB4E4\uC5B4, \uC0AC\uC5C5 \uC591\uB3C4, \uC9D1 \uC99D\uC5EC, \uB545 \uC99D\uC5EC \uB4F1\uC744 \uC0DD\uAC01\uD558\uBA70 \uB2F5\uD574\uC8FC\uC138\uC694.",
     options:[
-      {label:"없음", score:4},
-      {label:"조금 있음", score:16},
-      {label:"상당히 있음", score:26},
-      {label:"잘 모르겠습니다", score:14}
+      {label:"\uC5C6\uC74C", score:4},
+      {label:"\uC870\uAE08 \uC788\uC74C", score:16},
+      {label:"\uC0C1\uB2F9\uD788 \uC788\uC74C", score:26},
+      {label:"\uC798 \uBAA8\uB974\uACA0\uC2B5\uB2C8\uB2E4", score:14}
     ]},
   { type:"single", key:"business",
-    title:"가족의 사업, 지분 또는 특수 부동산을 물려줄 의향이 있나요?",
-    help:"사업체 또는 법인 지분, 비상장주식, 특수 부동산 등을 포함하여 생각해주세요.",
+    title:"\uAC00\uC871\uC758 \uC0AC\uC5C5, \uC9C0\uBD84 \uB610\uB294 \uD2B9\uC218 \uBD80\uB3D9\uC0B0\uC744 \uBB3C\uB824\uC904 \uC758\uD5A5\uC774 \uC788\uB098\uC694?",
+    help:"\uC0AC\uC5C5\uCCB4 \uB610\uB294 \uBC95\uC778 \uC9C0\uBD84, \uBE44\uC0C1\uC7A5\uC8FC\uC2DD, \uD2B9\uC218 \uBD80\uB3D9\uC0B0 \uB4F1\uC744 \uD3EC\uD568\uD558\uC5EC \uC0DD\uAC01\uD574\uC8FC\uC138\uC694.",
     options:[
-      {label:"없음", score:3},
-      {label:"일부 있음", score:12},
-      {label:"복잡한 구조로 이어질 예정", score:24},
-      {label:"잘 모르겠습니다", score:12}
+      {label:"\uC5C6\uC74C", score:3},
+      {label:"\uC77C\uBD80 \uC788\uC74C", score:12},
+      {label:"\uBCF5\uC7A1\uD55C \uAD6C\uC870\uB85C \uC774\uC5B4\uC9C8 \uC608\uC815", score:24},
+      {label:"\uC798 \uBAA8\uB974\uACA0\uC2B5\uB2C8\uB2E4", score:12}
     ]},
   { type:"multiSimple", key:"overseas",
-    title:"해외 국적 / 해외 거주 / 해외 자산 관련이 있나요?",
-    help:"여러 개를 동시에 선택할 수 있습니다. 해당 없음과 잘 모르겠습니다는 하나만 선택해주세요.",
+    title:"\uD574\uC678 \uAD6D\uC801 / \uD574\uC678 \uAC70\uC8FC / \uD574\uC678 \uC790\uC0B0 \uAD00\uB828\uC774 \uC788\uB098\uC694?",
+    help:"\uC5EC\uB7EC \uAC1C\uB97C \uB3D9\uC2DC\uC5D0 \uC120\uD0DD\uD560 \uC218 \uC788\uC2B5\uB2C8\uB2E4. \uD574\uB2F9 \uC5C6\uC74C\uACFC \uC798 \uBAA8\uB974\uACA0\uC2B5\uB2C8\uB2E4\uB294 \uD558\uB098\uB9CC \uC120\uD0DD\uD574\uC8FC\uC138\uC694.",
     exclusive:["none","unknown"],
     options:[
-      {value:"self_abroad",               label:"본인이 해외 거주 중", score:16},
-      {value:"family_abroad",             label:"배우자 또는 자녀가 해외 거주 중", score:14},
-      {value:"family_foreign_nationality",label:"배우자 또는 자녀가 외국 국적", score:16},
-      {value:"overseas_asset",            label:"해외 부동산 또는 해외 금융자산이 있음", score:18},
-      {value:"none",                      label:"해당 없음", score:0},
-      {value:"unknown",                   label:"잘 모르겠습니다", score:10}
+      {value:"self_abroad",               label:"\uBCF8\uC778\uC774 \uD574\uC678 \uAC70\uC8FC \uC911", score:16},
+      {value:"family_abroad",             label:"\uBC30\uC6B0\uC790 \uB610\uB294 \uC790\uB140\uAC00 \uD574\uC678 \uAC70\uC8FC \uC911", score:14},
+      {value:"family_foreign_nationality",label:"\uBC30\uC6B0\uC790 \uB610\uB294 \uC790\uB140\uAC00 \uC678\uAD6D \uAD6D\uC801", score:16},
+      {value:"overseas_asset",            label:"\uD574\uC678 \uBD80\uB3D9\uC0B0 \uB610\uB294 \uD574\uC678 \uAE08\uC735\uC790\uC0B0\uC774 \uC788\uC74C", score:18},
+      {value:"none",                      label:"\uD574\uB2F9 \uC5C6\uC74C", score:0},
+      {value:"unknown",                   label:"\uC798 \uBAA8\uB974\uACA0\uC2B5\uB2C8\uB2E4", score:10}
     ]},
   { type:"single", key:"conflict",
-    title:"가족 사이에 이미 갈등이나 불화가 있거나 예상되나요?",
-    help:"직접적으로 다투지는 않더라도 미묘한 분위기나 예상되는 상황도 포함하여 생각해주세요.",
+    title:"\uAC00\uC871 \uC0AC\uC774\uC5D0 \uC774\uBBF8 \uAC08\uB4F1\uC774\uB098 \uBD88\uD654\uAC00 \uC788\uAC70\uB098 \uC608\uC0C1\uB418\uB098\uC694?",
+    help:"\uC9C1\uC811\uC801\uC73C\uB85C \uB2E4\uD22C\uC9C0\uB294 \uC54A\uB354\uB77C\uB3C4 \uBBF8\uBB18\uD55C \uBD84\uC704\uAE30\uB098 \uC608\uC0C1\uB418\uB294 \uC0C1\uD669\uB3C4 \uD3EC\uD568\uD558\uC5EC \uC0DD\uAC01\uD574\uC8FC\uC138\uC694.",
     options:[
-      {label:"없음", score:4},
-      {label:"일부 있음", score:14},
-      {label:"이미 심각함", score:28},
-      {label:"잘 모르겠습니다", score:12}
+      {label:"\uC5C6\uC74C", score:4},
+      {label:"\uC77C\uBD80 \uC788\uC74C", score:14},
+      {label:"\uC774\uBBF8 \uC2EC\uAC01\uD568", score:28},
+      {label:"\uC798 \uBAA8\uB974\uACA0\uC2B5\uB2C8\uB2E4", score:12}
     ]},
   { type:"single", key:"documents",
-    title:"상속 서류, 가족관계 및 재산 목록 문서가 준비되어 있나요?",
-    help:"공증하지 않아도 구찮습니다. 대충이라도 문서가 있는지 기준으로 생각해주세요.",
+    title:"\uC0C1\uC18D \uC11C\uB958, \uAC00\uC871\uAD00\uACC4 \uBC0F \uC7AC\uC0B0 \uBAA9\uB85D \uBB38\uC11C\uAC00 \uC900\uBE44\uB418\uC5B4 \uC788\uB098\uC694?",
+    help:"\uACF5\uC99D\uD558\uC9C0 \uC54A\uC544\uB3C4 \uAD6C\uCC2E\uC2B5\uB2C8\uB2E4. \uB300\uCDA9\uC774\uB77C\uB3C4 \uBB38\uC11C\uAC00 \uC788\uB294\uC9C0 \uAE30\uC900\uC73C\uB85C \uC0DD\uAC01\uD574\uC8FC\uC138\uC694.",
     options:[
-      {label:"잘 정리되어 있음", score:4},
-      {label:"조금이라도 준비되어 있음", score:12},
-      {label:"전혜 준비되어 있지 않음", score:22},
-      {label:"잘 모르겠습니다", score:12}
+      {label:"\uC798 \uC815\uB9AC\uB418\uC5B4 \uC788\uC74C", score:4},
+      {label:"\uC870\uAE08\uC774\uB77C\uB3C4 \uC900\uBE44\uB418\uC5B4 \uC788\uC74C", score:12},
+      {label:"\uC804\uD61C \uC900\uBE44\uB418\uC5B4 \uC788\uC9C0 \uC54A\uC74C", score:22},
+      {label:"\uC798 \uBAA8\uB974\uACA0\uC2B5\uB2C8\uB2E4", score:12}
     ]}
 ];
 
@@ -225,7 +228,7 @@ function buildOptions(q){
       var sel=ans===o.label?" sel":"";
       return '<button class="opt'+sel+'" data-v="'+esc(o.label)+'" type="button">'+
         '<span class="opt-text">'+esc(o.label)+'</span>'+
-        '<span class="opt-mark">✓ 선택됨</span></button>';
+        '<span class="opt-mark">\u2713 \uC120\uD0DD\uB428</span></button>';
     }).join("");
   }
   if(q.type==="multiSimple"){
@@ -234,7 +237,7 @@ function buildOptions(q){
       var sel=arr.indexOf(o.value)!==-1?" sel":"";
       return '<button class="opt'+sel+'" data-v="'+esc(o.value)+'" type="button">'+
         '<span class="opt-text">'+esc(o.label)+'</span>'+
-        '<span class="opt-mark">✓ 선택됨</span></button>';
+        '<span class="opt-mark">\u2713 \uC120\uD0DD\uB428</span></button>';
     }).join("");
   }
   if(q.type==="assetCounts"){
@@ -243,14 +246,14 @@ function buildOptions(q){
       :[];
     var assets=q.assets.filter(function(a){return presence.indexOf(a.key)!==-1;});
     if(!assets.length)
-      return '<p class="empty-note">앞 질문에서 부동산을 선택하면 여기서 개수를 확인합니다. 선택한 항목이 없으면 다음으로 넘어가세요.</p>';
+      return '<p class="empty-note">\uC55E \uC9C8\uBB38\uC5D0\uC11C \uBD80\uB3D9\uC0B0\uC744 \uC120\uD0DD\uD558\uBA74 \uC5EC\uAE30\uC11C \uAC1C\uC218\uB97C \uD655\uC778\uD569\uB2C8\uB2E4. \uC120\uD0DD\uD55C \uD56D\uBAA9\uC774 \uC5C6\uC73C\uBA74 \uB2E4\uC74C\uC73C\uB85C \uB118\uC5B4\uAC00\uC138\uC694.</p>';
     var counts=state.answers[q.key]||{};
     return assets.map(function(a){
       var opts=a.labels.map(function(lb){
         var sel=counts[a.key]===lb?" sel":"";
         return '<button class="opt'+sel+'" data-v="'+esc(lb)+'" data-ak="'+esc(a.key)+'" type="button">'+
           '<span class="opt-text">'+esc(lb)+'</span>'+
-          '<span class="opt-mark">✓ 선택됨</span></button>';
+          '<span class="opt-mark">\u2713 \uC120\uD0DD\uB428</span></button>';
       }).join("");
       return '<div class="asset-group"><div class="asset-title">'+esc(a.title)+'</div>'+
         '<p class="asset-q">'+esc(a.q)+'</p>'+
@@ -335,7 +338,7 @@ function render(){
   elHelp.textContent=q.help||"";
   elOpts.innerHTML=buildOptions(q);
   bindOpts();
-  elNext.textContent=state.step===total-1?"결과 확인하기":"다음";
+  elNext.textContent=state.step===total-1?"\uACB0\uACFC \uD655\uC778\uD558\uAE30":"\uB2E4\uC74C";
   elPrev.disabled=state.step===0;
   notifyH();
 }
@@ -397,4 +400,9 @@ if(document.readyState==="complete") notifyHSoon();
 })();
 </script>
 </body>
-</html>
+</html>`;
+
+
+const outPath = path.join(process.cwd(), "public", "diagnosis.html");
+fs.writeFileSync(outPath, html, { encoding: "utf8" });
+console.log("\uC644\uB8CC:", outPath);
