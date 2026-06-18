@@ -1,0 +1,592 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>안심상속 유료 상세리포트</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <style>
+    :root {
+      --forest:      #0e3529;
+      --forest-deep: #06251d;
+      --gold:        #d7ad55;
+      --gold-light:  #f1d586;
+      --cream:       #fff8e8;
+      --paper:       #fffdf6;
+      --ink:         #12231d;
+      --muted:       #5e6b64;
+      --line:        rgba(14,53,41,.15);
+      --r:           20px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; }
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: var(--paper);
+      color: var(--ink);
+      word-break: keep-all;
+    }
+    .shell { width: min(720px, calc(100% - 32px)); margin: 0 auto; }
+
+    /* 헤더 */
+    .report-header {
+      background: linear-gradient(145deg, #082d22 0%, #163b2a 60%, #24381f 100%);
+      color: #fffdf5;
+      padding: 32px 0 28px;
+    }
+    .report-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border: 1px solid rgba(215,173,85,.6);
+      color: var(--gold-light);
+      border-radius: 999px;
+      padding: 7px 13px;
+      font-weight: 900;
+      font-size: .85rem;
+      margin-bottom: 14px;
+    }
+    .report-title {
+      font-size: clamp(1.8rem, 6vw, 2.6rem);
+      font-weight: 950;
+      letter-spacing: -.06em;
+      line-height: 1.1;
+      margin-bottom: 8px;
+    }
+    .report-subtitle {
+      color: rgba(255,253,245,.75);
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 18px;
+    }
+    .report-meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .meta-chip {
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: .85rem;
+      font-weight: 900;
+      background: rgba(255,255,255,.1);
+      border: 1px solid rgba(215,173,85,.4);
+      color: var(--gold-light);
+    }
+
+    /* 섹션 공통 */
+    .report-body { padding: 28px 0 60px; }
+    .report-section {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: var(--r);
+      padding: clamp(18px,4vw,26px);
+      margin-bottom: 14px;
+    }
+    .section-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      padding: 5px 11px;
+      border-radius: 999px;
+      background: var(--forest-deep);
+      color: #fff8dc;
+      font-size: .78rem;
+      font-weight: 950;
+      margin-bottom: 10px;
+    }
+    .section-title {
+      font-size: clamp(1.15rem, 4vw, 1.45rem);
+      font-weight: 950;
+      letter-spacing: -.04em;
+      color: var(--forest-deep);
+      margin-bottom: 8px;
+    }
+    .section-desc {
+      color: var(--muted);
+      font-size: .97rem;
+      line-height: 1.72;
+      font-weight: 700;
+      margin-bottom: 14px;
+    }
+
+    /* 리스트 */
+    .check-list {
+      display: grid;
+      gap: 8px;
+    }
+    .check-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+      padding: 11px 13px;
+      border-radius: 14px;
+      background: var(--cream);
+      border: 1px solid rgba(14,53,41,.1);
+      font-size: .97rem;
+      font-weight: 750;
+      line-height: 1.55;
+      color: var(--forest-deep);
+    }
+    .check-item::before {
+      content: "✓";
+      color: var(--gold);
+      font-weight: 900;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    /* 포인트 리스트 */
+    .point-list {
+      display: grid;
+      gap: 8px;
+      margin-top: 4px;
+    }
+    .point-item {
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: #f8fafc;
+      border-left: 3px solid var(--gold);
+      font-size: .97rem;
+      font-weight: 750;
+      line-height: 1.6;
+      color: var(--forest-deep);
+    }
+
+    /* 블라인드스팟 카드 */
+    .blind-card {
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: #fff8dc;
+      border: 1px solid rgba(215,173,85,.35);
+      margin-bottom: 9px;
+    }
+    .blind-card-title {
+      font-size: 1rem;
+      font-weight: 950;
+      color: var(--forest-deep);
+      margin-bottom: 5px;
+    }
+    .blind-card-content {
+      font-size: .93rem;
+      line-height: 1.65;
+      color: #4a3e1f;
+      font-weight: 700;
+    }
+
+    /* 스텝 */
+    .step-list { display: grid; gap: 10px; }
+    .step-item {
+      display: flex;
+      gap: 13px;
+      align-items: flex-start;
+      padding: 14px;
+      border-radius: 16px;
+      background: #f8fafc;
+      border: 1px solid var(--line);
+    }
+    .step-num {
+      width: 32px; height: 32px;
+      border-radius: 999px;
+      background: var(--forest-deep);
+      color: #fff8dc;
+      font-size: .9rem;
+      font-weight: 950;
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+    }
+    .step-content { flex: 1; }
+    .step-title {
+      font-size: 1rem;
+      font-weight: 950;
+      color: var(--forest-deep);
+      margin-bottom: 3px;
+    }
+    .step-desc {
+      font-size: .92rem;
+      line-height: 1.6;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    /* 질문 리스트 */
+    .question-list { display: grid; gap: 8px; }
+    .question-item {
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: #f0f9ff;
+      border: 1px solid rgba(12,74,110,.15);
+      font-size: .97rem;
+      font-weight: 800;
+      line-height: 1.55;
+      color: #0c4a6e;
+    }
+    .question-item::before {
+      content: "Q. ";
+      opacity: .6;
+    }
+
+    /* 서류 그룹 */
+    .doc-group { margin-bottom: 14px; }
+    .doc-group-label {
+      font-size: .85rem;
+      font-weight: 950;
+      color: var(--muted);
+      margin-bottom: 7px;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+
+    /* 법적 고지 */
+    .legal-notice {
+      padding: 16px 18px;
+      border-radius: var(--r);
+      background: #f8fafc;
+      border: 1px solid #dbe3ee;
+      color: var(--muted);
+      font-size: .88rem;
+      line-height: 1.7;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+
+    /* 로딩 */
+    .loading-wrap {
+      min-height: 60vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      color: var(--muted);
+    }
+    .spinner {
+      width: 44px; height: 44px;
+      border: 3px solid rgba(14,53,41,.1);
+      border-top-color: var(--gold);
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* 에러 */
+    .error-wrap {
+      min-height: 40vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      text-align: center;
+      padding: 32px 16px;
+    }
+    .error-title { font-size: 1.2rem; font-weight: 950; color: var(--forest-deep); }
+    .error-desc  { color: var(--muted); font-weight: 700; line-height: 1.7; }
+
+    /* 버튼 */
+    .btn-primary {
+      border: 0;
+      background: linear-gradient(135deg, #f5dc8a, #c99938);
+      color: #1c221c;
+      border-radius: 18px;
+      padding: 15px 22px;
+      font-weight: 950;
+      cursor: pointer;
+      width: 100%;
+      font-size: 1.05rem;
+      letter-spacing: -.025em;
+      touch-action: manipulation;
+      min-height: 54px;
+    }
+    .btn-ghost {
+      border: 1px solid rgba(14,53,41,.2);
+      background: #fff;
+      color: var(--muted);
+      border-radius: 18px;
+      padding: 14px 18px;
+      font-weight: 900;
+      cursor: pointer;
+      width: 100%;
+      font-size: 1rem;
+      touch-action: manipulation;
+      min-height: 52px;
+    }
+    .btn-row { display: grid; gap: 9px; margin-top: 18px; }
+
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+
+<div id="loadingView" class="shell">
+  <div class="loading-wrap">
+    <div class="spinner"></div>
+    <p style="font-weight:800;font-size:1rem;">유료 상세리포트를 생성하고 있습니다…</p>
+    <p style="font-size:.9rem;">잠시만 기다려주세요. 약 10~20초 소요됩니다.</p>
+  </div>
+</div>
+
+<div id="errorView" class="shell hidden">
+  <div class="error-wrap">
+    <p class="error-title">리포트 생성 중 문제가 발생했습니다</p>
+    <p class="error-desc" id="errorMsg">잠시 후 다시 시도해주세요.</p>
+    <div style="width:100%;max-width:400px;margin-top:16px;">
+      <button class="btn-ghost" type="button" onclick="window.history.back()">이전으로 돌아가기</button>
+    </div>
+  </div>
+</div>
+
+<div id="reportView" class="hidden">
+  <!-- JS로 채움 -->
+</div>
+
+<script>
+(function() {
+  'use strict';
+
+  var loadingView = document.getElementById('loadingView');
+  var errorView   = document.getElementById('errorView');
+  var reportView  = document.getElementById('reportView');
+
+  function esc(s) {
+    return String(s || '')
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  function showError(msg) {
+    loadingView.classList.add('hidden');
+    document.getElementById('errorMsg').textContent = msg || '잠시 후 다시 시도해주세요.';
+    errorView.classList.remove('hidden');
+  }
+
+  function renderReport(data) {
+    var s = data.sections || {};
+    var html = '';
+
+    /* 헤더 */
+    html += '<header class="report-header"><div class="shell">';
+    html += '<div class="report-badge">안심상속 유료 상세리포트</div>';
+    html += '<h1 class="report-title">' + esc(data.title || '유료 상세리포트') + '</h1>';
+    html += '<p class="report-subtitle">' + esc(data.subtitle || '내 상황에 맞춰 정리한 상속 준비 자료') + '</p>';
+    html += '<div class="report-meta-row">';
+    html += '<span class="meta-chip">진단 점수 ' + esc(String(data.score || 0)) + '점</span>';
+    html += '<span class="meta-chip">' + esc(data.level || '') + '</span>';
+    if (Array.isArray(data.matchedTypes)) {
+      data.matchedTypes.forEach(function(t) {
+        html += '<span class="meta-chip">' + esc(t) + '</span>';
+      });
+    }
+    html += '</div></div></header>';
+
+    html += '<div class="report-body"><div class="shell">';
+
+    /* 1. 내 상황 요약 */
+    if (s.summary) {
+      html += '<div class="report-section">';
+      html += '<div class="section-eyebrow">01 내 상황 요약</div>';
+      html += '<h2 class="section-title">' + esc(s.summary.title || '내 상황 요약') + '</h2>';
+      if (s.summary.lead) {
+        html += '<p class="section-desc">' + esc(s.summary.lead) + '</p>';
+      }
+      if (Array.isArray(s.summary.points) && s.summary.points.length) {
+        html += '<div class="point-list">';
+        s.summary.points.forEach(function(p) {
+          html += '<div class="point-item">' + esc(p) + '</div>';
+        });
+        html += '</div>';
+      }
+      html += '</div>';
+    }
+
+    /* 2. 사람 관계 */
+    if (s.persons) {
+      html += '<div class="report-section">';
+      html += '<div class="section-eyebrow">02 사람 관계</div>';
+      html += '<h2 class="section-title">' + esc(s.persons.title || '먼저 확인할 사람 관계') + '</h2>';
+      if (s.persons.description) {
+        html += '<p class="section-desc">' + esc(s.persons.description) + '</p>';
+      }
+      if (Array.isArray(s.persons.checklist) && s.persons.checklist.length) {
+        html += '<div class="check-list">';
+        s.persons.checklist.forEach(function(item) {
+          html += '<div class="check-item">' + esc(item) + '</div>';
+        });
+        html += '</div>';
+      }
+      html += '</div>';
+    }
+
+    /* 3. 재산과 채무 */
+    if (s.assets) {
+      html += '<div class="report-section">';
+      html += '<div class="section-eyebrow">03 재산과 채무</div>';
+      html += '<h2 class="section-title">' + esc(s.assets.title || '확인할 재산과 채무') + '</h2>';
+      if (s.assets.description) {
+        html += '<p class="section-desc">' + esc(s.assets.description) + '</p>';
+      }
+      if (Array.isArray(s.assets.checklist) && s.assets.checklist.length) {
+        html += '<div class="check-list">';
+        s.assets.checklist.forEach(function(item) {
+          html += '<div class="check-item">' + esc(item) + '</div>';
+        });
+        html += '</div>';
+      }
+      html += '</div>';
+    }
+
+    /* 4. 준비할 서류 */
+    if (s.documents) {
+      html += '<div class="report-section">';
+      html += '<div class="section-eyebrow">04 준비할 자료</div>';
+      html += '<h2 class="section-title">' + esc(s.documents.title || '준비하면 좋은 자료') + '</h2>';
+      if (s.documents.description) {
+        html += '<p class="section-desc">' + esc(s.documents.description) + '</p>';
+      }
+      if (Array.isArray(s.documents.basic) && s.documents.basic.length) {
+        html += '<div class="doc-group">';
+        html += '<div class="doc-group-label">기본 서류</div>';
+        html += '<div class="check-list">';
+        s.documents.basic.forEach(function(item) {
+          html += '<div class="check-item">' + esc(item) + '</div>';
+        });
+        html += '</div></div>';
+      }
+      if (Array.isArray(s.documents.situation_specific) && s.documents.situation_specific.length) {
+        html += '<div class="doc-group">';
+        html += '<div class="doc-group-label">내 상황에 따른 추가 서류</div>';
+        html += '<div class="check-list">';
+        s.documents.situation_specific.forEach(function(item) {
+          html += '<div class="check-item">' + esc(item) + '</div>';
+        });
+        html += '</div></div>';
+      }
+      html += '</div>';
+    }
+
+    /* 5. 놓치기 쉬운 항목 */
+    if (s.blind_spots) {
+      html += '<div class="report-section">';
+      html += '<div class="section-eyebrow">05 놓치기 쉬운 항목</div>';
+      html += '<h2 class="section-title">' + esc(s.blind_spots.title || '놓치기 쉬운 항목') + '</h2>';
+      if (s.blind_spots.description) {
+        html += '<p class="section-desc">' + esc(s.blind_spots.description) + '</p>';
+      }
+      if (Array.isArray(s.blind_spots.items) && s.blind_spots.items.length) {
+        s.blind_spots.items.forEach(function(item) {
+          html += '<div class="blind-card">';
+          html += '<div class="blind-card-title">' + esc(item.title || '') + '</div>';
+          html += '<div class="blind-card-content">' + esc(item.content || '') + '</div>';
+          html += '</div>';
+        });
+      }
+      html += '</div>';
+    }
+
+    /* 6. 상담 전 질문 */
+    if (s.questions) {
+      html += '<div class="report-section">';
+      html += '<div class="section-eyebrow">06 상담 전 질문</div>';
+      html += '<h2 class="section-title">' + esc(s.questions.title || '상담 전 정리할 질문') + '</h2>';
+      if (s.questions.description) {
+        html += '<p class="section-desc">' + esc(s.questions.description) + '</p>';
+      }
+      if (Array.isArray(s.questions.questions) && s.questions.questions.length) {
+        html += '<div class="question-list">';
+        s.questions.questions.forEach(function(q) {
+          html += '<div class="question-item">' + esc(q) + '</div>';
+        });
+        html += '</div>';
+      }
+      html += '</div>';
+    }
+
+    /* 7. 다음 순서 */
+    if (s.next_steps) {
+      html += '<div class="report-section">';
+      html += '<div class="section-eyebrow">07 다음 순서</div>';
+      html += '<h2 class="section-title">' + esc(s.next_steps.title || '다음에 확인할 순서') + '</h2>';
+      if (s.next_steps.description) {
+        html += '<p class="section-desc">' + esc(s.next_steps.description) + '</p>';
+      }
+      if (Array.isArray(s.next_steps.steps) && s.next_steps.steps.length) {
+        html += '<div class="step-list">';
+        s.next_steps.steps.forEach(function(step) {
+          html += '<div class="step-item">';
+          html += '<div class="step-num">' + esc(String(step.order || '')) + '</div>';
+          html += '<div class="step-content">';
+          html += '<div class="step-title">' + esc(step.title || '') + '</div>';
+          html += '<div class="step-desc">'  + esc(step.content || '') + '</div>';
+          html += '</div></div>';
+        });
+        html += '</div>';
+      }
+      html += '</div>';
+    }
+
+    /* 법적 고지 */
+    if (data.legal_notice) {
+      html += '<div class="legal-notice">' + esc(data.legal_notice) + '</div>';
+    }
+
+    /* 버튼 */
+    html += '<div class="btn-row">';
+    html += '<button class="btn-primary" type="button" onclick="window.print()">리포트 저장 (인쇄·PDF)</button>';
+    html += '<button class="btn-ghost"   type="button" onclick="window.location.href=\'/\'">처음으로 돌아가기</button>';
+    html += '</div>';
+
+    html += '</div></div>'; /* report-body shell */
+
+    reportView.innerHTML = html;
+    loadingView.classList.add('hidden');
+    reportView.classList.remove('hidden');
+  }
+
+  /* ── 리포트 생성 요청 ── */
+  async function generateReport() {
+    /* URL 파라미터 또는 sessionStorage에서 데이터 로드 */
+    var raw = null;
+    try {
+      raw = sessionStorage.getItem('ansim_report_request');
+    } catch(e) {}
+
+    if (!raw) {
+      showError('진단 결과 데이터가 없습니다. 무료 진단을 먼저 완료해주세요.');
+      return;
+    }
+
+    var request;
+    try {
+      request = JSON.parse(raw);
+    } catch(e) {
+      showError('데이터 오류가 발생했습니다. 다시 시도해주세요.');
+      return;
+    }
+
+    try {
+      var res = await fetch('/api/generate-report', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(request)
+      });
+
+      var data = await res.json().catch(function() { return {}; });
+
+      if (!res.ok || !data.ok) {
+        throw new Error(data.message || '리포트 생성 실패');
+      }
+
+      renderReport(data.report);
+
+      /* 세션 데이터 삭제 */
+      try { sessionStorage.removeItem('ansim_report_request'); } catch(e) {}
+
+    } catch(err) {
+      showError(err.message || '리포트 생성 중 문제가 발생했습니다.');
+    }
+  }
+
+  generateReport();
+})();
+</script>
+</body>
+</html>
