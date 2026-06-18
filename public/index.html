@@ -3,17 +3,17 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>?덉떖?곸냽 ?????ъ궛, ???삳?濡??④린湲?/title>
-  <meta name="description" content="吏湲????곸냽 ?곹솴??癒쇱? ?뺤씤?섏꽭?? 2遺?臾대즺 吏꾨떒?쇰줈 ?꾪뿕 ??ぉ???뚯븙?⑸땲??" />
-  <meta property="og:title" content="?덉떖?곸냽" />
-  <meta property="og:description" content="吏湲????곸냽 ?곹솴??癒쇱? ?뺤씤?섏꽭?? 2遺?臾대즺 吏꾨떒?쇰줈 ?꾪뿕 ??ぉ???뚯븙?⑸땲??" />
+  <title>안심상속 — 내 재산, 내 뜻대로 남기기</title>
+  <meta name="description" content="지금 내 상속 상황을 먼저 확인하세요. 2분 무료 진단으로 위험 항목을 파악합니다." />
+  <meta property="og:title" content="안심상속" />
+  <meta property="og:description" content="지금 내 상속 상황을 먼저 확인하세요. 2분 무료 진단으로 위험 항목을 파악합니다." />
   <meta property="og:image" content="/og-image.svg" />
   <meta name="theme-color" content="#d4af37" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.svg" />
 
   <style>
-    /* ?? ?좏겙 ?? */
+    /* ── 토큰 ── */
     :root {
       --forest:      #0e3529;
       --forest-deep: #06251d;
@@ -31,7 +31,7 @@
       --r-opt:       16px;
     }
 
-    /* ?? 由ъ뀑 ?? */
+    /* ── 리셋 ── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; }
     body {
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -42,13 +42,13 @@
     button, input, textarea { font: inherit; }
     a { color: inherit; }
 
-    /* ?? ?덉씠?꾩썐 ?? */
+    /* ── 레이아웃 ── */
     .shell {
       width: min(680px, calc(100% - 32px));
       margin: 0 auto;
     }
 
-    /* ?? ?덉뼱濡??? */
+    /* ── 히어로 ── */
     .hero {
       background:
         radial-gradient(circle at 12% 8%, rgba(241,213,134,.16), transparent 30%),
@@ -132,7 +132,7 @@
       width: 100%;
     }
 
-    /* ?? 吏꾨떒 ?곸뿭 ?? */
+    /* ── 진단 영역 ── */
     .diagnosis-wrap {
       background: var(--paper);
       min-height: 100svh;
@@ -155,7 +155,7 @@
       font-size: 1rem;
     }
 
-    /* ?쒗깮 諛뺤뒪 */
+    /* 혜택 박스 */
     .benefit-box {
       padding: 18px;
       border-radius: var(--r-card);
@@ -183,7 +183,7 @@
       font-weight: 850;
     }
 
-    /* 吏꾪뻾 諛?*/
+    /* 진행 바 */
     .progress-row {
       display: flex;
       justify-content: space-between;
@@ -207,7 +207,7 @@
       transition: width .22s ease;
     }
 
-    /* ?ㅻЦ 移대뱶 */
+    /* 설문 카드 */
     .survey-card {
       background: #fffaf0;
       border: 1px solid var(--line);
@@ -236,7 +236,7 @@
       margin-bottom: 16px;
     }
 
-    /* ?먯궛 洹몃９ */
+    /* 자산 그룹 */
     .asset-group {
       margin-top: 14px;
       padding: 15px;
@@ -264,7 +264,7 @@
       margin-bottom: 10px;
     }
 
-    /* ?좏깮吏 踰꾪듉 */
+    /* 선택지 버튼 */
     .options {
       display: flex;
       flex-direction: column;
@@ -314,7 +314,7 @@
       padding: 8px 0;
     }
 
-    /* ?댁쟾/?ㅼ쓬 ?ㅻ퉬 */
+    /* 이전/다음 네비 */
     .survey-nav {
       display: flex;
       flex-direction: column;
@@ -323,7 +323,7 @@
       padding-bottom: calc(100px + env(safe-area-inset-bottom, 0px));
     }
 
-    /* ?? 踰꾪듉 怨듯넻 ?? */
+    /* ── 버튼 공통 ── */
     .btn-primary {
       border: 0;
       background: linear-gradient(135deg, #f5dc8a, #c99938);
@@ -371,7 +371,7 @@
       box-shadow: 0 12px 28px rgba(6,37,29,.22);
     }
 
-    /* ?? 寃곌낵 ?? */
+    /* ── 결과 ── */
     .result-wrap { padding: 0 0 24px; }
 
     .result-score-card {
@@ -427,7 +427,7 @@
       font-weight: 850;
     }
 
-    /* 寃곌낵 ??移대뱶??*/
+    /* 결과 후 카드들 */
     .result-section {
       margin-bottom: 14px;
       padding: 18px;
@@ -453,7 +453,7 @@
       font-size: .97rem;
     }
 
-    /* ?좊즺 CTA 移대뱶 */
+    /* 유료 CTA 카드 */
     .paid-cta-card {
       padding: 22px;
       border-radius: var(--r-card);
@@ -503,14 +503,14 @@
       line-height: 1.5;
     }
     .paid-check-item::before {
-      content: "??;
+      content: "✓";
       color: var(--gold);
       font-weight: 900;
       flex-shrink: 0;
       margin-top: 1px;
     }
 
-    /* ?대찓????*/
+    /* 이메일 폼 */
     .form-card {
       padding: 22px;
       border-radius: var(--r-card);
@@ -597,7 +597,7 @@
       font-weight: 700;
     }
 
-    /* ?곹깭 硫붿떆吏 */
+    /* 상태 메시지 */
     .save-status {
       min-height: 22px;
       margin-top: 10px;
@@ -620,7 +620,7 @@
       color: #5f1f14;
     }
 
-    /* ?좎뒪??諛곕꼫 */
+    /* 토스트 배너 */
     .toast {
       position: fixed;
       left: 50%;
@@ -643,7 +643,7 @@
     .toast.error { background: #fff3f0; border-color: rgba(160,45,25,.34); color: #5f1f14; }
     .toast.hidden { display: none; }
 
-    /* 泥섏쓬?쇰줈 踰꾪듉 */
+    /* 처음으로 버튼 */
     .home-btn {
       position: fixed;
       top: calc(12px + env(safe-area-inset-top, 0px));
@@ -662,7 +662,7 @@
     }
     .home-btn.hidden { display: none; }
 
-    /* ?좊즺 ?뺤씤 ?⑤꼸 (localStorage paid_confirmed) */
+    /* 유료 확인 패널 (localStorage paid_confirmed) */
     .paid-confirmed-panel {
       padding: 22px;
       border-radius: var(--r-card);
@@ -728,7 +728,7 @@
       line-height: 1.56;
     }
 
-    /* ?? ?명꽣 ?? */
+    /* ── 푸터 ── */
     .footer {
       background: var(--forest-deep);
       color: rgba(255,253,245,.62);
@@ -738,10 +738,10 @@
       font-size: .92rem;
     }
 
-    /* ?? ?좏떥 ?? */
+    /* ── 유틸 ── */
     .hidden { display: none !important; }
 
-    /* ?? 誘몃뵒?댁옘由??? */
+    /* ── 미디어쿼리 ── */
     @media (max-width: 640px) {
       .paid-confirmed-grid { grid-template-columns: 1fr; }
     }
@@ -749,64 +749,64 @@
 </head>
 <body>
 
-<!-- ?좎뒪??諛곕꼫 -->
+<!-- 토스트 배너 -->
 <div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
 
-<!-- 泥섏쓬?쇰줈 踰꾪듉 -->
-<button id="homeBtn" class="home-btn hidden" type="button">泥섏쓬?쇰줈</button>
+<!-- 처음으로 버튼 -->
+<button id="homeBtn" class="home-btn hidden" type="button">처음으로</button>
 
-<!-- ?덉뼱濡?-->
+<!-- 히어로 -->
 <header class="hero">
   <div class="shell">
-    <nav class="nav" aria-label="?곷떒">
+    <nav class="nav" aria-label="상단">
       <div class="brand">
-        <div class="brand-mark">若?/div>
-        <span>?덉떖?곸냽</span>
+        <div class="brand-mark">安</div>
+        <span>안심상속</span>
       </div>
-      <div class="nav-note">?곸냽 ?곹솴 ?뺣━ 쨌 ?ㅼ쓬 ?④퀎 ?뺤씤</div>
+      <div class="nav-note">상속 상황 정리 · 다음 단계 확인</div>
     </nav>
 
-    <div class="eyebrow">?덉떖?곸냽 쨌 2遺?吏꾨떒</div>
-    <h1>???ъ궛,<br>???삳?濡?br>?④만 ???덉뒿?덈떎</h1>
+    <div class="eyebrow">안심상속 · 2분 진단</div>
+    <h1>내 재산,<br>내 뜻대로<br>남길 수 있습니다</h1>
     <p class="hero-copy">
-      以鍮꾪븳 ?щ엺留?媛?ν빀?덈떎.<br>
-      吏湲????곸냽 ?곹솴??癒쇱? ?뺤씤?섏꽭??
+      준비한 사람만 가능합니다.<br>
+      지금 내 상속 상황을 먼저 확인하세요.
     </p>
     <div class="hero-pills">
-      <span class="pill">?쇱옄 議곗슜??/span>
-      <span class="pill">蹂몄씤留??뺤씤</span>
-      <span class="pill">鍮꾧났媛?/span>
+      <span class="pill">혼자 조용히</span>
+      <span class="pill">본인만 확인</span>
+      <span class="pill">비공개</span>
     </div>
     <button class="btn-primary hero-cta" type="button" id="heroStartBtn">
-      2遺?臾대즺 吏꾨떒 ?쒖옉?섍린
+      2분 무료 진단 시작하기
     </button>
   </div>
 </header>
 
-<!-- 吏꾨떒 + 寃곌낵 ?곸뿭 -->
+<!-- 진단 + 결과 영역 -->
 <div class="diagnosis-wrap" id="diagnosisWrap">
   <div class="shell diagnosis-inner">
 
-    <!-- 吏꾨떒 ?명듃濡?(吏꾨떒 ?쒖옉 ?? -->
+    <!-- 진단 인트로 (진단 시작 전) -->
     <div id="surveyIntro">
-      <h2 class="section-title">臾대즺 ?곸냽 ?꾪뿕??吏꾨떒</h2>
-      <p class="section-copy">以鍮꾪븯吏 ?딆쑝硫?踰뺤씠 ???寃곗젙?⑸땲?? 吏湲????곹솴??癒쇱? ?뚯븙?섏꽭??</p>
+      <h2 class="section-title">무료 상속 위험도 진단</h2>
+      <p class="section-copy">준비하지 않으면 법이 대신 결정합니다. 지금 내 상황을 먼저 파악하세요.</p>
       <div class="benefit-box">
-        <strong>2遺????뺤씤?섎뒗 寃?/strong>
+        <strong>2분 후 확인되는 것</strong>
         <ul>
-          <li>???삳?濡??곸냽??媛?ν븳吏 ?щ?</li>
-          <li>吏湲??뱀옣 ?닿껐?댁빞 ???꾪뿕 ??ぉ</li>
-          <li>?곸냽 ?ㅺ퀎?먯꽌 ?볦튇 遺遺?/li>
+          <li>내 뜻대로 상속이 가능한지 여부</li>
+          <li>지금 당장 해결해야 할 위험 항목</li>
+          <li>상속 설계에서 놓친 부분</li>
         </ul>
       </div>
-      <button class="btn-primary" type="button" id="introStartBtn">吏꾨떒 ?쒖옉?섍린</button>
+      <button class="btn-primary" type="button" id="introStartBtn">진단 시작하기</button>
     </div>
 
-    <!-- ?ㅻЦ -->
+    <!-- 설문 -->
     <div id="surveyArea" class="hidden">
       <div class="progress-row">
         <span id="stepText"></span>
-        <span id="timeText">??2遺??뚯슂</span>
+        <span id="timeText">약 2분 소요</span>
       </div>
       <div class="progress-track">
         <div class="progress-fill" id="progressFill"></div>
@@ -818,24 +818,24 @@
       </div>
       <div class="survey-nav">
         <button class="btn-primary" type="button" id="nextBtn"></button>
-        <button class="btn-ghost" type="button" id="prevBtn">?댁쟾?쇰줈</button>
+        <button class="btn-ghost" type="button" id="prevBtn">이전으로</button>
       </div>
     </div>
 
-    <!-- 寃곌낵 -->
+    <!-- 결과 -->
     <div id="resultArea" class="hidden result-wrap">
-      <!-- JS媛 梨꾩? -->
+      <!-- JS가 채움 -->
     </div>
 
   </div>
 </div>
 
-<!-- ?명꽣 -->
+<!-- 푸터 -->
 <footer class="footer">
   <div class="shell">
-    <strong>?덉떖?곸냽</strong><br>
-    ???ъ궛?????삳?濡??④린湲??꾪븳 ?곸냽 以鍮??쒕퉬?ㅼ엯?덈떎.<br>
-    蹂??쒕퉬?ㅻ뒗 ?뺣낫 ?쒓났 紐⑹쟻?대ŉ, 踰뺣쪧쨌?몃Т 議곗뼵???泥댄븯吏 ?딆뒿?덈떎.
+    <strong>안심상속</strong><br>
+    내 재산을 내 뜻대로 남기기 위한 상속 준비 서비스입니다.<br>
+    본 서비스는 정보 제공 목적이며, 법률·세무 조언을 대체하지 않습니다.
   </div>
 </footer>
 
@@ -843,122 +843,122 @@
 (function () {
   'use strict';
 
-  /* ?? ?ㅻЦ ?곗씠???? */
+  /* ── 설문 데이터 ── */
   var QUESTIONS = [
     {
       type: 'single', key: 'family',
-      title: '?꾩옱 ?곸냽怨?愿?⑤맂 媛議??곹솴? ?대뼡媛??',
-      help: '媛??媛源뚯슫 ?곹솴???좏깮?댁＜?몄슂.',
+      title: '현재 상속과 관련된 가족 상황은 어떤가요?',
+      help: '가장 가까운 상황을 선택해주세요.',
       options: [
-        { label: '諛곗슦?먯? ?먮?媛 ?덉쓬', score: 8 },
-        { label: '?ы샎媛???먮뒗 ?꾪샎 ?먮?媛 ?덉쓬', score: 22 },
-        { label: '?먮?媛 ?녾굅???뺤젣?먮ℓ? 愿?⑤맆 ???덉쓬', score: 18 },
-        { label: '?뺥솗??紐⑤Ⅴ寃좎쓬', score: 12 }
+        { label: '배우자와 자녀가 있음', score: 8 },
+        { label: '재혼가정 또는 전혼 자녀가 있음', score: 22 },
+        { label: '자녀가 없거나 형제자매와 관련될 수 있음', score: 18 },
+        { label: '정확히 모르겠음', score: 12 }
       ]
     },
     {
       type: 'single', key: 'will',
-      title: '?좎뼵?μ씠???ъ궛 遺꾨같 怨꾪쉷??以鍮꾨릺???덈굹??',
-      help: '臾몄꽌 ?щ?蹂대떎 ?꾩옱 ?뺣━ ?섏???湲곗??쇰줈 ?듯빐二쇱꽭??',
+      title: '유언장이나 재산 분배 계획이 준비되어 있나요?',
+      help: '문서 여부보다 현재 정리 수준을 기준으로 답해주세요.',
       options: [
-        { label: '?대? ?뺣━?대몦 ?댁슜???덉쓬', score: 6 },
-        { label: '?앷컖? ?덉?留?臾몄꽌濡??뺣━?섏? ?딆쓬', score: 14 },
-        { label: '?꾩쭅 ?뺣━?섏? 紐삵븿', score: 22 },
-        { label: '?뺥솗??紐⑤Ⅴ寃좎쓬', score: 12 }
+        { label: '이미 정리해둔 내용이 있음', score: 6 },
+        { label: '생각은 있지만 문서로 정리하지 않음', score: 14 },
+        { label: '아직 정리하지 못함', score: 22 },
+        { label: '정확히 모르겠음', score: 12 }
       ]
     },
     {
       type: 'multiSimple', key: 'assetPresence',
-      title: '蹂댁쑀??遺?숈궛???덈굹??',
-      help: '?대떦?섎뒗 ??ぉ???좏깮?댁＜?몄슂. ?щ윭 媛??숈떆 ?좏깮 媛?ν빀?덈떎.',
+      title: '보유한 부동산이 있나요?',
+      help: '해당되는 항목을 선택해주세요. 여러 개 동시 선택 가능합니다.',
       exclusive: ['none', 'unknown'],
       options: [
-        { value: 'house',            label: '二쇳깮',                            score: 0 },
-        { value: 'land',             label: '?좎?',                            score: 0 },
-        { value: 'incomeRealEstate', label: '?섏씡??遺?숈궛(?곴?쨌?ㅽ뵾?ㅽ뀛쨌?쒖뀡)', score: 0 },
-        { value: 'factory',          label: '怨듭옣쨌李쎄퀬',                       score: 0 },
-        { value: 'otherRealEstate',  label: '湲고? 遺?숈궛',                     score: 0 },
-        { value: 'none',             label: '?대떦 ?놁쓬',                       score: 0 },
-        { value: 'unknown',          label: '?뺥솗??紐⑤Ⅴ寃좎쓬',                 score: 8 }
+        { value: 'house',            label: '주택',                            score: 0 },
+        { value: 'land',             label: '토지',                            score: 0 },
+        { value: 'incomeRealEstate', label: '수익형 부동산(상가·오피스텔·펜션)', score: 0 },
+        { value: 'factory',          label: '공장·창고',                       score: 0 },
+        { value: 'otherRealEstate',  label: '기타 부동산',                     score: 0 },
+        { value: 'none',             label: '해당 없음',                       score: 0 },
+        { value: 'unknown',          label: '정확히 모르겠음',                 score: 8 }
       ]
     },
     {
       type: 'assetCounts', key: 'assetCounts',
-      title: '?좏깮??遺?숈궛? ?쇰쭏??蹂댁쑀?섍퀬 ?덈굹??',
-      help: '?욎뿉???덈떎怨??좏깮????ぉ留??섎웾???뺤씤?⑸땲??',
+      title: '선택한 부동산은 얼마나 보유하고 있나요?',
+      help: '앞에서 있다고 선택한 항목만 수량을 확인합니다.',
       presenceKey: 'assetPresence',
       assets: [
-        { key: 'house',            title: '二쇳깮',          question: '二쇳깮? 紐?梨꾩씤媛??',                labels: ['1梨?,'2梨?,'3梨??댁긽'],  scores: [7,13,18] },
-        { key: 'land',             title: '?좎?',          question: '?좎???紐?怨녹뿉 ?덈굹??',             labels: ['1怨?,'2怨?,'3怨??댁긽'],  scores: [8,14,20] },
-        { key: 'incomeRealEstate', title: '?섏씡??遺?숈궛', question: '?곴?쨌?ㅽ뵾?ㅽ뀛쨌?쒖뀡? 紐?媛쒖씤媛??', labels: ['1媛?,'2媛?,'3媛??댁긽'],  scores: [8,14,20] },
-        { key: 'factory',          title: '怨듭옣쨌李쎄퀬',     question: '怨듭옣쨌李쎄퀬??紐?怨녹씤媛??',           labels: ['1怨?,'2怨?,'3怨??댁긽'],  scores: [8,14,20] },
-        { key: 'otherRealEstate',  title: '湲고? 遺?숈궛',   question: '湲고? 遺?숈궛? 紐?嫄댁씤媛??',         labels: ['1嫄?,'2嫄?,'3嫄??댁긽'],  scores: [6,11,16] }
+        { key: 'house',            title: '주택',          question: '주택은 몇 채인가요?',                labels: ['1채','2채','3채 이상'],  scores: [7,13,18] },
+        { key: 'land',             title: '토지',          question: '토지는 몇 곳에 있나요?',             labels: ['1곳','2곳','3곳 이상'],  scores: [8,14,20] },
+        { key: 'incomeRealEstate', title: '수익형 부동산', question: '상가·오피스텔·펜션은 몇 개인가요?', labels: ['1개','2개','3개 이상'],  scores: [8,14,20] },
+        { key: 'factory',          title: '공장·창고',     question: '공장·창고는 몇 곳인가요?',           labels: ['1곳','2곳','3곳 이상'],  scores: [8,14,20] },
+        { key: 'otherRealEstate',  title: '기타 부동산',   question: '기타 부동산은 몇 건인가요?',         labels: ['1건','2건','3건 이상'],  scores: [6,11,16] }
       ]
     },
     {
       type: 'single', key: 'gift',
-      title: '怨쇨굅???뱀젙 媛議깆뿉寃???留롮씠 以 ?ъ궛???덈굹??',
-      help: '利앹뿬, 紐낆쓽 ?댁쟾, ??湲덉븸 吏???깆쓣 ?좎삱???듯빐二쇱꽭??',
+      title: '과거에 특정 가족에게 더 많이 준 재산이 있나요?',
+      help: '증여, 명의 이전, 큰 금액 지원 등을 떠올려 답해주세요.',
       options: [
-        { label: '?놁쓬', score: 4 },
-        { label: '?쇰? ?덉쓬', score: 16 },
-        { label: '?곷떦???덉쓬', score: 26 },
-        { label: '?뺥솗??紐⑤Ⅴ寃좎쓬', score: 14 }
+        { label: '없음', score: 4 },
+        { label: '일부 있음', score: 16 },
+        { label: '상당히 있음', score: 26 },
+        { label: '정확히 모르겠음', score: 14 }
       ]
     },
     {
       type: 'single', key: 'business',
-      title: '媛議??ъ뾽, 吏遺? ?꾨??섏씡泥섎읆 ?섎늻湲?蹂듭옟???ъ궛???덈굹??',
-      help: '?ъ뾽泥? 踰뺤씤 吏遺? 怨듬룞紐낆쓽, ?꾨??섏씡 ?깆쓣 ?ы븿???앷컖?댁＜?몄슂.',
+      title: '가족 사업, 지분, 임대수익처럼 나누기 복잡한 재산이 있나요?',
+      help: '사업체, 법인 지분, 공동명의, 임대수익 등을 포함해 생각해주세요.',
       options: [
-        { label: '?놁쓬', score: 3 },
-        { label: '議곌툑 ?덉쓬', score: 12 },
-        { label: '以묒슂??鍮꾩쨷??李⑥???, score: 24 },
-        { label: '?뺥솗??紐⑤Ⅴ寃좎쓬', score: 12 }
+        { label: '없음', score: 3 },
+        { label: '조금 있음', score: 12 },
+        { label: '중요한 비중을 차지함', score: 24 },
+        { label: '정확히 모르겠음', score: 12 }
       ]
     },
     {
       type: 'multiSimple', key: 'overseas',
-      title: '?댁쇅 援?쟻쨌?댁쇅 嫄곗＜쨌?댁쇅 ?ъ궛 ?붿냼媛 ?덈굹??',
-      help: '?щ윭 媛??숈떆 ?좏깮 媛?ν빀?덈떎. ?대떦 ?놁쓬怨?紐⑤Ⅴ寃좎쓬? ?⑤룆 ?좏깮?⑸땲??',
+      title: '해외 국적·해외 거주·해외 재산 요소가 있나요?',
+      help: '여러 개 동시 선택 가능합니다. 해당 없음과 모르겠음은 단독 선택됩니다.',
       exclusive: ['none', 'unknown'],
       options: [
-        { value: 'self_abroad',              label: '蹂몄씤???댁쇅 嫄곗＜ 以?,            score: 16 },
-        { value: 'family_abroad',            label: '諛곗슦???먮뒗 ?먮?媛 ?댁쇅 嫄곗＜ 以?, score: 14 },
-        { value: 'family_foreign_nationality', label: '諛곗슦???먮뒗 ?먮?媛 ?멸뎅 援?쟻',  score: 16 },
-        { value: 'overseas_asset',           label: '?댁쇅 遺?숈궛 ?먮뒗 ?댁쇅 湲덉쑖?먯궛',  score: 18 },
-        { value: 'none',                     label: '?대떦 ?놁쓬',                      score: 0  },
-        { value: 'unknown',                  label: '?뺥솗??紐⑤Ⅴ寃좎쓬',               score: 10 }
+        { value: 'self_abroad',              label: '본인이 해외 거주 중',            score: 16 },
+        { value: 'family_abroad',            label: '배우자 또는 자녀가 해외 거주 중', score: 14 },
+        { value: 'family_foreign_nationality', label: '배우자 또는 자녀가 외국 국적',  score: 16 },
+        { value: 'overseas_asset',           label: '해외 부동산 또는 해외 금융자산',  score: 18 },
+        { value: 'none',                     label: '해당 없음',                      score: 0  },
+        { value: 'unknown',                  label: '정확히 모르겠음',               score: 10 }
       ]
     },
     {
       type: 'single', key: 'conflict',
-      title: '媛議??ъ씠???대? ?섍껄 李⑥씠??媛덈벑 議곗쭚???덈굹??',
-      help: '寃됱쑝濡??쒕윭???ㅽ댘肉??꾨땲??留먰븯湲??대젮??遺꾩쐞湲곕룄 ?ы븿???앷컖?댁＜?몄슂.',
+      title: '가족 사이에 이미 의견 차이나 갈등 조짐이 있나요?',
+      help: '겉으로 드러난 다툼뿐 아니라 말하기 어려운 분위기도 포함해 생각해주세요.',
       options: [
-        { label: '?놁쓬', score: 4 },
-        { label: '議곌툑 ?덉쓬', score: 14 },
-        { label: '?대? ?쒕졆??, score: 28 },
-        { label: '?뺥솗??紐⑤Ⅴ寃좎쓬', score: 12 }
+        { label: '없음', score: 4 },
+        { label: '조금 있음', score: 14 },
+        { label: '이미 뚜렷함', score: 28 },
+        { label: '정확히 모르겠음', score: 12 }
       ]
     },
     {
       type: 'single', key: 'documents',
-      title: '?ъ궛 紐⑸줉, 媛議깃?怨? 梨꾨Т ??湲곕낯 ?먮즺媛 ?뺣━?섏뼱 ?덈굹??',
-      help: '?꾨꼍?섏? ?딆븘???쒓납??紐⑥븘???먮즺媛 ?덈뒗吏 湲곗??쇰줈 ?듯빐二쇱꽭??',
+      title: '재산 목록, 가족관계, 채무 등 기본 자료가 정리되어 있나요?',
+      help: '완벽하지 않아도 한곳에 모아둔 자료가 있는지 기준으로 답해주세요.',
       options: [
-        { label: '?泥대줈 ?뺣━?섏뼱 ?덉쓬', score: 4 },
-        { label: '?쇰?留??뺣━?섏뼱 ?덉쓬', score: 12 },
-        { label: '嫄곗쓽 ?뺣━?섏뼱 ?덉? ?딆쓬', score: 22 },
-        { label: '?뺥솗??紐⑤Ⅴ寃좎쓬', score: 12 }
+        { label: '대체로 정리되어 있음', score: 4 },
+        { label: '일부만 정리되어 있음', score: 12 },
+        { label: '거의 정리되어 있지 않음', score: 22 },
+        { label: '정확히 모르겠음', score: 12 }
       ]
     }
   ];
 
-  /* ?? ?곹깭 ?? */
+  /* ── 상태 ── */
   var state = { step: 0, answers: {} };
 
-  /* ?? DOM refs ?? */
+  /* ── DOM refs ── */
   var $ = function(id) { return document.getElementById(id); };
   var surveyIntro  = $('surveyIntro');
   var surveyArea   = $('surveyArea');
@@ -974,7 +974,7 @@
   var homeBtn = $('homeBtn');
   var toast   = $('toast');
 
-  /* ?? ?좏떥 ?? */
+  /* ── 유틸 ── */
   function esc(s) {
     return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
@@ -986,7 +986,7 @@
     toastTimer = setTimeout(function() { toast.className = 'toast hidden'; }, 6000);
   }
 
-  /* ?? ?먯닔 怨꾩궛 ?? */
+  /* ── 점수 계산 ── */
   function getQuestionScore(q) {
     var ans = state.answers[q.key];
     if (!ans) return 0;
@@ -1019,21 +1019,21 @@
   }
   window.getTotalScore = getTotalScore;
 
-  /* ?? ?ㅻ깄???? */
+  /* ── 스냅샷 ── */
   function syncSnapshot() {
     window.__ansimCurrentAnswers = JSON.parse(JSON.stringify(state.answers));
   }
 
-  /* ?? ?뚮뜑: ?ㅻЦ ?? */
+  /* ── 렌더: 설문 ── */
   function renderSurvey() {
     var q     = QUESTIONS[state.step];
     var total = QUESTIONS.length;
 
     stepText.textContent = (state.step + 1) + ' / ' + total;
-    timeText.textContent = state.step >= total - 1 ? '留덉?留?吏덈Ц' : '??2遺??뚯슂';
+    timeText.textContent = state.step >= total - 1 ? '마지막 질문' : '약 2분 소요';
     progressFill.style.width = ((state.step + 1) / total * 100) + '%';
 
-    nextBtn.textContent = state.step >= total - 1 ? '寃곌낵 ?뺤씤?섍린' : '?ㅼ쓬';
+    nextBtn.textContent = state.step >= total - 1 ? '결과 확인하기' : '다음';
     prevBtn.disabled = state.step === 0;
     prevBtn.style.opacity = state.step === 0 ? '0.45' : '1';
 
@@ -1051,7 +1051,7 @@
         var sel = (ans === o.label) ? ' selected' : '';
         return '<button type="button" class="opt-btn' + sel + '" data-value="' + esc(o.label) + '">'
           + '<span class="opt-label">' + esc(o.label) + '</span>'
-          + '<span class="opt-check">???좏깮??/span>'
+          + '<span class="opt-check">✓ 선택됨</span>'
           + '</button>';
       }).join('') + '</div>';
     }
@@ -1061,7 +1061,7 @@
         var on = sel.indexOf(o.value) !== -1 ? ' selected' : '';
         return '<button type="button" class="opt-btn' + on + '" data-value="' + esc(o.value) + '">'
           + '<span class="opt-label">' + esc(o.label) + '</span>'
-          + '<span class="opt-check">???좏깮??/span>'
+          + '<span class="opt-check">✓ 선택됨</span>'
           + '</button>';
       }).join('') + '</div>';
     }
@@ -1070,7 +1070,7 @@
         ? state.answers[q.presenceKey].filter(function(k) { return k !== 'none' && k !== 'unknown'; }) : [];
       var assets = q.assets.filter(function(a) { return presence.indexOf(a.key) !== -1; });
       if (!assets.length) {
-        return '<p class="empty-note">??吏덈Ц?먯꽌 遺?숈궛???좏깮?섎㈃ ?ш린???섎웾???뺤씤?⑸땲?? ?좏깮????ぉ???놁쑝硫??ㅼ쓬?쇰줈 ?섏뼱媛?몄슂.</p>';
+        return '<p class="empty-note">앞 질문에서 부동산을 선택하면 여기서 수량을 확인합니다. 선택한 항목이 없으면 다음으로 넘어가세요.</p>';
       }
       var counts = state.answers[q.key] || {};
       return assets.map(function(a) {
@@ -1082,7 +1082,7 @@
             var on = counts[a.key] === lb ? ' selected' : '';
             return '<button type="button" class="opt-btn' + on + '" data-value="' + esc(lb) + '" data-asset="' + esc(a.key) + '">'
               + '<span class="opt-label">' + esc(lb) + '</span>'
-              + '<span class="opt-check">???좏깮??/span>'
+              + '<span class="opt-check">✓ 선택됨</span>'
               + '</button>';
           }).join('')
           + '</div></div>';
@@ -1145,7 +1145,7 @@
     trackFunnel('option_select', { step: state.step + 1, key: q.key });
   }
 
-  /* ?? ?ㅻ퉬寃뚯씠???? */
+  /* ── 네비게이션 ── */
   nextBtn.addEventListener('click', function() {
     var total = QUESTIONS.length;
     if (state.step >= total - 1) {
@@ -1176,7 +1176,7 @@
     }
   }
 
-  /* ?? 吏꾨떒 ?쒖옉 ?? */
+  /* ── 진단 시작 ── */
   function startSurvey() {
     state.step = 0;
     state.answers = {};
@@ -1206,101 +1206,101 @@
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, false);
 
-  /* ?? 寃곌낵 ?붾㈃ ?뚮뜑 ?? */
+  /* ── 결과 화면 렌더 ── */
   function showResult() {
     var score = getTotalScore();
     var level, badgeClass;
-    if (score >= 70)      { level = '二쇱쓽 ?꾩슂';  badgeClass = 'level-caution'; }
-    else if (score >= 40) { level = '?뺤씤 ?꾩슂';  badgeClass = 'level-check'; }
-    else                  { level = '湲곕낯 ?뺣━';  badgeClass = 'level-basic'; }
+    if (score >= 70)      { level = '주의 필요';  badgeClass = 'level-caution'; }
+    else if (score >= 40) { level = '확인 필요';  badgeClass = 'level-check'; }
+    else                  { level = '기본 정리';  badgeClass = 'level-basic'; }
 
     var signals = [];
     if (score >= 70) {
-      signals.push('?곸냽??援ъ꽦, ?ъ궛 援ъ“, ?ъ쟾 ?뺣━ ?곹깭瑜??섎늻???뺤씤???꾩슂媛 ?덉뒿?덈떎.');
+      signals.push('상속인 구성, 재산 구조, 사전 정리 상태를 나누어 확인할 필요가 있습니다.');
     } else if (score >= 40) {
-      signals.push('吏湲??④퀎?먯꽌???ъ궛 紐⑸줉, ?곸냽??愿怨? 遺꾨같 怨꾪쉷???뺣━?대몢硫?異⑸텇?⑸땲??');
+      signals.push('지금 단계에서는 재산 목록, 상속인 관계, 분배 계획을 정리해두면 충분합니다.');
     } else {
-      signals.push('?꾩옱??湲곕낯 ?뺣낫瑜?李⑤텇???뺣━?섎뒗 寃껊????쒖옉?섎㈃ 異⑸텇?⑸땲??');
+      signals.push('현재는 기본 정보를 차분히 정리하는 것부터 시작하면 충분합니다.');
     }
     var overseas = state.answers.overseas;
     if (Array.isArray(overseas) && overseas.some(function(v) { return v !== 'none' && v !== 'unknown'; })) {
-      signals.push('?댁쇅 嫄곗＜, ?댁쇅 援?쟻, ?댁쇅 ?ъ궛 ?붿냼媛 ?덉뼱 ?뺤씤?댁빞 ????ぉ???섏뼱?????덉뒿?덈떎.');
+      signals.push('해외 거주, 해외 국적, 해외 재산 요소가 있어 확인해야 할 항목이 늘어날 수 있습니다.');
     }
     var counts = state.answers.assetCounts || {};
-    if (Object.keys(counts).some(function(k) { return counts[k] && counts[k] !== '?놁쓬'; })) {
-      signals.push('遺?숈궛???ы븿?섏뼱 ?덉뼱 ?섎늻??諛⑹떇怨?愿由?湲곗???誘몃━ ?뺣━?섎뒗 寃껋씠 醫뗭뒿?덈떎.');
+    if (Object.keys(counts).some(function(k) { return counts[k] && counts[k] !== '없음'; })) {
+      signals.push('부동산이 포함되어 있어 나누는 방식과 관리 기준을 미리 정리하는 것이 좋습니다.');
     }
 
     var html = '';
 
-    /* ?먯닔 移대뱶 */
+    /* 점수 카드 */
     html += '<div class="result-score-card">'
-      + '<p class="result-headline">?꾩옱 ?곹솴 ?뺣━ ?꾨즺</p>'
+      + '<p class="result-headline">현재 상황 정리 완료</p>'
       + '<div class="result-level-badge ' + badgeClass + '">' + esc(level) + '</div>'
       + '<div class="result-signals">'
       + signals.map(function(s) { return '<div class="result-signal">' + esc(s) + '</div>'; }).join('')
       + '</div>'
-      + '<span class="result-score-note">吏꾨떒 ?먯닔 ' + score + '??/span>'
+      + '<span class="result-score-note">진단 점수 ' + score + '점</span>'
       + '</div>';
 
-    /* ?꾪솴 ?붿빟 */
+    /* 현황 요약 */
     html += '<div class="result-section">'
-      + '<h4>???곹솴???뚯븙?먯뒿?덈떎</h4>'
+      + '<h4>내 상황이 파악됐습니다</h4>'
       + '<ul>'
-      + '<li>吏湲??곹깭濡??곸냽??媛쒖떆?섎㈃, ???살씠 洹몃?濡?諛섏쁺?섏? ?딆쓣 ???덉뒿?덈떎.</li>'
-      + '<li>?좎뼵?Β룹쬆????대컢쨌怨듭젣 ?쒖슜???곕씪 寃곌낵媛 ?ш쾶 ?щ씪吏묐땲??</li>'
-      + '<li>吏湲?以鍮꾪븳 ?щ엺怨?以鍮꾪븯吏 ?딆? ?щ엺??寃곌낵???꾩쟾???ㅻ쫭?덈떎.</li>'
+      + '<li>지금 상태로 상속이 개시되면, 내 뜻이 그대로 반영되지 않을 수 있습니다.</li>'
+      + '<li>유언장·증여 타이밍·공제 활용에 따라 결과가 크게 달라집니다.</li>'
+      + '<li>지금 준비한 사람과 준비하지 않은 사람의 결과는 완전히 다릅니다.</li>'
       + '</ul>'
       + '</div>';
 
-    /* ?ㅼ쓬 ?④퀎 */
+    /* 다음 단계 */
     html += '<div class="result-section">'
-      + '<h4>?댁젣 "?대뼸寃???寃껋씤吏"媛 ?⑥븯?듬땲??/h4>'
+      + '<h4>이제 "어떻게 할 것인지"가 남았습니다</h4>'
       + '<ul>'
-      + '<li>???곹솴?먯꽌 媛?ν븳 ?곸냽 ?ㅺ퀎 ?좏깮吏</li>'
-      + '<li>?좊쪟遺?由ъ뒪?щ? ?쇳븯???⑸쾿??諛⑸쾿</li>'
-      + '<li>吏湲??뱀옣 ?댁빞 ??寃? ?쒖꽌?濡?/li>'
+      + '<li>내 상황에서 가능한 상속 설계 선택지</li>'
+      + '<li>유류분 리스크를 피하는 합법적 방법</li>'
+      + '<li>지금 당장 해야 할 것, 순서대로</li>'
       + '</ul>'
       + '</div>';
 
-    /* ?좊즺 CTA */
+    /* 유료 CTA */
     html += '<div class="paid-cta-card">'
-      + '<div class="paid-cta-eyebrow">?좊즺 ?곸꽭由ы룷?몄뿉???뺤씤?섏꽭??/div>'
-      + '<h3>蹂?몄궗쨌?몃Т???곷떞 1?뚮낫????댄븯寃?<br>???곸냽 ?ㅺ퀎???꾩껜 洹몃┝???≪쑝?몄슂.</h3>'
-      + '<p class="paid-cta-lead">?밴? ??9,000 <span style="text-decoration:line-through;opacity:.6;font-weight:700;">?뺢? 99,000??/span> ??蹂몄씤留??뺤씤?섎뒗 鍮꾧났媛??먮즺?낅땲??</p>'
+      + '<div class="paid-cta-eyebrow">유료 상세리포트에서 확인하세요</div>'
+      + '<h3>변호사·세무사 상담 1회보다 저렴하게,<br>내 상속 설계의 전체 그림을 잡으세요.</h3>'
+      + '<p class="paid-cta-lead">₩29,000 — 본인만 확인하는 비공개 자료입니다.</p>'
       + '<div class="paid-checks">'
-      + ['???곹솴?먯꽌 媛?ν븳 ?곸냽 ?ㅺ퀎 ?좏깮吏',
-         '?좊쪟遺?由ъ뒪??理쒖냼??諛⑸쾿 (2026 理쒖떊 ?먮? 諛섏쁺)',
-         '?덉꽭 ?쒕??덉씠????以鍮꾪뻽????vs ???덉쓣 ??,
-         '吏湲??뱀옣 ?댁빞 ??寃? ?쒖꽌?濡?,
-         '?꾨Ц媛 ?곷떞 ??諛섎뱶???뺤씤??吏덈Ц 紐⑸줉'].map(function(t) {
+      + ['내 상황에서 가능한 상속 설계 선택지',
+         '유류분 리스크 최소화 방법 (2026 최신 판례 반영)',
+         '절세 시뮬레이션 — 준비했을 때 vs 안 했을 때',
+         '지금 당장 해야 할 것, 순서대로',
+         '전문가 상담 전 반드시 확인할 질문 목록'].map(function(t) {
            return '<div class="paid-check-item">' + esc(t) + '</div>';
          }).join('')
       + '</div>'
       + '</div>';
 
-    /* ?좊즺 寃곗젣 ?뺤씤 ???⑤꼸 */
+    /* 유료 결제 확인 시 패널 */
     if (isPaid()) {
       html += renderPaidConfirmedPanel(score, level);
     }
 
-    /* ?대찓????*/
+    /* 이메일 폼 */
     html += '<div class="form-card" id="formCard">'
-      + '<h3>?좊즺 ?곸꽭由ы룷???덈궡瑜?諛쏆븘蹂댁떆?ㅻ㈃</h3>'
-      + '<p>?대쫫怨??대찓?쇱쓣 ?④꺼二쇱떆硫??곸꽭由ы룷???덈궡瑜??대찓?쇰줈 蹂대궡?쒕┰?덈떎.<br>蹂몄씤留??뺤씤?섎뒗 鍮꾧났媛??뺣낫濡?泥섎━?⑸땲??</p>'
+      + '<h3>유료 상세리포트 안내를 받아보시려면</h3>'
+      + '<p>이름과 이메일을 남겨주시면 상세리포트 안내를 이메일로 보내드립니다.<br>본인만 확인하는 비공개 정보로 처리됩니다.</p>'
       + '<div class="form-grid">'
-      + '<div class="field"><label for="leadName">?깊븿</label><input id="leadName" name="leadName" autocomplete="name" placeholder="?? ?띻만?? /></div>'
-      + '<div class="field"><label for="leadEmail">?대찓??/label><input id="leadEmail" name="leadEmail" type="email" autocomplete="email" placeholder="?? name@example.com" /></div>'
-      + '<div class="field"><label for="leadMemo">?④린???댁슜</label><textarea id="leadMemo" name="leadMemo" placeholder="沅곴툑???먯씠???꾩옱 ?곹솴???곸뼱二쇱꽭??"></textarea></div>'
-      + '<label class="consent-row"><input id="privacyConsent" type="checkbox" required /><span>?좊즺 ?곸꽭由ы룷???덈궡瑜??꾪빐 媛쒖씤?뺣낫 ?섏쭛 諛??댁슜???숈쓽?⑸땲??</span></label>'
-      + '<div class="form-cta-note"><strong>以鍮꾪븳 ?щ엺留????삳?濡??④만 ???덉뒿?덈떎.</strong><p>吏湲??대찓?쇱쓣 ?④꺼二쇱떆硫?br>???곹솴??留욌뒗 ?곸꽭由ы룷???덈궡瑜?蹂대궡?쒕┰?덈떎.</p></div>'
-      + '<button class="btn-primary" type="button" id="submitBtn">?곸꽭由ы룷???덈궡 諛쏄린</button>'
+      + '<div class="field"><label for="leadName">성함</label><input id="leadName" name="leadName" autocomplete="name" placeholder="예: 홍길동" /></div>'
+      + '<div class="field"><label for="leadEmail">이메일</label><input id="leadEmail" name="leadEmail" type="email" autocomplete="email" placeholder="예: name@example.com" /></div>'
+      + '<div class="field"><label for="leadMemo">남기실 내용</label><textarea id="leadMemo" name="leadMemo" placeholder="궁금한 점이나 현재 상황을 적어주세요."></textarea></div>'
+      + '<label class="consent-row"><input id="privacyConsent" type="checkbox" required /><span>유료 상세리포트 안내를 위해 개인정보 수집 및 이용에 동의합니다.</span></label>'
+      + '<div class="form-cta-note"><strong>준비한 사람만 내 뜻대로 남길 수 있습니다.</strong><p>지금 이메일을 남겨주시면<br>내 상황에 맞는 상세리포트 안내를 보내드립니다.</p></div>'
+      + '<button class="btn-primary" type="button" id="submitBtn">상세리포트 안내 받기</button>'
       + '<div class="save-status" id="saveStatus" role="status" aria-live="polite"></div>'
       + '</div>'
       + '</div>';
 
-    /* ?ㅼ떆 吏꾨떒 */
-    html += '<button class="btn-ghost" type="button" id="retryBtn" style="margin-bottom:32px;">泥섏쓬遺???ㅼ떆 吏꾨떒?섍린</button>';
+    /* 다시 진단 */
+    html += '<button class="btn-ghost" type="button" id="retryBtn" style="margin-bottom:32px;">처음부터 다시 진단하기</button>';
 
     surveyArea.classList.add('hidden');
     resultArea.innerHTML = html;
@@ -1315,7 +1315,7 @@
     window.__ansimFinalScore = score;
   }
 
-  /* ?? ?좊즺 ?뺤씤 ?? */
+  /* ── 유료 확인 ── */
   function isPaid() {
     try {
       return localStorage.getItem('ansim_payment_status') === 'paid_confirmed'
@@ -1327,26 +1327,26 @@
 
   function renderPaidConfirmedPanel(score, level) {
     var items = [
-      { title: '???곹솴 ?붿빟',      desc: '???먮쫫怨?癒쇱? 蹂???ぉ???쒕늿???뺣━?⑸땲??' },
-      { title: '?쎈뒗 ?쒖꽌',         desc: '?대뵒遺??蹂쇱? ?먮쫫???뺣━?⑸땲??' },
-      { title: '媛쒖씤 蹂닿????붿빟',  desc: '?꾩슂?????ㅼ떆 蹂??듭떖 ??ぉ???댁뒿?덈떎.' },
-      { title: '以鍮꾩옄猷?泥댄겕由ъ뒪??, desc: '湲곕낯 ?쒕쪟, ?ъ궛쨌梨꾨Т ?먮즺瑜??섎늻??遊낅땲??' },
-      { title: '?곷떞 ?꾪썑 ?뺣━',    desc: '?곷떞 ?꾪썑 ?뺤씤??吏덈Ц???뺣━?⑸땲??' }
+      { title: '내 상황 요약',      desc: '큰 흐름과 먼저 볼 항목을 한눈에 정리합니다.' },
+      { title: '읽는 순서',         desc: '어디부터 볼지 흐름을 정리합니다.' },
+      { title: '개인 보관용 요약',  desc: '필요할 때 다시 볼 핵심 항목을 담습니다.' },
+      { title: '준비자료 체크리스트', desc: '기본 서류, 재산·채무 자료를 나누어 봅니다.' },
+      { title: '상담 전후 정리',    desc: '상담 전후 확인할 질문을 정리합니다.' }
     ];
     return '<div class="paid-confirmed-panel">'
-      + '<div class="paid-confirmed-eyebrow">?좊즺 ?곸꽭由ы룷??以鍮??꾨즺</div>'
-      + '<h3>???곸냽 ?곹솴??李⑤텇??蹂????덈룄濡??뺣━???먮즺?낅땲??/h3>'
-      + '<p class="paid-confirmed-lead">吏꾨떒 ?먯닔 ' + score + '??쨌 ' + esc(level) + ' ??癒쇱? ???곹솴 ?붿빟???뺤씤?섏꽭??</p>'
+      + '<div class="paid-confirmed-eyebrow">유료 상세리포트 준비 완료</div>'
+      + '<h3>내 상속 상황을 차분히 볼 수 있도록 정리된 자료입니다</h3>'
+      + '<p class="paid-confirmed-lead">진단 점수 ' + score + '점 · ' + esc(level) + ' — 먼저 내 상황 요약을 확인하세요.</p>'
       + '<div class="paid-confirmed-grid">'
       + items.map(function(it) {
           return '<div class="paid-confirmed-item"><strong>' + esc(it.title) + '</strong><span>' + esc(it.desc) + '</span></div>';
         }).join('')
       + '</div>'
-      + '<div class="paid-confirmed-notice">泥섏쓬 蹂댁떎 ?? ???곹솴 ?붿빟 ???쎈뒗 ?쒖꽌 ??媛쒖씤 蹂닿????붿빟 ??以鍮꾩옄猷?泥댄겕由ъ뒪???쒖꽌瑜?沅뚯옣?⑸땲??</div>'
+      + '<div class="paid-confirmed-notice">처음 보실 때: 내 상황 요약 → 읽는 순서 → 개인 보관용 요약 → 준비자료 체크리스트 순서를 권장합니다.</div>'
       + '</div>';
   }
 
-  /* ?? ???대깽???? */
+  /* ── 폼 이벤트 ── */
   function bindFormEvents() {
     var btn = $('submitBtn');
     if (!btn) return;
@@ -1370,19 +1370,19 @@
     var email = emailEl.value.trim();
 
     if (!name) {
-      statusEl.textContent = '?깊븿???낅젰?댁＜?몄슂.';
+      statusEl.textContent = '성함을 입력해주세요.';
       statusEl.className = 'save-status error';
       statusEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
       return;
     }
     if (!email || !email.includes('@')) {
-      statusEl.textContent = '?대찓?쇱쓣 ?뺥솗???낅젰?댁＜?몄슂.';
+      statusEl.textContent = '이메일을 정확히 입력해주세요.';
       statusEl.className = 'save-status error';
       statusEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
       return;
     }
     if (consentEl && !consentEl.checked) {
-      statusEl.textContent = '媛쒖씤?뺣낫 ?섏쭛쨌?댁슜 ?숈쓽瑜?泥댄겕?댁＜?몄슂.';
+      statusEl.textContent = '개인정보 수집·이용 동의를 체크해주세요.';
       statusEl.className = 'save-status error';
       statusEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
       return;
@@ -1402,11 +1402,11 @@
     };
 
     btn.disabled = true;
-    btn.textContent = '?묒닔 以묒엯?덈떎...';
-    statusEl.textContent = '?좊즺 ?곸꽭由ы룷???덈궡 ?좎껌???묒닔?섍퀬 ?덉뒿?덈떎.';
+    btn.textContent = '접수 중입니다...';
+    statusEl.textContent = '유료 상세리포트 안내 신청을 접수하고 있습니다.';
     statusEl.className = 'save-status success';
     statusEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    showToast('?좊즺 ?곸꽭由ы룷???덈궡 ?좎껌???묒닔?섍퀬 ?덉뒿?덈떎.');
+    showToast('유료 상세리포트 안내 신청을 접수하고 있습니다.');
     trackFunnel('report_form_submit_click', { score: score });
 
     try {
@@ -1416,52 +1416,52 @@
         body: JSON.stringify(payload)
       });
       var data = await res.json().catch(function() { return {}; });
-      if (!res.ok || !data.ok) throw new Error(data.message || '?좎껌 ?묒닔 ?ㅽ뙣');
+      if (!res.ok || !data.ok) throw new Error(data.message || '신청 접수 실패');
 
-      statusEl.textContent = '?좎껌???묒닔?섏뿀?듬땲?? ?낅젰?섏떊 ?대찓?쇰줈 由ы룷???뺤씤 ?덉감瑜?蹂대궡?쒕┰?덈떎.';
+      statusEl.textContent = '신청이 접수되었습니다. 입력하신 이메일로 리포트 확인 절차를 보내드립니다.';
       statusEl.className = 'save-status success';
-      showToast('?좎껌???묒닔?섏뿀?듬땲?? ?대찓?쇱쓣 ?뺤씤?댁＜?몄슂.');
+      showToast('신청이 접수되었습니다. 이메일을 확인해주세요.');
       if (nameEl) nameEl.value = '';
       if (emailEl) emailEl.value = '';
       if (memoEl) memoEl.value = '';
       trackFunnel('report_form_submit_success', { score: score });
     } catch (err) {
-      statusEl.textContent = '?좎떆 ???ㅼ떆 ?좎껌??二쇱꽭?? ?낅젰?섏떊 ?댁슜? ?몃???怨듦컻?섏? ?딆뒿?덈떎.';
+      statusEl.textContent = '잠시 후 다시 신청해 주세요. 입력하신 내용은 외부에 공개되지 않습니다.';
       statusEl.className = 'save-status error';
-      showToast('?좎떆 ???ㅼ떆 ?좎껌??二쇱꽭??', 'error');
+      showToast('잠시 후 다시 신청해 주세요.', 'error');
     } finally {
       btn.disabled = false;
-      btn.textContent = '?곸꽭由ы룷???덈궡 諛쏄린';
+      btn.textContent = '상세리포트 안내 받기';
       statusEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
   }
 
-  /* ?? 由ы룷???곗씠??鍮뚮뜑 (?몃? 李몄“?? ?? */
+  /* ── 리포트 데이터 빌더 (외부 참조용) ── */
   function buildFreeReportData(score) {
-    var level = score >= 70 ? '二쇱쓽 ?꾩슂' : score >= 40 ? '?뺤씤 ?꾩슂' : '湲곕낯 ?뺣━';
+    var level = score >= 70 ? '주의 필요' : score >= 40 ? '확인 필요' : '기본 정리';
     return {
       version: 'free-report-v2',
       score: score,
       level: level,
-      title: '?덉떖?곸냽 臾대즺 吏꾨떒??,
-      headline: '?꾩옱 ?듬???諛뷀깢?쇰줈 ?곸냽 ?곹솴??癒쇱? ?뺣━?덉뒿?덈떎.',
+      title: '안심상속 무료 진단서',
+      headline: '현재 답변을 바탕으로 상속 상황을 먼저 정리했습니다.',
       answers: state.answers
     };
   }
   function buildPaidReportPreview(score) {
-    var level = score >= 70 ? '二쇱쓽 ?꾩슂' : score >= 40 ? '?뺤씤 ?꾩슂' : '湲곕낯 ?뺣━';
+    var level = score >= 70 ? '주의 필요' : score >= 40 ? '확인 필요' : '기본 정리';
     return {
       version: 'paid-report-preview-v2',
       score: score,
       level: level,
-      title: '?덉떖?곸냽 ?좊즺 ?곸꽭由ы룷??
+      title: '안심상속 유료 상세리포트'
     };
   }
   window.ansimBuildFreeReportData = function() { return buildFreeReportData(getTotalScore()); };
   window.ansimBuildPaidReportPreviewData = function() { return buildPaidReportPreview(getTotalScore()); };
   window.ansimGetPaidReportIntent = function() { return window.__ansimPaidReportIntent || null; };
 
-  /* ?? ?쇰꼸 ?몃옒???? */
+  /* ── 퍼널 트래킹 ── */
   function trackFunnel(name, detail) {
     var payload = Object.assign({ event: name, path: location.pathname, ts: new Date().toISOString() }, detail || {});
     try {
