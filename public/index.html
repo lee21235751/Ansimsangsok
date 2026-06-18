@@ -2600,16 +2600,17 @@
       var optionButtons = simpleSurveyOptionsEl.querySelectorAll(".simple-survey-option");
       for (var bi = 0; bi < optionButtons.length; bi++) {
         (function (btn) {
-          var fired = false;
-          function fire(ev) {
-            if (ev) { ev.preventDefault(); ev.stopPropagation(); }
-            if (fired) return;
-            fired = true;
-            setTimeout(function () { fired = false; }, 350);
+          // touchstart: 손가락 닿는 순간 즉각 반응 (지연 제노)
+          var tapped = false;
+          btn.addEventListener("touchstart", function() {
+            tapped = true;
             handleSimpleSurveyOptionClick(btn);
-          }
-          btn.addEventListener("click", fire, false);
-          btn.addEventListener("touchend", fire, false);
+            setTimeout(function() { tapped = false; }, 500);
+          }, { passive: true });
+          // click: \ub370스크탑/안드로이드 포방 (touch치 분은 tapped flag로 중복 방지)
+          btn.addEventListener("click", function() {
+            if (!tapped) handleSimpleSurveyOptionClick(btn);
+          }, false);
         })(optionButtons[bi]);
       }
     }
