@@ -2600,37 +2600,31 @@
       var optionButtons = simpleSurveyOptionsEl.querySelectorAll(".simple-survey-option");
       for (var bi = 0; bi < optionButtons.length; bi++) {
         (function (btn) {
-          var fired = false;
-          // touchstart: 시각 피드백만 즉시 (상태 업데이트 안 함)
+          // touchstart: 손가락 닿는 순간 즉각 시각 피드백
           btn.addEventListener("touchstart", function() {
-            var q = questions[state.step];
-            if (!q) return;
+            var q = questions[state.step]; if (!q) return;
+            var all = simpleSurveyOptionsEl.querySelectorAll(".simple-survey-option");
             if (q.type === "single") {
-              var all = simpleSurveyOptionsEl.querySelectorAll(".simple-survey-option");
               for (var x = 0; x < all.length; x++) all[x].classList.remove("is-selected");
               btn.classList.add("is-selected");
             } else if (q.type === "assetCounts") {
               var ak = btn.getAttribute("data-asset");
-              if (ak) {
-                var gb = simpleSurveyOptionsEl.querySelectorAll('.simple-survey-option[data-asset="' + ak + '"]');
-                for (var y = 0; y < gb.length; y++) gb[y].classList.remove("is-selected");
-                btn.classList.add("is-selected");
-              }
+              if (ak) { var gb = simpleSurveyOptionsEl.querySelectorAll('.simple-survey-option[data-asset="' + ak + '"]'); for (var y=0;y<gb.length;y++) gb[y].classList.remove("is-selected"); btn.classList.add("is-selected"); }
             } else if (q.type === "multiSimple") {
-              if (btn.classList.contains("is-selected")) btn.classList.remove("is-selected");
-              else btn.classList.add("is-selected");
+              btn.classList.toggle("is-selected");
             }
           }, { passive: true });
-          // touchend/click: 샹태 업데이트 (중복 방지)
-          function fire(ev) {
-            if (ev && ev.preventDefault) ev.preventDefault();
-            if (fired) return;
-            fired = true;
-            setTimeout(function() { fired = false; }, 400);
+          // touchend: 샹태 확정 + click 중복 방지
+          var _t = false;
+          btn.addEventListener("touchend", function(ev) {
+            ev.preventDefault();
+            if (_t) return; _t = true; setTimeout(function(){_t=false;},400);
             handleSimpleSurveyOptionClick(btn);
-          }
-          btn.addEventListener("touchend", fire, false);
-          btn.addEventListener("click", fire, false);
+          }, false);
+          // click: PC 포방
+          btn.addEventListener("click", function() {
+            if (!_t) handleSimpleSurveyOptionClick(btn);
+          }, false);
         })(optionButtons[bi]);
       }
     }
