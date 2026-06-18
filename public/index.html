@@ -2664,9 +2664,6 @@
     window.renderSimpleSurvey = renderSimpleSurvey;
     window.render = render;
 
-    // \ud398\uc774\uc9c0 \ub85c\ub4dc \uc2dc \uc124\ubb38 \ucd08\uae30\ud654 (\uae30\uc874 iframe\uc774 \ud558\ub358 \uc5ed\ud560 \ub300\uccb4)
-    renderSimpleSurvey();
-
     function getAnswerScore(question) {
       const answer = state.answers[question.key];
 
@@ -2916,7 +2913,6 @@ document.getElementById("saveLead").addEventListener("click", async () => {
     }
 syncReportAnswersSnapshot();
 
-    
   </script>
 
   <div class="v0104-mobile-fix-markers" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;" aria-hidden="true">
@@ -11226,6 +11222,24 @@ ready(function(){setTimeout(run,500);setTimeout(run,1500);setTimeout(run,3000);}
     updatePaidPanelVisibility();
     if (tries >= 30) clearInterval(timer);
   }, 300);
+})();
+</script>
+
+<script>
+// 설문 초기화 — iframe 제거 후 인라인 설문 자동 렌데링
+(function() {
+  function startSurvey() {
+    var root = document.getElementById("simpleSurveyRoot");
+    if (root) root.classList.remove("hidden");
+    if (typeof window.renderSimpleSurvey === "function") {
+      window.renderSimpleSurvey();
+    }
+  }
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", startSurvey);
+  } else {
+    startSurvey();
+  }
 })();
 </script>
 </body>
