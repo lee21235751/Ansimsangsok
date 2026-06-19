@@ -212,10 +212,6 @@ export default async function handler(req, res) {
     const body    = req.body||{};
     const answers = body.answers && typeof body.answers==='object' ? body.answers : {};
     const score   = Number.isFinite(Number(body.score)) ? Number(body.score) : 0;
-    const email   = String(body.email||'').trim();
-
-    // email optional
-
     const types = matchTypes(answers);
 
     let report;
