@@ -275,7 +275,9 @@ function buildReportSkeleton(answers, matchedTypes, score) {
 
 /* ── 4. Claude API 프롬프트 빌더 ─────────────────────────────────────── */
 
-function buildSystemPrompt() { return `안심상속 유료 상세리포트 작성 시스템. 규칙: 상속 상황 정리·상담 전 준비 자료(법률·세무 조언 아님). 법률 판단·세금 계산·결과 보장 표현 금지. 쉬운 한글. 비공개 자료. 2026년 법령: 유류분-형제자매 폐지·패륜상속인 상속권 상실 가능·기여 보상 증여는 반환 제외. 상속세-일괄공제5억·배우자공제5억~30억. 신고6개월·포기3개월. JSON만 반환, 코드블록 없이.`; }
+function buildSystemPrompt() {
+  return `안심상속 유료 상세리포트 작성 시스템. 규칙: 상속 상황 정리·상담 전 준비 자료(법률·세무 조언 아님). 법률 판단·세금 계산·결과 보장 표현 금지. 쉬운 한글. 비공개 자료. 2026년 법령: 유류분-형제자매 폐지·패륜상속인 상속권 상실 가능·기여 보상 증여는 반환 제외. 상속세-일괄공제5억·배우자공제5억~30억. 신고6개월·포기3개월. JSON만 반환, 코드블록 없이.`;
+}
 
 function buildUserPrompt(answers, matchedTypes, contextModules, score) {
   const level = score >= 70 ? '주의 필요' : score >= 40 ? '확인 필요' : '기본 정리';
@@ -324,59 +326,8 @@ function buildUserPrompt(answers, matchedTypes, contextModules, score) {
 【상황별 핵심 정보 (리포트에 반드시 반영)】
 ${contextText}
 
-위 정보를 바탕으로 다음 JSON 구조로 리포트를 작성하세요:
-
-{
-  "title": "안심상속 유료 상세리포트",
-  "subtitle": "내 상황에 맞춰 정리한 상속 준비 자료",
-  "level": "${level}",
-  "score": ${score},
-  "matchedTypes": ${JSON.stringify(matchedTypes.map(t => t.title))},
-  "sections": {
-    "summary": {
-      "title": "내 상황 요약",
-      "lead": "한 문장으로 현재 상황의 핵심",
-      "points": ["핵심 확인사항 3~5개 (구체적으로)"]
-    },
-    "persons": {
-      "title": "먼저 확인할 사람 관계",
-      "description": "상속인 범위와 관계 정리 방법 설명",
-      "checklist": ["확인할 항목 3~5개"]
-    },
-    "assets": {
-      "title": "확인할 재산과 채무",
-      "description": "재산 파악 방법 안내",
-      "checklist": ["확인할 항목 4~6개 (진단 답변 기반으로 구체적으로)"]
-    },
-    "documents": {
-      "title": "준비하면 좋은 자료",
-      "description": "상담 전 준비할 서류 안내",
-      "basic": ["기본 서류 3~4개"],
-      "situation_specific": ["상황별 추가 서류 2~4개 (진단 답변 반영)"]
-    },
-    "blind_spots": {
-      "title": "놓치기 쉬운 항목",
-      "description": "이 상황에서 특히 주의해야 할 점",
-      "items": [
-        {"title": "항목명", "content": "구체적 설명 2~3문장"}
-      ]
-    },
-    "questions": {
-      "title": "상담 전 정리할 질문",
-      "description": "전문가 상담 시 물어볼 질문 목록",
-      "questions": ["질문 4~6개 (이 상황에 맞는 구체적 질문)"]
-    },
-    "next_steps": {
-      "title": "다음에 확인할 순서",
-      "description": "지금부터 할 수 있는 것들",
-      "steps": [
-        {"order": 1, "title": "단계명", "content": "설명"}
-      ]
-    }
-  },
-  "legal_notice": "본 리포트는 정보 제공 목적이며, 법률·세무 조언을 대체하지 않습니다. 구체적인 상황은 반드시 변호사·세무사 등 전문가와 상담하세요.",
-  "generated_at": "${new Date().toISOString()}"
-}`;
+아래 JSON 구조로만 응답하세요(코드블록 없이):
+{"title":"안심상속 유료 상세리포트","subtitle":"내 상황에 맞춰 정리한 상속 준비 자료","level":"${level}","score":${score},"matchedTypes":${JSON.stringify(matchedTypes.map(t=>t.title))},"sections":{"summary":{"title":"내 상황 요약","lead":"한 문장 핵심","points":["확인사항1","확인사항2","확인사항3"]},"persons":{"title":"확인할 사람 관계","checklist":["항목1","항목2","항목3"]},"assets":{"title":"재산과 채무","checklist":["항목1","항목2","항목3","항목4"]},"documents":{"title":"준비할 자료","basic":["서류1","서류2","서류3"],"situation_specific":["서류1","서류2"]},"blind_spots":{"title":"놓치기 쉬운 항목","items":[{"title":"항목명","content":"설명"}]},"questions":{"title":"상담 전 질문","questions":["질문1","질문2","질문3","질문4"]},"next_steps":{"title":"다음 순서","steps":[{"order":1,"title":"단계","content":"설명"}]}},"legal_notice":"본 리포트는 정보 제공 목적이며 법률·세무 조언을 대체하지 않습니다.","generated_at":"${new Date().toISOString()}"}`;
 }
 
 /* ── 5. Claude API 호출 ──────────────────────────────────────────────── */
