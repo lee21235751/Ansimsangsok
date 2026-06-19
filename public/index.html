@@ -6,447 +6,305 @@
 <title>안심상속 — 내 재산, 내 뜻대로 남기기</title>
 <meta name="description" content="2분 무료 진단으로 내 상속 위험 항목을 파악하세요."/>
 <meta property="og:title" content="안심상속"/>
-<meta property="og:image" content="/og-image.svg"/>
 <meta name="theme-color" content="#d4af37"/>
 <link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
 <style>
-:root{
-  --F:#0e3529;--FD:#06251d;--G:#d7ad55;--GL:#f1d586;
-  --CR:#fff8e8;--PA:#fffdf6;--INK:#12231d;--MU:#5e6b64;
-  --LN:rgba(14,53,41,.18);--RR:20px;--RB:18px;
-}
+:root{--F:#0e3529;--FD:#06251d;--G:#d7ad55;--GL:#f1d586;--CR:#fff8e8;--INK:#12231d;--MU:#5e6b64;--LN:rgba(14,53,41,.18)}
 *,*::before,*::after{box-sizing:border-box;margin:0}
-body{font-family:system-ui,-apple-system,sans-serif;color:var(--INK);word-break:keep-all;overflow-x:hidden;background:var(--PA)}
+body{font-family:system-ui,-apple-system,sans-serif;color:var(--INK);word-break:keep-all;overflow-x:hidden;background:#fffdf6}
 button,input,textarea{font:inherit}
-.sh{width:min(680px,calc(100% - 32px));margin:0 auto}
-.hi{display:none!important}
-
-/* 히어로 */
+.w{width:min(680px,calc(100% - 32px));margin:0 auto}
+.dn{display:none!important}
 .hero{background:linear-gradient(145deg,#082d22,#163b2a 62%,#24381f);color:#fffdf5;padding:24px 0 28px}
 .nav{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:28px}
 .brand{display:flex;align-items:center;gap:10px;font-weight:900;letter-spacing:-.04em}
-.brand-mark{width:40px;height:40px;border:1px solid rgba(215,173,85,.85);border-radius:999px;display:grid;place-items:center;color:var(--GL);font-weight:900;flex-shrink:0}
-.eyebrow{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(215,173,85,.65);color:var(--GL);border-radius:999px;padding:9px 15px;font-weight:900;font-size:.9rem;background:rgba(255,255,255,.04);margin-bottom:16px}
+.bm{width:40px;height:40px;border:1px solid rgba(215,173,85,.85);border-radius:50%;display:grid;place-items:center;color:var(--GL);font-weight:900}
+.ey{display:inline-flex;border:1px solid rgba(215,173,85,.65);color:var(--GL);border-radius:999px;padding:9px 15px;font-weight:900;font-size:.9rem;background:rgba(255,255,255,.04);margin-bottom:16px}
 .hero h1{font-size:clamp(2.2rem,9vw,3.6rem);line-height:1.05;letter-spacing:-.07em;margin-bottom:14px}
 .hero p{color:rgba(255,253,245,.82);font-size:clamp(1rem,4vw,1.18rem);line-height:1.72;font-weight:650;margin-bottom:22px}
 .pills{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
-.pill{border:1px solid rgba(215,173,85,.5);color:var(--GL);padding:8px 13px;border-radius:999px;font-weight:900;font-size:.88rem;background:rgba(0,0,0,.12)}
-
-/* 버튼 */
-.btn-g{border:0;background:linear-gradient(135deg,#f5dc8a,#c99938);color:#1c221c;border-radius:var(--RB);padding:15px 22px;font-weight:950;box-shadow:0 12px 28px rgba(0,0,0,.22);cursor:pointer;min-height:54px;width:100%;font-size:1.05rem;letter-spacing:-.025em;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
-.btn-d{border:0;background:var(--FD);color:#fff8dc;border-radius:var(--RB);padding:15px 22px;font-weight:950;cursor:pointer;min-height:54px;width:100%;font-size:1.05rem;letter-spacing:-.025em;touch-action:manipulation;box-shadow:0 12px 28px rgba(6,37,29,.22)}
-.btn-w{border:1px solid rgba(14,53,41,.2);background:#fff;color:var(--MU);border-radius:var(--RB);padding:14px 18px;font-weight:900;cursor:pointer;min-height:54px;width:100%;font-size:1.05rem;touch-action:manipulation}
-
-/* 진단 */
-.diag{background:var(--PA);min-height:100svh;padding:0 0 env(safe-area-inset-bottom,0)}
-.diag-in{padding:28px 0 0}
-.sec-t{font-size:clamp(1.6rem,5vw,2.2rem);letter-spacing:-.055em;color:var(--FD);margin-bottom:8px}
-.sec-p{color:var(--MU);line-height:1.72;font-weight:700;margin-bottom:18px}
-.bx{padding:18px;border-radius:var(--RR);background:#fff4d8;border:2px solid rgba(194,137,28,.6);margin-bottom:22px}
-.bx strong{display:block;font-size:clamp(1.15rem,4.5vw,1.4rem);font-weight:950;letter-spacing:-.04em;margin-bottom:10px}
-.bx ul{margin:0;padding-left:20px;display:grid;gap:6px}
-.bx li{font-size:1rem;line-height:1.55;font-weight:850}
-
-/* 진행 */
-.prog-row{display:flex;justify-content:space-between;align-items:center;color:var(--F);font-weight:950;font-size:.95rem;margin-bottom:10px}
-.prog-track{height:8px;background:#d9d5c7;border-radius:999px;overflow:hidden;margin-bottom:18px}
-.prog-fill{height:100%;background:linear-gradient(90deg,#f6dc86,#b9862f);border-radius:999px;transition:width .22s}
-
-/* 설문 카드 */
-.q-card{background:#fffaf0;border:1px solid var(--LN);border-radius:var(--RR);padding:clamp(16px,4vw,26px)}
-.q-title{display:block;padding:15px 17px;border-radius:20px;background:#fff;border:2px solid rgba(14,53,41,.22);color:var(--FD);font-size:clamp(1.2rem,5vw,1.6rem);line-height:1.35;font-weight:950;letter-spacing:-.045em;margin-bottom:10px;box-shadow:0 8px 22px rgba(14,53,41,.07)}
-.q-help{color:#536058;font-weight:750;line-height:1.7;font-size:.96rem;margin-bottom:16px}
-.asset-grp{margin-top:14px;padding:15px;border-radius:20px;background:#fff7e5;border:1px solid rgba(14,53,41,.14)}
-.asset-grp-t{display:inline-flex;align-items:center;padding:6px 13px;border-radius:999px;background:var(--FD);color:#fff8dc;font-weight:950;font-size:clamp(.98rem,4vw,1.18rem);letter-spacing:-.03em;margin-bottom:10px}
-.asset-grp-q{color:var(--FD);font-size:clamp(1rem,4vw,1.22rem);font-weight:950;line-height:1.45;margin-bottom:10px}
+.pill{border:1px solid rgba(215,173,85,.5);color:var(--GL);padding:8px 13px;border-radius:999px;font-weight:900;font-size:.88rem}
+.bg{border:0;background:linear-gradient(135deg,#f5dc8a,#c99938);color:#1c221c;border-radius:18px;padding:15px 22px;font-weight:950;box-shadow:0 12px 28px rgba(0,0,0,.22);cursor:pointer;min-height:54px;width:100%;font-size:1.05rem;touch-action:manipulation}
+.bd{border:0;background:var(--FD);color:#fff8dc;border-radius:18px;padding:15px 22px;font-weight:950;cursor:pointer;min-height:54px;width:100%;font-size:1.05rem;touch-action:manipulation;box-shadow:0 12px 28px rgba(6,37,29,.22)}
+.bw{border:1px solid rgba(14,53,41,.2);background:#fff;color:var(--MU);border-radius:18px;padding:14px 18px;font-weight:900;cursor:pointer;min-height:54px;width:100%;font-size:1.05rem;touch-action:manipulation}
+.main{background:#fffdf6;min-height:100svh;padding:28px 0 0}
+.card{background:#fffaf0;border:1px solid var(--LN);border-radius:20px;padding:clamp(16px,4vw,26px)}
+.pr{display:flex;justify-content:space-between;align-items:center;color:var(--F);font-weight:950;font-size:.95rem;margin-bottom:10px}
+.pt{height:8px;background:#d9d5c7;border-radius:999px;overflow:hidden;margin-bottom:18px}
+.pf{height:100%;background:linear-gradient(90deg,#f6dc86,#b9862f);border-radius:999px;transition:width .22s}
+.qt{display:block;padding:15px 17px;border-radius:20px;background:#fff;border:2px solid rgba(14,53,41,.22);color:var(--FD);font-size:clamp(1.2rem,5vw,1.6rem);line-height:1.35;font-weight:950;letter-spacing:-.045em;margin-bottom:10px;box-shadow:0 8px 22px rgba(14,53,41,.07)}
+.qh{color:#536058;font-weight:750;line-height:1.7;font-size:.96rem;margin-bottom:16px}
+.ag{margin-top:14px;padding:15px;border-radius:20px;background:#fff7e5;border:1px solid rgba(14,53,41,.14)}
+.agt{display:inline-flex;padding:6px 13px;border-radius:999px;background:var(--FD);color:#fff8dc;font-weight:950;font-size:clamp(.98rem,4vw,1.18rem);margin-bottom:10px}
+.agq{color:var(--FD);font-size:clamp(1rem,4vw,1.22rem);font-weight:950;line-height:1.45;margin-bottom:10px}
 .opts{display:flex;flex-direction:column;gap:9px}
 .opt{display:flex;flex-direction:column;align-items:flex-start;gap:3px;width:100%;min-height:56px;padding:14px 16px;border:2px solid rgba(14,53,41,.2);border-radius:16px;background:#fff;color:var(--FD);font-size:1rem;font-weight:800;text-align:left;line-height:1.4;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-select:none}
-.opt.sel{background:var(--FD);color:#fff8dc;border-color:var(--G)}
-.opt-chk{display:none;font-size:.8rem;font-weight:800;color:var(--G);line-height:1}
-.opt.sel .opt-chk{display:block}
-.empty-note{color:#536058;font-weight:700;line-height:1.6;font-size:.95rem;padding:8px 0}
-.s-nav{display:flex;flex-direction:column;gap:9px;margin-top:18px;padding-bottom:calc(100px + env(safe-area-inset-bottom,0))}
-
-/* 결과 */
-.r-score{padding:22px;border-radius:var(--RR);background:#fff7e7;border:2px solid rgba(215,173,85,.45);margin-bottom:16px}
-.r-hl{font-size:clamp(1.55rem,5.5vw,2.1rem);line-height:1.2;color:var(--FD);font-weight:950;letter-spacing:-.05em;margin-bottom:10px}
-.r-badge{display:inline-flex;align-items:center;padding:6px 13px;border-radius:999px;font-weight:950;font-size:.96rem;margin-bottom:14px}
-.lv-c{background:#fef3c7;color:#92400e;border:1px solid rgba(146,64,14,.25)}
-.lv-b{background:#ecfdf5;color:#065f46;border:1px solid rgba(6,95,70,.2)}
-.lv-a{background:#f0f9ff;color:#0c4a6e;border:1px solid rgba(12,74,110,.18)}
-.r-sigs{display:grid;gap:9px}
-.r-sig{background:#fff;border:1px solid rgba(14,53,41,.12);border-radius:17px;padding:13px;color:var(--FD);line-height:1.55;font-weight:750;font-size:.97rem}
-.r-score-note{display:inline-flex;margin-top:14px;padding:6px 12px;border-radius:999px;background:rgba(14,53,41,.07);color:rgba(14,53,41,.65);font-size:.88rem;font-weight:850}
-.r-sec{margin-bottom:14px;padding:18px;border-radius:var(--RR);background:#f8fafc;border:1px solid #dbe3ee}
-.r-sec h4{font-size:1.05rem;font-weight:900;margin-bottom:10px;color:var(--FD)}
-.r-sec ul{margin:0;padding-left:18px;display:grid;gap:6px}
-.r-sec li{line-height:1.6;font-weight:700;font-size:.97rem}
-
-/* 유료 CTA */
-.paid-card{padding:22px;border-radius:var(--RR);background:linear-gradient(180deg,#fff8dc,#fffdf2);border:2px solid rgba(184,134,11,.32);box-shadow:0 18px 40px rgba(6,37,29,.12);margin-bottom:16px}
-.paid-ey{display:inline-flex;align-items:center;padding:6px 12px;border-radius:999px;background:var(--FD);color:#d4af37;font-size:.82rem;font-weight:950;margin-bottom:12px}
-.paid-card h3{font-size:clamp(1.2rem,4.5vw,1.55rem);line-height:1.25;color:var(--FD);letter-spacing:-.04em;font-weight:950;margin-bottom:8px}
-.paid-lead{color:rgba(6,37,29,.8);font-size:.97rem;line-height:1.65;font-weight:800;margin-bottom:14px}
-.paid-chks{display:grid;gap:7px;margin-bottom:16px}
-.paid-chk{display:flex;align-items:flex-start;gap:8px;font-size:.96rem;font-weight:850;color:var(--FD);line-height:1.5}
-.paid-chk::before{content:"✓";color:var(--G);font-weight:900;flex-shrink:0;margin-top:1px}
-
-/* 폼 */
-.form-card{padding:22px;border-radius:var(--RR);background:var(--CR);border:2px solid rgba(215,173,85,.45);margin-bottom:16px}
-.form-card h3{font-size:clamp(1.2rem,4.5vw,1.6rem);letter-spacing:-.04em;color:var(--FD);margin-bottom:8px}
-.form-card p{color:#49564f;line-height:1.7;font-weight:750;margin-bottom:16px;font-size:.97rem}
-.form-g{display:grid;gap:11px}
-.field label{display:block;margin-bottom:6px;color:var(--FD);font-weight:950;font-size:.97rem}
-.field input,.field textarea{width:100%;border:2px solid rgba(14,53,41,.2);border-radius:15px;min-height:52px;padding:12px 14px;color:var(--FD);background:#fff;font-weight:750}
-.field textarea{min-height:90px;resize:vertical;line-height:1.55}
-.consent{display:flex;align-items:flex-start;gap:10px;padding:14px;border:1px solid #cbd5e1;border-radius:15px;background:#fff;color:#1f2937;font-size:1rem;line-height:1.55;font-weight:700}
-.consent input[type="checkbox"]{width:22px;height:22px;margin-top:2px;flex-shrink:0;accent-color:var(--FD)}
-.form-note{padding:15px;border-radius:17px;background:#f7faf7;border:1px solid rgba(31,77,58,.18);text-align:center;margin-bottom:4px}
-.form-note strong{display:block;font-size:1rem;font-weight:900;color:#1f4d3a;margin-bottom:6px}
-.form-note p{margin:0;color:#334155;line-height:1.65;font-size:.97rem;font-weight:700}
-.status{min-height:22px;margin-top:10px;font-weight:950;line-height:1.55;font-size:.97rem}
-.status.ok{padding:13px 15px;border-radius:17px;background:#fff8dc;border:2px solid rgba(184,134,11,.34);color:var(--FD)}
-.status.err{padding:13px 15px;border-radius:17px;background:#fff3f0;border:2px solid rgba(160,45,25,.28);color:#5f1f14}
-
-/* 유료 확인 패널 */
-.paid-conf{padding:22px;border-radius:var(--RR);background:linear-gradient(180deg,#f8fdf7,#fffaea);border:1px solid rgba(25,58,47,.22);box-shadow:0 14px 34px rgba(25,58,47,.11);margin-bottom:16px}
-.paid-conf-ey{display:inline-flex;padding:5px 11px;border-radius:999px;background:rgba(25,58,47,.94);color:#fff8e7;font-size:.78rem;font-weight:900;margin-bottom:10px}
-.paid-conf h3{font-size:clamp(1.15rem,4vw,1.45rem);line-height:1.32;color:#193a2f;letter-spacing:-.045em;margin-bottom:8px}
-.paid-conf-lead{color:#4f3d22;font-size:.9rem;line-height:1.62;margin-bottom:14px}
-.paid-conf-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
-.paid-conf-item{padding:11px 12px;border-radius:15px;background:rgba(255,255,255,.78);border:1px solid rgba(197,151,73,.18)}
-.paid-conf-item strong{display:block;color:#193a2f;font-size:.85rem;line-height:1.35;margin-bottom:3px}
-.paid-conf-item span{display:block;color:#5f4b2b;font-size:.8rem;line-height:1.5}
-.paid-conf-note{padding:11px 12px;border-radius:14px;background:rgba(25,58,47,.08);color:#3f3522;font-size:.8rem;line-height:1.56}
-
-/* 토스트·홈버튼 */
-.toast{position:fixed;left:50%;bottom:calc(22px + env(safe-area-inset-bottom,0));transform:translateX(-50%);z-index:10000;width:min(92vw,540px);padding:15px 18px;border-radius:20px;background:#fff8dc;border:2px solid rgba(184,134,11,.42);color:var(--FD);font-weight:950;font-size:clamp(1rem,3.6vw,1.1rem);line-height:1.55;text-align:center;box-shadow:0 18px 44px rgba(0,0,0,.22);pointer-events:none}
-.toast.err{background:#fff3f0;border-color:rgba(160,45,25,.34);color:#5f1f14}
-.home-btn{position:fixed;top:calc(12px + env(safe-area-inset-top,0));right:12px;z-index:9999;border:0;background:var(--FD);color:#fff8dc;border-radius:999px;padding:10px 15px;font-weight:900;font-size:.9rem;cursor:pointer;box-shadow:0 10px 24px rgba(0,0,0,.18);touch-action:manipulation}
-
-/* 푸터 */
+.opt.on{background:var(--FD);color:#fff8dc;border-color:var(--G)}
+.ck{display:none;font-size:.8rem;font-weight:800;color:var(--G)}
+.opt.on .ck{display:block}
+.en{color:#536058;font-weight:700;line-height:1.6;font-size:.95rem;padding:8px 0}
+.snav{display:flex;flex-direction:column;gap:9px;margin-top:18px;padding-bottom:120px}
+.rs{padding:22px;border-radius:20px;background:#fff7e7;border:2px solid rgba(215,173,85,.45);margin-bottom:16px}
+.rh{font-size:clamp(1.55rem,5.5vw,2.1rem);line-height:1.2;color:var(--FD);font-weight:950;letter-spacing:-.05em;margin-bottom:10px}
+.rb{display:inline-flex;padding:6px 13px;border-radius:999px;font-weight:950;font-size:.96rem;margin-bottom:14px}
+.lc{background:#fef3c7;color:#92400e;border:1px solid rgba(146,64,14,.25)}
+.lb{background:#ecfdf5;color:#065f46;border:1px solid rgba(6,95,70,.2)}
+.la{background:#f0f9ff;color:#0c4a6e;border:1px solid rgba(12,74,110,.18)}
+.rsigs{display:grid;gap:9px}
+.rsig{background:#fff;border:1px solid rgba(14,53,41,.12);border-radius:17px;padding:13px;color:var(--FD);line-height:1.55;font-weight:750;font-size:.97rem}
+.rn{display:inline-flex;margin-top:14px;padding:6px 12px;border-radius:999px;background:rgba(14,53,41,.07);color:rgba(14,53,41,.65);font-size:.88rem;font-weight:850}
+.rsec{margin-bottom:14px;padding:18px;border-radius:20px;background:#f8fafc;border:1px solid #dbe3ee}
+.rsec h4{font-size:1.05rem;font-weight:900;margin-bottom:10px;color:var(--FD)}
+.rsec ul{margin:0;padding-left:18px;display:grid;gap:6px}
+.rsec li{line-height:1.6;font-weight:700;font-size:.97rem}
+.pc{padding:22px;border-radius:20px;background:linear-gradient(180deg,#fff8dc,#fffdf2);border:2px solid rgba(184,134,11,.32);box-shadow:0 18px 40px rgba(6,37,29,.12);margin-bottom:16px}
+.pe{display:inline-flex;padding:6px 12px;border-radius:999px;background:var(--FD);color:#d4af37;font-size:.82rem;font-weight:950;margin-bottom:12px}
+.pc h3{font-size:clamp(1.2rem,4.5vw,1.55rem);line-height:1.25;color:var(--FD);letter-spacing:-.04em;font-weight:950;margin-bottom:8px}
+.pl{color:rgba(6,37,29,.8);font-size:.97rem;line-height:1.65;font-weight:800;margin-bottom:14px}
+.pcs{display:grid;gap:7px;margin-bottom:16px}
+.pci{display:flex;align-items:flex-start;gap:8px;font-size:.96rem;font-weight:850;color:var(--FD);line-height:1.5}
+.pci::before{content:"✓";color:var(--G);font-weight:900;flex-shrink:0;margin-top:1px}
+.fc{padding:22px;border-radius:20px;background:var(--CR);border:2px solid rgba(215,173,85,.45);margin-bottom:16px}
+.fc h3{font-size:clamp(1.2rem,4.5vw,1.6rem);letter-spacing:-.04em;color:var(--FD);margin-bottom:8px}
+.fc p{color:#49564f;line-height:1.7;font-weight:750;margin-bottom:16px;font-size:.97rem}
+.fg{display:grid;gap:11px}
+.fl label{display:block;margin-bottom:6px;color:var(--FD);font-weight:950;font-size:.97rem}
+.fl input,.fl textarea{width:100%;border:2px solid rgba(14,53,41,.2);border-radius:15px;min-height:52px;padding:12px 14px;color:var(--FD);background:#fff;font-weight:750}
+.fl textarea{min-height:90px;resize:vertical;line-height:1.55}
+.con{display:flex;align-items:flex-start;gap:10px;padding:14px;border:1px solid #cbd5e1;border-radius:15px;background:#fff;color:#1f2937;font-size:1rem;line-height:1.55;font-weight:700}
+.con input{width:22px;height:22px;margin-top:2px;flex-shrink:0;accent-color:var(--FD)}
+.fn{padding:15px;border-radius:17px;background:#f7faf7;border:1px solid rgba(31,77,58,.18);text-align:center}
+.fn strong{display:block;font-size:1rem;font-weight:900;color:#1f4d3a;margin-bottom:6px}
+.fn p{margin:0;color:#334155;line-height:1.65;font-size:.97rem;font-weight:700}
+.st{min-height:22px;margin-top:10px;font-weight:950;line-height:1.55;font-size:.97rem}
+.st.ok{padding:13px 15px;border-radius:17px;background:#fff8dc;border:2px solid rgba(184,134,11,.34);color:var(--FD)}
+.st.er{padding:13px 15px;border-radius:17px;background:#fff3f0;border:2px solid rgba(160,45,25,.28);color:#5f1f14}
+.toast{position:fixed;left:50%;bottom:calc(22px + env(safe-area-inset-bottom,0));transform:translateX(-50%);z-index:9999;width:min(92vw,540px);padding:15px 18px;border-radius:20px;background:#fff8dc;border:2px solid rgba(184,134,11,.42);color:var(--FD);font-weight:950;font-size:clamp(1rem,3.6vw,1.1rem);line-height:1.55;text-align:center;box-shadow:0 18px 44px rgba(0,0,0,.22);pointer-events:none}
+.hb{position:fixed;top:calc(12px + env(safe-area-inset-top,0));right:12px;z-index:9998;border:0;background:var(--FD);color:#fff8dc;border-radius:999px;padding:10px 15px;font-weight:900;font-size:.9rem;cursor:pointer;box-shadow:0 10px 24px rgba(0,0,0,.18);touch-action:manipulation}
 footer{background:var(--FD);color:rgba(255,253,245,.62);padding:28px 0 40px;line-height:1.7;font-weight:650;font-size:.92rem}
-
-@media(max-width:640px){.paid-conf-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
-<div id="toast" class="toast hi" role="status" aria-live="polite"></div>
-<button id="homeBtn" class="home-btn hi" type="button">처음으로</button>
-
+<div id="T" class="toast dn"></div>
+<button id="HB" class="hb dn" type="button">처음으로</button>
 <header class="hero">
-  <div class="sh">
-    <nav class="nav">
-      <div class="brand"><div class="brand-mark">安</div><span>안심상속</span></div>
-      <div style="color:var(--GL);font-weight:800;font-size:.88rem;text-align:right">상속 상황 정리 · 다음 단계 확인</div>
-    </nav>
-    <div class="eyebrow">안심상속 · 2분 진단</div>
-    <h1>내 재산,<br>내 뜻대로<br>남길 수 있습니다</h1>
-    <p>준비한 사람만 가능합니다.<br>지금 내 상속 상황을 먼저 확인하세요.</p>
-    <div class="pills"><span class="pill">혼자 조용히</span><span class="pill">본인만 확인</span><span class="pill">비공개</span></div>
-    <button class="btn-g" type="button" id="heroBtn">2분 무료 진단 시작하기</button>
-  </div>
-</header>
-
-<div class="diag" id="diagWrap">
-  <div class="sh diag-in">
-    <div id="intro">
-      <h2 class="sec-t">무료 상속 위험도 진단</h2>
-      <p class="sec-p">준비하지 않으면 법이 대신 결정합니다. 지금 내 상황을 먼저 파악하세요.</p>
-      <div class="bx"><strong>2분 후 확인되는 것</strong><ul><li>내 뜻대로 상속이 가능한지 여부</li><li>지금 당장 해결해야 할 위험 항목</li><li>상속 설계에서 놓친 부분</li></ul></div>
-      <button class="btn-g" type="button" id="introBtn">진단 시작하기</button>
-    </div>
-    <div id="survey" class="hi">
-      <div class="prog-row"><span id="stepTxt"></span><span id="timeTxt">약 2분 소요</span></div>
-      <div class="prog-track"><div class="prog-fill" id="progFill"></div></div>
-      <div class="q-card">
-        <div id="qTitle"></div>
-        <div id="qHelp"></div>
-        <div id="qOpts"></div>
-      </div>
-      <div class="s-nav">
-        <button class="btn-g" type="button" id="nextBtn"></button>
-        <button class="btn-w" type="button" id="prevBtn">이전으로</button>
-      </div>
-    </div>
-    <div id="result" class="hi"></div>
-  </div>
+<div class="w">
+<nav class="nav">
+<div class="brand"><div class="bm">安</div><span>안심상속</span></div>
+<div style="color:var(--GL);font-weight:800;font-size:.88rem;text-align:right">상속 상황 정리 · 다음 단계 확인</div>
+</nav>
+<div class="ey">안심상속 · 2분 진단</div>
+<h1>내 재산,<br>내 뜻대로<br>남길 수 있습니다</h1>
+<p>준비한 사람만 가능합니다.<br>지금 내 상속 상황을 먼저 확인하세요.</p>
+<div class="pills"><span class="pill">혼자 조용히</span><span class="pill">본인만 확인</span><span class="pill">비공개</span></div>
+<button class="bg" type="button" id="HeroBtn">2분 무료 진단 시작하기</button>
 </div>
-
-<footer><div class="sh"><strong>안심상속</strong><br>내 재산을 내 뜻대로 남기기 위한 상속 준비 서비스입니다.<br>본 서비스는 정보 제공 목적이며, 법률·세무 조언을 대체하지 않습니다.</div></footer>
-
+</header>
+<div class="main w">
+<div id="Intro">
+<h2 style="font-size:clamp(1.6rem,5vw,2.2rem);letter-spacing:-.055em;color:var(--FD);margin-bottom:8px">무료 상속 위험도 진단</h2>
+<p style="color:var(--MU);line-height:1.72;font-weight:700;margin-bottom:18px">준비하지 않으면 법이 대신 결정합니다. 지금 내 상황을 먼저 파악하세요.</p>
+<div style="padding:18px;border-radius:20px;background:#fff4d8;border:2px solid rgba(194,137,28,.6);margin-bottom:22px">
+<strong style="display:block;font-size:clamp(1.15rem,4.5vw,1.4rem);font-weight:950;letter-spacing:-.04em;margin-bottom:10px">2분 후 확인되는 것</strong>
+<ul style="margin:0;padding-left:20px;display:grid;gap:6px"><li style="font-size:1rem;line-height:1.55;font-weight:850">내 뜻대로 상속이 가능한지 여부</li><li style="font-size:1rem;line-height:1.55;font-weight:850">지금 당장 해결해야 할 위험 항목</li><li style="font-size:1rem;line-height:1.55;font-weight:850">상속 설계에서 놓친 부분</li></ul>
+</div>
+<button class="bg" type="button" id="IntroBtn">진단 시작하기</button>
+</div>
+<div id="Survey" class="dn">
+<div class="pr"><span id="StepTxt"></span><span id="TimeTxt">약 2분 소요</span></div>
+<div class="pt"><div class="pf" id="PFill"></div></div>
+<div class="card"><div id="QTitle"></div><div id="QHelp"></div><div id="QOpts"></div></div>
+<div class="snav"><button class="bg" type="button" id="NextBtn"></button><button class="bw" type="button" id="PrevBtn">이전으로</button></div>
+</div>
+<div id="Result" class="dn"></div>
+</div>
+<footer><div class="w"><strong>안심상속</strong><br>내 재산을 내 뜻대로 남기기 위한 상속 준비 서비스입니다.<br>본 서비스는 정보 제공 목적이며, 법률·세무 조언을 대체하지 않습니다.</div></footer>
 <script>
-(function(){
-'use strict';
-
-/* ── 설문 데이터 ── */
 var Q=[
-  {type:'single',key:'family',title:'현재 상속과 관련된 가족 상황은 어떤가요?',help:'가장 가까운 상황을 선택해주세요.',
-   opts:[{l:'배우자와 자녀가 있음',s:8},{l:'재혼가정 또는 전혼 자녀가 있음',s:22},{l:'자녀가 없거나 형제자매와 관련될 수 있음',s:18},{l:'정확히 모르겠음',s:12}]},
-  {type:'single',key:'will',title:'유언장이나 재산 분배 계획이 준비되어 있나요?',help:'문서 여부보다 현재 정리 수준을 기준으로 답해주세요.',
-   opts:[{l:'이미 정리해둔 내용이 있음',s:6},{l:'생각은 있지만 문서로 정리하지 않음',s:14},{l:'아직 정리하지 못함',s:22},{l:'정확히 모르겠음',s:12}]},
-  {type:'multi',key:'assetPresence',title:'보유한 부동산이 있나요?',help:'해당되는 항목을 선택해주세요. 여러 개 동시 선택 가능합니다.',excl:['none','unknown'],
-   opts:[{v:'house',l:'주택',s:0},{v:'land',l:'토지',s:0},{v:'incomeRealEstate',l:'수익형 부동산(상가·오피스텔·펜션)',s:0},{v:'factory',l:'공장·창고',s:0},{v:'otherRealEstate',l:'기타 부동산',s:0},{v:'none',l:'해당 없음',s:0},{v:'unknown',l:'정확히 모르겠음',s:8}]},
-  {type:'counts',key:'assetCounts',title:'선택한 부동산은 얼마나 보유하고 있나요?',help:'앞에서 있다고 선택한 항목만 수량을 확인합니다.',presKey:'assetPresence',
-   assets:[{k:'house',t:'주택',q:'주택은 몇 채인가요?',lb:['1채','2채','3채 이상'],sc:[7,13,18]},{k:'land',t:'토지',q:'토지는 몇 곳에 있나요?',lb:['1곳','2곳','3곳 이상'],sc:[8,14,20]},{k:'incomeRealEstate',t:'수익형 부동산',q:'상가·오피스텔·펜션은 몇 개인가요?',lb:['1개','2개','3개 이상'],sc:[8,14,20]},{k:'factory',t:'공장·창고',q:'공장·창고는 몇 곳인가요?',lb:['1곳','2곳','3곳 이상'],sc:[8,14,20]},{k:'otherRealEstate',t:'기타 부동산',q:'기타 부동산은 몇 건인가요?',lb:['1건','2건','3건 이상'],sc:[6,11,16]}]},
-  {type:'single',key:'gift',title:'과거에 특정 가족에게 더 많이 준 재산이 있나요?',help:'증여, 명의 이전, 큰 금액 지원 등을 떠올려 답해주세요.',
-   opts:[{l:'없음',s:4},{l:'일부 있음',s:16},{l:'상당히 있음',s:26},{l:'정확히 모르겠음',s:14}]},
-  {type:'single',key:'business',title:'가족 사업, 지분, 임대수익처럼 나누기 복잡한 재산이 있나요?',help:'사업체, 법인 지분, 공동명의, 임대수익 등을 포함해 생각해주세요.',
-   opts:[{l:'없음',s:3},{l:'조금 있음',s:12},{l:'중요한 비중을 차지함',s:24},{l:'정확히 모르겠음',s:12}]},
-  {type:'multi',key:'overseas',title:'해외 국적·해외 거주·해외 재산 요소가 있나요?',help:'여러 개 동시 선택 가능합니다. 해당 없음과 모르겠음은 단독 선택됩니다.',excl:['none','unknown'],
-   opts:[{v:'self_abroad',l:'본인이 해외 거주 중',s:16},{v:'family_abroad',l:'배우자 또는 자녀가 해외 거주 중',s:14},{v:'family_foreign_nationality',l:'배우자 또는 자녀가 외국 국적',s:16},{v:'dual_nationality',l:'본인 또는 가족이 복수국적',s:18},{v:'overseas_asset',l:'해외 부동산 또는 해외 금융자산',s:18},{v:'none',l:'해당 없음',s:0},{v:'unknown',l:'정확히 모르겠음',s:10}]},
-  {type:'single',key:'conflict',title:'가족 사이에 이미 의견 차이나 갈등 조짐이 있나요?',help:'겉으로 드러난 다툼뿐 아니라 말하기 어려운 분위기도 포함해 생각해주세요.',
-   opts:[{l:'없음',s:4},{l:'조금 있음',s:14},{l:'이미 뚜렷함',s:28},{l:'정확히 모르겠음',s:12}]},
-  {type:'single',key:'documents',title:'재산 목록, 가족관계, 채무 등 기본 자료가 정리되어 있나요?',help:'완벽하지 않아도 한곳에 모아둔 자료가 있는지 기준으로 답해주세요.',
-   opts:[{l:'대체로 정리되어 있음',s:4},{l:'일부만 정리되어 있음',s:12},{l:'거의 정리되어 있지 않음',s:22},{l:'정확히 모르겠음',s:12}]}
+  {t:'single',k:'family',q:'현재 상속과 관련된 가족 상황은 어떤가요?',h:'가장 가까운 상황을 선택해주세요.',o:[{l:'배우자와 자녀가 있음',s:8},{l:'재혼가정 또는 전혼 자녀가 있음',s:22},{l:'자녀가 없거나 형제자매와 관련될 수 있음',s:18},{l:'정확히 모르겠음',s:12}]},
+  {t:'single',k:'will',q:'유언장이나 재산 분배 계획이 준비되어 있나요?',h:'문서 여부보다 현재 정리 수준을 기준으로 답해주세요.',o:[{l:'이미 정리해둔 내용이 있음',s:6},{l:'생각은 있지만 문서로 정리하지 않음',s:14},{l:'아직 정리하지 못함',s:22},{l:'정확히 모르겠음',s:12}]},
+  {t:'multi',k:'assetPresence',q:'보유한 부동산이 있나요?',h:'여러 개 동시 선택 가능합니다.',ex:['none','unknown'],o:[{v:'house',l:'주택',s:0},{v:'land',l:'토지',s:0},{v:'incomeRealEstate',l:'수익형 부동산(상가·오피스텔·펜션)',s:0},{v:'factory',l:'공장·창고',s:0},{v:'otherRealEstate',l:'기타 부동산',s:0},{v:'none',l:'해당 없음',s:0},{v:'unknown',l:'정확히 모르겠음',s:8}]},
+  {t:'counts',k:'assetCounts',q:'선택한 부동산은 얼마나 보유하고 있나요?',h:'앞에서 있다고 선택한 항목만 수량을 확인합니다.',pk:'assetPresence',a:[{k:'house',t:'주택',q:'주택은 몇 채인가요?',l:['1채','2채','3채 이상'],s:[7,13,18]},{k:'land',t:'토지',q:'토지는 몇 곳에 있나요?',l:['1곳','2곳','3곳 이상'],s:[8,14,20]},{k:'incomeRealEstate',t:'수익형 부동산',q:'상가·오피스텔·펜션은 몇 개인가요?',l:['1개','2개','3개 이상'],s:[8,14,20]},{k:'factory',t:'공장·창고',q:'공장·창고는 몇 곳인가요?',l:['1곳','2곳','3곳 이상'],s:[8,14,20]},{k:'otherRealEstate',t:'기타 부동산',q:'기타 부동산은 몇 건인가요?',l:['1건','2건','3건 이상'],s:[6,11,16]}]},
+  {t:'single',k:'gift',q:'과거에 특정 가족에게 더 많이 준 재산이 있나요?',h:'증여, 명의 이전, 큰 금액 지원 등을 떠올려 답해주세요.',o:[{l:'없음',s:4},{l:'일부 있음',s:16},{l:'상당히 있음',s:26},{l:'정확히 모르겠음',s:14}]},
+  {t:'single',k:'business',q:'가족 사업, 지분, 임대수익처럼 나누기 복잡한 재산이 있나요?',h:'사업체, 법인 지분, 공동명의, 임대수익 등을 포함해 생각해주세요.',o:[{l:'없음',s:3},{l:'조금 있음',s:12},{l:'중요한 비중을 차지함',s:24},{l:'정확히 모르겠음',s:12}]},
+  {t:'multi',k:'overseas',q:'해외 국적·해외 거주·해외 재산 요소가 있나요?',h:'여러 개 동시 선택 가능합니다.',ex:['none','unknown'],o:[{v:'self_abroad',l:'본인이 해외 거주 중',s:16},{v:'family_abroad',l:'배우자 또는 자녀가 해외 거주 중',s:14},{v:'family_foreign_nationality',l:'배우자 또는 자녀가 외국 국적',s:16},{v:'dual_nationality',l:'본인 또는 가족이 복수국적',s:18},{v:'overseas_asset',l:'해외 부동산 또는 해외 금융자산',s:18},{v:'none',l:'해당 없음',s:0},{v:'unknown',l:'정확히 모르겠음',s:10}]},
+  {t:'single',k:'conflict',q:'가족 사이에 이미 의견 차이나 갈등 조짐이 있나요?',h:'겉으로 드러난 다툼뿐 아니라 말하기 어려운 분위기도 포함해 생각해주세요.',o:[{l:'없음',s:4},{l:'조금 있음',s:14},{l:'이미 뚜렷함',s:28},{l:'정확히 모르겠음',s:12}]},
+  {t:'single',k:'documents',q:'재산 목록, 가족관계, 채무 등 기본 자료가 정리되어 있나요?',h:'완벽하지 않아도 한곳에 모아둔 자료가 있는지 기준으로 답해주세요.',o:[{l:'대체로 정리되어 있음',s:4},{l:'일부만 정리되어 있음',s:12},{l:'거의 정리되어 있지 않음',s:22},{l:'정확히 모르겠음',s:12}]}
 ];
 
-/* ── 상태 ── */
-var S={step:0,ans:{}};
+var step=0,ans={};
 
-/* ── DOM ── */
-var $=function(id){return document.getElementById(id)};
-var toast=$('toast'),homeBtn=$('homeBtn');
-var intro=$('intro'),survey=$('survey'),result=$('result');
-var stepTxt=$('stepTxt'),timeTxt=$('timeTxt'),progFill=$('progFill');
-var qTitle=$('qTitle'),qHelp=$('qHelp'),qOpts=$('qOpts');
-var nextBtn=$('nextBtn'),prevBtn=$('prevBtn');
+function ge(id){return document.getElementById(id)}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
 
-/* ── 유틸 ── */
-function e(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
-var tT;
-function toast_(msg,type){toast.textContent=msg;toast.className='toast'+(type==='err'?' err':'');clearTimeout(tT);tT=setTimeout(function(){toast.className='toast hi'},6000)}
+var toastEl=ge('T'),toastTm;
+function toast(msg){toastEl.textContent=msg;toastEl.classList.remove('dn');clearTimeout(toastTm);toastTm=setTimeout(function(){toastEl.classList.add('dn')},4000)}
 
-/* ── 점수 ── */
-function score(){
+function calcScore(){
   return Math.min(100,Q.reduce(function(sum,q){
-    var a=S.ans[q.key];
-    if(!a)return sum;
-    if(q.type==='single'){var o=q.opts.find(function(x){return x.l===a});return sum+(o?o.s:0)}
-    if(q.type==='multi'){if(!Array.isArray(a))return sum;return sum+a.reduce(function(s2,v){var o=q.opts.find(function(x){return x.v===v});return s2+(o?o.s:0)},0)}
-    if(q.type==='counts'){
-      var pres=Array.isArray(S.ans[q.presKey])?S.ans[q.presKey].filter(function(k){return k!=='none'&&k!=='unknown'}):[];
-      return sum+q.assets.filter(function(as){return pres.includes(as.k)}).reduce(function(s3,as){var idx=as.lb.indexOf(a[as.k]);return s3+(idx>=0?as.sc[idx]:0)},0)}
+    var a=ans[q.k];if(!a)return sum;
+    if(q.t==='single'){var o=q.o.find(function(x){return x.l===a});return sum+(o?o.s:0)}
+    if(q.t==='multi'){if(!Array.isArray(a))return sum;return sum+a.reduce(function(s2,v){var o=q.o.find(function(x){return x.v===v});return s2+(o?o.s:0)},0)}
+    if(q.t==='counts'){
+      var pres=Array.isArray(ans[q.pk])?ans[q.pk].filter(function(k){return k!=='none'&&k!=='unknown'}):[];
+      return sum+q.a.filter(function(x){return pres.indexOf(x.k)>=0}).reduce(function(s3,x){var idx=x.l.indexOf(a[x.k]);return s3+(idx>=0?x.s[idx]:0)},0)}
     return sum;
   },0));
 }
-window.getTotalScore=score;
+window.getTotalScore=calcScore;
 
-/* ── 렌더 ── */
 function renderQ(){
-  var q=Q[S.step],tot=Q.length;
-  stepTxt.textContent=(S.step+1)+' / '+tot;
-  timeTxt.textContent=S.step>=tot-1?'마지막 질문':'약 2분 소요';
-  progFill.style.width=((S.step+1)/tot*100)+'%';
-  nextBtn.textContent=S.step>=tot-1?'결과 확인하기':'다음';
-  prevBtn.disabled=S.step===0;
-  prevBtn.style.opacity=S.step===0?'0.45':'1';
-  qTitle.innerHTML='<span class="q-title">'+e(q.title)+'</span>';
-  qHelp.innerHTML='<p class="q-help">'+e(q.help||'')+'</p>';
-  qOpts.innerHTML=buildOpts(q);
-  qOpts.querySelectorAll('.opt').forEach(function(b){b.addEventListener('click',function(){click(b)},false)});
+  var q=Q[step],tot=Q.length;
+  ge('StepTxt').textContent=(step+1)+' / '+tot;
+  ge('TimeTxt').textContent=step>=tot-1?'마지막 질문':'약 2분 소요';
+  ge('PFill').style.width=((step+1)/tot*100)+'%';
+  ge('NextBtn').textContent=step>=tot-1?'결과 확인하기':'다음';
+  ge('PrevBtn').disabled=step===0;ge('PrevBtn').style.opacity=step===0?'0.45':'1';
+  ge('QTitle').innerHTML='<span class="qt">'+esc(q.q)+'</span>';
+  ge('QHelp').innerHTML='<p class="qh">'+esc(q.h||'')+'</p>';
+  ge('QOpts').innerHTML=buildOpts(q);
+  ge('QOpts').querySelectorAll('.opt').forEach(function(b){b.onclick=function(){onOpt(b)}});
 }
 
 function buildOpts(q){
-  if(q.type==='single'){
-    var a=S.ans[q.key];
-    return '<div class="opts">'+q.opts.map(function(o){
-      return '<button type="button" class="opt'+(a===o.l?' sel':'')+'" data-v="'+e(o.l)+'"><span>'+e(o.l)+'</span><span class="opt-chk">✓ 선택됨</span></button>';
-    }).join('')+'</div>';
+  if(q.t==='single'){
+    var a=ans[q.k];
+    return '<div class="opts">'+q.o.map(function(o){return'<button type="button" class="opt'+(a===o.l?' on':'')+'" data-v="'+esc(o.l)+'"><span>'+esc(o.l)+'</span><span class="ck">✓ 선택됨</span></button>'}).join('')+'</div>';
   }
-  if(q.type==='multi'){
-    var sel=Array.isArray(S.ans[q.key])?S.ans[q.key]:[];
-    return '<div class="opts">'+q.opts.map(function(o){
-      return '<button type="button" class="opt'+(sel.includes(o.v)?' sel':'')+'" data-v="'+e(o.v)+'"><span>'+e(o.l)+'</span><span class="opt-chk">✓ 선택됨</span></button>';
-    }).join('')+'</div>';
+  if(q.t==='multi'){
+    var sel=Array.isArray(ans[q.k])?ans[q.k]:[];
+    return '<div class="opts">'+q.o.map(function(o){return'<button type="button" class="opt'+(sel.indexOf(o.v)>=0?' on':'')+'" data-v="'+esc(o.v)+'"><span>'+esc(o.l)+'</span><span class="ck">✓ 선택됨</span></button>'}).join('')+'</div>';
   }
-  if(q.type==='counts'){
-    var pres=Array.isArray(S.ans[q.presKey])?S.ans[q.presKey].filter(function(k){return k!=='none'&&k!=='unknown'}):[];
-    var assets=q.assets.filter(function(a){return pres.includes(a.k)});
-    if(!assets.length)return '<p class="empty-note">앞 질문에서 부동산을 선택하면 수량을 확인합니다. 없으면 다음으로 넘어가세요.</p>';
-    var counts=S.ans[q.key]||{};
+  if(q.t==='counts'){
+    var pres=Array.isArray(ans[q.pk])?ans[q.pk].filter(function(k){return k!=='none'&&k!=='unknown'}):[];
+    var assets=q.a.filter(function(x){return pres.indexOf(x.k)>=0});
+    if(!assets.length)return '<p class="en">앞 질문에서 부동산을 선택하면 수량을 확인합니다. 없으면 다음으로 넘어가세요.</p>';
+    var ct=ans[q.k]||{};
     return assets.map(function(a){
-      return '<div class="asset-grp"><div class="asset-grp-t">'+e(a.t)+'</div><p class="asset-grp-q">'+e(a.q)+'</p>'
-        +'<div class="opts">'+a.lb.map(function(lb){
-          return '<button type="button" class="opt'+(counts[a.k]===lb?' sel':'')+'" data-v="'+e(lb)+'" data-ak="'+e(a.k)+'"><span>'+e(lb)+'</span><span class="opt-chk">✓ 선택됨</span></button>';
-        }).join('')+'</div></div>';
+      return '<div class="ag"><div class="agt">'+esc(a.t)+'</div><p class="agq">'+esc(a.q)+'</p>'
+        +'<div class="opts">'+a.l.map(function(lb){return'<button type="button" class="opt'+(ct[a.k]===lb?' on':'')+'" data-v="'+esc(lb)+'" data-ak="'+esc(a.k)+'"><span>'+esc(lb)+'</span><span class="ck">✓ 선택됨</span></button>'}).join('')+'</div></div>';
     }).join('');
   }
   return '';
 }
 
-function click(b){
-  var q=Q[S.step],v=b.getAttribute('data-v'),ak=b.getAttribute('data-ak');
-  if(q.type==='single'){
-    S.ans[q.key]=v;
-    qOpts.querySelectorAll('.opt').forEach(function(x){x.classList.remove('sel')});
-    b.classList.add('sel');
-  } else if(q.type==='counts'){
+function onOpt(b){
+  var q=Q[step],v=b.getAttribute('data-v'),ak=b.getAttribute('data-ak');
+  if(q.t==='single'){
+    ans[q.k]=v;
+    ge('QOpts').querySelectorAll('.opt').forEach(function(x){x.classList.toggle('on',x.getAttribute('data-v')===v)});
+  } else if(q.t==='counts'){
     if(!ak)return;
-    if(!S.ans[q.key])S.ans[q.key]={};
-    S.ans[q.key][ak]=v;
-    qOpts.querySelectorAll('.opt[data-ak="'+ak+'"]').forEach(function(x){x.classList.remove('sel')});
-    b.classList.add('sel');
-  } else if(q.type==='multi'){
-    var excl=q.excl||[],sel=Array.isArray(S.ans[q.key])?S.ans[q.key].slice():[];
-    if(excl.includes(v)){sel=sel.includes(v)?[]:[v]}
-    else if(sel.includes(v)){sel=sel.filter(function(x){return x!==v})}
-    else{sel=sel.filter(function(x){return!excl.includes(x)});sel.push(v)}
-    S.ans[q.key]=sel;
-    qOpts.querySelectorAll('.opt').forEach(function(x){x.classList.toggle('sel',sel.includes(x.getAttribute('data-v')))});
+    if(!ans[q.k])ans[q.k]={};ans[q.k][ak]=v;
+    ge('QOpts').querySelectorAll('.opt[data-ak="'+ak+'"]').forEach(function(x){x.classList.toggle('on',x.getAttribute('data-v')===v)});
+  } else if(q.t==='multi'){
+    var ex=q.ex||[],sel=Array.isArray(ans[q.k])?ans[q.k].slice():[];
+    if(ex.indexOf(v)>=0){sel=sel.indexOf(v)>=0?[]:[v]}
+    else if(sel.indexOf(v)>=0){sel=sel.filter(function(x){return x!==v})}
+    else{sel=sel.filter(function(x){return ex.indexOf(x)<0});sel.push(v)}
+    ans[q.k]=sel;
+    ge('QOpts').querySelectorAll('.opt').forEach(function(x){x.classList.toggle('on',sel.indexOf(x.getAttribute('data-v'))>=0)});
   }
-  window.__ansimCurrentAnswers=JSON.parse(JSON.stringify(S.ans));
 }
 
-/* ── 네비 ── */
-nextBtn.addEventListener('click',function(){
-  if(S.step>=Q.length-1){showResult()}
-  else{S.step++;renderQ();scroll_()}
-},false);
-prevBtn.addEventListener('click',function(){if(S.step>0){S.step--;renderQ();scroll_()}},false);
-function scroll_(){var el=survey;if(el&&el.getBoundingClientRect().top<0)el.scrollIntoView({behavior:'smooth',block:'start'})}
+ge('NextBtn').onclick=function(){if(step>=Q.length-1)showResult();else{step++;renderQ();var s=ge('Survey');if(s.getBoundingClientRect().top<0)s.scrollIntoView({behavior:'smooth',block:'start'})}};
+ge('PrevBtn').onclick=function(){if(step>0){step--;renderQ()}};
 
-/* ── 시작 ── */
-function start(){
-  S.step=0;S.ans={};
-  window.__ansimCurrentAnswers={};
-  intro.classList.add('hi');result.classList.add('hi');result.innerHTML='';
-  survey.classList.remove('hi');renderQ();
-  $('diagWrap').scrollIntoView({behavior:'smooth',block:'start'});
-  homeBtn.classList.remove('hi');
+function startSurvey(){
+  step=0;ans={};
+  ge('Intro').classList.add('dn');ge('Result').classList.add('dn');ge('Result').innerHTML='';
+  ge('Survey').classList.remove('dn');renderQ();
+  ge('Survey').scrollIntoView({behavior:'smooth',block:'start'});
+  ge('HB').classList.remove('dn');
 }
-$('heroBtn').addEventListener('click',start,false);
-$('introBtn').addEventListener('click',start,false);
-homeBtn.addEventListener('click',function(){
-  S.step=0;S.ans={};
-  survey.classList.add('hi');result.classList.add('hi');result.innerHTML='';
-  intro.classList.remove('hi');homeBtn.classList.add('hi');
+ge('HeroBtn').onclick=startSurvey;
+ge('IntroBtn').onclick=startSurvey;
+ge('HB').onclick=function(){
+  step=0;ans={};
+  ge('Survey').classList.add('dn');ge('Result').classList.add('dn');ge('Result').innerHTML='';
+  ge('Intro').classList.remove('dn');ge('HB').classList.add('dn');
   window.scrollTo({top:0,behavior:'smooth'});
-},false);
+};
 
-/* ── 결과 ── */
 function showResult(){
-  var sc=score();
-  var level=sc>=70?'주의 필요':sc>=40?'확인 필요':'기본 정리';
-  var bc=sc>=70?'lv-c':sc>=40?'lv-b':'lv-a';
+  var sc=calcScore();
+  var lv=sc>=70?'주의 필요':sc>=40?'확인 필요':'기본 정리';
+  var bc=sc>=70?'lc':sc>=40?'lb':'la';
   var sigs=[];
   if(sc>=70)sigs.push('상속인 구성, 재산 구조, 사전 정리 상태를 나누어 확인할 필요가 있습니다.');
   else if(sc>=40)sigs.push('재산 목록, 상속인 관계, 분배 계획을 정리해두면 충분합니다.');
   else sigs.push('기본 정보를 차분히 정리하는 것부터 시작하면 충분합니다.');
-  var ov=Array.isArray(S.ans.overseas)?S.ans.overseas:[];
+  var ov=Array.isArray(ans.overseas)?ans.overseas:[];
   if(ov.some(function(v){return v!=='none'&&v!=='unknown'}))sigs.push('해외 거주, 국적, 재산 요소가 있어 확인할 항목이 늘어날 수 있습니다.');
-  var ct=S.ans.assetCounts||{};
+  var ct=ans.assetCounts||{};
   if(Object.keys(ct).some(function(k){return ct[k]}))sigs.push('부동산이 포함되어 있어 나누는 방식과 관리 기준을 미리 정리하는 것이 좋습니다.');
 
-  var isPaid=false;
-  try{isPaid=localStorage.getItem('ansim_payment_status')==='paid_confirmed'||sessionStorage.getItem('ansim_payment_status')==='paid_confirmed'}catch(e){}
-
   var html=
-    '<div class="r-score">'
-    +'<p class="r-hl">현재 상황 정리 완료</p>'
-    +'<div class="r-badge '+bc+'">'+e(level)+'</div>'
-    +'<div class="r-sigs">'+sigs.map(function(s){return'<div class="r-sig">'+e(s)+'</div>'}).join('')+'</div>'
-    +'<span class="r-score-note">진단 점수 '+sc+'점</span>'
-    +'</div>'
-    +'<div class="r-sec"><h4>내 상황이 파악됐습니다</h4><ul><li>지금 상태로 상속이 개시되면, 내 뜻이 그대로 반영되지 않을 수 있습니다.</li><li>유언장·증여 타이밍·공제 활용에 따라 결과가 크게 달라집니다.</li><li>준비한 사람과 준비하지 않은 사람의 결과는 완전히 다릅니다.</li></ul></div>'
-    +'<div class="r-sec"><h4>이제 "어떻게 할 것인지"가 남았습니다</h4><ul><li>내 상황에서 가능한 상속 설계 선택지</li><li>유류분 리스크를 피하는 합법적 방법</li><li>지금 당장 해야 할 것, 순서대로</li></ul></div>'
-    +'<div class="paid-card">'
-    +'<div class="paid-ey">유료 상세리포트에서 확인하세요</div>'
+    '<div class="rs"><p class="rh">현재 상황 정리 완료</p>'
+    +'<div class="rb '+bc+'">'+esc(lv)+'</div>'
+    +'<div class="rsigs">'+sigs.map(function(s){return'<div class="rsig">'+esc(s)+'</div>'}).join('')+'</div>'
+    +'<span class="rn">진단 점수 '+sc+'점</span></div>'
+    +'<div class="rsec"><h4>내 상황이 파악됐습니다</h4><ul><li>지금 상태로 상속이 개시되면, 내 뜻이 그대로 반영되지 않을 수 있습니다.</li><li>유언장·증여 타이밍·공제 활용에 따라 결과가 크게 달라집니다.</li><li>준비한 사람과 준비하지 않은 사람의 결과는 완전히 다릅니다.</li></ul></div>'
+    +'<div class="rsec"><h4>이제 "어떻게 할 것인지"가 남았습니다</h4><ul><li>내 상황에서 가능한 상속 설계 선택지</li><li>유류분 리스크를 피하는 합법적 방법</li><li>지금 당장 해야 할 것, 순서대로</li></ul></div>'
+    +'<div class="pc"><div class="pe">유료 상세리포트에서 확인하세요</div>'
     +'<h3>변호사·세무사 상담 1회보다 저렴하게,<br>내 상속 설계의 전체 그림을 잡으세요.</h3>'
-    +'<p class="paid-lead">특가 ₩69,000 <span style="text-decoration:line-through;opacity:.6;font-weight:700;">정가 99,000원</span> — 본인만 확인하는 비공개 자료입니다.</p>'
-    +'<div class="paid-chks">'
-    +['내 상황에서 가능한 상속 설계 선택지','유류분 리스크 최소화 방법 (2026 최신 판례 반영)','절세 시뮬레이션 — 준비했을 때 vs 안 했을 때','지금 당장 해야 할 것, 순서대로','전문가 상담 전 반드시 확인할 질문 목록'].map(function(t){return'<div class="paid-chk">'+e(t)+'</div>'}).join('')
-    +'</div>'
-    +'<button class="btn-g" type="button" id="paidBtn" style="margin-top:4px;">유료 상세리포트 바로 받기 — 특가 ₩69,000</button>'
-    +'</div>';
-
-  if(isPaid){html+=paidConfHTML(sc,level)}
-
-  html+=
-    '<div class="form-card" id="formCard">'
-    +'<h3>유료 상세리포트 안내를 받아보시려면</h3>'
-    +'<p>이름과 이메일을 남겨주시면 상세리포트 안내를 이메일로 보내드립니다.<br>본인만 확인하는 비공개 정보로 처리됩니다.</p>'
-    +'<div class="form-g">'
-    +'<div class="field"><label for="fName">성함</label><input id="fName" autocomplete="name" placeholder="예: 홍길동"/></div>'
-    +'<div class="field"><label for="fEmail">이메일</label><input id="fEmail" type="email" autocomplete="email" placeholder="예: name@example.com"/></div>'
-    +'<div class="field"><label for="fMemo">남기실 내용</label><textarea id="fMemo" placeholder="궁금한 점이나 현재 상황을 적어주세요."></textarea></div>'
-    +'<label class="consent"><input id="fConsent" type="checkbox"/><span>유료 상세리포트 안내를 위해 개인정보 수집 및 이용에 동의합니다.</span></label>'
-    +'<div class="form-note"><strong>준비한 사람만 내 뜻대로 남길 수 있습니다.</strong><p>지금 이메일을 남겨주시면<br>내 상황에 맞는 상세리포트 안내를 보내드립니다.</p></div>'
-    +'<button class="btn-g" type="button" id="submitBtn">상세리포트 안내 받기</button>'
-    +'<div class="status" id="statusEl" role="status" aria-live="polite"></div>'
+    +'<p class="pl">특가 ₩69,000 <span style="text-decoration:line-through;opacity:.6;">정가 99,000원</span> — 본인만 확인하는 비공개 자료입니다.</p>'
+    +'<div class="pcs">'+['내 상황에서 가능한 상속 설계 선택지','유류분 리스크 최소화 방법 (2026 최신 판례 반영)','절세 시뮬레이션 — 준비했을 때 vs 안 했을 때','지금 당장 해야 할 것, 순서대로','전문가 상담 전 반드시 확인할 질문 목록'].map(function(t){return'<div class="pci">'+esc(t)+'</div>'}).join('')+'</div>'
+    +'<button class="bg" type="button" id="PaidBtn" style="margin-top:4px">유료 상세리포트 바로 받기 — 특가 ₩69,000</button></div>'
+    +'<div class="fc"><h3>유료 상세리포트 안내를 받아보시려면</h3>'
+    +'<p>이름과 이메일을 남겨주시면 상세리포트 안내를 이메일로 보내드립니다.</p>'
+    +'<div class="fg">'
+    +'<div class="fl"><label for="fName">성함</label><input id="fName" autocomplete="name" placeholder="예: 홍길동"/></div>'
+    +'<div class="fl"><label for="fEmail">이메일</label><input id="fEmail" type="email" autocomplete="email" placeholder="예: name@example.com"/></div>'
+    +'<div class="fl"><label for="fMemo">남기실 내용</label><textarea id="fMemo" placeholder="궁금한 점이나 현재 상황을 적어주세요."></textarea></div>'
+    +'<label class="con"><input id="fChk" type="checkbox"/><span>유료 상세리포트 안내를 위해 개인정보 수집 및 이용에 동의합니다.</span></label>'
+    +'<div class="fn"><strong>준비한 사람만 내 뜻대로 남길 수 있습니다.</strong><p>지금 이메일을 남겨주시면<br>내 상황에 맞는 상세리포트 안내를 보내드립니다.</p></div>'
+    +'<button class="bg" type="button" id="SubBtn">상세리포트 안내 받기</button>'
+    +'<div class="st" id="StEl"></div>'
     +'</div></div>'
-    +'<button class="btn-w" type="button" id="retryBtn" style="margin-bottom:32px;">처음부터 다시 진단하기</button>';
+    +'<button class="bw" type="button" id="RetryBtn" style="margin-bottom:32px">처음부터 다시 진단하기</button>';
 
-  survey.classList.add('hi');
-  result.innerHTML=html;
-  result.classList.remove('hi');
+  ge('Survey').classList.add('dn');
+  var R=ge('Result');
+  R.innerHTML=html;
+  R.classList.remove('dn');
 
-  /* 이벤트 바인딩 */
-  var paidBtn=$('paidBtn');
-  if(paidBtn)paidBtn.addEventListener('click',function(){
-    var em=(document.getElementById('fEmail')||{}).value||'';
-    try{sessionStorage.setItem('ansim_report_request',JSON.stringify({email:em.trim(),score:sc,answers:S.ans}))}catch(er){}
+  ge('PaidBtn').onclick=function(){
+    try{
+      sessionStorage.setItem('ansim_report_request',JSON.stringify({
+        email:(ge('fEmail')&&ge('fEmail').value?ge('fEmail').value.trim():''),
+        score:sc,
+        answers:ans
+      }));
+    }catch(e){}
     window.location.href='/report';
-  },false);
+  };
 
-  var submitBtn=$('submitBtn');
-  if(submitBtn)submitBtn.addEventListener('click',handleSubmit,false);
-
-  var retryBtn=$('retryBtn');
-  if(retryBtn)retryBtn.addEventListener('click',start,false);
-
-  window.__ansimFinalScore=sc;
+  ge('SubBtn').onclick=handleSubmit;
+  ge('RetryBtn').onclick=startSurvey;
 }
 
-function paidConfHTML(sc,level){
-  var items=[{t:'내 상황 요약',d:'큰 흐름과 먼저 볼 항목을 한눈에 정리합니다.'},{t:'읽는 순서',d:'어디부터 볼지 흐름을 정리합니다.'},{t:'개인 보관용 요약',d:'필요할 때 다시 볼 핵심 항목을 담습니다.'},{t:'준비자료 체크리스트',d:'기본 서류, 재산·채무 자료를 나누어 봅니다.'},{t:'상담 전후 정리',d:'상담 전후 확인할 질문을 정리합니다.'}];
-  return '<div class="paid-conf">'
-    +'<div class="paid-conf-ey">유료 상세리포트 준비 완료</div>'
-    +'<h3>내 상속 상황을 차분히 볼 수 있도록 정리된 자료입니다</h3>'
-    +'<p class="paid-conf-lead">진단 점수 '+sc+'점 · '+e(level)+' — 먼저 내 상황 요약을 확인하세요.</p>'
-    +'<div class="paid-conf-grid">'+items.map(function(it){return'<div class="paid-conf-item"><strong>'+e(it.t)+'</strong><span>'+e(it.d)+'</span></div>'}).join('')+'</div>'
-    +'<div class="paid-conf-note">처음 보실 때: 내 상황 요약 → 읽는 순서 → 개인 보관용 요약 → 준비자료 체크리스트 순서를 권장합니다.</div>'
-    +'</div>';
-}
-
-/* ── 폼 제출 ── */
 async function handleSubmit(){
-  var name=($('fName')||{}).value||'';
-  var email=($('fEmail')||{}).value||'';
-  var memo=($('fMemo')||{}).value||'';
-  var consent=$('fConsent'),btn=$('submitBtn'),st=$('statusEl');
-  name=name.trim();email=email.trim();
-  if(!st||!btn)return;
-  st.className='status';st.textContent='';
-  if(!name){st.textContent='성함을 입력해주세요.';st.className='status err';st.scrollIntoView({behavior:'smooth',block:'center'});return}
-  if(!email||!email.includes('@')){st.textContent='이메일을 정확히 입력해주세요.';st.className='status err';st.scrollIntoView({behavior:'smooth',block:'center'});return}
-  if(consent&&!consent.checked){st.textContent='개인정보 수집·이용 동의를 체크해주세요.';st.className='status err';st.scrollIntoView({behavior:'smooth',block:'center'});return}
-  var sc=score();
-  btn.disabled=true;btn.textContent='접수 중입니다...';
-  st.textContent='유료 상세리포트 안내 신청을 접수하고 있습니다.';st.className='status ok';
-  toast_('유료 상세리포트 안내 신청을 접수하고 있습니다.');
+  var name=(ge('fName')||{value:''}).value.trim();
+  var email=(ge('fEmail')||{value:''}).value.trim();
+  var memo=(ge('fMemo')||{value:''}).value.trim();
+  var chk=ge('fChk'),btn=ge('SubBtn'),st=ge('StEl');
+  st.className='st';st.textContent='';
+  if(!name){st.textContent='성함을 입력해주세요.';st.className='st er';return}
+  if(!email||email.indexOf('@')<0){st.textContent='이메일을 정확히 입력해주세요.';st.className='st er';return}
+  if(chk&&!chk.checked){st.textContent='개인정보 수집·이용 동의를 체크해주세요.';st.className='st er';return}
+  btn.disabled=true;btn.textContent='접수 중...';
+  st.textContent='신청을 접수하고 있습니다.';st.className='st ok';
   try{
-    var res=await fetch('/api/leads',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,email,memo:memo.trim(),answers:S.ans,score:sc,reportRequestedAt:new Date().toISOString()})});
-    var data=await res.json().catch(function(){return{}});
-    if(!res.ok||!data.ok)throw new Error(data.message||'신청 접수 실패');
-    st.textContent='신청이 접수되었습니다. 입력하신 이메일로 리포트 확인 절차를 보내드립니다.';st.className='status ok';
-    toast_('신청이 접수되었습니다. 이메일을 확인해주세요.');
-    if($('fName'))$('fName').value='';if($('fEmail'))$('fEmail').value='';if($('fMemo'))$('fMemo').value='';
-  }catch(err){
-    st.textContent='잠시 후 다시 신청해 주세요.';st.className='status err';
-    toast_('잠시 후 다시 신청해 주세요.','err');
-  }finally{btn.disabled=false;btn.textContent='상세리포트 안내 받기';st.scrollIntoView({behavior:'smooth',block:'center'})}
+    var r=await fetch('/api/leads',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:name,email:email,memo:memo,answers:ans,score:calcScore(),reportRequestedAt:new Date().toISOString()})});
+    var d=await r.json().catch(function(){return{}});
+    if(!r.ok||!d.ok)throw new Error(d.message||'실패');
+    st.textContent='신청이 접수되었습니다. 이메일을 확인해주세요.';st.className='st ok';
+    toast('신청이 접수되었습니다.');
+    if(ge('fName'))ge('fName').value='';if(ge('fEmail'))ge('fEmail').value='';if(ge('fMemo'))ge('fMemo').value='';
+  }catch(e){st.textContent='잠시 후 다시 신청해 주세요.';st.className='st er'}
+  finally{btn.disabled=false;btn.textContent='상세리포트 안내 받기'}
 }
-
-/* ── 외부 참조 ── */
-window.ansimBuildFreeReportData=function(){return{version:'free-v2',score:score(),answers:S.ans}};
-window.ansimTrackFunnel=function(n,d){
-  var p=Object.assign({event:n,ts:new Date().toISOString()},d||{});
-  try{var k='ansimsangsokFunnelEvents',prev=JSON.parse(localStorage.getItem(k)||'[]');prev.push(p);localStorage.setItem(k,JSON.stringify(prev.slice(-200)))}catch(er){}
-  if(typeof window.gtag==='function')window.gtag('event',n,p);
-};
-
-})();
 </script>
 </body>
 </html>
