@@ -1,849 +1,245 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="ko">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <meta name="robots" content="noindex,nofollow,noarchive" />
-  <title>안심상속 리드 관리</title>
-  <style>
-    :root {
-      --bg: #f7f4ec;
-      --card: #fffaf0;
-      --text: #2c2418;
-      --muted: #756b5c;
-      --line: #e5dcc9;
-      --accent: #8a6a2f;
-      --accent-dark: #5f471e;
-      --danger: #9b2f2f;
-      --good: #2f6b45;
-      --hold: #6c5c2f;
-      --shadow: 0 10px 28px rgba(75, 55, 25, 0.08);
-    }
-
-    * { box-sizing: border-box; }
-
-    body {
-      margin: 0;
-      background: var(--bg);
-      color: var(--text);
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      line-height: 1.5;
-    }
-
-    .wrap {
-      width: min(1120px, calc(100% - 28px));
-      margin: 0 auto;
-      padding: 22px 0 36px;
-    }
-
-    header {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 14px;
-      margin-bottom: 16px;
-    }
-
-    h1 {
-      margin: 0;
-      font-size: clamp(22px, 4vw, 32px);
-      line-height: 1.15;
-      letter-spacing: -0.04em;
-    }
-
-    .sub {
-      margin: 8px 0 0;
-      color: var(--muted);
-      font-size: 14px;
-    }
-
-    .card {
-      background: var(--card);
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      box-shadow: var(--shadow);
-      padding: 16px;
-      margin-bottom: 14px;
-    }
-
-    .toolbar {
-      display: grid;
-      grid-template-columns: 1.4fr 0.9fr 0.9fr auto;
-      gap: 10px;
-      align-items: end;
-    }
-
-    label {
-      display: block;
-      font-size: 12px;
-      color: var(--muted);
-      margin-bottom: 5px;
-      font-weight: 700;
-    }
-
-    input, select, button {
-      width: 100%;
-      font: inherit;
-      border-radius: 12px;
-      border: 1px solid var(--line);
-      background: #fffdf8;
-      color: var(--text);
-      padding: 10px 11px;
-    }
-
-    button {
-      cursor: pointer;
-      border: 0;
-      background: var(--accent);
-      color: white;
-      font-weight: 800;
-    }
-
-    button:hover { background: var(--accent-dark); }
-
-    button.secondary {
-      background: #efe5d1;
-      color: var(--text);
-      border: 1px solid var(--line);
-    }
-
-    .statusbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-      margin-top: 10px;
-      color: var(--muted);
-      font-size: 13px;
-    }
-
-    .pill {
-      display: inline-flex;
-      padding: 4px 8px;
-      border-radius: 999px;
-      background: #efe5d1;
-      border: 1px solid var(--line);
-      font-size: 12px;
-      font-weight: 800;
-      white-space: nowrap;
-    }
-
-    .pill.new { color: var(--danger); }
-    .pill.payment_guided, .pill.guided, .pill.interested { color: var(--accent-dark); }
-    .pill.paid { color: var(--good); }
-    .pill.hold, .pill.declined { color: var(--hold); }
-
-    .grid { display: grid; gap: 12px; }
-
-    .lead {
-      display: grid;
-      gap: 12px;
-      background: #fffdf8;
-      border: 1px solid var(--line);
-      border-radius: 16px;
-      padding: 14px;
-    }
-
-    .lead.testLead {
-      background: #fff8e6;
-      border-color: #d7a934;
-      box-shadow: 0 0 0 1px rgba(215, 169, 52, 0.12);
-    }
-
-    .testBadge {
-      display: inline-flex;
-      align-items: center;
-      margin-left: 6px;
-      padding: 3px 7px;
-      border-radius: 999px;
-      background: #7a4f00;
-      color: white;
-      font-size: 11px;
-      font-weight: 800;
-      vertical-align: middle;
-    }
-
-    .leadTop {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
-      gap: 10px;
-      align-items: start;
-    }
-
-    .name {
-      font-weight: 900;
-      font-size: 17px;
-      letter-spacing: -0.03em;
-    }
-
-    .meta {
-      color: var(--muted);
-      font-size: 13px;
-      margin-top: 3px;
-      word-break: break-word;
-    }
-
-    .badges {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: flex-end;
-      gap: 6px;
-    }
-
-    .detail {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 8px;
-      color: var(--muted);
-      font-size: 13px;
-    }
-
-    .detailBox {
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      padding: 9px;
-      background: #fffaf0;
-      min-height: 52px;
-    }
-
-    .actions {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1.3fr auto;
-      gap: 8px;
-      align-items: end;
-    }
-
-    .copyActions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 10px;
-    }
-
-    .copyActions button {
-      width: auto;
-      padding: 8px 10px;
-      border-radius: 999px;
-      background: #fffdf8;
-      color: var(--accent-dark);
-      border: 1px solid var(--line);
-      font-size: 13px;
-    }
-
-    .copyActions button:hover {
-      border-color: var(--accent);
-    }
-
-    .oneClickActions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 8px;
-    }
-
-    .oneClickActions button {
-      width: auto;
-      padding: 9px 11px;
-      border-radius: 999px;
-      background: var(--accent-dark);
-      color: white;
-      border: 1px solid var(--accent-dark);
-      font-size: 13px;
-      font-weight: 700;
-    }
-
-    .oneClickActions button.hold {
-      background: #6c5c2f;
-      border-color: #6c5c2f;
-    }
-
-    .empty {
-      text-align: center;
-      color: var(--muted);
-      padding: 28px 12px;
-      border: 1px dashed var(--line);
-      border-radius: 16px;
-      background: #fffdf8;
-    }
-
-    .error { color: var(--danger); font-weight: 800; }
-    .ok { color: var(--good); font-weight: 800; }
-    .small { font-size: 12px; color: var(--muted); }
-
-    .conversionSummary {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 8px;
-      margin-top: 12px;
-    }
-
-    .summaryCard {
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      background: #fffdf8;
-      padding: 10px 12px;
-    }
-
-    .summaryLabel {
-      font-size: 12px;
-      color: var(--muted);
-      margin-bottom: 3px;
-    }
-
-    .summaryValue {
-      font-size: 21px;
-      font-weight: 800;
-      color: var(--accent-dark);
-    }
-
-    .quickFilters {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 12px;
-    }
-
-    .quickFilters button {
-      width: auto;
-      padding: 8px 10px;
-      border-radius: 999px;
-      background: #efe5d1;
-      color: var(--text);
-      border: 1px solid var(--line);
-      font-size: 13px;
-    }
-
-    .quickFilters button.active {
-      background: var(--accent);
-      color: white;
-      border-color: var(--accent);
-    }
-
-    @media (max-width: 820px) {
-      .toolbar, .actions, .detail { grid-template-columns: 1fr; }
-      header { display: block; }
-      .badges { justify-content: flex-start; }
-      .leadTop { grid-template-columns: 1fr; }
-    }
-  </style>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta name="robots" content="noindex,nofollow"/>
+<title>안심상속 리드 관리</title>
+<style>
+*{box-sizing:border-box;margin:0}
+body{background:#f7f4ec;color:#2c2418;font-family:system-ui,-apple-system,sans-serif;line-height:1.5}
+.wrap{width:min(1120px,calc(100% - 28px));margin:0 auto;padding:22px 0 40px}
+h1{font-size:clamp(20px,4vw,30px);letter-spacing:-.04em;margin-bottom:4px}
+.sub{color:#756b5c;font-size:14px;margin-bottom:16px}
+.card{background:#fffaf0;border:1px solid #e5dcc9;border-radius:18px;padding:16px;margin-bottom:14px;box-shadow:0 10px 28px rgba(75,55,25,.08)}
+.tb{display:grid;grid-template-columns:1.4fr .9fr .9fr auto;gap:10px;align-items:end}
+@media(max-width:600px){.tb{grid-template-columns:1fr 1fr}}
+label{display:block;font-size:12px;color:#756b5c;margin-bottom:5px;font-weight:600}
+input,select,textarea{width:100%;padding:9px 11px;border:1.5px solid #e5dcc9;border-radius:10px;background:#fff;color:#2c2418;font:inherit;font-size:14px}
+input:focus,select:focus{outline:2px solid #8a6a2f;border-color:#8a6a2f}
+.btn{padding:9px 15px;border:0;border-radius:10px;font:inherit;font-size:14px;font-weight:700;cursor:pointer;white-space:nowrap;min-height:38px}
+.btn-p{background:#8a6a2f;color:#fff}
+.btn-s{background:#e5dcc9;color:#5f471e}
+.btn-sm{padding:6px 10px;font-size:12px;border-radius:8px}
+.qf{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.qf-btn{padding:6px 12px;border:1.5px solid #e5dcc9;border-radius:999px;background:#fff;color:#756b5c;font-size:13px;font-weight:700;cursor:pointer}
+.qf-btn.on{background:#8a6a2f;color:#fff;border-color:#8a6a2f}
+.stat{display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));gap:8px;margin-bottom:14px}
+.stat-item{background:#fffaf0;border:1px solid #e5dcc9;border-radius:14px;padding:12px;text-align:center}
+.stat-n{font-size:22px;font-weight:900;color:#5f471e}
+.stat-l{font-size:12px;color:#756b5c;font-weight:600}
+.sbar{padding:10px 14px;border-radius:10px;background:#fff;border:1px solid #e5dcc9;color:#756b5c;font-size:13px;margin-bottom:10px}
+.sbar.ok{background:#eef7f1;border-color:#2f6b45;color:#2f6b45}
+.sbar.er{background:#fdf0f0;border-color:#9b2f2f;color:#9b2f2f}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{background:#f0e8d8;padding:8px 10px;text-align:left;font-weight:700;border-bottom:1.5px solid #e5dcc9;white-space:nowrap}
+td{padding:9px 10px;border-bottom:1px solid #e5dcc9;vertical-align:top}
+tr:hover td{background:#fdf8f0}
+.badge{display:inline-block;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:800}
+.b-new{background:#dbeafe;color:#1e3a5f}
+.b-contacted{background:#d1fae5;color:#065f46}
+.b-payment_guided{background:#fef3c7;color:#92400e}
+.b-hold{background:#f3f4f6;color:#374151}
+.b-test{background:#fce7f3;color:#9d174d}
+.b-paid{background:#d1fae5;color:#065f46}
+.b-none{background:#f3f4f6;color:#6b7280}
+.b-guided{background:#dbeafe;color:#1e3a5f}
+.b-interested{background:#fef3c7;color:#92400e}
+.b-declined{background:#fce7f3;color:#9d174d}
+.note-pre{font-size:12px;color:#756b5c;white-space:pre-wrap;max-height:80px;overflow-y:auto;background:#fdf8f0;padding:6px 8px;border-radius:8px;margin-top:4px}
+.actions{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+select.sel-s{width:auto;padding:5px 8px;font-size:12px}
+.empty{text-align:center;padding:40px;color:#756b5c;font-size:15px}
+.test-tag{display:inline-block;background:#fce7f3;color:#9d174d;font-size:10px;font-weight:800;padding:1px 6px;border-radius:4px;margin-left:4px;vertical-align:middle}
+</style>
 </head>
 <body>
-  <main class="wrap">
-    <header>
-      <div>
-        <h1>리드 관리</h1>
-        <p class="sub">무료진단 이후 들어온 리드를 확인하고, 후속상태와 리포트 안내 상태를 정리합니다.</p>
+<div class="wrap">
+  <h1>안심상속 리드 관리</h1>
+  <p class="sub">신규 리드 확인 및 후속 관리</p>
+
+  <div class="card">
+    <div class="tb">
+      <div><label>관리자 토큰</label><input id="tkn" type="password" placeholder="ADMIN_LEAD_UPDATE_TOKEN" autocomplete="off"/></div>
+      <div><label>후속 상태</label>
+        <select id="fStatus">
+          <option value="">전체</option>
+          <option value="new">신규</option>
+          <option value="contacted">연락 완료</option>
+          <option value="payment_guided">결제 안내</option>
+          <option value="hold">보류</option>
+          <option value="test">테스트</option>
+        </select>
       </div>
-      <button class="secondary" type="button" id="clearTokenButton">토큰 지우기</button>
-    </header>
-
-    <section class="card">
-      <div class="toolbar">
-        <div>
-          <label for="adminToken">관리자 토큰</label>
-          <input id="adminToken" type="password" autocomplete="off" placeholder="ADMIN_LEAD_UPDATE_TOKEN" />
-        </div>
-
-        <div>
-          <label for="followupFilter">후속상태</label>
-          <select id="followupFilter">
-            <option value="">전체</option>
-            <option value="new">새 리드</option>
-            <option value="contacted">연락함</option>
-            <option value="payment_guided">결제 안내</option>
-            <option value="hold">보류</option>
-            <option value="test">테스트</option>
-          </select>
-        </div>
-
-        <div>
-          <label for="paidFilter">리포트상태</label>
-          <select id="paidFilter">
-            <option value="">전체</option>
-            <option value="none">없음</option>
-            <option value="guided">안내함</option>
-            <option value="interested">관심 있음</option>
-            <option value="paid">구매 완료</option>
-            <option value="declined">거절</option>
-          </select>
-        </div>
-
-        <div>
-          <label>&nbsp;</label>
-          <button type="button" id="loadButton">불러오기</button>
-        </div>
+      <div><label>리포트 상태</label>
+        <select id="fPaid">
+          <option value="">전체</option>
+          <option value="none">미안내</option>
+          <option value="guided">안내 완료</option>
+          <option value="interested">관심</option>
+          <option value="paid">결제 완료</option>
+          <option value="declined">거절</option>
+        </select>
       </div>
-
-      <div class="statusbar">
-        <span id="statusText">토큰을 입력한 뒤 리드를 불러오세요.</span>
-        <span class="small">토큰은 이 브라우저 세션에만 보관됩니다.</span>
+      <div style="display:flex;gap:8px;align-items:flex-end">
+        <button class="btn btn-p" onclick="load()">불러오기</button>
+        <button class="btn btn-s" onclick="reset()">초기화</button>
       </div>
-
-      <div class="conversionSummary" aria-label="전환관리 요약">
-        <div class="summaryCard"><div class="summaryLabel">새 리드</div><div class="summaryValue" id="summaryNew">0</div></div>
-        <div class="summaryCard"><div class="summaryLabel">결제 안내 대상</div><div class="summaryValue" id="summaryPaymentGuided">0</div></div>
-        <div class="summaryCard"><div class="summaryLabel">리포트 관심</div><div class="summaryValue" id="summaryInterested">0</div></div>
-        <div class="summaryCard"><div class="summaryLabel">구매 완료</div><div class="summaryValue" id="summaryPaid">0</div></div>
-      </div>
-
-      <div class="quickFilters" aria-label="빠른 필터">
-        <button type="button" data-followup="new" data-paid="">새 리드</button>
-        <button type="button" data-followup="payment_guided" data-paid="">결제 안내 대상</button>
-        <button type="button" data-followup="" data-paid="interested">리포트 관심</button>
-        <button type="button" data-followup="" data-paid="paid">구매 완료</button>
-        <button type="button" data-followup="hold" data-paid="">보류</button>
-        <button type="button" data-followup="test" data-paid="">테스트</button>
-        <button type="button" data-followup="" data-paid="">전체</button>
-      </div>
-    </section>
-
-    <section class="grid" id="leadList">
-      <div class="empty">아직 불러온 리드가 없습니다.</div>
-    </section>
-  </main>
-
-  <script>
-    var FOLLOWUP_LABELS = {
-      new: "새 리드",
-      contacted: "연락함",
-      payment_guided: "결제 안내",
-      hold: "보류",
-      test: "테스트"
-    };
-
-    var PAID_LABELS = {
-      none: "없음",
-      guided: "안내함",
-      interested: "관심 있음",
-      paid: "구매 완료",
-      declined: "거절"
-    };
-
-    var adminTokenInput = document.getElementById("adminToken");
-    var followupFilter = document.getElementById("followupFilter");
-    var paidFilter = document.getElementById("paidFilter");
-    var loadButton = document.getElementById("loadButton");
-    var clearTokenButton = document.getElementById("clearTokenButton");
-    var statusText = document.getElementById("statusText");
-    var leadList = document.getElementById("leadList");
-    var quickFilterButtons = document.querySelectorAll(".quickFilters button");
-    var summaryNew = document.getElementById("summaryNew");
-    var summaryPaymentGuided = document.getElementById("summaryPaymentGuided");
-    var summaryInterested = document.getElementById("summaryInterested");
-    var summaryPaid = document.getElementById("summaryPaid");
-
-    var savedToken = sessionStorage.getItem("ansimsangsok_admin_token");
-    if (savedToken) {
-      adminTokenInput.value = savedToken;
-    }
-
-    function setStatus(message, type) {
-      statusText.textContent = message;
-      statusText.className = type === "error" ? "error" : type === "ok" ? "ok" : "";
-    }
-
-    function escapeHtml(value) {
-      return String(value == null ? "" : value)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-    }
-
-    function isTestLead(lead) {
-      var parts = [
-        lead && lead.name,
-        lead && lead.email,
-        lead && lead.memo,
-        lead && lead.note,
-        lead && lead.followup_note
-      ];
-
-      var text = parts
-        .filter(Boolean)
-        .map(function(value) { return String(value).toLowerCase(); })
-        .join(" ");
-
-      return (
-        text.indexOf("test") >= 0 ||
-        text.indexOf("테스트") >= 0 ||
-        text.indexOf("검증") >= 0 ||
-        text.indexOf("실제 고객 아님") >= 0 ||
-        String((lead && lead.email) || "").toLowerCase().indexOf("test+") >= 0
-      );
-    }
-
-    function testBadgeHtml(lead) {
-      return isTestLead(lead) ? " <span class=\"testBadge\">테스트</span>" : "";
-    }
-
-    function formatDate(value) {
-      if (!value) return "-";
-      var date = new Date(value);
-      if (Number.isNaN(date.getTime())) return "-";
-      return date.toLocaleString("ko-KR", {
-        year: "numeric",
-        month: "2-digit",
-        day: "2-digit",
-        hour: "2-digit",
-        minute: "2-digit"
-      });
-    }
-
-    function getToken() {
-      return adminTokenInput.value.trim();
-    }
-
-    function labelOf(map, value) {
-      return map[value] || value || "-";
-    }
-
-    function optionHtml(map, selectedValue) {
-      var html = "";
-      Object.keys(map).forEach(function(value) {
-        var selected = value === selectedValue ? " selected" : "";
-        html += "<option value=\"" + escapeHtml(value) + "\"" + selected + ">" + escapeHtml(map[value]) + "</option>";
-      });
-      return html;
-    }
-
-    async function requestJson(url, options) {
-      var response = await fetch(url, options);
-      var text = await response.text();
-      var data = null;
-
-      try {
-        data = text ? JSON.parse(text) : null;
-      } catch (error) {
-        data = { raw: text };
-      }
-
-      if (!response.ok) {
-        var message = data && data.error ? data.error : "request_failed";
-        throw new Error(message);
-      }
-
-      return data;
-    }
-
-    function setText(node, value) {
-      if (node) node.textContent = String(value);
-    }
-
-    function updateConversionSummary(leads) {
-      var items = Array.isArray(leads) ? leads : [];
-      var summary = items.reduce(function(acc, lead) {
-        var followupStatus = lead.followup_status || "new";
-        var paidReportStatus = lead.paid_report_status || "none";
-
-        if (followupStatus === "new") acc.newCount += 1;
-        if (followupStatus === "payment_guided") acc.paymentGuidedCount += 1;
-        if (paidReportStatus === "interested") acc.interestedCount += 1;
-        if (paidReportStatus === "paid") acc.paidCount += 1;
-
-        return acc;
-      }, {
-        newCount: 0,
-        paymentGuidedCount: 0,
-        interestedCount: 0,
-        paidCount: 0
-      });
-
-      setText(summaryNew, summary.newCount);
-      setText(summaryPaymentGuided, summary.paymentGuidedCount);
-      setText(summaryInterested, summary.interestedCount);
-      setText(summaryPaid, summary.paidCount);
-    }
-
-    function renderEmpty(message) {
-      leadList.innerHTML = "<div class=\"empty\">" + escapeHtml(message) + "</div>";
-    }
-
-    function renderLeads(leads) {
-      updateConversionSummary(leads);
-
-      if (!Array.isArray(leads) || leads.length === 0) {
-        renderEmpty("조건에 맞는 리드가 없습니다.");
-        return;
-      }
-
-      var html = "";
-
-      leads.forEach(function(lead) {
-        var followupStatus = lead.followup_status || "new";
-        var paidReportStatus = lead.paid_report_status || "none";
-
-        html += ""
-          + "<article class=\"lead" + (isTestLead(lead) ? " testLead" : "") + "\" data-lead-id=\"" + escapeHtml(lead.id) + "\" data-lead-name=\"" + escapeHtml(lead.name || "") + "\" data-lead-email=\"" + escapeHtml(lead.email || "") + "\">"
-          + "<div class=\"leadTop\">"
-          + "<div>"
-          + "<div class=\"name\">" + escapeHtml(lead.name || "이름 없음") + "</div>"
-          + "<div class=\"meta\">" + escapeHtml(lead.email || "이메일 없음") + "</div>"
-          + "<div class=\"meta\">접수: " + escapeHtml(formatDate(lead.created_at)) + "</div>"
-          + "</div>"
-          + "<div class=\"badges\">"
-          + "<span class=\"pill " + escapeHtml(followupStatus) + "\">" + escapeHtml(labelOf(FOLLOWUP_LABELS, followupStatus)) + "</span>"
-          + "<span class=\"pill " + escapeHtml(paidReportStatus) + "\">" + escapeHtml(labelOf(PAID_LABELS, paidReportStatus)) + "</span>"
-          + "</div>"
-          + "</div>"
-
-          + "<div class=\"detail\">"
-          + "<div class=\"detailBox\"><strong>점수</strong><br />" + escapeHtml(lead.score == null ? "-" : lead.score) + "</div>"
-          + "<div class=\"detailBox\"><strong>최근 연락</strong><br />" + escapeHtml(formatDate(lead.last_contacted_at)) + "</div>"
-          + "<div class=\"detailBox\"><strong>수정</strong><br />" + escapeHtml(formatDate(lead.updated_at)) + "</div>"
-          + "</div>"
-
-          + "<div class=\"detail\">"
-          + "<div class=\"detailBox\"><strong>메모</strong><br />" + escapeHtml(lead.memo || "-") + "</div>"
-          + "<div class=\"detailBox\"><strong>사용자 입력</strong><br />" + escapeHtml(lead.note || "-") + "</div>"
-          + "<div class=\"detailBox\"><strong>후속 메모</strong><br />" + escapeHtml(lead.followup_note || "-") + "</div>"
-          + "</div>"
-
-          + "<div class=\"actions\">"
-          + "<div><label>후속상태</label><select class=\"js-followup\">" + optionHtml(FOLLOWUP_LABELS, followupStatus) + "</select></div>"
-          + "<div><label>리포트상태</label><select class=\"js-paid\">" + optionHtml(PAID_LABELS, paidReportStatus) + "</select></div>"
-          + "<div><label>후속 메모</label><input class=\"js-note\" type=\"text\" value=\"" + escapeHtml(lead.followup_note || "") + "\" placeholder=\"간단 메모\" /></div>"
-          + "<div><label>&nbsp;</label><button type=\"button\" class=\"js-save\">저장</button></div>"
-          + "</div>"
-
-          + "<div class=\"copyActions\" aria-label=\"응대 문구 복사\">"
-          + "<button type=\"button\" class=\"js-copy-reply\" data-reply=\"first\">첫 안내 복사</button>"
-          + "<button type=\"button\" class=\"js-copy-reply\" data-reply=\"report\">리포트 안내 복사</button>"
-          + "<button type=\"button\" class=\"js-copy-reply\" data-reply=\"payment\">결제 안내 복사</button>"
-          + "<button type=\"button\" class=\"js-copy-reply\" data-reply=\"hold\">보류 안내 복사</button>"
-          + "</div>"
-          + "<div class=\"oneClickActions\" aria-label=\"상태 변경과 응대 문구 복사\">"
-          + "<button type=\"button\" class=\"js-oneclick-reply\" data-reply=\"first\" data-followup=\"contacted\" data-paid=\"none\" data-note=\"첫 안내\">첫 안내 전환+복사</button>"
-          + "<button type=\"button\" class=\"js-oneclick-reply\" data-reply=\"report\" data-followup=\"contacted\" data-paid=\"guided\" data-note=\"리포트 안내\">리포트 안내 전환+복사</button>"
-          + "<button type=\"button\" class=\"js-oneclick-reply\" data-reply=\"payment\" data-followup=\"payment_guided\" data-paid=\"guided\" data-note=\"결제 안내\">결제 안내 전환+복사</button>"
-          + "<button type=\"button\" class=\"js-oneclick-reply hold\" data-reply=\"hold\" data-followup=\"hold\" data-paid=\"none\" data-note=\"보류 안내\">보류 전환+복사</button>"
-          + "</div>"
-          + "</article>";
-      });
-
-      leadList.innerHTML = html;
-
-      Array.prototype.forEach.call(document.querySelectorAll(".js-save"), function(button) {
-        button.addEventListener("click", function(event) {
-          var card = event.target.closest(".lead");
-          if (card) saveLead(card);
-        });
-      });
-
-      Array.prototype.forEach.call(document.querySelectorAll(".js-copy-reply"), function(button) {
-        button.addEventListener("click", function(event) {
-          var card = event.target.closest(".lead");
-          if (card) copyReply(card, button.getAttribute("data-reply"));
-        });
-      });
-
-      Array.prototype.forEach.call(document.querySelectorAll(".js-oneclick-reply"), function(button) {
-        button.addEventListener("click", function(event) {
-          var card = event.target.closest(".lead");
-          if (card) oneClickReply(card, button);
-        });
-      });
-    }
-
-
-    function setQuickFilterActive(followupValue, paidValue) {
-      Array.prototype.forEach.call(quickFilterButtons, function(button) {
-        var isActive =
-          button.getAttribute("data-followup") === followupValue &&
-          button.getAttribute("data-paid") === paidValue;
-
-        if (isActive) {
-          button.classList.add("active");
-        } else {
-          button.classList.remove("active");
-        }
-      });
-    }
-
-    function applyQuickFilter(button) {
-      followupFilter.value = button.getAttribute("data-followup") || "";
-      paidFilter.value = button.getAttribute("data-paid") || "";
-      setQuickFilterActive(followupFilter.value, paidFilter.value);
-      loadLeads();
-    }
-
-    async function loadLeads() {
-      var token = getToken();
-
-      if (!token) {
-        setStatus("관리자 토큰을 입력하세요.", "error");
-        return;
-      }
-
-      sessionStorage.setItem("ansimsangsok_admin_token", token);
-
-      var params = new URLSearchParams();
-      params.set("limit", "50");
-
-      if (followupFilter.value) {
-        params.set("followupStatus", followupFilter.value);
-      }
-
-      if (paidFilter.value) {
-        params.set("paidReportStatus", paidFilter.value);
-      }
-
-      setStatus("리드를 불러오는 중입니다.", "");
-
-      try {
-        var data = await requestJson("/api/admin/leads/list?" + params.toString(), {
-          method: "GET",
-          headers: { "x-admin-token": token }
-        });
-
-        renderLeads(data.leads);
-        setStatus("리드 " + (data.count || 0) + "건을 불러왔습니다.", "ok");
-      } catch (error) {
-        updateConversionSummary([]);
-        renderEmpty("리드를 불러오지 못했습니다.");
-        setStatus("불러오기 실패: " + error.message, "error");
-      }
-    }
-
-    function buildReplyText(card, kind) {
-      var name = card.getAttribute("data-lead-name") || "";
-      var greeting = name ? name + "님, 안녕하세요. 안심상속입니다." : "안녕하세요. 안심상속입니다.";
-
-      if (kind === "report") {
-        return greeting + "\n\n상속정리 리포트는 현재 상황을 차분히 정리하고, 확인할 항목과 준비자료, 상담 전 질문을 한 번에 볼 수 있도록 정리하는 자료입니다.\n\n진행을 원하시면 안내를 이어서 도와드리겠습니다.";
-      }
-
-      if (kind === "payment") {
-        return greeting + "\n\n요청하신 상속정리 리포트 진행 안내드립니다. 리포트에는 현재 상황 요약, 확인할 항목, 준비자료, 상담 전 질문 정리가 포함됩니다.\n\n진행을 원하시면 결제 안내를 보내드리겠습니다.";
-      }
-
-      if (kind === "hold") {
-        return greeting + "\n\n지금 바로 진행하지 않으셔도 괜찮습니다. 필요하실 때 다시 확인하실 수 있도록 남겨주신 내용을 기준으로 안내드리겠습니다.";
-      }
-
-      return greeting + "\n\n남겨주신 내용을 확인했습니다. 안심상속은 상속 상황을 차분히 정리하고, 지금 확인할 항목과 다음 준비 방향을 이해하실 수 있도록 돕습니다.\n\n필요하시면 상속정리 리포트 안내를 이어서 도와드리겠습니다.";
-    }
-
-    async function copyTextToClipboard(text) {
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        await navigator.clipboard.writeText(text);
-        return;
-      }
-
-      var textarea = document.createElement("textarea");
-      textarea.value = text;
-      textarea.setAttribute("readonly", "readonly");
-      textarea.style.position = "fixed";
-      textarea.style.left = "-9999px";
-      document.body.appendChild(textarea);
-      textarea.select();
-      document.execCommand("copy");
-      document.body.removeChild(textarea);
-    }
-
-    function appendFollowupNote(card, noteLabel) {
-      var noteInput = card.querySelector(".js-note");
-      if (!noteInput) return;
-
-      var stamp = new Date().toLocaleString("ko-KR");
-      var addition = noteLabel + " / " + stamp;
-      var current = noteInput.value.trim();
-      noteInput.value = current ? current + " | " + addition : addition;
-    }
-
-    async function oneClickReply(card, button) {
-      var followupStatus = button.getAttribute("data-followup") || "contacted";
-      var paidReportStatus = button.getAttribute("data-paid") || "none";
-      var replyKind = button.getAttribute("data-reply") || "first";
-      var noteLabel = button.getAttribute("data-note") || "응대";
-      var followupSelect = card.querySelector(".js-followup");
-      var paidSelect = card.querySelector(".js-paid");
-
-      if (followupSelect) followupSelect.value = followupStatus;
-      if (paidSelect) paidSelect.value = paidReportStatus;
-      appendFollowupNote(card, noteLabel);
-
-      try {
-        await copyTextToClipboard(buildReplyText(card, replyKind));
-        setStatus("응대 문구를 복사하고 상태를 저장하는 중입니다.", "");
-      } catch (error) {
-        setStatus("복사는 실패했지만 상태 저장을 시도합니다.", "error");
-      }
-
-      await saveLead(card);
-    }
-
-    async function copyReply(card, kind) {
-      try {
-        await copyTextToClipboard(buildReplyText(card, kind));
-        setStatus("응대 문구를 복사했습니다.", "ok");
-      } catch (error) {
-        setStatus("복사 실패: 직접 선택해서 복사해 주세요.", "error");
-      }
-    }
-
-    async function saveLead(card) {
-      var token = getToken();
-
-      if (!token) {
-        setStatus("관리자 토큰을 입력하세요.", "error");
-        return;
-      }
-
-      var leadId = card.getAttribute("data-lead-id");
-      var followupStatus = card.querySelector(".js-followup").value;
-      var paidReportStatus = card.querySelector(".js-paid").value;
-      var followupNote = card.querySelector(".js-note").value.trim();
-
-      setStatus("상태를 저장하는 중입니다.", "");
-
-      try {
-        await requestJson("/api/admin/leads/update-status", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json; charset=utf-8",
-            "x-admin-token": token
-          },
-          body: JSON.stringify({
-            leadId: leadId,
-            followupStatus: followupStatus,
-            paidReportStatus: paidReportStatus,
-            followupNote: followupNote
-          })
-        });
-
-        setStatus("저장했습니다.", "ok");
-        await loadLeads();
-      } catch (error) {
-        setStatus("저장 실패: " + error.message, "error");
-      }
-    }
-
-    Array.prototype.forEach.call(quickFilterButtons, function(button) {
-      button.addEventListener("click", function() {
-        applyQuickFilter(button);
-      });
+    </div>
+    <div class="qf">
+      <button class="qf-btn" data-f="" data-p="">전체</button>
+      <button class="qf-btn" data-f="new" data-p="">신규</button>
+      <button class="qf-btn" data-f="contacted" data-p="">연락 완료</button>
+      <button class="qf-btn" data-f="payment_guided" data-p="">결제 안내</button>
+      <button class="qf-btn" data-f="" data-p="paid">결제 완료</button>
+      <button class="qf-btn" data-f="hold" data-p="">보류</button>
+    </div>
+  </div>
+
+  <div class="stat" id="Stat" style="display:none">
+    <div class="stat-item"><div class="stat-n" id="sTotal">0</div><div class="stat-l">전체</div></div>
+    <div class="stat-item"><div class="stat-n" id="sNew">0</div><div class="stat-l">신규</div></div>
+    <div class="stat-item"><div class="stat-n" id="sContacted">0</div><div class="stat-l">연락 완료</div></div>
+    <div class="stat-item"><div class="stat-n" id="sPayment">0</div><div class="stat-l">결제 안내</div></div>
+    <div class="stat-item"><div class="stat-n" id="sPaid">0</div><div class="stat-l">결제 완료</div></div>
+  </div>
+
+  <div class="sbar" id="SBar">토큰을 입력한 뒤 리드를 불러오세요.</div>
+
+  <div class="card" style="padding:0;overflow:hidden" id="TableWrap">
+    <table id="LeadTable">
+      <thead>
+        <tr>
+          <th>접수일시</th><th>이름</th><th>이메일</th><th>점수</th>
+          <th>후속 상태</th><th>리포트 상태</th><th>메모/노트</th><th>저장</th>
+        </tr>
+      </thead>
+      <tbody id="LeadBody"><tr><td colspan="8" class="empty">리드를 불러오세요.</td></tr></tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+var FOLLOW={'new':'신규','contacted':'연락 완료','payment_guided':'결제 안내','hold':'보류','test':'테스트'};
+var PAID={'none':'미안내','guided':'안내 완료','interested':'관심','paid':'결제 완료','declined':'거절'};
+
+function ge(id){return document.getElementById(id)}
+function esc(v){return String(v||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function tkn(){return (ge('tkn').value||sessionStorage.getItem('ansim_admin_tkn')||'').trim()}
+function setBar(msg,type){var b=ge('SBar');b.textContent=msg;b.className='sbar'+(type==='ok'?' ok':type==='er'?' er':'')}
+
+function fmt(v){
+  if(!v)return '-';
+  try{var d=new Date(v);return d.getFullYear()+'.'+(d.getMonth()+1).toString().padStart(2,'0')+'.'+d.getDate().toString().padStart(2,'0')+' '+d.getHours().toString().padStart(2,'0')+':'+d.getMinutes().toString().padStart(2,'0')}
+  catch(e){return String(v).slice(0,16)}
+}
+
+function badgeCls(map,v){return 'badge b-'+(map==='f'?v||'new':v||'none')}
+
+function optHtml(map,sel){
+  return Object.keys(map).map(function(k){
+    return'<option value="'+k+'"'+(k===sel?' selected':'')+'>'+map[k]+'</option>';
+  }).join('');
+}
+
+function isTest(lead){
+  var vals=[lead.name,lead.email,lead.note].map(function(v){return String(v||'').toLowerCase()});
+  return vals.some(function(v){return v.includes('test')||v.includes('테스트')});
+}
+
+function renderStat(leads){
+  var cnt={new:0,contacted:0,payment_guided:0,paid:0};
+  leads.forEach(function(l){
+    var f=l.followup_status||'new';
+    if(cnt[f]!=null)cnt[f]++;
+    if((l.paid_report_status||'none')==='paid')cnt.paid++;
+  });
+  ge('sTotal').textContent=leads.length;
+  ge('sNew').textContent=cnt.new;
+  ge('sContacted').textContent=cnt.contacted;
+  ge('sPayment').textContent=cnt.payment_guided;
+  ge('sPaid').textContent=cnt.paid;
+  ge('Stat').style.display='';
+}
+
+function renderLeads(leads){
+  if(!leads.length){ge('LeadBody').innerHTML='<tr><td colspan="8" class="empty">리드가 없습니다.</td></tr>';return}
+  ge('LeadBody').innerHTML=leads.map(function(l){
+    var fs=l.followup_status||'new';
+    var ps=l.paid_report_status||'none';
+    var test=isTest(l);
+    return '<tr data-id="'+esc(l.id)+'">'
+      +'<td>'+esc(fmt(l.created_at))+'</td>'
+      +'<td>'+esc(l.name||'')+(test?'<span class="test-tag">TEST</span>':'')+'</td>'
+      +'<td><a href="mailto:'+esc(l.email||'')+'">'+esc(l.email||'')+'</a></td>'
+      +'<td style="text-align:center">'+esc(String(l.score||'-'))+'</td>'
+      +'<td><span class="badge b-'+fs+'">'+esc(FOLLOW[fs]||fs)+'</span><br>'
+        +'<select class="sel-s sel-f" data-id="'+esc(l.id)+'">'+optHtml(FOLLOW,fs)+'</select></td>'
+      +'<td><span class="badge b-'+ps+'">'+esc(PAID[ps]||ps)+'</span><br>'
+        +'<select class="sel-s sel-p" data-id="'+esc(l.id)+'">'+optHtml(PAID,ps)+'</select></td>'
+      +'<td>'+(l.note?'<div class="note-pre">'+esc(l.note)+'</div>':'')
+        +'<textarea class="note-ta" data-id="'+esc(l.id)+'" rows="2" style="margin-top:6px;font-size:12px" placeholder="후속 메모">'+esc(l.followup_note||'')+'</textarea></td>'
+      +'<td><button class="btn btn-p btn-sm js-save" data-id="'+esc(l.id)+'">저장</button></td>'
+      +'</tr>';
+  }).join('');
+
+  ge('LeadBody').querySelectorAll('.js-save').forEach(function(btn){
+    btn.onclick=function(){save(btn.getAttribute('data-id'))};
+  });
+}
+
+async function load(){
+  var t=tkn();
+  if(!t){setBar('토큰을 입력해주세요.','er');return}
+  sessionStorage.setItem('ansim_admin_tkn',t);
+  setBar('불러오는 중...');
+  try{
+    var fs=ge('fStatus').value,fp=ge('fPaid').value;
+    var url='/api/admin/leads/list?limit=100'+(fs?'&followupStatus='+fs:'')+(fp?'&paidReportStatus='+fp:'');
+    var r=await fetch(url,{headers:{'x-admin-token':t}});
+    var d=await r.json().catch(function(){return{}});
+    if(!r.ok||!d.ok)throw new Error(d.error||'불러오기 실패');
+    renderLeads(d.leads||[]);
+    renderStat(d.leads||[]);
+    setBar((d.leads||[]).length+'건 불러왔습니다.','ok');
+  }catch(e){setBar('오류: '+e.message,'er')}
+}
+
+async function save(id){
+  var t=tkn();
+  if(!t){setBar('토큰을 입력해주세요.','er');return}
+  var row=ge('LeadBody').querySelector('tr[data-id="'+id+'"]');
+  if(!row)return;
+  var fs=row.querySelector('.sel-f').value;
+  var ps=row.querySelector('.sel-p').value;
+  var note=row.querySelector('.note-ta').value.trim();
+  try{
+    var r=await fetch('/api/admin/leads/update-status',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-admin-token':t},
+      body:JSON.stringify({leadId:id,followupStatus:fs,paidReportStatus:ps,followupNote:note})
     });
+    var d=await r.json().catch(function(){return{}});
+    if(!r.ok||!d.ok)throw new Error(d.error||'저장 실패');
+    setBar('저장되었습니다.','ok');
+  }catch(e){setBar('저장 오류: '+e.message,'er')}
+}
 
-    followupFilter.addEventListener("change", function() {
-      setQuickFilterActive(followupFilter.value, paidFilter.value);
-    });
+function reset(){ge('fStatus').value='';ge('fPaid').value='';load()}
 
-    paidFilter.addEventListener("change", function() {
-      setQuickFilterActive(followupFilter.value, paidFilter.value);
-    });
+document.querySelectorAll('.qf-btn').forEach(function(btn){
+  btn.onclick=function(){
+    document.querySelectorAll('.qf-btn').forEach(function(b){b.classList.remove('on')});
+    btn.classList.add('on');
+    ge('fStatus').value=btn.getAttribute('data-f');
+    ge('fPaid').value=btn.getAttribute('data-p');
+    load();
+  };
+});
 
-    setQuickFilterActive(followupFilter.value, paidFilter.value);
-
-    loadButton.addEventListener("click", loadLeads);
-
-    clearTokenButton.addEventListener("click", function() {
-      sessionStorage.removeItem("ansimsangsok_admin_token");
-      adminTokenInput.value = "";
-      setStatus("토큰을 지웠습니다.", "");
-      renderEmpty("토큰을 입력한 뒤 리드를 불러오세요.");
-    });
-  </script>
+var saved=sessionStorage.getItem('ansim_admin_tkn');
+if(saved)ge('tkn').value=saved;
+ge('tkn').onkeydown=function(e){if(e.key==='Enter')load()};
+</script>
 </body>
 </html>
