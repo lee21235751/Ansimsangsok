@@ -4,16 +4,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "node scripts/build.mjs",
-    "start": "node server.mjs",
-    "evidence:update": "node scripts/update-evidence-sources.mjs",
-    "evidence:validate": "node scripts/validate-evidence-sources.mjs"
+    "build": "node scripts/build.mjs"
   },
   "engines": {
     "node": ">=18"
-  },
-  "devDependencies": {
-    "playwright": "^1.60.0",
-    "sharp": "^0.34.5"
   }
 }
