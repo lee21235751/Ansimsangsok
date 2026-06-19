@@ -214,9 +214,7 @@ export default async function handler(req, res) {
     const score   = Number.isFinite(Number(body.score)) ? Number(body.score) : 0;
     const email   = String(body.email||'').trim();
 
-    if (!email||!email.includes('@')) {
-      return res.status(400).json({ok:false,message:'이메일이 필요합니다.'});
-    }
+    // email optional
 
     const types = matchTypes(answers);
 
