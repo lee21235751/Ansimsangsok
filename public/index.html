@@ -384,12 +384,8 @@ function showResult(){
   /* 이벤트 바인딩 */
   var paidBtn=$('paidBtn');
   if(paidBtn)paidBtn.addEventListener('click',function(){
-    var em=($('fEmail')||{}).value||'';
-    if(!em||!em.includes('@')){
-      var fc=$('formCard');if(fc)fc.scrollIntoView({behavior:'smooth',block:'center'});
-      toast_('이메일을 먼저 입력해주세요.');return;
-    }
-    try{sessionStorage.setItem('ansim_report_request',JSON.stringify({email:em,score:sc,answers:S.ans}))}catch(er){}
+    var em=(document.getElementById('fEmail')||{}).value||'';
+    try{sessionStorage.setItem('ansim_report_request',JSON.stringify({email:em.trim(),score:sc,answers:S.ans}))}catch(er){}
     window.location.href='/report';
   },false);
 
