@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+<title>결제 처리 중 | 안심상속</title>
+<meta name="robots" content="noindex"/>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Pretendard","Noto Sans KR",sans-serif;background:#0d1f17;color:#fffdf5;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+  .box{max-width:420px;width:100%;text-align:center}
+  .spinner{width:44px;height:44px;border:4px solid rgba(241,213,134,.25);border-top-color:#f1d586;border-radius:50%;margin:0 auto 24px;animation:spin 0.9s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  h1{font-size:1.15rem;font-weight:800;margin-bottom:10px}
+  p{font-size:.92rem;color:rgba(255,253,245,.7);line-height:1.6}
+  .err{display:none;background:rgba(220,80,80,.12);border:1px solid rgba(220,80,80,.35);border-radius:14px;padding:18px;margin-top:18px;font-size:.88rem;color:#ffb4b4;text-align:left}
+  .retry{display:none;margin-top:16px;background:#f1d586;color:#0d1f17;border:none;border-radius:10px;padding:12px 20px;font-weight:800;font-size:.9rem;cursor:pointer}
+</style>
+</head>
+<body>
+<div class="box">
+  <div class="spinner" id="Spin"></div>
+  <h1 id="Title">결제를 확인하고 있습니다</h1>
+  <p id="Sub">잠시만 기다려주세요. 화면을 닫지 마세요.</p>
+  <div class="err" id="ErrBox"></div>
+  <button class="retry" id="RetryBtn" type="button" onclick="window.location.href='/'">처음으로 돌아가기</button>
+</div>
+
+<script>
+(function(){
+  var urlParams = new URLSearchParams(window.location.search);
+  var paymentKey = urlParams.get('paymentKey');
+  var orderId = urlParams.get('orderId');
+  var amount = urlParams.get('amount');
+
+  function showError(msg){
+    document.getElementById('Spin').style.display='none';
+    document.getElementById('Title').textContent='결제 승인에 실패했습니다';
+    document.getElementById('Sub').textContent='아래 내용을 확인해주세요.';
+    var eb = document.getElementById('ErrBox');
+    eb.style.display='block';
+    eb.textContent = msg || '알 수 없는 오류가 발생했습니다. 카드사 문제일 수 있으니 잠시 후 다시 시도해주세요.';
+    document.getElementById('RetryBtn').style.display='inline-block';
+  }
+
+  if(!paymentKey || !orderId || !amount){
+    showError('결제 정보가 올바르지 않습니다.');
+    return;
+  }
+
+  fetch('/api/confirm-payment', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ paymentKey: paymentKey, orderId: orderId, amount: Number(amount) })
+  })
+  .then(function(res){
+    return res.json().then(function(data){ return { ok: res.ok, data: data }; });
+  })
+  .then(function(result){
+    if(!result.ok){
+      showError(result.data && result.data.message ? result.data.message : '결제 승인 처리 중 문제가 발생했습니다.');
+      return;
+    }
+    /* 결제 승인 성공 - 결제 완료 표시와 orderId를 진단 데이터에 병합해 심화설문으로 이동.
+       orderId는 이후 generate-report 호출 시 결제 검증용으로 사용됨. */
+    try{
+      sessionStorage.setItem('ansim_payment_done', JSON.stringify({
+        orderId: orderId,
+        paymentKey: paymentKey,
+        amount: amount,
+        paidAt: new Date().toISOString()
+      }));
+      var reqRaw = sessionStorage.getItem('ansim_report_request');
+      var reqObj = reqRaw ? JSON.parse(reqRaw) : {};
+      reqObj.orderId = orderId;
+      sessionStorage.setItem('ansim_report_request', JSON.stringify(reqObj));
+    }catch(e){}
+    document.getElementById('Title').textContent='결제가 완료되었습니다';
+    document.getElementById('Sub').textContent='심화 설문으로 이동합니다.';
+    setTimeout(function(){
+      window.location.href = '/deep-survey';
+    }, 800);
+  })
+  .catch(function(){
+    showError('네트워크 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
+  });
+})();
+</script>
+</body>
+</html>
