@@ -57,7 +57,14 @@ function matchTypes(a) {
   if (business==='조금 있음')           { add('T17',25); }
 
   const hasOverseas = overseas.some(v => !['none','unknown'].includes(v));
-  if (hasOverseas) add('T16',45);
+  if (hasOverseas) {
+    add('T16',45);
+    /* 자산 해외이전·디지털자산은 실무상 더 까다로운 케이스라 가중치 상향 */
+    if (overseas.includes('overseas_realestate_or_company')) add('T16',20);
+    if (overseas.includes('overseas_securities')) add('T16',15);
+    if (overseas.includes('crypto')) add('T16',15);
+    if (overseas.includes('permanent_residency')) add('T16',10);
+  }
 
   if (conflict==='조금 있음')   { add('T07',35); add('T13',15); }
   if (conflict==='이미 뚜렷함') { add('T07',55); add('T13',25); add('T06',20); }
@@ -128,6 +135,8 @@ function buildSimulation(deep) {
   return {
     totalEok, debtEok, netEok, totalDeduction, taxableEok,
     realEstateEok, hasOverseasAsset, overseasEok,
+    overseasAssetType: deep.overseasAssetType || null,
+    residencyStatus: deep.residencyStatus || null,
     spouseAlive, childCount, shareText,
     giftWithin10y, giftAmountEok, priorGiftTiming: deep.priorGiftTiming || null,
     businessShare: deep.businessShare || null,
@@ -148,6 +157,12 @@ function getContext(a, types) {
   const lines = [];
   const overseas = Array.isArray(a.overseas) ? a.overseas : [];
   const hasOverseas = overseas.some(v=>!['none','unknown'].includes(v));
+  const hasPR = overseas.includes('permanent_residency');
+  const hasOverseasRE = overseas.includes('overseas_realestate_or_company');
+  const hasOverseasSec = overseas.includes('overseas_securities');
+  const hasCrypto = overseas.includes('crypto');
+  const hasDual = overseas.includes('dual_nationality');
+  const hasForeignNat = overseas.includes('family_foreign_nationality');
 
   if (types.some(t=>t.includes('전혼')||t.includes('재혼'))) {
     lines.push('전혼 자녀도 법정상속인으로 현배우자 자녀와 동등한 상속분을 가짐. 상속인 범위 정확히 파악 필요.');
@@ -155,8 +170,20 @@ function getContext(a, types) {
   if (types.some(t=>t.includes('유류분'))) {
     lines.push('2026.2.12 민법 개정: 형제자매 유류분 폐지, 패륜상속인 상속권 상실 가능, 기여 보상 증여는 유류분 반환 제외.');
   }
-  if (hasOverseas) {
-    lines.push('해외 거주 상속인은 서명공증 필요, 외국 국적자는 별도 서류, 해외 금융자산은 국내 신고 의무.');
+  if (hasPR && !hasForeignNat) {
+    lines.push('핵심: 영주권(시민권 아님)은 국적 변경이 아님. 본인이 한국 국적을 유지하면 상속에는 원칙적으로 한국 민법이 그대로 적용됨(국제사법상 본국법주의). 영주권 보유 자체만으로 상속 준거법이 바뀌지 않는다는 점을 명확히 안내할 것.');
+  }
+  if (hasOverseasRE) {
+    lines.push('해외로 옮긴 부동산·사업체(싱가포르·미국 등)도 피상속인이 한국 국적이면 한국 상속세 과세대상에 포함됨(거주자는 전세계 자산 합산 과세). 해당국 상속법과 한국법이 동시에 적용되어 이중 절차가 필요할 수 있음. 조세조약상 외국납부세액공제 검토 필요.');
+  }
+  if (hasOverseasSec) {
+    lines.push('미국·홍콩 등 해외 증권계좌(주식)도 한국 거주자 기준 상속재산에 합산됨. 해외 증권사는 한국 가족관계증명서를 영문공증·아포스티유 받아 별도 상속절차(probate 등)를 거쳐야 인출 가능한 경우가 많아 시간이 오래 걸림.');
+  }
+  if (hasCrypto) {
+    lines.push('암호화폐도 상속재산에 포함되며 상속세 신고 대상. 거래소 계정이면 가족관계증명서로 상속인 인출 신청 가능하나, 개인 지갑(콜드월렛)의 시드구문·키를 본인만 알고 있으면 사망 시 영구히 접근 불가능해질 수 있어 사전에 안전한 방식으로 정보를 남겨두는 것이 중요함.');
+  }
+  if (hasOverseas && !hasOverseasRE && !hasOverseasSec && !hasCrypto && !hasPR) {
+    lines.push('해외 거주 상속인은 서명공증 필요, 외국 국적자는 별도 서류, 해외 금융자산은 국내 신고 의무(해외금융계좌 신고제도, 5억 초과 시).');
   }
   if (types.some(t=>t.includes('사업체')||t.includes('지분'))) {
     lines.push('법인 지분은 정관·주주간 계약 확인 필요. 가업상속공제(최대 600억) 검토 가능하나 요건 까다로움.');
@@ -197,6 +224,8 @@ async function callClaude(answers, types, score, deepAnswers) {
 - 전체 추정 재산: ${formatEok(sim.totalEok)}
 - 부동산 추정 시가: ${formatEok(sim.realEstateEok)}
 - 해외자산 보유: ${sim.hasOverseasAsset ? formatEok(sim.overseasEok)+' 추정' : '없음 또는 모름'}
+- 해외자산 형태: ${sim.overseasAssetType || '해당없음'}
+- 영주권·국적 상태: ${sim.residencyStatus || '해당없음'}
 - 채무 추정: ${formatEok(sim.debtEok)}
 - 순재산(재산-채무): ${formatEok(sim.netEok)}
 - 적용 가능 공제 추정(일괄공제5억${sim.spouseAlive?'+배우자공제 최소5억':''}): ${formatEok(sim.totalDeduction)}
@@ -217,7 +246,8 @@ async function callClaude(answers, types, score, deepAnswers) {
 "~점검이 필요합니다", "~확인이 필요합니다", "~검토하세요" 로만 끝나는 문장을 남발하지 마세요. 가능한 모든 곳에서 실제로 선택 가능한 구체적 옵션을 2~3개씩 제시하세요.
 예시: 유류분 문제라면 "① 다른 상속인에게 유류분 상당액을 사전 정산하는 방법 ② 기여분을 인정받을 증빙을 미리 확보하는 방법 ③ 유언장에 증여 경위를 명시해두는 방법" 식으로 구체적 선택지를 나열하세요.
 사업체·지분이 있다면 가업상속공제 요건(피상속인 경영기간, 상속인 가업 종사 등)을 일반론이 아니라 입력된 지분율 기준으로 적용 가능성을 언급하세요.
-기여(부양·간병) 사실이 있다면 기여분 주장의 실질적 근거가 될 수 있는 자료(통장 이체내역, 진단서, 간병 영수증 등)를 구체적으로 안내하세요.`;
+기여(부양·간병) 사실이 있다면 기여분 주장의 실질적 근거가 될 수 있는 자료(통장 이체내역, 진단서, 간병 영수증 등)를 구체적으로 안내하세요.
+해외 영주권 상태가 "한국 국적 유지"라면, 영주권은 시민권과 다르며 한국 국적을 유지하는 한 상속에는 한국 민법이 그대로 적용된다는 점을 명확히 안내하세요. 해외로 옮긴 회사·부동산이 있다면 한국 거주자는 전세계 자산이 한국 상속세 과세대상에 합산된다는 점과 해당국 절차가 별도로 필요할 수 있다는 점을 안내하세요. 해외 증권계좌(미국·홍콩 등)가 있다면 가족관계증명서의 영문공증·아포스티유가 필요할 수 있다는 실무 팁을 포함하세요. 암호화폐가 있다면 개인 지갑 시드구문·키 정보를 안전하게 남겨두는 방법을 구체적으로 안내하세요.`;
   }
 
   const prompt = `안심상속 유료 상세리포트를 작성하세요.
