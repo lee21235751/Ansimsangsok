@@ -87,9 +87,17 @@ function buildSimulation(deep) {
   const debtMidpoint = {
     '없음': 0, '1천만원 미만': 0.05, '1천만~1억': 0.5, '1억 이상': 1.5, '모르겠음': null
   };
+  const overseasMidpoint = {
+    '1억 미만': 0.5, '1억~3억': 2, '3억~5억': 4, '5억 이상': 7, '모르겠음': null
+  };
+
+  const realEstateEok  = assetMidpoint[deep.realEstateValue] ?? null;
+  const overseasEok    = overseasMidpoint[deep.overseasAssetValue] ?? 0;
+  const hasOverseasAsset = !!deep.overseasAssetValue && deep.overseasAssetValue !== '모르겠음';
 
   const totalEok = assetMidpoint[deep.totalAssets] ?? null;
   const debtEok  = debtMidpoint[deep.debt] ?? 0;
+  /* 해외자산은 totalAssets 구간 추정에 이미 포함했을 가능성이 있으므로 합산하지 않고 별도 표기만 함 */
   const netEok   = totalEok != null ? Math.max(0, totalEok - (debtEok||0)) : null;
 
   /* 일괄공제 5억 + 배우자공제(최소5억) 단순 적용 예시 — 실제 세액 아님, 구간 추정용 */
@@ -119,8 +127,11 @@ function buildSimulation(deep) {
 
   return {
     totalEok, debtEok, netEok, totalDeduction, taxableEok,
+    realEstateEok, hasOverseasAsset, overseasEok,
     spouseAlive, childCount, shareText,
     giftWithin10y, giftAmountEok, priorGiftTiming: deep.priorGiftTiming || null,
+    businessShare: deep.businessShare || null,
+    caregivingContribution: deep.caregivingContribution || null,
     conflictDetail: deep.conflictDetail || null,
     expertNeed: deep.expertNeed || null
   };
@@ -184,6 +195,8 @@ async function callClaude(answers, types, score, deepAnswers) {
 
 [심화설문 기반 시뮬레이션 데이터 — 반드시 simulation 섹션에 이 숫자를 그대로 활용해 구체적으로 작성]
 - 전체 추정 재산: ${formatEok(sim.totalEok)}
+- 부동산 추정 시가: ${formatEok(sim.realEstateEok)}
+- 해외자산 보유: ${sim.hasOverseasAsset ? formatEok(sim.overseasEok)+' 추정' : '없음 또는 모름'}
 - 채무 추정: ${formatEok(sim.debtEok)}
 - 순재산(재산-채무): ${formatEok(sim.netEok)}
 - 적용 가능 공제 추정(일괄공제5억${sim.spouseAlive?'+배우자공제 최소5억':''}): ${formatEok(sim.totalDeduction)}
@@ -191,12 +204,20 @@ async function callClaude(answers, types, score, deepAnswers) {
 - 배우자 생존: ${sim.spouseAlive ? '예':'아니오'}
 - 자녀 수: ${sim.childCount ?? '미상'}명
 - 법정상속분 비율: ${sim.shareText || '확인 필요'}
+- 사업체·법인 지분율: ${sim.businessShare || '없음 또는 미상'}
 - 10년 이내 사전증여 여부: ${sim.giftWithin10y ? '예 ('+sim.priorGiftTiming+')':'아니오 또는 없음'}
 - 사전증여 추정액: ${formatEok(sim.giftAmountEok)}
+- 부양·간병 등 기여 사실: ${sim.caregivingContribution || '없음 또는 미상'}
 - 갈등 구체 유형: ${sim.conflictDetail || '없음'}
 - 희망 전문가 분야: ${sim.expertNeed || '미정'}
 
-이 숫자들은 정확한 세액이 아니라 "구간 추정"임을 리포트에 명시하되, 일반론이 아니라 이 숫자를 직접 인용해 계산 과정을 보여주는 방식으로 작성하세요.`;
+이 숫자들은 정확한 세액이 아니라 "구간 추정"임을 리포트에 명시하되, 일반론이 아니라 이 숫자를 직접 인용해 계산 과정을 보여주는 방식으로 작성하세요.
+
+[행동지침 — 매우 중요]
+"~점검이 필요합니다", "~확인이 필요합니다", "~검토하세요" 로만 끝나는 문장을 남발하지 마세요. 가능한 모든 곳에서 실제로 선택 가능한 구체적 옵션을 2~3개씩 제시하세요.
+예시: 유류분 문제라면 "① 다른 상속인에게 유류분 상당액을 사전 정산하는 방법 ② 기여분을 인정받을 증빙을 미리 확보하는 방법 ③ 유언장에 증여 경위를 명시해두는 방법" 식으로 구체적 선택지를 나열하세요.
+사업체·지분이 있다면 가업상속공제 요건(피상속인 경영기간, 상속인 가업 종사 등)을 일반론이 아니라 입력된 지분율 기준으로 적용 가능성을 언급하세요.
+기여(부양·간병) 사실이 있다면 기여분 주장의 실질적 근거가 될 수 있는 자료(통장 이체내역, 진단서, 간병 영수증 등)를 구체적으로 안내하세요.`;
   }
 
   const prompt = `안심상속 유료 상세리포트를 작성하세요.
@@ -246,8 +267,8 @@ ${ctx?'\n[참고]\n'+ctx:''}${simBlock}
     "blind_spots": {
       "title": "놓치기 쉬운 항목",
       "items": [
-        {"title": "항목명1", "content": "설명1"},
-        {"title": "항목명2", "content": "설명2"}
+        {"title": "항목명1", "content": "설명1 — 가능하면 실제 선택지 2개 이상 포함"},
+        {"title": "항목명2", "content": "설명2 — 가능하면 실제 선택지 2개 이상 포함"}
       ]
     },
     "questions": {
@@ -257,9 +278,9 @@ ${ctx?'\n[참고]\n'+ctx:''}${simBlock}
     "next_steps": {
       "title": "다음 순서",
       "steps": [
-        {"order": 1, "title": "단계1", "content": "설명1"},
-        {"order": 2, "title": "단계2", "content": "설명2"},
-        {"order": 3, "title": "단계3", "content": "설명3"}
+        {"order": 1, "title": "단계1", "content": "지금 바로 할 수 있는 구체 행동으로 작성"},
+        {"order": 2, "title": "단계2", "content": "지금 바로 할 수 있는 구체 행동으로 작성"},
+        {"order": 3, "title": "단계3", "content": "지금 바로 할 수 있는 구체 행동으로 작성"}
       ]
     }
   },
@@ -267,7 +288,7 @@ ${ctx?'\n[참고]\n'+ctx:''}${simBlock}
   "generated_at": "${new Date().toISOString()}"
 }
 
-규칙: JSON만 반환. 코드블록 없이. 배열 항목은 반드시 별도 문자열로.`;
+규칙: JSON만 반환. 코드블록 없이. 배열 항목은 반드시 별도 문자열로. "~필요합니다/검토하세요/확인하세요"로만 끝나는 문장을 연속 사용하지 말 것 — 최소 절반 이상의 항목에는 실제 선택지나 구체적 행동을 포함할 것.`;
 
   const res = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
@@ -278,8 +299,8 @@ ${ctx?'\n[참고]\n'+ctx:''}${simBlock}
     },
     body: JSON.stringify({
       model: 'claude-haiku-4-5-20251001',
-      max_tokens: 4096,
-      system: '안심상속 유료 상세리포트 작성 시스템. 법률·세무 조언 금지(단, 입력된 구간 수치 기반 단순 추정 계산은 허용). 상황 정리와 준비 안내, 구간 추정 시뮬레이션. JSON만 반환.',
+      max_tokens: 4500,
+      system: '안심상속 유료 상세리포트 작성 시스템. 법률·세무 조언 금지(단, 입력된 구간 수치 기반 단순 추정 계산은 허용). "점검이 필요합니다"식 모호한 문장 대신, 가능한 곳마다 실제 선택 가능한 구체적 옵션을 제시할 것. 상황 정리와 준비 안내, 구간 추정 시뮬레이션. JSON만 반환.',
       messages: [{ role: 'user', content: prompt }]
     })
   });
