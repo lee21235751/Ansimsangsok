@@ -174,8 +174,12 @@ var Q=[
   {t:'single',k:'perspective',q:'누구의 상속을 준비하고 계신가요?',h:'부모님이나 배우자의 상속을 자녀(가족) 입장에서 미리 준비하시는 경우도 똑같이 진단해드립니다.',o:[{l:'나(본인)의 상속을 미리 준비',s:0},{l:'부모님 또는 배우자의 상속을 가족 입장에서 준비',s:0}]},
   {t:'single',k:'family',
    q:function(a){return a.perspective==='부모님 또는 배우자의 상속을 가족 입장에서 준비'?'부모님(또는 배우자)의 현재 가족 상황은 어떤가요?':'현재 상속과 관련된 가족 상황은 어떤가요?'},
-   h:function(a){return a.perspective==='부모님 또는 배우자의 상속을 가족 입장에서 준비'?'배우자는 부모님의 배우자, 자녀는 부모님의 자녀(본인 포함 형제자매) 기준으로 답해주세요.':'가장 가까운 상황을 선택해주세요.'},
-   o:[{l:'배우자와 자녀가 있음',s:8},{l:'재혼가정 또는 전혼 자녀가 있음',s:22},{l:'자녀가 없거나 형제자매와 관련될 수 있음',s:18},{l:'정확히 모르겠음',s:12}]},
+   h:function(a){return a.perspective==='부모님 또는 배우자의 상속을 가족 입장에서 준비'?'배우자는 부모님의 배우자, 자녀는 부모님의 자녀(본인 포함 형제자매) 기준으로 답해주세요.':'가장 가까운 상황을 선택해주세요. 배우자 또는 자녀 중 한쪽만 있어도 선택해주세요.'},
+   o:[{l:'배우자 또는 자녀가 있음',s:8},{l:'자녀가 없거나 형제자매와 관련될 수 있음',s:18},{l:'정확히 모르겠음',s:12}]},
+  {t:'multi',k:'remarriage',
+   q:function(a){return a.perspective==='부모님 또는 배우자의 상속을 가족 입장에서 준비'?'부모님(또는 배우자)에게 아래 중 해당하는 사항이 있나요?':'아래 중 해당하는 사항이 있나요?'},
+   h:'여러 개 동시 선택 가능합니다. 해당하는 것이 없으면 "해당 없음"을 선택해주세요.',ex:['none'],
+   o:[{v:'self_remarried',l:'본인이 재혼했음(재혼가정)',s:14},{v:'spouse_remarried',l:'배우자가 재혼한 적이 있음(재혼가정)',s:14},{v:'my_prior_children',l:'나의 전혼 자녀가 있음(이전 혼인에서 낳은 내 친자식)',s:18},{v:'spouse_prior_children',l:'배우자의 전혼 자녀가 있음(배우자가 데려온 자녀)',s:16},{v:'my_child_adopted_away',l:'나의 전혼 자녀가 전 배우자의 재혼 상대에게 친양자로 입양되었음',s:12},{v:'avoid_step_inheritance',l:'내 재산이 배우자를 거쳐 배우자의 전혼 자녀에게 흘러가는 것은 원치 않음',s:22},{v:'none',l:'해당 없음',s:0}]},
   {t:'single',k:'will',
    q:function(a){return a.perspective==='부모님 또는 배우자의 상속을 가족 입장에서 준비'?'부모님(또는 배우자)의 유언장이나 재산 분배 계획이 준비되어 있나요?':'유언장이나 재산 분배 계획이 준비되어 있나요?'},
    h:'문서 여부보다 현재 정리 수준을 기준으로 답해주세요.',
@@ -185,9 +189,14 @@ var Q=[
    h:'부양해준 자녀, 더 어려운 자녀 등 이유는 다양할 수 있습니다. 솔직하게 답해주세요.',
    o:[{l:'있음 — 이미 마음을 정함',s:20},{l:'있음 — 아직 확신은 없음',s:16},{l:'없음 — 균등하게 나눌 생각',s:4},{l:'아직 생각해보지 않음',s:10}]},
   {t:'multi',k:'assetTypes',q:'아래 중 보유한 재산이 있나요?',h:'부동산, 주식, 코인 등 해당하는 것을 모두 선택해주세요.',ex:['none'],o:[{v:'realestate',l:'부동산(주택·토지·상가 등)',s:0},{v:'kr_stock',l:'국내 주식·펀드',s:2},{v:'overseas_stock',l:'미국·홍콩 등 해외 주식',s:6},{v:'crypto',l:'암호화폐',s:6},{v:'business',l:'사업체·법인 지분',s:0},{v:'none',l:'특별히 없음',s:0}]},
-  {t:'multi',k:'assetPresence',q:'보유한 부동산이 있나요?',h:'여러 개 동시 선택 가능합니다.',ex:['none','unknown'],o:[{v:'house',l:'주택',s:5},{v:'land',l:'토지',s:8},{v:'incomeRealEstate',l:'수익형 부동산(상가·오피스텔·펜션)',s:8},{v:'factory',l:'공장·창고',s:8},{v:'otherRealEstate',l:'기타 부동산',s:5},{v:'none',l:'해당 없음',s:0},{v:'unknown',l:'정확히 모르겠음',s:8}]},
+  {t:'multi',k:'assetPresence',q:'보유한 부동산은 어떤 유형인가요?',h:'여러 개 동시 선택 가능합니다.',ex:['none','unknown'],o:[{v:'house',l:'주택',s:5},{v:'land',l:'토지',s:8},{v:'incomeRealEstate',l:'수익형 부동산(상가·오피스텔·펜션)',s:8},{v:'factory',l:'공장·창고',s:8},{v:'otherRealEstate',l:'기타 부동산',s:5},{v:'none',l:'해당 없음',s:0},{v:'unknown',l:'정확히 모르겠음',s:8}],
+   showIf:function(a){ return Array.isArray(a.assetTypes) && a.assetTypes.indexOf('realestate')>=0; }},
   {t:'single',k:'gift',q:'과거에 특정 가족에게 더 많이 준 재산이 있나요?',h:'증여, 명의 이전, 큰 금액 지원 등을 떠올려 답해주세요.',o:[{l:'없음',s:4},{l:'일부 있음',s:16},{l:'상당히 있음',s:26},{l:'정확히 모르겠음',s:14}]},
   {t:'single',k:'business',q:'가족 사업, 지분, 임대수익처럼 나누기 복잡한 재산이 있나요?',h:'사업체, 법인 지분, 공동명의, 임대수익 등을 포함해 생각해주세요.',o:[{l:'없음',s:3},{l:'조금 있음',s:12},{l:'중요한 비중을 차지함',s:24},{l:'정확히 모르겠음',s:12}]},
+  {t:'single',k:'debt',
+   q:function(a){return a.perspective==='부모님 또는 배우자의 상속을 가족 입장에서 준비'?'부모님(또는 배우자)에게 대출·보증·미납세금 등 채무가 있나요?':'대출·보증·미납세금 등 채무가 있나요?'},
+   h:'정확한 금액은 몰라도 괜찮습니다. 있는지 없는지만 알려주세요.',
+   o:[{l:'없음',s:2},{l:'있음 — 부담스럽지 않은 수준',s:8},{l:'있음 — 부담이 큰 수준',s:18},{l:'정확히 모르겠음',s:10}]},
   {t:'multi',k:'overseas',q:'해외 국적·거주·재산 요소가 있나요?',h:'영주권, 해외주식, 암호화폐도 포함됩니다. 자녀 중 외국 국적자가 있어도 선택해주세요. 여러 개 동시 선택 가능합니다.',ex:['none','unknown'],o:[{v:'self_abroad',l:'본인이 해외 거주 중',s:16},{v:'permanent_residency',l:'본인 또는 가족이 해외 영주권 보유(시민권 아님)',s:17},{v:'family_abroad',l:'배우자 또는 자녀가 해외 거주 중',s:14},{v:'family_foreign_nationality',l:'배우자 또는 자녀가 외국 국적(시민권)',s:16},{v:'dual_nationality',l:'본인 또는 가족이 복수국적',s:18},{v:'overseas_realestate_or_company',l:'해외 부동산 또는 해외로 옮긴 회사·사업체',s:20},{v:'overseas_securities',l:'미국·홍콩 등 해외 증권계좌(주식)',s:14},{v:'overseas_bank',l:'해외 예금·은행계좌',s:14},{v:'crypto',l:'암호화폐 보유',s:14},{v:'none',l:'해당 없음',s:0},{v:'unknown',l:'정확히 모르겠음',s:10}]},
   {t:'single',k:'conflict',
    q:function(a){return a.perspective==='부모님 또는 배우자의 상속을 가족 입장에서 준비'?'가족(형제자매 등) 사이에 이미 의견 차이나 갈등 조짐이 있나요?':'가족 사이에 이미 의견 차이나 갈등 조짐이 있나요?'},
@@ -207,8 +216,16 @@ function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').
 var toastEl=ge('T'),toastTm;
 function toast(msg){toastEl.textContent=msg;toastEl.classList.remove('dn');clearTimeout(toastTm);toastTm=setTimeout(function(){toastEl.classList.add('dn')},4000)}
 
+function visible(q){ return !q.showIf || q.showIf(ans); }
+function visibleSteps(){
+  var arr=[];
+  for(var i=0;i<Q.length;i++){ if(visible(Q[i])) arr.push(i); }
+  return arr;
+}
+
 function calcScore(){
   return Math.min(100,Q.reduce(function(sum,q){
+    if(!visible(q))return sum;
     var a=ans[q.k];if(!a)return sum;
     if(q.t==='single'){var o=q.o.find(function(x){return x.l===a});return sum+(o?o.s:0)}
     if(q.t==='multi'){if(!Array.isArray(a))return sum;return sum+a.reduce(function(s2,v){var o=q.o.find(function(x){return x.v===v});return s2+(o?o.s:0)},0)}
@@ -221,11 +238,15 @@ function calcScore(){
 window.getTotalScore=calcScore;
 
 function renderQ(){
-  var q=Q[step],tot=Q.length;
-  ge('StepTxt').textContent=(step+1)+' / '+tot;
-  ge('PFill').style.width=((step+1)/tot*100)+'%';
-  ge('NextBtn').textContent=step>=tot-1?'결과 확인하기':'다음';
-  ge('PrevBtn').disabled=step===0;ge('PrevBtn').style.opacity=step===0?'0.45':'1';
+  var q=Q[step];
+  var vs=visibleSteps();
+  var posInVs=vs.indexOf(step);
+  var tot=vs.length;
+  ge('StepTxt').textContent=(posInVs+1)+' / '+tot;
+  ge('PFill').style.width=((posInVs+1)/tot*100)+'%';
+  var isLast=vs[vs.length-1]===step;
+  ge('NextBtn').textContent=isLast?'결과 확인하기':'다음';
+  ge('PrevBtn').disabled=posInVs===0;ge('PrevBtn').style.opacity=posInVs===0?'0.45':'1';
   var qText = typeof q.q==='function' ? q.q(ans) : q.q;
   var hText = typeof q.h==='function' ? q.h(ans) : q.h;
   ge('QTitle').innerHTML='<span class="qt">'+esc(qText)+'</span>';
@@ -275,11 +296,25 @@ function onOpt(b){
   }
 }
 
-ge('NextBtn').onclick=function(){if(step>=Q.length-1)showResult();else{step++;renderQ();var s=ge('Survey');if(s.getBoundingClientRect().top<0)s.scrollIntoView({behavior:'smooth',block:'start'})}};
-ge('PrevBtn').onclick=function(){if(step>0){step--;renderQ()}};
+ge('NextBtn').onclick=function(){
+  var vs=visibleSteps();
+  var posInVs=vs.indexOf(step);
+  if(posInVs>=vs.length-1){showResult();return;}
+  step++;
+  while(step<Q.length && !visible(Q[step])){ delete ans[Q[step].k]; step++; }
+  if(step>=Q.length){showResult();return;}
+  renderQ();
+  var s=ge('Survey');if(s.getBoundingClientRect().top<0)s.scrollIntoView({behavior:'smooth',block:'start'});
+};
+ge('PrevBtn').onclick=function(){
+  var vs=visibleSteps();
+  var posInVs=vs.indexOf(step);
+  if(posInVs>0){ step=vs[posInVs-1]; renderQ(); }
+};
 
 function startSurvey(){
   step=0;ans={};
+  while(step<Q.length && !visible(Q[step])){ step++; }
   ge('Intro').classList.add('dn');
   ge('Result').classList.add('dn');ge('Result').innerHTML='';
   ge('Survey').classList.remove('dn');renderQ();

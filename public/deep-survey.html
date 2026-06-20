@@ -80,16 +80,19 @@ var DQ=[
    showIf:function(){ return freeHasOverseas; }},
   {k:'debt',q:'채무(대출·보증·미납세금 등)가 있다면 얼마 정도인가요?',h:'',
    o:['없음','1천만원 미만','1천만~1억','1억 이상','정확한 금액은 모르겠음']},
-  {k:'spouseStatus',q:'배우자는 생존해 계신가요?',h:'',
-   o:['생존','이미 사망','해당없음(미혼 등)']},
+  {k:'spouseStatus',q:'배우자는 생존해 계신가요?',h:'정식으로 이혼하지 않았다면 별거 중이거나 이혼소송 중이어도 법적으로는 "생존"으로 답해주세요(상속 자격과 직결됩니다).',
+   o:['생존(혼인관계 유지·동거)','생존 — 별거 중(정식 이혼 안 함)','생존 — 이혼소송 진행 중(아직 미확정)','이미 사망','해당없음(미혼 등)']},
   {k:'spouseNationality',q:'배우자의 국적·영주권 상태는 어떻게 되나요?',h:'영주권과 시민권(국적 취득)은 다릅니다.',
    o:['한국 국적만 보유','한국 국적 + 해외 영주권 보유','한국 국적 + 외국 시민권 보유(복수국적)','외국 시민권만 보유(한국 국적 없음/상실)','정확히는 모르겠음'],
-   showIf:function(d){ return d.spouseStatus==='생존'; }},
+   showIf:function(d){ return d.spouseStatus==='생존(혼인관계 유지·동거)'||d.spouseStatus==='생존 — 별거 중(정식 이혼 안 함)'||d.spouseStatus==='생존 — 이혼소송 진행 중(아직 미확정)'; }},
   {k:'childrenCount',q:'자녀는 몇 명인가요?',h:'전혼 자녀가 있다면 포함해서 답해주세요.',
    o:['0명','1명','2명','3명','4명 이상']},
   {k:'parentsAlive',q:'부모님(직계존속)이 생존해 계신가요?',h:'자녀가 없으면 부모님이 배우자와 함께 1순위 상속인이 됩니다. 양가 부모님 중 한 분이라도 생존해 계시면 "생존"을 선택해주세요.',
    o:['생존','모두 사망','정확히는 모르겠음'],
    showIf:function(d){ return d.childrenCount==='0명'; }},
+  {k:'parentNeglect',q:'생존해 계신 부모님 중, 본인이 미성년이던 시절 양육 의무를 다하지 않았거나 학대 등으로 부당한 대우를 한 분이 있나요?',h:'2026년 시행된 구하라법(상속권 상실 선고 제도)에 따라, 해당된다면 그 부모님의 상속권 제한을 법원에 청구할 수 있습니다. 해당 없으면 "없음"을 선택해주세요.',
+   o:['없음','있음 — 양육을 사실상 방기함(장기간 연락 두절·생활비 미지급 등)','있음 — 학대 또는 부당한 대우가 있었음','정확히는 모르겠음'],
+   showIf:function(d){ return d.childrenCount==='0명' && d.parentsAlive==='생존'; }},
   {k:'siblingsCount',q:'형제자매는 몇 명인가요?',h:'본인 기준 형제자매 수입니다. 자녀와 부모님이 모두 없으면 형제자매가 상속인이 됩니다.',
    o:['0명','1명','2명','3명 이상','정확히는 모르겠음'],
    showIf:function(d){ return d.childrenCount==='0명' && (d.parentsAlive==='모두 사망' || d.parentsAlive==='정확히는 모르겠음'); }},
@@ -108,13 +111,15 @@ var DQ=[
   {k:'grandchildrenNationality',q:'그 손주(들)의 국적·영주권 상태는 어떻게 되나요?',h:'대습상속인이 될 손주의 국적입니다. 여러 명이라면 가장 가까운 상황 하나를 선택해주세요.',
    o:['전원 한국 국적만 보유','일부 한국 국적 + 해외 영주권 보유','일부 한국 국적 + 외국 시민권 보유(복수국적)','일부 외국 시민권만 보유(한국 국적 없음/상실)','손주마다 상황이 다르게 섞여 있음','정확히는 모르겠음'],
    showIf:function(d){ return d.predeceasedChild==='있음 — 그 자녀에게 자녀(손주)가 있음' && d.grandchildrenDetail==='예 — 손주 국적도 확인하고 싶음'; }},
-  {k:'businessShare',q:'사업체·법인 지분이 있다면 지분율은 어느 정도인가요?',h:'없다면 "해당없음"을 선택해주세요.',
-   o:['해당없음(사업체·지분 없음)','10% 미만','10~30%','30~50%','50% 초과(경영권 보유)','보유는 확실하나 정확한 비율은 모르겠음']},
-  {k:'priorGiftTiming',q:'사전 증여가 있다면, 시기는 언제인가요?',h:'',
-   o:['해당없음(사전 증여 없음)','1년 이내','1~5년 전','5~10년 전','10년 이상 전']},
+  {k:'businessShare',q:'사업체·법인 지분이 있다면 지분율은 어느 정도인가요?',h:'',
+   o:['10% 미만','10~30%','30~50%','50% 초과(경영권 보유)','보유는 확실하나 정확한 비율은 모르겠음'],
+   showIf:function(){ return freeHasBusiness; }},
+  {k:'priorGiftTiming',q:'사전 증여 시기는 언제인가요?',h:'',
+   o:['1년 이내','1~5년 전','5~10년 전','10년 이상 전'],
+   showIf:function(){ return freeHasGift; }},
   {k:'priorGiftAmount',q:'사전 증여 추정 금액은요?',h:'',
    o:['1천만원 미만','1천만~5천만','5천만~1억','1억~5억','5억 이상'],
-   showIf:function(d){ return d.priorGiftTiming && d.priorGiftTiming!=='해당없음(사전 증여 없음)'; }},
+   showIf:function(d){ return freeHasGift && d.priorGiftTiming; }},
   {k:'caregivingContribution',q:'특정 상속인이 부양·간병 등으로 더 기여한 부분이 있나요?',h:'기여분 인정 여부 판단에 참고됩니다.',
    o:['있음 — 동거하며 장기간 부양','있음 — 간병·병원비 부담','있음 — 재산 형성에 기여','없음 또는 해당없음']},
   {k:'conflictDetail',q:'가족 갈등이 있다면 어떤 종류에 가까운가요?',h:'가장 가까운 것 하나를 선택해주세요.',
@@ -133,6 +138,8 @@ var freeAns = (function(){
 })();
 var freeHasRealEstate = Array.isArray(freeAns.assetPresence) && freeAns.assetPresence.some(function(v){ return v!=='none' && v!=='unknown'; });
 var freeHasOverseas = Array.isArray(freeAns.overseas) && freeAns.overseas.some(function(v){ return v!=='none' && v!=='unknown'; });
+var freeHasGift = freeAns.gift && freeAns.gift !== '없음';
+var freeHasBusiness = freeAns.business && freeAns.business !== '없음';
 function ge(id){return document.getElementById(id)}
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
 

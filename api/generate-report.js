@@ -43,10 +43,12 @@ function matchTypes(a) {
   const overseas = Array.isArray(a.overseas) ? a.overseas : [];
   const assetTypes = Array.isArray(a.assetTypes) ? a.assetTypes : [];
   const presence = Array.isArray(a.assetPresence) ? a.assetPresence : [];
+  const remarriage = Array.isArray(a.remarriage) ? a.remarriage : [];
+  const hasRemarriage = remarriage.some(v => v !== 'none');
   const hasRE    = presence.some(v => !['none','unknown'].includes(v)) || assetTypes.includes('realestate');
 
-  if (family==='배우자와 자녀가 있음')           { add('T01',40); }
-  if (family==='재혼가정 또는 전혼 자녀가 있음') { add('T04',50); add('T05',40); add('T13',20); }
+  if (family==='배우자 또는 자녀가 있음')           { add('T01',40); }
+  if (hasRemarriage) { add('T04',50); add('T05',40); add('T13',20); }
   if (family==='자녀가 없거나 형제자매와 관련될 수 있음') { add('T02',30); add('T03',40); }
 
   if (will==='이미 정리해둔 내용이 있음')          add('T14',40);
@@ -123,7 +125,9 @@ function buildSimulation(deep) {
   const netEok   = totalEok != null ? Math.max(0, totalEok - (debtEok||0)) : null;
 
   /* 일괄공제 5억 + 배우자공제(최소5억) 단순 적용 예시 — 실제 세액 아님, 구간 추정용 */
-  const spouseAlive = deep.spouseStatus === '생존';
+  /* 별거 중이거나 이혼소송이 진행 중이어도 정식 이혼이 완료되지 않았다면 법적으로는 100% 배우자 상속인 자격을 그대로 유지함 */
+  const spouseAlive = deep.spouseStatus === '생존(혼인관계 유지·동거)' || deep.spouseStatus === '생존 — 별거 중(정식 이혼 안 함)' || deep.spouseStatus === '생존 — 이혼소송 진행 중(아직 미확정)';
+  const spouseEstranged = deep.spouseStatus === '생존 — 별거 중(정식 이혼 안 함)' || deep.spouseStatus === '생존 — 이혼소송 진행 중(아직 미확정)';
   const baseDeduction = 5; /* 일괄공제 5억 */
   const spouseDeduction = spouseAlive ? 5 : 0; /* 최소 배우자공제 5억 (실제는 최대 30억까지 변동) */
   const totalDeduction = baseDeduction + spouseDeduction;
@@ -213,10 +217,11 @@ function buildSimulation(deep) {
     realEstateCount: deep.realEstateCount || null,
     overseasAssetType: deep.overseasAssetType || null,
     spouseNationality: deep.spouseNationality || null,
+    parentNeglect: deep.parentNeglect || null,
     childrenNationality: deep.childrenNationality || null,
     predeceasedChild: deep.predeceasedChild || null,
     grandchildrenNationality: deep.grandchildrenNationality || null,
-    spouseAlive, childCount, shareText, inheritanceTier,
+    spouseAlive, spouseEstranged, childCount, shareText, inheritanceTier,
     spouseShareEok, childShareEok, spouseForcedShareEok, childForcedShareEok,
     giftToHeir, giftAmountEok, priorGiftTiming: deep.priorGiftTiming || null,
     businessShare: deep.businessShare || null,
@@ -261,17 +266,42 @@ function getContext(a, types, deep, sim) {
   if (hasDual) {
     lines.push('핵심: 국적법상 복수국적자는 대한민국 법령 적용에서 대한민국 국민으로만 처우받음. 즉 한국 내 상속 절차에서는 외국 국적을 따로 주장할 수 없고 한국 국민 기준으로 처리되므로, 한국 인감증명서·기본증명서 발급이 가능해 외국국적자보다 절차가 한결 간단함. 상속 관련 서류는 한국 국적 기준으로 준비하면 됨.');
   }
-  if (types.some(t=>t.includes('전혼')||t.includes('재혼'))) {
-    lines.push('전혼 자녀도 법정상속인으로 현배우자 자녀와 동등한 상속분을 가짐. 상속인 범위 정확히 파악 필요.');
-    lines.push('주의(흔한 오해): 반대로 배우자가 데려온 자녀(의붓자식)는 친양자 입양 등 정식 입양 절차를 거치지 않았다면 법적으로 상속인이 아님. 오랜 기간 함께 살아 친자녀처럼 느껴지더라도 법정상속분은 없으며, 그 의붓자식에게 재산을 남기고 싶다면 입양 절차를 밟거나 유증(유언으로 증여)을 명시해야 함.');
+  const remarriageArr = Array.isArray(a.remarriage) ? a.remarriage : [];
+  const hasMyPriorChildren = remarriageArr.includes('my_prior_children');
+  const hasSpousePriorChildren = remarriageArr.includes('spouse_prior_children');
+  const hasChildAdoptedAway = remarriageArr.includes('my_child_adopted_away');
+  const wantsAvoidStepInheritance = remarriageArr.includes('avoid_step_inheritance');
+  if (hasMyPriorChildren || hasSpousePriorChildren || hasChildAdoptedAway || types.some(t=>t.includes('전혼')||t.includes('재혼'))) {
+    if (hasMyPriorChildren) {
+      lines.push('나의 전혼 자녀(이전 혼인에서 낳은 친자식)도 법정상속인으로, 현재 배우자와의 사이에서 낳은 자녀와 완전히 동등한 상속분을 가짐. 상속인 범위를 정확히 파악하고 빠뜨리지 않도록 해야 함.');
+    }
+    if (hasSpousePriorChildren) {
+      lines.push('주의(흔한 오해): 배우자가 데려온 자녀(의붓자식)는 친양자 입양 등 정식 입양 절차를 거치지 않았다면 법적으로 상속인이 아님. 오랜 기간 함께 살아 친자녀처럼 느껴지더라도 법정상속분은 없으며, 그 의붓자식에게 재산을 남기고 싶다면 입양 절차를 밟거나 유언으로 유증을 명시해야 함.');
+    }
+    if (hasChildAdoptedAway) {
+      lines.push('참고(안심 정보): 나의 전혼 자녀가 전 배우자의 재혼 상대에게 친양자로 입양되었다면, 그 순간 그 자녀와 본인 사이의 법적 친자관계는 종료됨. 따라서 그 자녀는 더 이상 본인의 법정상속인이 아니며, 본인 사망 시 상속 대상에서 자동으로 제외됨. 이는 본인의 상속인 범위를 줄여주는 정보이므로 정확히 알려드릴 것(단, 일반 양자 입양이라면 친생관계가 유지되어 여전히 상속인이므로, 친양자인지 일반양자인지 정확히 확인이 필요하다는 점도 함께 안내).');
+    }
+    if (!hasMyPriorChildren && !hasSpousePriorChildren && !hasChildAdoptedAway) {
+      /* 무료진단에서 remarriage 답변이 없어도 심화설문 등에서 재혼/전혼 키워드가 잡힌 경우의 기본 안내 */
+      lines.push('재혼가정인 경우, 전혼 자녀(친자식)는 법정상속인이지만 배우자가 데려온 자녀(의붓자식)는 입양하지 않았다면 상속인이 아니라는 점을 구분해 상속인 범위를 정확히 파악할 필요가 있음.');
+    }
   }
-  if (sim && sim.childCount > 0 && sim.businessShare && sim.businessShare !== '해당없음(사업체·지분 없음)') {
+  if (wantsAvoidStepInheritance) {
+    lines.push('[핵심] 본인이 먼저 사망하면 재산 일부가 배우자에게 가는데, 그 배우자가 나중에 사망하면 그 재산(원래 본인 재산이었던 부분 포함)은 배우자의 고유재산이 되어 배우자의 직계비속(배우자의 전혼 자녀 포함)에게 그대로 상속됨. 본인의 친자식이 아닌 배우자의 전혼 자녀에게 결국 자신의 재산이 흘러가는 것을 막을 방법이 없는가? 답은 "유언만으로는 막기 어렵지만 유언대용신탁으로는 설계 가능"임. 신탁계약에서 1차 수익자를 배우자로, 배우자 사망 후 잔여재산의 2차(후순위) 수익자를 본인의 친자식으로 미리 지정해두면(연속수익자 신탁), 배우자가 그 재산을 다 쓰지 않고 남긴 부분은 배우자의 상속인이 아니라 본인이 지정한 2차 수익자(친자식)에게 귀속됨. 이는 일반 유언장으로는 구현할 수 없는 기능이므로, 이 의향이 있다면 신탁 전문 금융기관 또는 신탁 설계 가능한 변호사 상담을 가장 먼저 권할 것. 다만 배우자의 유류분(법정상속분의 1/2)은 신탁으로도 완전히 배제할 수 없다는 한계도 함께 안내할 것.');
+  }
+  if (sim && sim.spouseEstranged) {
+    lines.push('[핵심] 배우자와 별거 중이거나 이혼소송이 진행 중이지만 아직 정식으로 이혼이 확정되지 않았다면, 사망 당시 법률상 혼인관계만 유효하면 그것으로 충분하므로 배우자는 법정상속인 자격을 100% 그대로 유지함. 별거 기간이 길거나 사실상 관계가 끝났다고 느끼는 것은 법적 효력에 전혀 영향을 주지 않으며, 이는 본인의 의향과 무관하게 적용되는 강력한 기본값임을 분명히 안내하세요. 이를 원하지 않는다면 ① 이혼 절차를 사망 전에 완료하거나 ② 유언장으로 배우자의 몫을 유류분(법정상속분의 1/2) 수준까지로 최소화하는 방법(유류분 이하로는 줄일 수 없음)을 검토해야 한다는 점을 구체적으로 안내하세요.');
+  }
+  if (sim && sim.childCount > 0 && sim.businessShare) {
     lines.push('참고(사업체 지분 보유 + 자녀가 있는 경우): 상속인 중 미성년 자녀가 있다면, 상속재산분할협의나 사업체 지분 승계 시 친권자(보통 배우자)와 미성년 자녀 사이에 이해관계가 충돌할 수 있어 가정법원에 특별대리인 선임을 신청해야 협의가 유효함. 자녀가 아직 어리다면 이 점을 미리 확인하도록 안내할 것(자녀가 이미 성년이라면 해당 없음).');
   }
   if (types.some(t=>t.includes('유류분')) || types.some(t=>t.includes('형제자매')) || ['parents','spouse_only','siblings'].includes(sim && sim.inheritanceTier)) {
-    lines.push('유류분 권리자: 형제자매는 2024년 4월 헌법재판소 위헌 결정으로 이미 유류분 권리가 폐지됨(자녀·배우자·부모만 유류분 보유, 직계비속·배우자는 법정상속분의 1/2, 직계존속은 1/3). 2026년 3월 개정 시행으로 패륜상속인에 대한 상속권 상실선고 제도가 신설되었고, 기여에 대한 보상 성격 증여는 유류분 반환 대상에서 제외하도록 명문화됨.');
+    lines.push('유류분 권리자: 형제자매는 2024년 4월 헌법재판소 위헌 결정으로 이미 유류분 권리가 폐지됨(자녀·배우자·부모만 유류분 보유, 직계비속·배우자는 법정상속분의 1/2, 직계존속은 1/3). 2026년 1월 1일부터 시행된 구하라법(상속권 상실 선고 제도, 민법 제1004조의2)으로 패륜상속인에 대한 상속권 상실선고 제도가 신설되었고, 기여에 대한 보상 성격 증여는 유류분 반환 대상에서 제외하도록 명문화됨.');
     lines.push('주의: 유언대용신탁은 과거 유류분 회피 수단으로 알려졌으나, 최근 판례는 신탁재산도 유류분 산정 기초재산에 포함시키는 추세이므로 만능 해법이 아님. 신탁만 믿고 다른 준비를 소홀히 하면 안 됨.');
     lines.push('합법적으로 유류분 영향을 줄이는 실무적 방법 3가지: ① 특정 자녀의 부양·간병·재산형성 기여를 구체적으로 입증할 자료(통장 이체내역, 간병기록, 진단서 등)를 미리 확보해 기여분으로 인정받는 방법(2026 개정으로 기여 보상 증여는 유류분에서 제외됨) ② 유류분반환청구권의 소멸시효(침해를 안 날로부터 1년, 상속개시일로부터 10년)를 정확히 이해하고 시기를 설계하는 방법 ③ 유언장에 증여·유증의 경위와 이유를 구체적으로 명시해 다른 상속인의 이해를 구하고 분쟁 가능성 자체를 낮추는 방법.');
+  }
+  if (sim && sim.parentNeglect && sim.parentNeglect !== '없음') {
+    lines.push('[핵심] 부모(직계존속)가 본인이 미성년이던 시절 양육 의무를 중대하게 저버렸거나 학대 등 부당한 대우를 했다면, 2026년 1월 1일 시행된 구하라법(민법 제1004조의2 상속권 상실 선고)에 따라 그 부모의 상속권 상실을 가정법원에 청구할 수 있음. 상속 개시와 동시에 자동으로 배제되는 것이 아니라 반드시 이해관계인이 가정법원에 별도로 청구해야 하며, 양육비 미지급 내역, 주민등록상 분리 기간, 학교·병원·복지기관의 보호자 기록, 제3자 진술 등이 핵심 증거로 활용됨. 이 법은 2024년 4월 25일 이후 개시된 상속에도 소급 적용될 수 있다는 점, 그리고 본인이 생전에 공정증서(공증)로 상속권 상실의 의사를 미리 표시해두는 방법도 있다는 점을 안내하세요. 지금부터 관련 증거(과거 양육 공백을 보여주는 자료)를 정리해두도록 권할 것.');
   }
   if (hasPR && !hasForeignNat) {
     lines.push('핵심: 영주권(시민권 아님)은 국적 변경이 아님. 본인이 한국 국적을 유지하면 상속에는 원칙적으로 한국 민법이 그대로 적용됨(국제사법상 본국법주의). 영주권 보유 자체만으로 상속 준거법이 바뀌지 않는다는 점을 명확히 안내할 것.');
@@ -356,13 +386,14 @@ async function callClaude(answers, types, score, deepAnswers) {
 - 자녀 국적·영주권 상태: ${sim.childrenNationality || '해당없음'}
 - 먼저 사망한 자녀(대습상속 가능성): ${sim.predeceasedChild && sim.predeceasedChild !== '없음' ? sim.predeceasedChild : '없음'}
 - 대습상속인이 될 손주의 국적·영주권 상태: ${sim.grandchildrenNationality || '해당없음'}
+- 부모(직계존속)의 과거 양육의무 위반/학대 이력: ${sim.parentNeglect && sim.parentNeglect !== '없음' ? sim.parentNeglect + ' (구하라법 적용 검토 대상)' : '없음 또는 해당없음'}
 - 무료진단에서 확인된 해외 요소(전체): ${overseas}
 - 외국 국적(시민권) 보유 자녀 수: ${sim.foreignNatChildren && sim.foreignNatChildren !== '0명' ? sim.foreignNatChildren : '없음 또는 미상'}
 - 채무 추정: ${formatEok(sim.debtEok)}
 - 순재산(재산-채무): ${formatEok(sim.netEok)}
 - 적용 가능 공제 추정(일괄공제5억${sim.spouseAlive?'+배우자공제 최소5억':''}): ${formatEok(sim.totalDeduction)}
 - 과세대상 재산 추정(순재산-공제): ${formatEok(sim.taxableEok)}
-- 배우자 생존: ${sim.spouseAlive ? '예':'아니오'}
+- 배우자 생존: ${sim.spouseAlive ? '예':'아니오'}${sim.spouseEstranged ? ' (단, 별거 중이거나 이혼소송 진행 중 — 정식 이혼이 완료되지 않아 법적으로는 100% 배우자 상속인 자격 유지)' : ''}
 - 자녀 수: ${sim.childCount ?? '미상'}명
 - 상속순위 구분(inheritanceTier): ${sim.inheritanceTier === 'children' ? '1순위 직계비속(자녀)' : sim.inheritanceTier === 'parents' ? '2순위 직계존속(부모) — 자녀 없음' : sim.inheritanceTier === 'spouse_only' ? '배우자 단독상속 — 직계비속·직계존속 모두 없음' : sim.inheritanceTier === 'siblings' ? '3순위 형제자매 — 자녀·부모·배우자 모두 없음' : '확인 필요'}
 - 법정상속분 비율: ${sim.shareText || '확인 필요'}
@@ -400,9 +431,9 @@ ${isParentPerspective ? '[중요] 이 사용자는 본인이 아니라 부모님
 
 [진단]
 점수:${score}(${level}), 유형:${types.join('/')}
-가족:${answers.family||'-'}, 유언:${answers.will||'-'}, 부동산:${reList}
+가족:${answers.family||'-'}, 재혼/전혼자녀:${Array.isArray(answers.remarriage)&&answers.remarriage.length&&!answers.remarriage.includes('none')?answers.remarriage.join(','):'해당없음'}, 유언:${answers.will||'-'}, 부동산:${reList}
 증여:${answers.gift||'-'}, 사업:${answers.business||'-'}, 해외:${overseas}
-갈등:${answers.conflict||'-'}, 자료:${answers.documents||'-'}
+갈등:${answers.conflict||'-'}, 자료:${answers.documents||'-'}, 채무:${answers.debt||'-'}
 ${ctx?'\n[참고]\n'+ctx:''}${simBlock}
 
 아래 JSON을 정확히 따라 작성하세요. 각 배열 항목은 반드시 독립된 문자열로 작성하세요.${sim ? ' simulation 섹션은 심화설문 데이터가 있을 때만 포함하세요.' : ' simulation 섹션은 생략하세요(심화설문 데이터 없음).'}
