@@ -72,6 +72,9 @@ function matchTypes(a) {
     if (overseas.includes('overseas_securities') || assetTypes.includes('overseas_stock')) add('T16',15);
     if (overseas.includes('crypto') || assetTypes.includes('crypto')) add('T16',15);
     if (overseas.includes('permanent_residency')) add('T16',10);
+    /* 외국국적·복수국적 자녀는 상속 실행 절차(서류·아포스티유) 자체가 막힐 수 있는 핵심 케이스 */
+    if (overseas.includes('family_foreign_nationality')) add('T16',18);
+    if (overseas.includes('dual_nationality')) add('T16',10);
   }
 
   if (conflict==='조금 있음')   { add('T07',35); add('T13',15); }
@@ -163,6 +166,7 @@ function buildSimulation(deep) {
     spouseShareEok, childShareEok, spouseForcedShareEok, childForcedShareEok,
     giftToHeir, giftAmountEok, priorGiftTiming: deep.priorGiftTiming || null,
     businessShare: deep.businessShare || null,
+    foreignNatChildren: deep.foreignNatChildren || null,
     caregivingContribution: deep.caregivingContribution || null,
     conflictDetail: deep.conflictDetail || null,
     expertNeed: deep.expertNeed || null
@@ -190,6 +194,13 @@ function getContext(a, types) {
 
   if (a.unequalIntent==='있음 — 이미 마음을 정함' || a.unequalIntent==='있음 — 아직 확신은 없음') {
     lines.push('핵심: 특정 자녀(가족)에게 더 남기고 싶은 의향이 있는 경우, 단순히 유언장에 "더 준다"고만 적으면 다른 상속인이 유류분반환청구로 법정상속분의 1/2(직계비속·배우자 기준)까지는 결국 가져갈 수 있음. 따라서 "내 뜻대로 더 주는 것"을 실질적으로 지키려면 유류분 자체를 줄이는 합법적 설계(기여분 입증, 시효 활용, 사전 협의)가 함께 필요함. 이것이 일반적인 절세 상담과 다른, 이 리포트의 핵심 목적임.');
+  }
+  if (hasForeignNat) {
+    lines.push('핵심: 자녀(가족)가 외국 국적인 경우, 본인(피상속인)이 한국 국적을 유지한다면 상속 자체는 한국 민법이 그대로 적용되어 상속권 자체는 보장됨(국제사법 제77조, 본국법주의). 문제는 권리가 아니라 "실행 절차". 외국국적 자녀는 한국 인감증명서를 발급받을 수 없어, 상속재산분할협의서나 위임장에 서명할 때 현지 공증인의 서명인증서와 아포스티유 인증, 공증된 한국어 번역문을 모두 갖춰야 함. 한국 재외공관(영사관)의 사서증서 인증만으로는 등기소·법원이 접수를 거부하는 경우가 실무상 많아, 이를 모르고 영사관에서 처리하려다 서류가 반려되는 사례가 흔함.');
+    lines.push('상속재산분할협의서는 상속인 전원의 서명이 있어야 효력이 있어, 외국국적 자녀 한 명의 서류만 늦어져도 전체 절차가 멈춤. 국제우편 왕복, 번역공증까지 고려하면 통상 3개월 이상 걸릴 수 있어, 균등하게 또는 원하는 대로 나누고 싶어도 실제로는 한 사람 때문에 전체가 지연되는 경우가 많음. 가능하면 생전에 위임장 양식을 미리 준비해두거나, 자녀가 한국 방문 시 국내 공증으로 처리해두는 방법을 검토할 것.');
+  }
+  if (hasDual) {
+    lines.push('복수국적인 가족이 있는 경우, 어느 국적으로 신원을 증명할지에 따라 필요 서류가 달라짐. 한국 국적이 살아있다면 한국 인감증명서·기본증명서 발급이 가능해 절차가 한결 간단해지므로, 상속 관련 서류만큼은 가능하면 한국 국적 기준 서류로 준비해두는 것이 유리할 수 있음.');
   }
   if (types.some(t=>t.includes('전혼')||t.includes('재혼'))) {
     lines.push('전혼 자녀도 법정상속인으로 현배우자 자녀와 동등한 상속분을 가짐. 상속인 범위 정확히 파악 필요.');
@@ -264,6 +275,8 @@ async function callClaude(answers, types, score, deepAnswers) {
 - 해외자산 보유: ${sim.hasOverseasAsset ? formatEok(sim.overseasEok)+' 추정' : '없음 또는 모름'}
 - 해외자산 형태: ${sim.overseasAssetType || '해당없음'}
 - 영주권·국적 상태: ${sim.residencyStatus || '해당없음'}
+- 무료진단에서 확인된 해외 요소(전체): ${overseas}
+- 외국 국적(시민권) 보유 자녀 수: ${sim.foreignNatChildren && sim.foreignNatChildren !== '0명' ? sim.foreignNatChildren : '없음 또는 미상'}
 - 채무 추정: ${formatEok(sim.debtEok)}
 - 순재산(재산-채무): ${formatEok(sim.netEok)}
 - 적용 가능 공제 추정(일괄공제5억${sim.spouseAlive?'+배우자공제 최소5억':''}): ${formatEok(sim.totalDeduction)}
@@ -290,7 +303,8 @@ async function callClaude(answers, types, score, deepAnswers) {
 예시: 유류분 문제라면 "① 다른 상속인에게 유류분 상당액을 사전 정산하는 방법 ② 기여분을 인정받을 증빙을 미리 확보하는 방법(2026 개정으로 기여 보상 증여는 유류분에서 제외됨) ③ 유언장에 증여 경위를 명시해두는 방법" 식으로 구체적 선택지를 나열하세요.
 사업체·지분이 있다면 가업상속공제 요건(피상속인 경영기간, 상속인 가업 종사 등)을 일반론이 아니라 입력된 지분율 기준으로 적용 가능성을 언급하세요.
 기여(부양·간병) 사실이 있다면 기여분 주장의 실질적 근거가 될 수 있는 자료(통장 이체내역, 진단서, 간병 영수증 등)를 구체적으로 안내하세요.
-해외 영주권 상태가 "한국 국적 유지"라면, 영주권은 시민권과 다르며 한국 국적을 유지하는 한 상속에는 한국 민법이 그대로 적용된다는 점을 명확히 안내하세요. 해외로 옮긴 회사·부동산이 있다면 한국 거주자는 전세계 자산이 한국 상속세 과세대상에 합산된다는 점과 해당국 절차가 별도로 필요할 수 있다는 점을 안내하세요. 해외 증권계좌(미국·홍콩 등)가 있다면 가족관계증명서의 영문공증·아포스티유가 필요할 수 있다는 실무 팁을 포함하세요. 암호화폐가 있다면 개인 지갑 시드구문·키 정보를 안전하게 남겨두는 방법을 구체적으로 안내하세요.`;
+해외 영주권 상태가 "한국 국적 유지"라면, 영주권은 시민권과 다르며 한국 국적을 유지하는 한 상속에는 한국 민법이 그대로 적용된다는 점을 명확히 안내하세요. 해외로 옮긴 회사·부동산이 있다면 한국 거주자는 전세계 자산이 한국 상속세 과세대상에 합산된다는 점과 해당국 절차가 별도로 필요할 수 있다는 점을 안내하세요. 해외 증권계좌(미국·홍콩 등)가 있다면 가족관계증명서의 영문공증·아포스티유가 필요할 수 있다는 실무 팁을 포함하세요. 암호화폐가 있다면 개인 지갑 시드구문·키 정보를 안전하게 남겨두는 방법을 구체적으로 안내하세요.
+자녀(가족)가 외국 국적이거나 복수국적인 경우, 핵심은 "상속받을 권리가 없는 게 아니라 서류 절차가 막힌다"는 점입니다. 본인이 한국 국적을 유지하면 외국국적 자녀도 한국 민법상 동일한 상속권이 있다는 점을 먼저 안심시키되, 인감증명서 대체(현지 공증+아포스티유+번역공증), 재외공관 인증만으로는 등기소가 거부하는 경우가 많다는 점, 상속인 전원 서명이 필요해 한 사람의 서류 지연이 전체를 막을 수 있다는 점을 구체적으로 안내하세요. "생전에 위임장 양식을 미리 준비해두기", "자녀가 한국 방문 시 국내 공증으로 처리해두기" 같은 실행 가능한 사전 대비책을 제시하세요.`;
   }
 
   const prompt = `안심상속 유료 상세리포트를 작성하세요.

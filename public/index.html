@@ -257,6 +257,7 @@ function showResult(){
   var ov=Array.isArray(ans.overseas)?ans.overseas:[];
   var at=Array.isArray(ans.assetTypes)?ans.assetTypes:[];
   if(ov.some(function(v){return v!=='none'&&v!=='unknown'}))sigs.push('해외 거주, 국적, 재산 요소가 있어 확인할 항목이 늘어날 수 있습니다.');
+  if(ov.indexOf('family_foreign_nationality')>=0)sigs.push('자녀(가족)가 외국 국적이면 상속권 자체는 보장되지만, 서류 인증 절차 때문에 실제 처리가 수개월 지연될 수 있습니다.');
   if(at.indexOf('overseas_stock')>=0||at.indexOf('crypto')>=0)sigs.push('해외 주식·암호화폐는 상속 신고 대상이면서도 누락되기 쉬워 별도로 확인이 필요합니다.');
   var ct=ans.assetCounts||{};
   if(Object.keys(ct).some(function(k){return ct[k]}))sigs.push('부동산이 포함되어 있어 나누는 방식과 관리 기준을 미리 정리하는 것이 좋습니다.');
