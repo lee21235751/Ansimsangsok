@@ -1,9 +1,9 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="ko">
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>안심상속 — 심화 진단</title>
+<title>?덉떖?곸냽 ???ы솕 吏꾨떒</title>
 <meta name="robots" content="noindex,nofollow"/>
 <style>
 :root{--F:#0e3529;--FD:#06251d;--G:#d7ad55;--GL:#f1d586;--CR:#fff8e8;--INK:#12231d;--MU:#5e6b64;--LN:rgba(14,53,41,.18)}
@@ -36,97 +36,97 @@ button,input,select{font:inherit}
 </head>
 <body>
 <header class="hero"><div class="w">
-  <div class="ey">결제 완료 · 심화 진단</div>
-  <h1>몇 가지만 더<br>구체적으로 확인합니다</h1>
-  <p>방금 결제하신 유료 상세리포트는 일반 정보가 아니라, 입력하신 숫자를 바탕으로 실제 계산이 포함된 자료입니다. 약 2~3분 정도 소요됩니다.</p>
-  <p style="margin-top:10px;color:rgba(255,253,245,.7);font-size:.88rem">💡 정확한 금액이나 수치를 모르셔도 괜찮습니다. 가장 가까운 항목을 선택해주세요. 해당 사항이 없으면 "해당없음"을 선택하시면 됩니다.</p>
+  <div class="ey">寃곗젣 ?꾨즺 쨌 ?ы솕 吏꾨떒</div>
+  <h1>紐?媛吏留???br>援ъ껜?곸쑝濡??뺤씤?⑸땲??/h1>
+  <p>諛⑷툑 寃곗젣?섏떊 ?좊즺 ?곸꽭由ы룷?몃뒗 ?쇰컲 ?뺣낫媛 ?꾨땲?? ?낅젰?섏떊 ?レ옄瑜?諛뷀깢?쇰줈 ?ㅼ젣 怨꾩궛???ы븿???먮즺?낅땲?? ??2~3遺??뺣룄 ?뚯슂?⑸땲??</p>
+  <p style="margin-top:10px;color:rgba(255,253,245,.7);font-size:.88rem">?뮕 ?뺥솗??湲덉븸?대굹 ?섏튂瑜?紐⑤Ⅴ?붾룄 愿쒖갖?듬땲?? 媛??媛源뚯슫 ??ぉ???좏깮?댁＜?몄슂. ?대떦 ?ы빆???놁쑝硫?"?대떦?놁쓬"???좏깮?섏떆硫??⑸땲??</p>
 </div></header>
-<div class="w" style="margin:16px auto;padding:12px 14px;border-radius:14px;background:rgba(107,114,108,.09);border-left:3px solid var(--MU);color:var(--FD);font-size:.9rem;line-height:1.55;font-weight:700"><strong style="display:block;margin-bottom:4px">⚠️ 이 진단은 일반적 상속 정보 제공 목적입니다.</strong> 개별 법적 판단이 필요하면 변호사 상담을 받으세요.</div>
+<div class="w" style="margin:16px auto;padding:12px 14px;border-radius:14px;background:rgba(107,114,108,.09);border-left:3px solid var(--MU);color:var(--FD);font-size:.9rem;line-height:1.55;font-weight:700"><strong style="display:block;margin-bottom:4px">?좑툘 ??吏꾨떒? ?쇰컲???곸냽 ?뺣낫 ?쒓났 紐⑹쟻?낅땲??</strong> 媛쒕퀎 踰뺤쟻 ?먮떒???꾩슂?섎㈃ 蹂?몄궗 ?곷떞??諛쏆쑝?몄슂.</div>
 <div class="main w">
   <div id="Survey">
-    <div class="pr"><span id="StepTxt"></span><span>구체적인 숫자일수록 정확합니다</span></div>
+    <div class="pr"><span id="StepTxt"></span><span>援ъ껜?곸씤 ?レ옄?쇱닔濡??뺥솗?⑸땲??/span></div>
     <div class="pt"><div class="pf" id="PFill"></div></div>
     <div class="card"><div id="QTitle"></div><div id="QHelp"></div><div id="QOpts"></div></div>
     <div class="snav">
       <button class="bg" type="button" id="NextBtn"></button>
-      <button class="bw" type="button" id="PrevBtn">이전으로</button>
+      <button class="bw" type="button" id="PrevBtn">?댁쟾?쇰줈</button>
     </div>
   </div>
   <div id="LoadingView" class="dn">
     <div class="loading">
       <div class="spin"></div>
-      <p style="font-weight:800;color:var(--FD)">심화 분석 리포트를 생성하고 있습니다</p>
-      <small>약 20~30초 소요됩니다.</small>
+      <p style="font-weight:800;color:var(--FD)">?ы솕 遺꾩꽍 由ы룷?몃? ?앹꽦?섍퀬 ?덉뒿?덈떎</p>
+      <small>??20~30珥??뚯슂?⑸땲??</small>
     </div>
   </div>
 </div>
 
 <script>
 var DQ=[
-  {k:'totalAssets',q:'전체 재산 규모를 대략 알려주세요',h:'부동산·금융자산·기타 모두 합산한 추정치입니다. 정확하지 않다면 가장 가까운 구간을 선택해주세요.',
-   o:['2억 미만','2억~5억','5억~10억','10억~20억','20억~50억','50억 이상','정확한 금액은 모르겠음']},
-  {k:'realEstateCount',q:'보유한 부동산은 모두 몇 건인가요?',h:'주택·토지·상가 등 종류 상관없이 전체 건수를 답해주세요. 정확하지 않다면 가장 가까운 구간을 선택해주세요.',
-   o:['1건','2건','3~4건','5건 이상','정확한 건수는 모르겠음'],
+  {k:'totalAssets',q:'?꾩껜 ?ъ궛 洹쒕え瑜?????뚮젮二쇱꽭??,h:'遺?숈궛쨌湲덉쑖?먯궛쨌湲고? 紐⑤몢 ?⑹궛??異붿젙移섏엯?덈떎. ?뺥솗?섏? ?딅떎硫?媛??媛源뚯슫 援ш컙???좏깮?댁＜?몄슂.',
+   o:['2??誘몃쭔','2??5??,'5??10??,'10??20??,'20??50??,'50???댁긽','?뺥솗??湲덉븸? 紐⑤Ⅴ寃좎쓬']},
+  {k:'realEstateCount',q:'蹂댁쑀??遺?숈궛? 紐⑤몢 紐?嫄댁씤媛??',h:'二쇳깮쨌?좎?쨌?곴? ??醫낅쪟 ?곴??놁씠 ?꾩껜 嫄댁닔瑜??듯빐二쇱꽭?? ?뺥솗?섏? ?딅떎硫?媛??媛源뚯슫 援ш컙???좏깮?댁＜?몄슂.',
+   o:['1嫄?,'2嫄?,'3~4嫄?,'5嫄??댁긽','?뺥솗??嫄댁닔??紐⑤Ⅴ寃좎쓬'],
    showIf:function(){ return freeHasRealEstate; }},
-  {k:'realEstateValue',q:'부동산 합산 추정 시가는 얼마인가요?',h:'정확하지 않다면 가장 가까운 구간을 선택해주세요.',
-   o:['2억 미만','2억~5억','5억~10억','10억~20억','20억~50억','50억 이상','정확한 금액은 모르겠음'],
+  {k:'realEstateValue',q:'遺?숈궛 ?⑹궛 異붿젙 ?쒓????쇰쭏?멸???',h:'?뺥솗?섏? ?딅떎硫?媛??媛源뚯슫 援ш컙???좏깮?댁＜?몄슂.',
+   o:['2??誘몃쭔','2??5??,'5??10??,'10??20??,'20??50??,'50???댁긽','?뺥솗??湲덉븸? 紐⑤Ⅴ寃좎쓬'],
    showIf:function(){ return freeHasRealEstate; }},
-  {k:'financialAssets',q:'금융자산(예적금·주식·보험 등) 합산 추정액은요?',h:'정확하지 않다면 가장 가까운 구간을 선택해주세요.',
-   o:['1억 미만','1억~3억','3억~5억','5억~10억','10억 이상','정확한 금액은 모르겠음']},
-  {k:'overseasAssetValue',q:'해외 자산이 있다면 추정 규모는 얼마인가요?',h:'해외 부동산·금융자산·증권·코인을 합산한 추정치입니다. 정확하지 않다면 가장 가까운 구간을 선택해주세요.',
-   o:['1억 미만','1억~3억','3억~5억','5억 이상','정확한 금액은 모르겠음'],
+  {k:'financialAssets',q:'湲덉쑖?먯궛(?덉쟻湲댟룹＜?씲룸낫???? ?⑹궛 異붿젙?≪???',h:'?뺥솗?섏? ?딅떎硫?媛??媛源뚯슫 援ш컙???좏깮?댁＜?몄슂.',
+   o:['1??誘몃쭔','1??3??,'3??5??,'5??10??,'10???댁긽','?뺥솗??湲덉븸? 紐⑤Ⅴ寃좎쓬']},
+  {k:'overseasAssetValue',q:'?댁쇅 ?먯궛???덈떎硫?異붿젙 洹쒕え???쇰쭏?멸???',h:'?댁쇅 遺?숈궛쨌湲덉쑖?먯궛쨌利앷텒쨌肄붿씤???⑹궛??異붿젙移섏엯?덈떎. ?뺥솗?섏? ?딅떎硫?媛??媛源뚯슫 援ш컙???좏깮?댁＜?몄슂.',
+   o:['1??誘몃쭔','1??3??,'3??5??,'5???댁긽','?뺥솗??湲덉븸? 紐⑤Ⅴ寃좎쓬'],
    showIf:function(){ return freeHasOverseas; }},
-  {k:'overseasAssetType',q:'해외 자산은 주로 어떤 형태인가요?',h:'가장 비중이 큰 것 하나를 선택해주세요.',
-   o:['해외 부동산','해외로 옮긴 회사·사업체 지분','미국·홍콩 등 해외 증권계좌(주식)','해외 예금·은행계좌','암호화폐','여러 형태가 섞여 있음'],
+  {k:'overseasAssetType',q:'?댁쇅 ?먯궛? 二쇰줈 ?대뼡 ?뺥깭?멸???',h:'媛??鍮꾩쨷????寃??섎굹瑜??좏깮?댁＜?몄슂.',
+   o:['?댁쇅 遺?숈궛','?댁쇅濡???릿 ?뚯궗쨌?ъ뾽泥?吏遺?,'誘멸뎅쨌?띿쉘 ???댁쇅 利앷텒怨꾩쥖(二쇱떇)','?댁쇅 ?덇툑쨌??됯퀎醫?,'?뷀샇?뷀룓','?щ윭 ?뺥깭媛 ?욎뿬 ?덉쓬'],
    showIf:function(){ return freeHasOverseas; }},
-  {k:'debt',q:'채무(대출·보증·미납세금 등)가 있다면 얼마 정도인가요?',h:'',
-   o:['없음','1천만원 미만','1천만~1억','1억 이상','정확한 금액은 모르겠음']},
-  {k:'spouseStatus',q:'배우자는 생존해 계신가요?',h:'정식으로 이혼하지 않았다면 별거 중이거나 이혼소송 중이어도 법적으로는 "생존"으로 답해주세요(상속 자격과 직결됩니다). 혼인신고 없이 동거 중이라면 "사실혼"을 선택해주세요.',
-   o:['생존(혼인관계 유지·동거)','생존 — 별거 중(정식 이혼 안 함)','생존 — 이혼소송 진행 중(아직 미확정)','사실혼 — 혼인신고는 하지 않음(동거·내연관계 포함)','이미 사망','해당없음(미혼 등)']},
-  {k:'spouseNationality',q:'배우자의 국적·영주권 상태는 어떻게 되나요?',h:'영주권과 시민권(국적 취득)은 다릅니다.',
-   o:['한국 국적만 보유','한국 국적 + 해외 영주권 보유','한국 국적 + 외국 시민권 보유(복수국적)','외국 시민권만 보유(한국 국적 없음/상실)','정확히는 모르겠음'],
-   showIf:function(d){ return d.spouseStatus==='생존(혼인관계 유지·동거)'||d.spouseStatus==='생존 — 별거 중(정식 이혼 안 함)'||d.spouseStatus==='생존 — 이혼소송 진행 중(아직 미확정)'; }},
-  {k:'childrenCount',q:'자녀는 몇 명인가요?',h:'전혼 자녀가 있다면 포함해서 답해주세요.',
-   o:['0명','1명','2명','3명','4명 이상']},
-  {k:'parentsAlive',q:'부모님(직계존속)이 생존해 계신가요?',h:'자녀가 없으면 부모님이 배우자와 함께 1순위 상속인이 됩니다. 양가 부모님 중 한 분이라도 생존해 계시면 "생존"을 선택해주세요.',
-   o:['생존','모두 사망','정확히는 모르겠음'],
-   showIf:function(d){ return d.childrenCount==='0명'; }},
-  {k:'parentNeglect',q:'생존해 계신 부모님 중, 본인이 미성년이던 시절 양육 의무를 다하지 않았거나 학대 등으로 부당한 대우를 한 분이 있나요?',h:'2026년 시행된 구하라법(상속권 상실 선고 제도)에 따라, 해당된다면 그 부모님의 상속권 제한을 법원에 청구할 수 있습니다. 해당 없으면 "없음"을 선택해주세요.',
-   o:['없음','있음 — 양육을 사실상 방기함(장기간 연락 두절·생활비 미지급 등)','있음 — 학대 또는 부당한 대우가 있었음','정확히는 모르겠음'],
-   showIf:function(d){ return d.childrenCount==='0명' && d.parentsAlive==='생존'; }},
-  {k:'siblingsCount',q:'형제자매는 몇 명인가요?',h:'본인 기준 형제자매 수입니다. 자녀와 부모님이 모두 없으면 형제자매가 상속인이 됩니다.',
-   o:['0명','1명','2명','3명 이상','정확히는 모르겠음'],
-   showIf:function(d){ return d.childrenCount==='0명' && (d.parentsAlive==='모두 사망' || d.parentsAlive==='정확히는 모르겠음'); }},
-  {k:'childrenNationality',q:'자녀들의 국적·영주권 상태는 어떻게 되나요?',h:'여러 명이라면 가장 가까운 상황 하나를 선택해주세요.',
-   o:['전원 한국 국적만 보유','일부 한국 국적 + 해외 영주권 보유','일부 한국 국적 + 외국 시민권 보유(복수국적)','일부 외국 시민권만 보유(한국 국적 없음/상실)','자녀마다 상황이 다르게 섞여 있음','정확히는 모르겠음'],
-   showIf:function(d){ return d.childrenCount && d.childrenCount!=='0명'; }},
-  {k:'foreignNatChildren',q:'그중 외국 국적(시민권)을 가진 자녀는 몇 명인가요?',h:'영주권만 있는 경우는 제외하고, 외국 시민권 취득자만 답해주세요.',
-   o:['0명','1명','2명','3명 이상'],
-   showIf:function(d){ return d.childrenCount && d.childrenCount!=='0명' && (d.childrenNationality==='일부 한국 국적 + 외국 시민권 보유(복수국적)'||d.childrenNationality==='일부 외국 시민권만 보유(한국 국적 없음/상실)'||d.childrenNationality==='자녀마다 상황이 다르게 섞여 있음'); }},
-  {k:'predeceasedChild',q:'자녀 중 본인보다 먼저 사망한 분이 있나요?',h:'있다면 그 자녀의 자녀(손주)가 대신 상속인이 되는 것이 기본값입니다(대습상속). 다만 이것도 협의·유언이 없을 때의 기본값이며, 원하시는 대로 조정하는 방법은 리포트에서 안내해드립니다.',
-   o:['없음','있음 — 그 자녀에게 자녀(손주)가 있음','있음 — 그 자녀에게 자녀(손주)가 없음','정확히는 모르겠음'],
-   showIf:function(d){ return d.childrenCount && d.childrenCount!=='0명'; }},
-  {k:'grandchildrenDetail',q:'그 손주(들)에 대해 추가로 더 확인하시겠어요?',h:'대습상속 기본 안내와 내 뜻대로 조정하는 방법은 리포트에 항상 포함됩니다. 손주의 국적까지 알려주시면 서류 절차 안내를 더 구체적으로 드릴 수 있습니다.',
-   o:['예 — 손주 국적도 확인하고 싶음','아니오 — 지금은 기본 안내만으로 충분함'],
-   showIf:function(d){ return d.predeceasedChild==='있음 — 그 자녀에게 자녀(손주)가 있음'; }},
-  {k:'grandchildrenNationality',q:'그 손주(들)의 국적·영주권 상태는 어떻게 되나요?',h:'대습상속인이 될 손주의 국적입니다. 여러 명이라면 가장 가까운 상황 하나를 선택해주세요.',
-   o:['전원 한국 국적만 보유','일부 한국 국적 + 해외 영주권 보유','일부 한국 국적 + 외국 시민권 보유(복수국적)','일부 외국 시민권만 보유(한국 국적 없음/상실)','손주마다 상황이 다르게 섞여 있음','정확히는 모르겠음'],
-   showIf:function(d){ return d.predeceasedChild==='있음 — 그 자녀에게 자녀(손주)가 있음' && d.grandchildrenDetail==='예 — 손주 국적도 확인하고 싶음'; }},
-  {k:'businessShare',q:'사업체·법인 지분이 있다면 지분율은 어느 정도인가요?',h:'',
-   o:['10% 미만','10~30%','30~50%','50% 초과(경영권 보유)','보유는 확실하나 정확한 비율은 모르겠음'],
+  {k:'debt',q:'梨꾨Т(?異쑣룸낫利씲룸??⑹꽭湲???媛 ?덈떎硫??쇰쭏 ?뺣룄?멸???',h:'',
+   o:['?놁쓬','1泥쒕쭔??誘몃쭔','1泥쒕쭔~1??,'1???댁긽','?뺥솗??湲덉븸? 紐⑤Ⅴ寃좎쓬']},
+  {k:'spouseStatus',q:'諛곗슦?먮뒗 ?앹〈??怨꾩떊媛??',h:'?뺤떇?쇰줈 ?댄샎?섏? ?딆븯?ㅻ㈃ 蹂꾧굅 以묒씠嫄곕굹 ?댄샎?뚯넚 以묒씠?대룄 踰뺤쟻?쇰줈??"?앹〈"?쇰줈 ?듯빐二쇱꽭???곸냽 ?먭꺽怨?吏곴껐?⑸땲??. ?쇱씤?좉퀬 ?놁씠 ?숆굅 以묒씠?쇰㈃ "?ъ떎?????좏깮?댁＜?몄슂.',
+   o:['?앹〈(?쇱씤愿怨??좎?쨌?숆굅)','?앹〈 ??蹂꾧굅 以??뺤떇 ?댄샎 ????','?앹〈 ???댄샎?뚯넚 吏꾪뻾 以??꾩쭅 誘명솗??','?ъ떎?????쇱씤?좉퀬???섏? ?딆쓬(?숆굅쨌?댁뿰愿怨??ы븿)','?대? ?щ쭩','?대떦?놁쓬(誘명샎 ??']},
+  {k:'spouseNationality',q:'諛곗슦?먯쓽 援?쟻쨌?곸＜沅??곹깭???대뼸寃??섎굹??',h:'?곸＜沅뚭낵 ?쒕?沅?援?쟻 痍⑤뱷)? ?ㅻ쫭?덈떎.',
+   o:['?쒓뎅 援?쟻留?蹂댁쑀','?쒓뎅 援?쟻 + ?댁쇅 ?곸＜沅?蹂댁쑀','?쒓뎅 援?쟻 + ?멸뎅 ?쒕?沅?蹂댁쑀(蹂듭닔援?쟻)','?멸뎅 ?쒕?沅뚮쭔 蹂댁쑀(?쒓뎅 援?쟻 ?놁쓬/?곸떎)','?뺥솗?덈뒗 紐⑤Ⅴ寃좎쓬'],
+   showIf:function(d){ return d.spouseStatus==='?앹〈(?쇱씤愿怨??좎?쨌?숆굅)'||d.spouseStatus==='?앹〈 ??蹂꾧굅 以??뺤떇 ?댄샎 ????'||d.spouseStatus==='?앹〈 ???댄샎?뚯넚 吏꾪뻾 以??꾩쭅 誘명솗??'; }},
+  {k:'childrenCount',q:'?먮???紐?紐낆씤媛??',h:'?꾪샎 ?먮?媛 ?덈떎硫??ы븿?댁꽌 ?듯빐二쇱꽭??',
+   o:['0紐?,'1紐?,'2紐?,'3紐?,'4紐??댁긽']},
+  {k:'parentsAlive',q:'遺紐⑤떂(吏곴퀎議댁냽)???앹〈??怨꾩떊媛??',h:'?먮?媛 ?놁쑝硫?遺紐⑤떂??諛곗슦?먯? ?④퍡 1?쒖쐞 ?곸냽?몄씠 ?⑸땲?? ?묎? 遺紐⑤떂 以???遺꾩씠?쇰룄 ?앹〈??怨꾩떆硫?"?앹〈"???좏깮?댁＜?몄슂.',
+   o:['?앹〈','紐⑤몢 ?щ쭩','?뺥솗?덈뒗 紐⑤Ⅴ寃좎쓬'],
+   showIf:function(d){ return d.childrenCount==='0紐?; }},
+  {k:'parentNeglect',q:'?앹〈??怨꾩떊 遺紐⑤떂 以? 蹂몄씤??誘몄꽦?꾩씠???쒖젅 ?묒쑁 ?섎Т瑜??ㅽ븯吏 ?딆븯嫄곕굹 ?숇? ?깆쑝濡?遺?뱁븳 ??곕? ??遺꾩씠 ?덈굹??',h:'2026???쒗뻾??援ы븯?쇰쾿(?곸냽沅??곸떎 ?좉퀬 ?쒕룄)???곕씪, ?대떦?쒕떎硫?洹?遺紐⑤떂???곸냽沅??쒗븳??踰뺤썝??泥?뎄?????덉뒿?덈떎. ?대떦 ?놁쑝硫?"?놁쓬"???좏깮?댁＜?몄슂.',
+   o:['?놁쓬','?덉쓬 ???묒쑁???ъ떎??諛⑷린???κ린媛??곕씫 ?먯젅쨌?앺솢鍮?誘몄?湲???','?덉쓬 ???숇? ?먮뒗 遺?뱁븳 ??곌? ?덉뿀??,'?뺥솗?덈뒗 紐⑤Ⅴ寃좎쓬'],
+   showIf:function(d){ return d.childrenCount==='0紐? && d.parentsAlive==='?앹〈'; }},
+  {k:'siblingsCount',q:'?뺤젣?먮ℓ??紐?紐낆씤媛??',h:'蹂몄씤 湲곗? ?뺤젣?먮ℓ ?섏엯?덈떎. ?먮?? 遺紐⑤떂??紐⑤몢 ?놁쑝硫??뺤젣?먮ℓ媛 ?곸냽?몄씠 ?⑸땲??',
+   o:['0紐?,'1紐?,'2紐?,'3紐??댁긽','?뺥솗?덈뒗 紐⑤Ⅴ寃좎쓬'],
+   showIf:function(d){ return d.childrenCount==='0紐? && (d.parentsAlive==='紐⑤몢 ?щ쭩' || d.parentsAlive==='?뺥솗?덈뒗 紐⑤Ⅴ寃좎쓬'); }},
+  {k:'childrenNationality',q:'?먮??ㅼ쓽 援?쟻쨌?곸＜沅??곹깭???대뼸寃??섎굹??',h:'?щ윭 紐낆씠?쇰㈃ 媛??媛源뚯슫 ?곹솴 ?섎굹瑜??좏깮?댁＜?몄슂.',
+   o:['?꾩썝 ?쒓뎅 援?쟻留?蹂댁쑀','?쇰? ?쒓뎅 援?쟻 + ?댁쇅 ?곸＜沅?蹂댁쑀','?쇰? ?쒓뎅 援?쟻 + ?멸뎅 ?쒕?沅?蹂댁쑀(蹂듭닔援?쟻)','?쇰? ?멸뎅 ?쒕?沅뚮쭔 蹂댁쑀(?쒓뎅 援?쟻 ?놁쓬/?곸떎)','?먮?留덈떎 ?곹솴???ㅻⅤ寃??욎뿬 ?덉쓬','?뺥솗?덈뒗 紐⑤Ⅴ寃좎쓬'],
+   showIf:function(d){ return d.childrenCount && d.childrenCount!=='0紐?; }},
+  {k:'foreignNatChildren',q:'洹몄쨷 ?멸뎅 援?쟻(?쒕?沅???媛吏??먮???紐?紐낆씤媛??',h:'?곸＜沅뚮쭔 ?덈뒗 寃쎌슦???쒖쇅?섍퀬, ?멸뎅 ?쒕?沅?痍⑤뱷?먮쭔 ?듯빐二쇱꽭??',
+   o:['0紐?,'1紐?,'2紐?,'3紐??댁긽'],
+   showIf:function(d){ return d.childrenCount && d.childrenCount!=='0紐? && (d.childrenNationality==='?쇰? ?쒓뎅 援?쟻 + ?멸뎅 ?쒕?沅?蹂댁쑀(蹂듭닔援?쟻)'||d.childrenNationality==='?쇰? ?멸뎅 ?쒕?沅뚮쭔 蹂댁쑀(?쒓뎅 援?쟻 ?놁쓬/?곸떎)'||d.childrenNationality==='?먮?留덈떎 ?곹솴???ㅻⅤ寃??욎뿬 ?덉쓬'); }},
+  {k:'predeceasedChild',q:'?먮? 以?蹂몄씤蹂대떎 癒쇱? ?щ쭩??遺꾩씠 ?덈굹??',h:'?덈떎硫?洹??먮????먮?(?먯＜)媛 ????곸냽?몄씠 ?섎뒗 寃껋씠 湲곕낯媛믪엯?덈떎(??듭긽??. ?ㅻ쭔 ?닿쾬???묒쓽쨌?좎뼵???놁쓣 ?뚯쓽 湲곕낯媛믪씠硫? ?먰븯?쒕뒗 ?濡?議곗젙?섎뒗 諛⑸쾿? 由ы룷?몄뿉???덈궡?대뱶由쎈땲??',
+   o:['?놁쓬','?덉쓬 ??洹??먮??먭쾶 ?먮?(?먯＜)媛 ?덉쓬','?덉쓬 ??洹??먮??먭쾶 ?먮?(?먯＜)媛 ?놁쓬','?뺥솗?덈뒗 紐⑤Ⅴ寃좎쓬'],
+   showIf:function(d){ return d.childrenCount && d.childrenCount!=='0紐?; }},
+  {k:'grandchildrenDetail',q:'洹??먯＜(???????異붽?濡????뺤씤?섏떆寃좎뼱??',h:'??듭긽??湲곕낯 ?덈궡? ???삳?濡?議곗젙?섎뒗 諛⑸쾿? 由ы룷?몄뿉 ??긽 ?ы븿?⑸땲?? ?먯＜??援?쟻源뚯? ?뚮젮二쇱떆硫??쒕쪟 ?덉감 ?덈궡瑜???援ъ껜?곸쑝濡??쒕┫ ???덉뒿?덈떎.',
+   o:['?????먯＜ 援?쟻???뺤씤?섍퀬 ?띠쓬','?꾨땲????吏湲덉? 湲곕낯 ?덈궡留뚯쑝濡?異⑸텇??],
+   showIf:function(d){ return d.predeceasedChild==='?덉쓬 ??洹??먮??먭쾶 ?먮?(?먯＜)媛 ?덉쓬'; }},
+  {k:'grandchildrenNationality',q:'洹??먯＜(????援?쟻쨌?곸＜沅??곹깭???대뼸寃??섎굹??',h:'??듭긽?띿씤?????먯＜??援?쟻?낅땲?? ?щ윭 紐낆씠?쇰㈃ 媛??媛源뚯슫 ?곹솴 ?섎굹瑜??좏깮?댁＜?몄슂.',
+   o:['?꾩썝 ?쒓뎅 援?쟻留?蹂댁쑀','?쇰? ?쒓뎅 援?쟻 + ?댁쇅 ?곸＜沅?蹂댁쑀','?쇰? ?쒓뎅 援?쟻 + ?멸뎅 ?쒕?沅?蹂댁쑀(蹂듭닔援?쟻)','?쇰? ?멸뎅 ?쒕?沅뚮쭔 蹂댁쑀(?쒓뎅 援?쟻 ?놁쓬/?곸떎)','?먯＜留덈떎 ?곹솴???ㅻⅤ寃??욎뿬 ?덉쓬','?뺥솗?덈뒗 紐⑤Ⅴ寃좎쓬'],
+   showIf:function(d){ return d.predeceasedChild==='?덉쓬 ??洹??먮??먭쾶 ?먮?(?먯＜)媛 ?덉쓬' && d.grandchildrenDetail==='?????먯＜ 援?쟻???뺤씤?섍퀬 ?띠쓬'; }},
+  {k:'businessShare',q:'?ъ뾽泥는룸쾿??吏遺꾩씠 ?덈떎硫?吏遺꾩쑉? ?대뒓 ?뺣룄?멸???',h:'',
+   o:['10% 誘몃쭔','10~30%','30~50%','50% 珥덇낵(寃쎌쁺沅?蹂댁쑀)','蹂댁쑀???뺤떎?섎굹 ?뺥솗??鍮꾩쑉? 紐⑤Ⅴ寃좎쓬'],
    showIf:function(){ return freeHasBusiness; }},
-  {k:'priorGiftTiming',q:'사전 증여 시기는 언제인가요?',h:'',
-   o:['1년 이내','1~5년 전','5~10년 전','10년 이상 전'],
+  {k:'priorGiftTiming',q:'?ъ쟾 利앹뿬 ?쒓린???몄젣?멸???',h:'',
+   o:['1???대궡','1~5????,'5~10????,'10???댁긽 ??],
    showIf:function(){ return freeHasGift; }},
-  {k:'priorGiftAmount',q:'사전 증여 추정 금액은요?',h:'',
-   o:['1천만원 미만','1천만~5천만','5천만~1억','1억~5억','5억 이상'],
+  {k:'priorGiftAmount',q:'?ъ쟾 利앹뿬 異붿젙 湲덉븸???',h:'',
+   o:['1泥쒕쭔??誘몃쭔','1泥쒕쭔~5泥쒕쭔','5泥쒕쭔~1??,'1??5??,'5???댁긽'],
    showIf:function(d){ return freeHasGift && d.priorGiftTiming; }},
-  {k:'caregivingContribution',q:'특정 상속인이 부양·간병 등으로 더 기여한 부분이 있나요?',h:'기여분 인정 여부 판단에 참고됩니다.',
-   o:['있음 — 동거하며 장기간 부양','있음 — 간병·병원비 부담','있음 — 재산 형성에 기여','없음 또는 해당없음']},
-  {k:'conflictDetail',q:'가족 갈등이 있다면 어떤 종류에 가까운가요?',h:'가장 가까운 것 하나를 선택해주세요.',
-   o:['해당없음(갈등 없음)','분배 비율에 대한 이견','부양·기여 인정 문제','전혼 자녀와의 관계','연락이 끊긴 상속인 존재','기타']},
-  {k:'expertNeed',q:'전문가 상담이 필요하다면 어떤 분야인가요?',h:'',
-   o:['변호사(분쟁·소송 관련)','세무사(절세·신고 관련)','둘 다 필요','아직 필요 없음']}
+  {k:'caregivingContribution',q:'?뱀젙 ?곸냽?몄씠 遺?뫢룰컙蹂??깆쑝濡???湲곗뿬??遺遺꾩씠 ?덈굹??',h:'湲곗뿬遺??몄젙 ?щ? ?먮떒??李멸퀬?⑸땲??',
+   o:['?덉쓬 ???숆굅?섎ŉ ?κ린媛?遺??,'?덉쓬 ??媛꾨퀝쨌蹂묒썝鍮?遺??,'?덉쓬 ???ъ궛 ?뺤꽦??湲곗뿬','?놁쓬 ?먮뒗 ?대떦?놁쓬']},
+  {k:'conflictDetail',q:'媛議?媛덈벑???덈떎硫??대뼡 醫낅쪟??媛源뚯슫媛??',h:'媛??媛源뚯슫 寃??섎굹瑜??좏깮?댁＜?몄슂.',
+   o:['?대떦?놁쓬(媛덈벑 ?놁쓬)','遺꾨같 鍮꾩쑉??????닿껄','遺?뫢룰린???몄젙 臾몄젣','?꾪샎 ?먮????愿怨?,'?곕씫???딄릿 ?곸냽??議댁옱','湲고?']},
+  {k:'expertNeed',q:'?꾨Ц媛 ?곷떞???꾩슂?섎떎硫??대뼡 遺꾩빞?멸???',h:'',
+   o:['蹂?몄궗(遺꾩웳쨌?뚯넚 愿??','?몃Т???덉꽭쨌?좉퀬 愿??','?????꾩슂','?꾩쭅 ?꾩슂 ?놁쓬']}
 ];
 
 var step=0, dans={};
@@ -139,8 +139,8 @@ var freeAns = (function(){
 })();
 var freeHasRealEstate = Array.isArray(freeAns.assetPresence) && freeAns.assetPresence.some(function(v){ return v!=='none' && v!=='unknown'; });
 var freeHasOverseas = Array.isArray(freeAns.overseas) && freeAns.overseas.some(function(v){ return v!=='none' && v!=='unknown'; });
-var freeHasGift = freeAns.gift && freeAns.gift !== '없음';
-var freeHasBusiness = freeAns.business && freeAns.business !== '없음';
+var freeHasGift = freeAns.gift && freeAns.gift !== '?놁쓬';
+var freeHasBusiness = freeAns.business && freeAns.business !== '?놁쓬';
 function ge(id){return document.getElementById(id)}
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
 
@@ -159,7 +159,7 @@ function renderQ(){
   ge('StepTxt').textContent=(posInVs+1)+' / '+tot;
   ge('PFill').style.width=((posInVs+1)/tot*100)+'%';
   var isLast = vs[vs.length-1]===step;
-  ge('NextBtn').textContent = isLast ? '심화 리포트 생성하기' : '다음';
+  ge('NextBtn').textContent = isLast ? '?ы솕 由ы룷???앹꽦?섍린' : '?ㅼ쓬';
   ge('PrevBtn').style.opacity = posInVs===0 ? '0.4':'1';
   ge('PrevBtn').disabled = posInVs===0;
   ge('QTitle').innerHTML='<span class="qt">'+esc(q.q)+'</span>';
@@ -180,7 +180,7 @@ ge('NextBtn').onclick=function(){
   var vs = visibleSteps();
   var posInVs = vs.indexOf(step);
   if(posInVs>=vs.length-1){ submitDeepSurvey(); return; }
-  /* 다음 문항으로 이동하되, 답변에 따라 새로 숨겨질 수 있는 문항은 건너뜀 */
+  /* ?ㅼ쓬 臾명빆?쇰줈 ?대룞?섎릺, ?듬????곕씪 ?덈줈 ?④꺼吏????덈뒗 臾명빆? 嫄대꼫? */
   step++;
   while(step<DQ.length && !visible(DQ[step])){ delete dans[DQ[step].k]; step++; }
   if(step>=DQ.length){ submitDeepSurvey(); return; }
@@ -195,7 +195,7 @@ ge('PrevBtn').onclick=function(){
 async function submitDeepSurvey(){
   var raw=null;
   try{ raw=sessionStorage.getItem('ansim_report_request'); }catch(e){}
-  if(!raw){ alert('진단 데이터가 없습니다. 처음부터 다시 진행해주세요.'); location.href='/'; return; }
+  if(!raw){ alert('吏꾨떒 ?곗씠?곌? ?놁뒿?덈떎. 泥섏쓬遺???ㅼ떆 吏꾪뻾?댁＜?몄슂.'); location.href='/'; return; }
   var req;
   try{ req=JSON.parse(raw); }catch(e){ location.href='/'; return; }
   req.deepAnswers = dans;
