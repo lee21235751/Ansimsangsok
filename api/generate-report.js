@@ -160,6 +160,7 @@ function buildSimulation(deep) {
   return {
     totalEok, debtEok, netEok, totalDeduction, taxableEok,
     realEstateEok, hasOverseasAsset, overseasEok,
+    realEstateType: deep.realEstateType || null,
     overseasAssetType: deep.overseasAssetType || null,
     residencyStatus: deep.residencyStatus || null,
     spouseAlive, childCount, shareText,
@@ -180,7 +181,8 @@ function formatEok(n) {
 }
 
 /* ── 상황별 컨텍스트 모듈 ── */
-function getContext(a, types) {
+function getContext(a, types, deep) {
+  deep = deep || {};
   const lines = [];
   const overseas = Array.isArray(a.overseas) ? a.overseas : [];
   const assetTypes = Array.isArray(a.assetTypes) ? a.assetTypes : [];
@@ -231,6 +233,12 @@ function getContext(a, types) {
   if (a.conflict==='이미 뚜렷함') {
     lines.push('갈등이 있는 경우 유언장 등 문서화가 핵심. 협의 분할 과정에서 갈등 표면화 가능.');
   }
+  if (deep.realEstateType === '토지·농지') {
+    lines.push('토지·농지는 현금과 달리 물리적으로 똑같이 나누기 어려워, 공유지분 형태로 상속되는 경우가 많음. 공유지분 상태에서는 처분·개발 시 상속인 전원의 동의가 필요해 한 명이라도 반대하면 장기간 묶이는 경우가 흔함. 특정 자녀에게 농지를 온전히 남기고 싶다면, 다른 자녀에게 유류분 상당액을 현금이나 다른 재산으로 미리 정산하는 방안을 함께 검토할 것.');
+  }
+  if (deep.realEstateType === '상가·건물(임대 목적)') {
+    lines.push('임대 목적 상가·건물은 임대수익이 함께 따라오므로, 단순 시가뿐 아니라 누가 임대관리·수익을 가져갈지도 분쟁 요소가 됨. 상속 후 공동소유 상태로 두면 임대료 배분, 관리비용 부담, 매각 여부를 둘러싸고 형제간 갈등이 길어지는 경우가 많아 미리 관리 방식(단독 상속 후 정산 vs 공동관리)을 정해두는 것이 중요함.');
+  }
   if (a.conflict==='조금 있음') {
     lines.push('지금은 사이가 괜찮아 보여도, 실제 상속 협의 과정에서 분배 비율에 대한 미묘한 입장 차이가 표면화되는 경우가 많음. 사전에 분배 기준을 명확히 문서화해두는 것이 갈등 예방에 효과적.');
   }
@@ -252,7 +260,7 @@ async function callClaude(answers, types, score, deepAnswers) {
   if (!apiKey) throw new Error('ANTHROPIC_API_KEY 없음');
 
   const level = score>=70?'주의 필요':score>=40?'확인 필요':'기본 정리';
-  const ctx   = getContext(answers, types);
+  const ctx   = getContext(answers, types, deepAnswers);
   const sim   = buildSimulation(deepAnswers);
 
   const presence = Array.isArray(answers.assetPresence)?answers.assetPresence:[];
@@ -272,6 +280,7 @@ async function callClaude(answers, types, score, deepAnswers) {
 [심화설문 기반 시뮬레이션 데이터 — 반드시 simulation 섹션에 이 숫자를 그대로 활용해 구체적으로 작성]
 - 전체 추정 재산: ${formatEok(sim.totalEok)}
 - 부동산 추정 시가: ${formatEok(sim.realEstateEok)}
+- 부동산 주요 유형: ${sim.realEstateType || '해당없음'}
 - 해외자산 보유: ${sim.hasOverseasAsset ? formatEok(sim.overseasEok)+' 추정' : '없음 또는 모름'}
 - 해외자산 형태: ${sim.overseasAssetType || '해당없음'}
 - 영주권·국적 상태: ${sim.residencyStatus || '해당없음'}
