@@ -8,3 +8,4 @@ _backup_before_*
 .env*
 
 desktop.ini
+cleanup-deployments.ps1
