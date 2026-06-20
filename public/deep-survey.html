@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>안심상속 — 심화 진단</title>
+<meta name="robots" content="noindex,nofollow"/>
+<style>
+:root{--F:#0e3529;--FD:#06251d;--G:#d7ad55;--GL:#f1d586;--CR:#fff8e8;--INK:#12231d;--MU:#5e6b64;--LN:rgba(14,53,41,.18)}
+*,*::before,*::after{box-sizing:border-box;margin:0}
+body{font-family:system-ui,-apple-system,sans-serif;color:var(--INK);word-break:keep-all;background:#fffdf6}
+button,input,select{font:inherit}
+.w{width:min(680px,calc(100% - 32px));margin:0 auto}
+.dn{display:none!important}
+.hero{background:linear-gradient(145deg,#082d22,#163b2a 62%,#24381f);color:#fffdf5;padding:28px 0}
+.ey{display:inline-flex;border:1px solid rgba(215,173,85,.65);color:var(--GL);border-radius:999px;padding:8px 14px;font-weight:900;font-size:.85rem;margin-bottom:14px}
+.hero h1{font-size:clamp(1.6rem,6vw,2.2rem);line-height:1.15;letter-spacing:-.05em;margin-bottom:8px}
+.hero p{color:rgba(255,253,245,.8);font-size:.97rem;line-height:1.65;font-weight:650}
+.main{padding:24px 0 60px}
+.pr{display:flex;justify-content:space-between;align-items:center;color:var(--F);font-weight:950;font-size:.93rem;margin-bottom:9px}
+.pt{height:7px;background:#e4dfd0;border-radius:999px;overflow:hidden;margin-bottom:18px}
+.pf{height:100%;background:linear-gradient(90deg,#f6dc86,#b9862f);border-radius:999px;transition:width .2s}
+.card{background:#fffaf0;border:1px solid var(--LN);border-radius:20px;padding:clamp(16px,4vw,24px)}
+.qt{display:block;padding:14px 16px;border-radius:18px;background:#fff;border:2px solid rgba(14,53,41,.22);color:var(--FD);font-size:clamp(1.08rem,4.4vw,1.35rem);line-height:1.4;font-weight:900;letter-spacing:-.03em;margin-bottom:10px}
+.qh{color:#536058;font-weight:700;line-height:1.65;font-size:.92rem;margin-bottom:14px}
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{display:flex;align-items:center;gap:8px;width:100%;min-height:52px;padding:13px 15px;border:2px solid rgba(14,53,41,.2);border-radius:15px;background:#fff;color:var(--FD);font-size:.97rem;font-weight:750;text-align:left;cursor:pointer;touch-action:manipulation}
+.opt.on{background:var(--FD);color:#fff8dc;border-color:var(--G)}
+.snav{display:flex;flex-direction:column;gap:9px;margin-top:18px;padding-bottom:80px}
+.bg{border:0;background:linear-gradient(135deg,#f5dc8a,#c99938);color:#1c221c;border-radius:18px;padding:15px 22px;font-weight:950;cursor:pointer;min-height:54px;width:100%;font-size:1.02rem;touch-action:manipulation}
+.bw{border:1px solid rgba(14,53,41,.2);background:#fff;color:var(--MU);border-radius:18px;padding:14px 18px;font-weight:900;cursor:pointer;min-height:52px;width:100%;font-size:1rem;touch-action:manipulation}
+.skip{text-align:center;color:var(--MU);font-size:.88rem;font-weight:700;margin-top:10px;text-decoration:underline;cursor:pointer}
+.loading{min-height:50vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;color:var(--MU)}
+.spin{width:40px;height:40px;border:3px solid rgba(14,53,41,.1);border-top-color:var(--G);border-radius:50%;animation:sp .8s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<header class="hero"><div class="w">
+  <div class="ey">결제 완료 · 심화 진단</div>
+  <h1>몇 가지만 더<br>구체적으로 확인합니다</h1>
+  <p>방금 결제하신 유료 상세리포트는 일반 정보가 아니라, 입력하신 숫자를 바탕으로 실제 계산이 포함된 자료입니다. 약 2분 정도 소요됩니다.</p>
+</div></header>
+<div class="main w">
+  <div id="Survey">
+    <div class="pr"><span id="StepTxt"></span><span>구체적인 숫자일수록 정확합니다</span></div>
+    <div class="pt"><div class="pf" id="PFill"></div></div>
+    <div class="card"><div id="QTitle"></div><div id="QHelp"></div><div id="QOpts"></div></div>
+    <div class="snav">
+      <button class="bg" type="button" id="NextBtn"></button>
+      <button class="bw" type="button" id="PrevBtn">이전으로</button>
+      <div class="skip" id="SkipBtn">이 항목은 건너뛰기</div>
+    </div>
+  </div>
+  <div id="LoadingView" class="dn">
+    <div class="loading">
+      <div class="spin"></div>
+      <p style="font-weight:800;color:var(--FD)">심화 분석 리포트를 생성하고 있습니다</p>
+      <small>약 20~30초 소요됩니다.</small>
+    </div>
+  </div>
+</div>
+
+<script>
+var DQ=[
+  {k:'totalAssets',q:'전체 재산 규모를 대략 알려주세요',h:'부동산·금융자산·기타 모두 합산한 추정치입니다. 정확하지 않아도 괜찮습니다.',
+   o:['2억 미만','2억~5억','5억~10억','10억~20억','20억~50억','50억 이상','모르겠음']},
+  {k:'realEstateValue',q:'부동산 합산 추정 시가는 얼마인가요?',h:'보유한 부동산이 없으면 건너뛰기를 눌러주세요.',
+   o:['2억 미만','2억~5억','5억~10억','10억~20억','20억~50억','50억 이상','모르겠음']},
+  {k:'financialAssets',q:'금융자산(예적금·주식·보험 등) 합산 추정액은요?',h:'',
+   o:['1억 미만','1억~3억','3억~5억','5억~10억','10억 이상','모르겠음']},
+  {k:'debt',q:'채무(대출·보증·미납세금 등)가 있다면 얼마 정도인가요?',h:'',
+   o:['없음','1천만원 미만','1천만~1억','1억 이상','모르겠음']},
+  {k:'spouseStatus',q:'배우자는 생존해 계신가요?',h:'',
+   o:['생존','이미 사망','해당없음(미혼 등)']},
+  {k:'childrenCount',q:'자녀는 몇 명인가요?',h:'전혼 자녀가 있다면 포함해서 답해주세요.',
+   o:['0명','1명','2명','3명','4명 이상']},
+  {k:'priorGiftTiming',q:'사전 증여가 있다면, 시기는 언제인가요?',h:'없다면 건너뛰기를 눌러주세요.',
+   o:['1년 이내','1~5년 전','5~10년 전','10년 이상 전']},
+  {k:'priorGiftAmount',q:'사전 증여 추정 금액은요?',h:'',
+   o:['1천만원 미만','1천만~5천만','5천만~1억','1억~5억','5억 이상']},
+  {k:'conflictDetail',q:'가족 갈등이 있다면 어떤 종류에 가까운가요?',h:'가장 가까운 것 하나를 선택해주세요. 없다면 건너뛰기.',
+   o:['분배 비율에 대한 이견','부양·기여 인정 문제','전혼 자녀와의 관계','연락이 끊긴 상속인 존재','기타']},
+  {k:'expertNeed',q:'전문가 상담이 필요하다면 어떤 분야인가요?',h:'',
+   o:['변호사(분쟁·소송 관련)','세무사(절세·신고 관련)','둘 다 필요','아직 필요 없음']}
+];
+
+var step=0, dans={};
+function ge(id){return document.getElementById(id)}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+
+function renderQ(){
+  var q=DQ[step], tot=DQ.length;
+  ge('StepTxt').textContent=(step+1)+' / '+tot;
+  ge('PFill').style.width=((step+1)/tot*100)+'%';
+  ge('NextBtn').textContent = step>=tot-1 ? '심화 리포트 생성하기' : '다음';
+  ge('PrevBtn').style.opacity = step===0 ? '0.4':'1';
+  ge('PrevBtn').disabled = step===0;
+  ge('QTitle').innerHTML='<span class="qt">'+esc(q.q)+'</span>';
+  ge('QHelp').innerHTML = q.h ? '<p class="qh">'+esc(q.h)+'</p>' : '';
+  var sel = dans[q.k];
+  ge('QOpts').innerHTML = '<div class="opts">'+q.o.map(function(o){
+    return '<button type="button" class="opt'+(sel===o?' on':'')+'" data-v="'+esc(o)+'">'+esc(o)+'</button>';
+  }).join('')+'</div>';
+  ge('QOpts').querySelectorAll('.opt').forEach(function(b){
+    b.onclick=function(){
+      dans[q.k]=b.getAttribute('data-v');
+      ge('QOpts').querySelectorAll('.opt').forEach(function(x){x.classList.toggle('on',x===b)});
+    };
+  });
+}
+
+ge('NextBtn').onclick=function(){
+  if(step>=DQ.length-1){ submitDeepSurvey(); return; }
+  step++; renderQ();
+};
+ge('PrevBtn').onclick=function(){ if(step>0){ step--; renderQ(); } };
+ge('SkipBtn').onclick=function(){
+  delete dans[DQ[step].k];
+  if(step>=DQ.length-1){ submitDeepSurvey(); return; }
+  step++; renderQ();
+};
+
+async function submitDeepSurvey(){
+  var raw=null;
+  try{ raw=sessionStorage.getItem('ansim_report_request'); }catch(e){}
+  if(!raw){ alert('진단 데이터가 없습니다. 처음부터 다시 진행해주세요.'); location.href='/'; return; }
+  var req;
+  try{ req=JSON.parse(raw); }catch(e){ location.href='/'; return; }
+  req.deepAnswers = dans;
+  try{ sessionStorage.setItem('ansim_report_request', JSON.stringify(req)); }catch(e){}
+
+  ge('Survey').classList.add('dn');
+  ge('LoadingView').classList.remove('dn');
+
+  location.href='/report';
+}
+
+renderQ();
+</script>
+</body>
+</html>

@@ -73,6 +73,65 @@ function matchTypes(a) {
   return Object.entries(s).sort((a,b)=>b[1]-a[1]).slice(0,3).map(([id])=>TYPES[id]);
 }
 
+/* ── 심화설문 → 시뮬레이션 데이터 변환 ── */
+function buildSimulation(deep) {
+  if (!deep || typeof deep !== 'object' || !Object.keys(deep).length) return null;
+
+  const assetMidpoint = {
+    '2억 미만': 1.5, '2억~5억': 3.5, '5억~10억': 7.5, '10억~20억': 15,
+    '20억~50억': 35, '50억 이상': 60, '모르겠음': null
+  };
+  const finMidpoint = {
+    '1억 미만': 0.5, '1억~3억': 2, '3억~5억': 4, '5억~10억': 7.5, '10억 이상': 12, '모르겠음': null
+  };
+  const debtMidpoint = {
+    '없음': 0, '1천만원 미만': 0.05, '1천만~1억': 0.5, '1억 이상': 1.5, '모르겠음': null
+  };
+
+  const totalEok = assetMidpoint[deep.totalAssets] ?? null;
+  const debtEok  = debtMidpoint[deep.debt] ?? 0;
+  const netEok   = totalEok != null ? Math.max(0, totalEok - (debtEok||0)) : null;
+
+  /* 일괄공제 5억 + 배우자공제(최소5억) 단순 적용 예시 — 실제 세액 아님, 구간 추정용 */
+  const spouseAlive = deep.spouseStatus === '생존';
+  const baseDeduction = 5; /* 일괄공제 5억 */
+  const spouseDeduction = spouseAlive ? 5 : 0; /* 최소 배우자공제 5억 (실제는 최대 30억까지 변동) */
+  const totalDeduction = baseDeduction + spouseDeduction;
+  const taxableEok = netEok != null ? Math.max(0, netEok - totalDeduction) : null;
+
+  /* 법정상속분 비율 계산 (배우자 1.5, 자녀 1) */
+  const childCount = { '0명':0,'1명':1,'2명':2,'3명':3,'4명 이상':4 }[deep.childrenCount];
+  let shareText = null;
+  if (childCount != null) {
+    const spouseShare = spouseAlive ? 1.5 : 0;
+    const totalShare = spouseShare + childCount * 1;
+    if (totalShare > 0) {
+      const parts = [];
+      if (spouseAlive) parts.push(`배우자 ${(spouseShare/totalShare*100).toFixed(1)}%`);
+      if (childCount > 0) parts.push(`자녀 1인당 ${(1/totalShare*100).toFixed(1)}%`);
+      shareText = parts.join(', ');
+    }
+  }
+
+  /* 유류분 침해 가능 여부 판단용 플래그 */
+  const giftWithin10y = deep.priorGiftTiming && deep.priorGiftTiming !== '10년 이상 전';
+  const giftAmountEok = { '1천만원 미만':0.05,'1천만~5천만':0.3,'5천만~1억':0.75,'1억~5억':3,'5억 이상':7 }[deep.priorGiftAmount] ?? null;
+
+  return {
+    totalEok, debtEok, netEok, totalDeduction, taxableEok,
+    spouseAlive, childCount, shareText,
+    giftWithin10y, giftAmountEok, priorGiftTiming: deep.priorGiftTiming || null,
+    conflictDetail: deep.conflictDetail || null,
+    expertNeed: deep.expertNeed || null
+  };
+}
+
+function formatEok(n) {
+  if (n == null) return '확인 필요';
+  if (n === 0) return '0원';
+  return n >= 1 ? `약 ${n.toFixed(1)}억 원` : `약 ${Math.round(n*10000)}만 원`;
+}
+
 /* ── 상황별 컨텍스트 모듈 ── */
 function getContext(a, types) {
   const lines = [];
@@ -101,12 +160,13 @@ function getContext(a, types) {
 }
 
 /* ── Claude API 호출 ── */
-async function callClaude(answers, types, score) {
+async function callClaude(answers, types, score, deepAnswers) {
   const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) throw new Error('ANTHROPIC_API_KEY 없음');
 
   const level = score>=70?'주의 필요':score>=40?'확인 필요':'기본 정리';
   const ctx   = getContext(answers, types);
+  const sim   = buildSimulation(deepAnswers);
 
   const presence = Array.isArray(answers.assetPresence)?answers.assetPresence:[];
   const counts   = answers.assetCounts||{};
@@ -118,6 +178,27 @@ async function callClaude(answers, types, score) {
   const overseas = (Array.isArray(answers.overseas)?answers.overseas:[])
     .filter(v=>!['none','unknown'].includes(v)).join(', ')||'없음';
 
+  let simBlock = '';
+  if (sim) {
+    simBlock = `
+
+[심화설문 기반 시뮬레이션 데이터 — 반드시 simulation 섹션에 이 숫자를 그대로 활용해 구체적으로 작성]
+- 전체 추정 재산: ${formatEok(sim.totalEok)}
+- 채무 추정: ${formatEok(sim.debtEok)}
+- 순재산(재산-채무): ${formatEok(sim.netEok)}
+- 적용 가능 공제 추정(일괄공제5억${sim.spouseAlive?'+배우자공제 최소5억':''}): ${formatEok(sim.totalDeduction)}
+- 과세대상 재산 추정(순재산-공제): ${formatEok(sim.taxableEok)}
+- 배우자 생존: ${sim.spouseAlive ? '예':'아니오'}
+- 자녀 수: ${sim.childCount ?? '미상'}명
+- 법정상속분 비율: ${sim.shareText || '확인 필요'}
+- 10년 이내 사전증여 여부: ${sim.giftWithin10y ? '예 ('+sim.priorGiftTiming+')':'아니오 또는 없음'}
+- 사전증여 추정액: ${formatEok(sim.giftAmountEok)}
+- 갈등 구체 유형: ${sim.conflictDetail || '없음'}
+- 희망 전문가 분야: ${sim.expertNeed || '미정'}
+
+이 숫자들은 정확한 세액이 아니라 "구간 추정"임을 리포트에 명시하되, 일반론이 아니라 이 숫자를 직접 인용해 계산 과정을 보여주는 방식으로 작성하세요.`;
+  }
+
   const prompt = `안심상속 유료 상세리포트를 작성하세요.
 
 [진단]
@@ -125,9 +206,9 @@ async function callClaude(answers, types, score) {
 가족:${answers.family||'-'}, 유언:${answers.will||'-'}, 부동산:${reList}
 증여:${answers.gift||'-'}, 사업:${answers.business||'-'}, 해외:${overseas}
 갈등:${answers.conflict||'-'}, 자료:${answers.documents||'-'}
-${ctx?'\n[참고]\n'+ctx:''}
+${ctx?'\n[참고]\n'+ctx:''}${simBlock}
 
-아래 JSON을 정확히 따라 작성하세요. 각 배열 항목은 반드시 독립된 문자열로 작성하세요.
+아래 JSON을 정확히 따라 작성하세요. 각 배열 항목은 반드시 독립된 문자열로 작성하세요.${sim ? ' simulation 섹션은 심화설문 데이터가 있을 때만 포함하세요.' : ' simulation 섹션은 생략하세요(심화설문 데이터 없음).'}
 
 {
   "title": "안심상속 유료 상세리포트",
@@ -140,7 +221,15 @@ ${ctx?'\n[참고]\n'+ctx:''}
       "title": "내 상황 요약",
       "lead": "한 문장으로 현재 상황 핵심",
       "points": ["핵심사항1", "핵심사항2", "핵심사항3", "핵심사항4"]
-    },
+    },${sim ? `
+    "simulation": {
+      "title": "예상 상속세·법정상속분 시뮬레이션 (구간 추정)",
+      "disclaimer": "아래 수치는 입력하신 구간 정보를 바탕으로 한 단순 추정이며 실제 세액과 다를 수 있습니다. 정확한 금액은 세무사 상담이 필요합니다.",
+      "asset_summary": "전체 재산·채무·순재산을 한 문단으로 정리",
+      "deduction_estimate": "적용 가능한 공제와 과세대상 재산 추정을 한 문단으로 설명",
+      "legal_share": "배우자·자녀 법정상속분 비율을 구체 숫자로 설명",
+      "forced_share_check": "사전증여 시기·금액 기반 유류분 침해 가능성 점검 결과"
+    },` : ''}
     "persons": {
       "title": "확인할 사람 관계",
       "checklist": ["항목1", "항목2", "항목3", "항목4"]
@@ -174,7 +263,7 @@ ${ctx?'\n[참고]\n'+ctx:''}
       ]
     }
   },
-  "legal_notice": "본 리포트는 정보 제공 목적이며 법률·세무 조언을 대체하지 않습니다. 구체적 사항은 변호사·세무사와 상담하세요.",
+  "legal_notice": "본 리포트는 정보 제공 목적이며 법률·세무 조언을 대체하지 않습니다. 시뮬레이션 수치는 추정치이며 구체적 사항은 변호사·세무사와 상담하세요.",
   "generated_at": "${new Date().toISOString()}"
 }
 
@@ -190,7 +279,7 @@ ${ctx?'\n[참고]\n'+ctx:''}
     body: JSON.stringify({
       model: 'claude-haiku-4-5-20251001',
       max_tokens: 4096,
-      system: '안심상속 유료 상세리포트 작성 시스템. 법률·세무 조언 금지. 상황 정리와 준비 안내만. JSON만 반환.',
+      system: '안심상속 유료 상세리포트 작성 시스템. 법률·세무 조언 금지(단, 입력된 구간 수치 기반 단순 추정 계산은 허용). 상황 정리와 준비 안내, 구간 추정 시뮬레이션. JSON만 반환.',
       messages: [{ role: 'user', content: prompt }]
     })
   });
@@ -212,11 +301,12 @@ export default async function handler(req, res) {
     const body    = req.body||{};
     const answers = body.answers && typeof body.answers==='object' ? body.answers : {};
     const score   = Number.isFinite(Number(body.score)) ? Number(body.score) : 0;
+    const deepAnswers = body.deepAnswers && typeof body.deepAnswers==='object' ? body.deepAnswers : null;
     const types = matchTypes(answers);
 
     let report;
     try {
-      report = await callClaude(answers, types, score);
+      report = await callClaude(answers, types, score, deepAnswers);
     } catch(e) {
       console.error('Claude 오류:', e.message);
       return res.status(502).json({ok:false,message:'리포트 생성 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요.'});

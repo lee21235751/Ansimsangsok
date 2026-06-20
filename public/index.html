@@ -292,7 +292,8 @@ function showResult(){
         answers:ans
       }));
     }catch(e){}
-    window.location.href='/report';
+    /* TODO: 실제 결제(Toss) 연동 시 이 자리에 결제창 호출 → 성공 콜백에서 아래 이동 실행 */
+    window.location.href='/deep-survey';
   };
 
   ge('SubBtn').onclick=handleSubmit;

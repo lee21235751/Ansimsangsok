@@ -135,6 +135,18 @@ function render(d){
       +'</div>';
   }
 
+  /* 1.5. 시뮬레이션 (심화설문 완료 시에만 존재) */
+  if(s.simulation){
+    h+='<div class="sec" style="background:#fff8dc;border-color:rgba(184,134,11,.3)"><div class="sec-ey" style="background:#92400e">심화 분석 · 구간 추정</div>'
+      +'<h2 class="sec-t">'+esc(s.simulation.title||'예상 상속세·법정상속분 시뮬레이션')+'</h2>'
+      +(s.simulation.disclaimer?'<p class="sec-d" style="font-style:italic">'+esc(s.simulation.disclaimer)+'</p>':'')
+      +(s.simulation.asset_summary?'<div class="pt" style="margin-bottom:8px"><strong>재산 현황</strong><br>'+esc(s.simulation.asset_summary)+'</div>':'')
+      +(s.simulation.deduction_estimate?'<div class="pt" style="margin-bottom:8px"><strong>공제·과세대상 추정</strong><br>'+esc(s.simulation.deduction_estimate)+'</div>':'')
+      +(s.simulation.legal_share?'<div class="pt" style="margin-bottom:8px"><strong>법정상속분</strong><br>'+esc(s.simulation.legal_share)+'</div>':'')
+      +(s.simulation.forced_share_check?'<div class="pt"><strong>유류분 점검</strong><br>'+esc(s.simulation.forced_share_check)+'</div>':'')
+      +'</div>';
+  }
+
   /* 2. 사람 관계 */
   if(s.persons){
     h+='<div class="sec"><div class="sec-ey">02 사람 관계</div>'
