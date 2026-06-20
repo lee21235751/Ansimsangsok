@@ -410,6 +410,37 @@ export default async function handler(req, res) {
     const answers = body.answers && typeof body.answers==='object' ? body.answers : {};
     const score   = Number.isFinite(Number(body.score)) ? Number(body.score) : 0;
     const deepAnswers = body.deepAnswers && typeof body.deepAnswers==='object' ? body.deepAnswers : null;
+    const orderId = typeof body.orderId === 'string' ? body.orderId : null;
+
+    /* 결제 검증: orderId가 paid_reports에 status='paid'로 존재하고 아직 리포트를 발급받지 않았는지 확인.
+       이 검증이 없으면 누구나 이 엔드포인트를 직접 호출해 결제 없이 리포트를 받을 수 있음. */
+    const sbUrlCheck = (process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL || '').replace(/\/$/,'');
+    const sbKeyCheck = process.env.SUPABASE_SERVICE_ROLE_KEY||'';
+    if (!sbUrlCheck || !sbKeyCheck) {
+      console.error('SUPABASE 환경변수 누락 - 결제 검증 불가');
+      return res.status(500).json({ok:false,message:'서버 설정 오류입니다. 잠시 후 다시 시도해주세요.'});
+    }
+    if (!orderId) {
+      return res.status(402).json({ok:false,message:'결제 정보가 확인되지 않았습니다. 처음부터 다시 진행해주세요.'});
+    }
+    try {
+      const checkRes = await fetch(
+        sbUrlCheck + '/rest/v1/paid_reports?order_id=eq.' + encodeURIComponent(orderId) + '&select=status,report_generated',
+        { headers: { apikey: sbKeyCheck, Authorization: 'Bearer ' + sbKeyCheck } }
+      );
+      const rows = await checkRes.json();
+      const record = Array.isArray(rows) ? rows[0] : null;
+      if (!record || record.status !== 'paid') {
+        return res.status(402).json({ok:false,message:'결제가 확인되지 않았습니다. 결제 후 다시 시도해주세요.'});
+      }
+      if (record.report_generated) {
+        return res.status(409).json({ok:false,message:'이미 이 결제로 리포트가 발급되었습니다.'});
+      }
+    } catch (checkErr) {
+      console.error('결제 검증 중 오류:', checkErr.message);
+      return res.status(500).json({ok:false,message:'결제 확인 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.'});
+    }
+
     const types = matchTypes(answers);
 
     let report;
@@ -420,15 +451,30 @@ export default async function handler(req, res) {
       return res.status(502).json({ok:false,message:'리포트 생성 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요.'});
     }
 
-    /* Supabase 저장 (실패해도 무시) */
-    const sbUrl = (process.env.SUPABASE_URL||'').replace(/\/$/,'');
-    const sbKey = process.env.SUPABASE_SERVICE_ROLE_KEY||process.env.VITE_SUPABASE_ANON_KEY||'';
-    if (sbUrl && sbKey) {
-      fetch(`${sbUrl}/rest/v1/paid_reports`, {
-        method:'POST',
-        headers:{'Content-Type':'application/json','apikey':sbKey,'Authorization':'Bearer '+sbKey},
-        body: JSON.stringify({lead_id:body.leadId||null,score,level:report.level,matched_types:types,report_json:report,created_at:new Date().toISOString()})
-      }).catch(()=>{});
+    /* 리포트 발급 완료 표시 + 리포트 본문 저장 (결제 시점에 만들어둔 같은 order_id 행을 업데이트)
+       실패해도 무시 (리포트 자체는 이미 사용자에게 정상 응답됨) */
+    try {
+      await fetch(
+        sbUrlCheck + '/rest/v1/paid_reports?order_id=eq.' + encodeURIComponent(orderId),
+        {
+          method: 'PATCH',
+          headers: {
+            apikey: sbKeyCheck,
+            Authorization: 'Bearer ' + sbKeyCheck,
+            'Content-Type': 'application/json',
+            Prefer: 'return=minimal',
+          },
+          body: JSON.stringify({
+            report_generated: true,
+            score,
+            level: report.level,
+            matched_types: types,
+            report_json: report,
+          }),
+        }
+      );
+    } catch (markErr) {
+      console.error('리포트 발급 완료 표시 실패(리포트 자체는 정상 발급됨):', markErr.message);
     }
 
     return res.status(200).json({ok:true,report,meta:{matchedTypes:types,score,level:report.level,generatedAt:report.generated_at}});

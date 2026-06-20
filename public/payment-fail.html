@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+<title>결제 실패 | 안심상속</title>
+<meta name="robots" content="noindex"/>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Pretendard","Noto Sans KR",sans-serif;background:#0d1f17;color:#fffdf5;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+  .box{max-width:420px;width:100%;text-align:center}
+  h1{font-size:1.15rem;font-weight:800;margin-bottom:10px}
+  p{font-size:.92rem;color:rgba(255,253,245,.7);line-height:1.6;margin-bottom:8px}
+  .reason{background:rgba(220,80,80,.12);border:1px solid rgba(220,80,80,.35);border-radius:14px;padding:16px;margin:18px 0;font-size:.88rem;color:#ffb4b4;text-align:left;word-break:break-word}
+  .btn{display:inline-block;margin-top:8px;background:#f1d586;color:#0d1f17;border:none;border-radius:10px;padding:13px 22px;font-weight:800;font-size:.92rem;cursor:pointer;text-decoration:none}
+</style>
+</head>
+<body>
+<div class="box">
+  <h1>결제가 완료되지 않았습니다</h1>
+  <p>결제 진행 중 문제가 발생했습니다. 카드 정보를 다시 확인해주시거나, 다른 결제수단으로 시도해주세요.</p>
+  <div class="reason" id="ReasonBox" style="display:none"></div>
+  <a class="btn" href="/">처음으로 돌아가기</a>
+</div>
+<script>
+(function(){
+  var urlParams = new URLSearchParams(window.location.search);
+  var code = urlParams.get('code');
+  var message = urlParams.get('message');
+  if(message){
+    var box = document.getElementById('ReasonBox');
+    box.style.display='block';
+    box.textContent = (code ? '['+code+'] ' : '') + decodeURIComponent(message);
+  }
+})();
+</script>
+</body>
+</html>

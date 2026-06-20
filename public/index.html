@@ -83,6 +83,7 @@ button,input,textarea{font:inherit}
 .hb{position:fixed;top:calc(12px + env(safe-area-inset-top,0));right:12px;z-index:9998;border:0;background:var(--FD);color:#fff8dc;border-radius:999px;padding:10px 15px;font-weight:900;font-size:.9rem;cursor:pointer;box-shadow:0 10px 24px rgba(0,0,0,.18);touch-action:manipulation}
 footer{background:var(--FD);color:rgba(255,253,245,.62);padding:28px 0 40px;line-height:1.7;font-weight:650;font-size:.92rem}
 </style>
+<script src="https://js.tosspayments.com/v1/payment"></script>
 </head>
 <body>
 <div id="T" class="toast dn"></div>
@@ -307,12 +308,47 @@ function showResult(){
         answers:ans
       }));
     }catch(e){}
-    /* TODO: 실제 결제(Toss) 연동 시 이 자리에 결제창 호출 → 성공 콜백에서 아래 이동 실행 */
-    window.location.href='/deep-survey';
+    openPaymentSheet();
   };
 
   ge('SubBtn').onclick=handleSubmit;
   ge('RetryBtn').onclick=startSurvey;
+}
+
+/* ===== Toss 결제창 연동 (API 개별 연동 키 방식) =====
+   사업자등록 전이라도 회원가입만으로 바로 발급되는 "API 개별 연동 키"(test_ck_...)를 사용.
+   결제위젯(test_gck_...)은 사업자등록 완료 후에만 키가 발급되는 구조라 지금 단계에서는 결제창 방식이 맞음.
+   사업자등록 후 PG 실계약 시 결제위젯으로 전환하고 싶다면, 이 블록 전체를 결제위젯 SDK 패턴으로 교체하면 됨. */
+var TOSS_CLIENT_KEY='test_ck_oEjb0gm23PNx7RYKd7QvrpGwBJn5'; /* 본인 테스트 클라이언트 키(API 개별 연동 키). 사업자등록 완료 후 live_ck_로 시작하는 실키로 교체할 것. */
+var REPORT_PRICE=49000;
+
+function genOrderId(){
+  /* 영문 대소문자/숫자/특수문자(-,_) 6~64자 요구사항 충족하는 주문번호 생성 */
+  return 'ansim_'+Date.now()+'_'+Math.random().toString(36).slice(2,10);
+}
+
+function openPaymentSheet(){
+  if(typeof TossPayments==='undefined'){
+    toast('결제 모듈을 불러오지 못했습니다. 잠시 후 다시 시도해주세요.');
+    return;
+  }
+  try{
+    var tossPayments=TossPayments(TOSS_CLIENT_KEY);
+    var email=(ge('fEmail')&&ge('fEmail').value?ge('fEmail').value.trim():'');
+    tossPayments.requestPayment('카드', {
+      amount: REPORT_PRICE,
+      orderId: genOrderId(),
+      orderName: '안심상속 유료 상세리포트',
+      successUrl: window.location.origin+'/payment-success',
+      failUrl: window.location.origin+'/payment-fail',
+      customerEmail: email || undefined,
+    }).catch(function(err){
+      if(err && err.code==='USER_CANCEL') return; /* 사용자가 직접 닫은 경우 에러 토스트 불필요 */
+      toast('결제 요청 중 문제가 발생했습니다. 다시 시도해주세요.');
+    });
+  }catch(err){
+    toast('결제 모듈 초기화에 실패했습니다.');
+  }
 }
 
 async function handleSubmit(){
