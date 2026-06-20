@@ -112,21 +112,16 @@ footer{background:var(--FD);color:rgba(255,253,245,.62);padding:28px 0 40px;line
 <h1>내 재산,<br>내 뜻대로<br>남길 수 있습니다</h1>
 <p>준비한 사람만 가능합니다.<br>지금 내 상속 상황을 먼저 확인하세요.</p>
 <div class="pills"><span class="pill">혼자 조용히</span><span class="pill">본인만 확인</span><span class="pill">비공개</span></div>
+<div style="padding:16px 18px;border-radius:18px;background:rgba(241,213,134,.12);border:1.5px solid rgba(241,213,134,.4);margin-bottom:18px;text-align:left">
+<strong style="display:block;font-size:1.02rem;font-weight:950;color:var(--GL);margin-bottom:8px">2분 후 확인되는 것</strong>
+<ul style="margin:0;padding-left:18px;display:grid;gap:5px;color:rgba(255,253,245,.88)"><li style="font-size:.92rem;line-height:1.5;font-weight:700">내 뜻대로 상속이 가능한지 여부</li><li style="font-size:.92rem;line-height:1.5;font-weight:700">지금 당장 해결해야 할 위험 항목</li><li style="font-size:.92rem;line-height:1.5;font-weight:700">상속 설계에서 놓친 부분</li></ul>
+</div>
 <button class="bg" type="button" id="HeroBtn">2분 무료 진단 시작하기</button>
 </div>
 </header>
 <div class="main w">
-<div id="Intro">
-<h2 style="font-size:clamp(1.6rem,5vw,2.2rem);letter-spacing:-.055em;color:var(--FD);margin-bottom:8px">무료 상속 위험도 진단</h2>
-<p style="color:var(--MU);line-height:1.72;font-weight:700;margin-bottom:18px">준비하지 않으면 법이 대신 결정합니다. 지금 내 상황을 먼저 파악하세요.</p>
-<div style="padding:18px;border-radius:20px;background:#fff4d8;border:2px solid rgba(194,137,28,.6);margin-bottom:22px">
-<strong style="display:block;font-size:clamp(1.15rem,4.5vw,1.4rem);font-weight:950;letter-spacing:-.04em;margin-bottom:10px">2분 후 확인되는 것</strong>
-<ul style="margin:0;padding-left:20px;display:grid;gap:6px"><li style="font-size:1rem;line-height:1.55;font-weight:850">내 뜻대로 상속이 가능한지 여부</li><li style="font-size:1rem;line-height:1.55;font-weight:850">지금 당장 해결해야 할 위험 항목</li><li style="font-size:1rem;line-height:1.55;font-weight:850">상속 설계에서 놓친 부분</li></ul>
-</div>
-<button class="bg" type="button" id="IntroBtn">진단 시작하기</button>
-</div>
 <div id="Survey" class="dn">
-<div class="pr"><span id="StepTxt"></span><span id="TimeTxt">약 2분 소요</span></div>
+<div class="pr"><span id="StepTxt"></span></div>
 <div class="pt"><div class="pf" id="PFill"></div></div>
 <div class="card"><div id="QTitle"></div><div id="QHelp"></div><div id="QOpts"></div></div>
 <div class="snav"><button class="bg" type="button" id="NextBtn"></button><button class="bw" type="button" id="PrevBtn">이전으로</button></div>
@@ -171,7 +166,6 @@ window.getTotalScore=calcScore;
 function renderQ(){
   var q=Q[step],tot=Q.length;
   ge('StepTxt').textContent=(step+1)+' / '+tot;
-  ge('TimeTxt').textContent=step>=tot-1?'마지막 질문':'약 2분 소요';
   ge('PFill').style.width=((step+1)/tot*100)+'%';
   ge('NextBtn').textContent=step>=tot-1?'결과 확인하기':'다음';
   ge('PrevBtn').disabled=step===0;ge('PrevBtn').style.opacity=step===0?'0.45':'1';
@@ -227,17 +221,16 @@ ge('PrevBtn').onclick=function(){if(step>0){step--;renderQ()}};
 
 function startSurvey(){
   step=0;ans={};
-  ge('Intro').classList.add('dn');ge('Result').classList.add('dn');ge('Result').innerHTML='';
+  ge('Result').classList.add('dn');ge('Result').innerHTML='';
   ge('Survey').classList.remove('dn');renderQ();
   ge('Survey').scrollIntoView({behavior:'smooth',block:'start'});
   ge('HB').classList.remove('dn');
 }
 ge('HeroBtn').onclick=startSurvey;
-ge('IntroBtn').onclick=startSurvey;
 ge('HB').onclick=function(){
   step=0;ans={};
   ge('Survey').classList.add('dn');ge('Result').classList.add('dn');ge('Result').innerHTML='';
-  ge('Intro').classList.remove('dn');ge('HB').classList.add('dn');
+  ge('HB').classList.add('dn');
   window.scrollTo({top:0,behavior:'smooth'});
 };
 
