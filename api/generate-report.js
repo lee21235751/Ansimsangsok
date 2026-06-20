@@ -70,6 +70,7 @@ function matchTypes(a) {
     /* 자산 해외이전·디지털자산은 실무상 더 까다로운 케이스라 가중치 상향 */
     if (overseas.includes('overseas_realestate_or_company')) add('T16',20);
     if (overseas.includes('overseas_securities') || assetTypes.includes('overseas_stock')) add('T16',15);
+    if (overseas.includes('overseas_bank')) add('T16',10);
     if (overseas.includes('crypto') || assetTypes.includes('crypto')) add('T16',15);
     if (overseas.includes('permanent_residency')) add('T16',10);
     /* 외국국적·복수국적 자녀는 상속 실행 절차(서류·아포스티유) 자체가 막힐 수 있는 핵심 케이스 */
@@ -160,7 +161,7 @@ function buildSimulation(deep) {
   return {
     totalEok, debtEok, netEok, totalDeduction, taxableEok,
     realEstateEok, hasOverseasAsset, overseasEok,
-    realEstateType: deep.realEstateType || null,
+    realEstateCount: deep.realEstateCount || null,
     overseasAssetType: deep.overseasAssetType || null,
     residencyStatus: deep.residencyStatus || null,
     spouseAlive, childCount, shareText,
@@ -190,9 +191,13 @@ function getContext(a, types, deep) {
   const hasPR = overseas.includes('permanent_residency');
   const hasOverseasRE = overseas.includes('overseas_realestate_or_company');
   const hasOverseasSec = overseas.includes('overseas_securities') || assetTypes.includes('overseas_stock');
+  const hasOverseasBank = overseas.includes('overseas_bank');
   const hasCrypto = overseas.includes('crypto') || assetTypes.includes('crypto');
   const hasDual = overseas.includes('dual_nationality');
   const hasForeignNat = overseas.includes('family_foreign_nationality');
+  const presence = Array.isArray(a.assetPresence) ? a.assetPresence : [];
+  const hasLand = presence.includes('land');
+  const hasIncomeRE = presence.includes('incomeRealEstate');
 
   if (a.unequalIntent==='있음 — 이미 마음을 정함' || a.unequalIntent==='있음 — 아직 확신은 없음') {
     lines.push('핵심: 특정 자녀(가족)에게 더 남기고 싶은 의향이 있는 경우, 단순히 유언장에 "더 준다"고만 적으면 다른 상속인이 유류분반환청구로 법정상속분의 1/2(직계비속·배우자 기준)까지는 결국 가져갈 수 있음. 따라서 "내 뜻대로 더 주는 것"을 실질적으로 지키려면 유류분 자체를 줄이는 합법적 설계(기여분 입증, 시효 활용, 사전 협의)가 함께 필요함. 이것이 일반적인 절세 상담과 다른, 이 리포트의 핵심 목적임.');
@@ -221,10 +226,13 @@ function getContext(a, types, deep) {
   if (hasOverseasSec) {
     lines.push('미국·홍콩 등 해외 증권계좌(주식)도 한국 거주자 기준 상속재산에 합산됨. 해외 증권사는 한국 가족관계증명서를 영문공증·아포스티유 받아 별도 상속절차(probate 등)를 거쳐야 인출 가능한 경우가 많아 시간이 오래 걸림.');
   }
+  if (hasOverseasBank) {
+    lines.push('해외 예금·은행계좌도 한국 거주자 기준 상속재산에 포함되며, 매월 말일 중 단 하루라도 잔액이 5억 원을 초과한 적이 있으면 해외금융계좌 신고 대상이 될 수 있음. 해외 은행은 한국 가족관계증명서·사망진단서를 영문공증·아포스티유 받아 제출해야 하고, 은행마다 절차가 달라 일반 상속재산보다 인출까지 오래 걸리는 경우가 많음. 계좌 정보(은행명·지점·계좌번호)를 가족이 전혀 모르면 존재 자체를 놓칠 수 있어 미리 정리해두는 것이 중요함.');
+  }
   if (hasCrypto) {
     lines.push('암호화폐도 상속재산에 포함되며 상속세 신고 대상. 거래소 계정이면 가족관계증명서·사망진단서로 상속인 인출 신청 가능하나, 일반 재산 조회(안심상속 원스톱서비스 등)에는 가상자산 보유 사실이 나오지 않는 경우가 많아 가족이 존재 자체를 모르고 지나칠 수 있음. 개인 지갑(콜드월렛)의 시드구문·키를 본인만 알고 있으면 사망 시 영구히 접근 불가능해질 수 있어 사전에 안전한 방식으로 정보를 남겨두는 것이 중요함.');
   }
-  if (hasOverseas && !hasOverseasRE && !hasOverseasSec && !hasCrypto && !hasPR) {
+  if (hasOverseas && !hasOverseasRE && !hasOverseasSec && !hasOverseasBank && !hasCrypto && !hasPR) {
     lines.push('해외 거주 상속인은 서명공증 필요, 외국 국적자는 별도 서류, 해외 금융자산은 국내 신고 의무 있음(해외금융계좌 신고제도 — 매월 말일 중 단 하루라도 합산 잔액이 5억 원을 초과하면 다음 해 6월까지 신고 대상).');
   }
   if (types.some(t=>t.includes('사업체')||t.includes('지분'))) {
@@ -233,11 +241,14 @@ function getContext(a, types, deep) {
   if (a.conflict==='이미 뚜렷함') {
     lines.push('갈등이 있는 경우 유언장 등 문서화가 핵심. 협의 분할 과정에서 갈등 표면화 가능.');
   }
-  if (deep.realEstateType === '토지·농지') {
+  if (hasLand) {
     lines.push('토지·농지는 현금과 달리 물리적으로 똑같이 나누기 어려워, 공유지분 형태로 상속되는 경우가 많음. 공유지분 상태에서는 처분·개발 시 상속인 전원의 동의가 필요해 한 명이라도 반대하면 장기간 묶이는 경우가 흔함. 특정 자녀에게 농지를 온전히 남기고 싶다면, 다른 자녀에게 유류분 상당액을 현금이나 다른 재산으로 미리 정산하는 방안을 함께 검토할 것.');
   }
-  if (deep.realEstateType === '상가·건물(임대 목적)') {
+  if (hasIncomeRE) {
     lines.push('임대 목적 상가·건물은 임대수익이 함께 따라오므로, 단순 시가뿐 아니라 누가 임대관리·수익을 가져갈지도 분쟁 요소가 됨. 상속 후 공동소유 상태로 두면 임대료 배분, 관리비용 부담, 매각 여부를 둘러싸고 형제간 갈등이 길어지는 경우가 많아 미리 관리 방식(단독 상속 후 정산 vs 공동관리)을 정해두는 것이 중요함.');
+  }
+  if (deep.realEstateCount === '2건' || deep.realEstateCount === '3~4건' || deep.realEstateCount === '5건 이상') {
+    lines.push('부동산이 여러 건이면, 단순히 시가 합계를 균등하게 나누는 것과 실제로 "어떤 부동산을 누가 가져가는지"는 전혀 다른 문제임. 같은 합계 금액이라도 입지·환금성·관리부담이 부동산마다 다르므로, 특정 자녀가 선호하는 부동산을 두고 다툼이 생기기 쉬움. 부동산별로 누구에게 남길지 미리 지정해두고, 가치 차이는 다른 재산이나 현금으로 조정하는 방식을 권장함.');
   }
   if (a.conflict==='조금 있음') {
     lines.push('지금은 사이가 괜찮아 보여도, 실제 상속 협의 과정에서 분배 비율에 대한 미묘한 입장 차이가 표면화되는 경우가 많음. 사전에 분배 기준을 명확히 문서화해두는 것이 갈등 예방에 효과적.');
@@ -265,9 +276,10 @@ async function callClaude(answers, types, score, deepAnswers) {
 
   const presence = Array.isArray(answers.assetPresence)?answers.assetPresence:[];
   const counts   = answers.assetCounts||{};
+  const reTypeLabel = {house:'주택',land:'토지·농지',incomeRealEstate:'수익형부동산(상가등)',factory:'공장·창고',otherRealEstate:'기타부동산'};
   const reList   = ['house','land','incomeRealEstate','factory','otherRealEstate']
     .filter(k=>presence.includes(k))
-    .map(k=>`${k}:${counts[k]||'1'}`)
+    .map(k=>`${reTypeLabel[k]} ${counts[k]||'1'}건`)
     .join(', ') || '없음';
 
   const overseas = (Array.isArray(answers.overseas)?answers.overseas:[])
@@ -280,7 +292,8 @@ async function callClaude(answers, types, score, deepAnswers) {
 [심화설문 기반 시뮬레이션 데이터 — 반드시 simulation 섹션에 이 숫자를 그대로 활용해 구체적으로 작성]
 - 전체 추정 재산: ${formatEok(sim.totalEok)}
 - 부동산 추정 시가: ${formatEok(sim.realEstateEok)}
-- 부동산 주요 유형: ${sim.realEstateType || '해당없음'}
+- 부동산 보유 건수(심화설문): ${sim.realEstateCount || '미상'}
+- 부동산 보유 현황(무료진단 기준): ${reList}
 - 해외자산 보유: ${sim.hasOverseasAsset ? formatEok(sim.overseasEok)+' 추정' : '없음 또는 모름'}
 - 해외자산 형태: ${sim.overseasAssetType || '해당없음'}
 - 영주권·국적 상태: ${sim.residencyStatus || '해당없음'}
