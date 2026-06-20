@@ -1,4 +1,4 @@
-function sendJson(res, statusCode, payload) {
+﻿function sendJson(res, statusCode, payload) {
   res.statusCode = statusCode;
   res.setHeader("Content-Type", "application/json; charset=utf-8");
   res.end(JSON.stringify(payload));
@@ -11,7 +11,7 @@ function readBody(req) {
     req.on("data", chunk => {
       data += chunk;
       if (data.length > 1024 * 1024) {
-        reject(new Error("요청 본문이 너무 큽니다."));
+        reject(new Error("?붿껌 蹂몃Ц???덈Т ?쎈땲??"));
         req.destroy();
       }
     });
@@ -44,11 +44,11 @@ function getConfiguredPaymentMethods() {
   const raw = process.env.PAYMENT_METHODS || "card,kakao_pay,naver_pay";
   const allowed = new Set(["card", "kakao_pay", "naver_pay", "toss_pay", "bank_transfer"]);
   const labels = {
-    card: "신용카드·체크카드",
-    kakao_pay: "카카오페이",
-    naver_pay: "네이버페이",
-    toss_pay: "토스페이",
-    bank_transfer: "계좌이체"
+    card: "?좎슜移대뱶쨌泥댄겕移대뱶",
+    kakao_pay: "移댁뭅?ㅽ럹??,
+    naver_pay: "?ㅼ씠踰꾪럹??,
+    toss_pay: "?좎뒪?섏씠",
+    bank_transfer: "怨꾩쥖?댁껜"
   };
 
   return raw
@@ -72,7 +72,7 @@ function getPaymentConfig(req) {
     secretKeyConfigured: Boolean(normalizeEnvValue(process.env.PAYMENT_SECRET_KEY)),
     webhookSecretConfigured: Boolean(normalizeEnvValue(process.env.PAYMENT_WEBHOOK_SECRET)),
     methods: getConfiguredPaymentMethods(),
-    primaryMethodLabel: process.env.PAYMENT_PRIMARY_METHOD_LABEL || "신용카드·카카오페이·토스페이",
+    primaryMethodLabel: process.env.PAYMENT_PRIMARY_METHOD_LABEL || "?좎슜移대뱶쨌移댁뭅?ㅽ럹?는룻넗?ㅽ럹??,
     successUrl: process.env.PAYMENT_SUCCESS_URL || baseUrl + "/?payment=success",
     failUrl: process.env.PAYMENT_FAIL_URL || baseUrl + "/?payment=fail",
     cancelUrl: process.env.PAYMENT_CANCEL_URL || baseUrl + "/?payment=cancel",
@@ -101,7 +101,7 @@ export default async function handler(req, res) {
     res.setHeader("Allow", "POST");
     return sendJson(res, 405, {
       ok: false,
-      message: "지원하지 않는 요청입니다."
+      message: "吏?먰븯吏 ?딅뒗 ?붿껌?낅땲??"
     });
   }
 
@@ -114,7 +114,7 @@ export default async function handler(req, res) {
     } catch (error) {
       return sendJson(res, 400, {
         ok: false,
-        message: "요청 형식이 올바르지 않습니다."
+        message: "?붿껌 ?뺤떇???щ컮瑜댁? ?딆뒿?덈떎."
       });
     }
 
@@ -122,7 +122,7 @@ export default async function handler(req, res) {
     const name = sanitizeText(body.name, 80);
     const email = sanitizeText(body.email, 160);
     const score = Number(body.score || 0);
-    const amount = 29000;
+    const amount = 49000;
     const tossTestMode = body.tossTestMode === true;
     const tossTestToken = sanitizeText(body.tossTestToken, 160);
     const paymentConfig = getPaymentConfig(req);
@@ -140,7 +140,7 @@ export default async function handler(req, res) {
     if (productType !== "paid-detail-report") {
       return sendJson(res, 400, {
         ok: false,
-        message: "지원하지 않는 상품 유형입니다."
+        message: "吏?먰븯吏 ?딅뒗 ?곹뭹 ?좏삎?낅땲??"
       });
     }
 
@@ -149,7 +149,7 @@ export default async function handler(req, res) {
       status: "payment_ready",
       orderId: makeOrderId(),
       productType,
-      productName: "안심상속 유료 상세리포트",
+      productName: "?덉떖?곸냽 ?좊즺 ?곸꽭由ы룷??,
       amount,
       currency: "KRW",
       buyer: {
@@ -172,7 +172,7 @@ export default async function handler(req, res) {
         tossCheckout: (paymentConfig.provider === "toss" || tossTestAllowed) ? {
           clientKeyConfigured: paymentConfig.clientKeyConfigured,
           clientKey: paymentConfig.clientKeyConfigured ? normalizeEnvValue(process.env.PAYMENT_CLIENT_KEY) : null,
-          orderName: "안심상속 유료 상세리포트",
+          orderName: "?덉떖?곸냽 ?좊즺 ?곸꽭由ы룷??,
           customerName: name || "",
           customerEmail: email || "",
           useEscrow: false,
@@ -185,14 +185,14 @@ export default async function handler(req, res) {
         allowed: tossTestAllowed,
         enabled: paymentConfig.tossTestRouteEnabled
       },
-      message: "결제 준비 정보가 생성되었습니다."
+      message: "寃곗젣 以鍮??뺣낫媛 ?앹꽦?섏뿀?듬땲??"
     };
 
     return sendJson(res, 200, order);
   } catch (error) {
     return sendJson(res, 500, {
       ok: false,
-      message: "결제 준비 중 오류가 발생했습니다."
+      message: "寃곗젣 以鍮?以??ㅻ쪟媛 諛쒖깮?덉뒿?덈떎."
     });
   }
 }
