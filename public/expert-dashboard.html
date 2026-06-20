@@ -67,7 +67,7 @@ if(!token){
 
 async function loadRequests(){
   try{
-    const res = await fetch('/api/expert-requests?token=' + encodeURIComponent(token));
+    const res = await fetch('/api/expert?action=requests&token=' + encodeURIComponent(token));
     const data = await res.json();
     if(!data.ok){
       greet.textContent = '접근 오류';
@@ -132,10 +132,10 @@ function attachHandlers(){
       submitBtn.disabled = true;
       st.className='st'; st.textContent='제출 중...';
       try{
-        const res = await fetch('/api/submit-bid', {
+        const res = await fetch('/api/expert', {
           method:'POST',
           headers:{'Content-Type':'application/json'},
-          body: JSON.stringify({ token, request_id: card.dataset.id, proposed_fee: fee, available_dates: dates, message: msg })
+          body: JSON.stringify({ action: 'bid', token, request_id: card.dataset.id, proposed_fee: fee, available_dates: dates, message: msg })
         });
         const data = await res.json();
         if(data.ok){

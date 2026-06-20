@@ -156,6 +156,7 @@ document.getElementById('F').addEventListener('submit', async (e)=>{
   st.className='st'; st.textContent='';
 
   const payload = {
+    action: 'apply',
     type: document.getElementById('type').value,
     name: document.getElementById('name').value,
     license_number: document.getElementById('license').value,
@@ -173,7 +174,7 @@ document.getElementById('F').addEventListener('submit', async (e)=>{
   }
 
   try{
-    const res = await fetch('/api/expert-apply', {
+    const res = await fetch('/api/expert', {
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body: JSON.stringify(payload)

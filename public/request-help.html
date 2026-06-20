@@ -122,6 +122,7 @@ document.getElementById('F').addEventListener('submit', async (e)=>{
   try{ matchedTypes = JSON.parse(sessionStorage.getItem('ansim_matched_types')||'[]'); }catch(e){}
 
   const payload = {
+    action: 'create',
     situation_summary: document.getElementById('summary').value,
     preferred_method: methodSel.value || null,
     region: document.getElementById('region').value || null,
@@ -136,7 +137,7 @@ document.getElementById('F').addEventListener('submit', async (e)=>{
   }
 
   try{
-    const res = await fetch('/api/consultation-request', {
+    const res = await fetch('/api/consultation', {
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body: JSON.stringify(payload)

@@ -60,7 +60,7 @@ if(!token){
 
 async function load(){
   try{
-    const res = await fetch('/api/get-bids?token=' + encodeURIComponent(token));
+    const res = await fetch('/api/consultation?action=bids&token=' + encodeURIComponent(token));
     const data = await res.json();
     if(!data.ok){
       content.innerHTML = '<div class="empty">' + (data.message || '불러올 수 없습니다.') + '</div>';
@@ -113,10 +113,10 @@ function attachHandlers(request){
       if(!confirm('이 전문가를 선택하시겠습니까? 선택 후에는 변경할 수 없습니다.')) return;
       btn.disabled = true; btn.textContent = '처리 중...';
       try{
-        const res = await fetch('/api/select-bid', {
+        const res = await fetch('/api/consultation', {
           method:'POST',
           headers:{'Content-Type':'application/json'},
-          body: JSON.stringify({ token, bid_id: bidId })
+          body: JSON.stringify({ action: 'select', token, bid_id: bidId })
         });
         const data = await res.json();
         if(data.ok){ load(); }
