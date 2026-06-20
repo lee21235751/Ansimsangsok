@@ -3,6 +3,9 @@
  * POST /api/generate-report
  */
 
+/* Claude API 호출 + 후속 처리가 60초를 넘을 수 있어 함수 최대 실행시간을 늘림 */
+export const maxDuration = 120;
+
 /* ── 20개 유형 매칭 ── */
 const TYPES = {
   T01:'배우자와 자녀가 있는 일반 상속',
@@ -408,7 +411,7 @@ ${ctx?'\n[참고]\n'+ctx:''}${simBlock}
     },
     body: JSON.stringify({
       model: 'claude-haiku-4-5-20251001',
-      max_tokens: 8000,
+      max_tokens: 6000,
       system: '안심상속 유료 상세리포트 작성 시스템. 이 서비스의 목적은 절세가 아니라 "사용자가 원하는 자녀(가족)에게 더 많이 남길 수 있도록, 유류분 분쟁을 합법적으로 최소화하는 상속 설계를 돕는 것"임. 모든 답변은 이 목적을 중심으로 작성할 것. 법률·세무 조언 금지(단, 입력된 구간 수치 기반 단순 추정 계산 및 일반적인 법령·판례 정보 제공은 허용). "점검이 필요합니다"식 모호한 문장 대신, 가능한 곳마다 실제 선택 가능한 구체적 옵션을 제시할 것. JSON만 반환.',
       messages: [{ role: 'user', content: prompt }]
     })
