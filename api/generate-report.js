@@ -101,21 +101,21 @@ function buildSimulation(deep) {
 
   const assetMidpoint = {
     '2억 미만': 1.5, '2억~5억': 3.5, '5억~10억': 7.5, '10억~20억': 15,
-    '20억~50억': 35, '50억 이상': 60, '모르겠음': null
+    '20억~50억': 35, '50억 이상': 60, '정확한 금액은 모르겠음': null
   };
   const finMidpoint = {
-    '1억 미만': 0.5, '1억~3억': 2, '3억~5억': 4, '5억~10억': 7.5, '10억 이상': 12, '모르겠음': null
+    '1억 미만': 0.5, '1억~3억': 2, '3억~5억': 4, '5억~10억': 7.5, '10억 이상': 12, '정확한 금액은 모르겠음': null
   };
   const debtMidpoint = {
-    '없음': 0, '1천만원 미만': 0.05, '1천만~1억': 0.5, '1억 이상': 1.5, '모르겠음': null
+    '없음': 0, '1천만원 미만': 0.05, '1천만~1억': 0.5, '1억 이상': 1.5, '정확한 금액은 모르겠음': null
   };
   const overseasMidpoint = {
-    '1억 미만': 0.5, '1억~3억': 2, '3억~5억': 4, '5억 이상': 7, '모르겠음': null
+    '1억 미만': 0.5, '1억~3억': 2, '3억~5억': 4, '5억 이상': 7, '정확한 금액은 모르겠음': null
   };
 
   const realEstateEok  = assetMidpoint[deep.realEstateValue] ?? null;
   const overseasEok    = overseasMidpoint[deep.overseasAssetValue] ?? 0;
-  const hasOverseasAsset = !!deep.overseasAssetValue && deep.overseasAssetValue !== '모르겠음';
+  const hasOverseasAsset = !!deep.overseasAssetValue && deep.overseasAssetValue !== '정확한 금액은 모르겠음';
 
   const totalEok = assetMidpoint[deep.totalAssets] ?? null;
   const debtEok  = debtMidpoint[deep.debt] ?? 0;
@@ -129,12 +129,32 @@ function buildSimulation(deep) {
   const totalDeduction = baseDeduction + spouseDeduction;
   const taxableEok = netEok != null ? Math.max(0, netEok - totalDeduction) : null;
 
-  /* 법정상속분 비율 계산 (배우자 1.5, 자녀 1) */
+  /* 법정상속분 비율 계산
+     1순위: 직계비속(자녀) + 배우자(1.5) — 자녀 있으면 항상 이 순위로 확정
+     2순위: 직계존속(부모) + 배우자(1.5) — 자녀 없고 부모 생존 시
+     3순위: 형제자매(균등) — 자녀·부모 모두 없을 때, 배우자 있으면 배우자 단독 우선
+     주의: 직계존속·형제자매는 유류분 비율이 다름(직계존속 1/3, 형제자매는 2024년 헌재 위헌 결정으로 유류분 자체 폐지) */
   const childCount = { '0명':0,'1명':1,'2명':2,'3명':3,'4명 이상':4 }[deep.childrenCount];
+  const parentsAlive = deep.parentsAlive === '생존';
+  const siblingsCount = { '0명':0,'1명':1,'2명':2,'3명 이상':3 }[deep.siblingsCount];
   let shareText = null;
   let spouseShareEok = null, childShareEok = null;
   let spouseForcedShareEok = null, childForcedShareEok = null;
-  if (childCount != null && netEok != null) {
+  let inheritanceTier = null; /* 'children' | 'parents' | 'siblings' | 'spouse_only' | null */
+
+  if (childCount > 0) {
+    inheritanceTier = 'children';
+  } else if (childCount === 0) {
+    if (parentsAlive) {
+      inheritanceTier = 'parents';
+    } else if (spouseAlive) {
+      inheritanceTier = 'spouse_only';
+    } else if (siblingsCount != null) {
+      inheritanceTier = 'siblings';
+    }
+  }
+
+  if (inheritanceTier === 'children' && netEok != null) {
     const spouseShare = spouseAlive ? 1.5 : 0;
     const totalShare = spouseShare + childCount * 1;
     if (totalShare > 0) {
@@ -153,6 +173,32 @@ function buildSimulation(deep) {
       }
       shareText = parts.join(', ');
     }
+  } else if (inheritanceTier === 'parents' && netEok != null) {
+    /* 직계존속(부모)도 배우자와 1.5:1 비율로 공동상속, 유류분은 법정상속분의 1/3 */
+    const spouseShare = spouseAlive ? 1.5 : 0;
+    const totalShare = spouseShare + 1; /* 부모 전체를 1로 단순화(부 또는 모 단독 생존도 동일 취급) */
+    const parts = [];
+    if (spouseAlive) {
+      const ratio = spouseShare/totalShare;
+      parts.push(`배우자 ${(ratio*100).toFixed(1)}%`);
+      spouseShareEok = netEok * ratio;
+      spouseForcedShareEok = spouseShareEok * 0.5;
+    }
+    const parentRatio = 1/totalShare;
+    parts.push(`직계존속(부모) 전체 ${(parentRatio*100).toFixed(1)}%`);
+    childShareEok = netEok * parentRatio; /* 변수명은 재사용하되 실질은 직계존속 몫 */
+    childForcedShareEok = childShareEok * (1/3); /* 직계존속 유류분 = 법정상속분의 1/3 */
+    shareText = parts.join(', ') + ' (자녀가 없어 직계존속이 1순위로 공동상속)';
+  } else if (inheritanceTier === 'spouse_only' && netEok != null) {
+    spouseShareEok = netEok;
+    spouseForcedShareEok = netEok * 0.5;
+    shareText = '배우자 단독상속 100% (직계비속·직계존속이 모두 없어 배우자가 전부 상속)';
+  } else if (inheritanceTier === 'siblings' && netEok != null) {
+    /* 자녀·부모 모두 없고 배우자도 없으면 형제자매가 균등 상속. 형제자매는 2024년 헌재 위헌 결정으로 유류분 자체가 폐지됨 */
+    const n = Math.max(1, siblingsCount || 1);
+    childShareEok = netEok / n;
+    childForcedShareEok = 0; /* 형제자매는 유류분 없음 */
+    shareText = `형제자매 ${n}인 균등상속 (1인당 ${(100/n).toFixed(1)}%, 유류분 권리 없음)`;
   }
 
   /* 유류분 산정 기초재산 관련 플래그
@@ -170,7 +216,7 @@ function buildSimulation(deep) {
     childrenNationality: deep.childrenNationality || null,
     predeceasedChild: deep.predeceasedChild || null,
     grandchildrenNationality: deep.grandchildrenNationality || null,
-    spouseAlive, childCount, shareText,
+    spouseAlive, childCount, shareText, inheritanceTier,
     spouseShareEok, childShareEok, spouseForcedShareEok, childForcedShareEok,
     giftToHeir, giftAmountEok, priorGiftTiming: deep.priorGiftTiming || null,
     businessShare: deep.businessShare || null,
@@ -188,7 +234,7 @@ function formatEok(n) {
 }
 
 /* ── 상황별 컨텍스트 모듈 ── */
-function getContext(a, types, deep) {
+function getContext(a, types, deep, sim) {
   deep = deep || {};
   const lines = [];
   const overseas = Array.isArray(a.overseas) ? a.overseas : [];
@@ -217,8 +263,12 @@ function getContext(a, types, deep) {
   }
   if (types.some(t=>t.includes('전혼')||t.includes('재혼'))) {
     lines.push('전혼 자녀도 법정상속인으로 현배우자 자녀와 동등한 상속분을 가짐. 상속인 범위 정확히 파악 필요.');
+    lines.push('주의(흔한 오해): 반대로 배우자가 데려온 자녀(의붓자식)는 친양자 입양 등 정식 입양 절차를 거치지 않았다면 법적으로 상속인이 아님. 오랜 기간 함께 살아 친자녀처럼 느껴지더라도 법정상속분은 없으며, 그 의붓자식에게 재산을 남기고 싶다면 입양 절차를 밟거나 유증(유언으로 증여)을 명시해야 함.');
   }
-  if (types.some(t=>t.includes('유류분'))) {
+  if (sim && sim.childCount > 0) {
+    lines.push('참고(미성년 자녀가 있는 경우): 상속인 중 미성년 자녀가 있다면, 상속재산분할협의 시 친권자(보통 배우자)와 미성년 자녀 사이에 이해관계가 충돌할 수 있어 가정법원에 특별대리인 선임을 신청해야 협의가 유효함. 이를 모르고 친권자가 미성년 자녀를 대리해 협의서에 서명하면 나중에 무효가 될 수 있으므로, 미성년 자녀가 있다면 이 점을 미리 확인하도록 안내할 것.');
+  }
+  if (types.some(t=>t.includes('유류분')) || types.some(t=>t.includes('형제자매')) || ['parents','spouse_only','siblings'].includes(sim && sim.inheritanceTier)) {
     lines.push('유류분 권리자: 형제자매는 2024년 4월 헌법재판소 위헌 결정으로 이미 유류분 권리가 폐지됨(자녀·배우자·부모만 유류분 보유, 직계비속·배우자는 법정상속분의 1/2, 직계존속은 1/3). 2026년 3월 개정 시행으로 패륜상속인에 대한 상속권 상실선고 제도가 신설되었고, 기여에 대한 보상 성격 증여는 유류분 반환 대상에서 제외하도록 명문화됨.');
     lines.push('주의: 유언대용신탁은 과거 유류분 회피 수단으로 알려졌으나, 최근 판례는 신탁재산도 유류분 산정 기초재산에 포함시키는 추세이므로 만능 해법이 아님. 신탁만 믿고 다른 준비를 소홀히 하면 안 됨.');
     lines.push('합법적으로 유류분 영향을 줄이는 실무적 방법 3가지: ① 특정 자녀의 부양·간병·재산형성 기여를 구체적으로 입증할 자료(통장 이체내역, 간병기록, 진단서 등)를 미리 확보해 기여분으로 인정받는 방법(2026 개정으로 기여 보상 증여는 유류분에서 제외됨) ② 유류분반환청구권의 소멸시효(침해를 안 날로부터 1년, 상속개시일로부터 10년)를 정확히 이해하고 시기를 설계하는 방법 ③ 유언장에 증여·유증의 경위와 이유를 구체적으로 명시해 다른 상속인의 이해를 구하고 분쟁 가능성 자체를 낮추는 방법.');
@@ -277,8 +327,8 @@ async function callClaude(answers, types, score, deepAnswers) {
   if (!apiKey) throw new Error('ANTHROPIC_API_KEY 없음');
 
   const level = score>=70?'주의 필요':score>=40?'확인 필요':'기본 정리';
-  const ctx   = getContext(answers, types, deepAnswers);
   const sim   = buildSimulation(deepAnswers);
+  const ctx   = getContext(answers, types, deepAnswers, sim);
 
   const presence = Array.isArray(answers.assetPresence)?answers.assetPresence:[];
   const counts   = answers.assetCounts||{};
@@ -314,9 +364,10 @@ async function callClaude(answers, types, score, deepAnswers) {
 - 과세대상 재산 추정(순재산-공제): ${formatEok(sim.taxableEok)}
 - 배우자 생존: ${sim.spouseAlive ? '예':'아니오'}
 - 자녀 수: ${sim.childCount ?? '미상'}명
+- 상속순위 구분(inheritanceTier): ${sim.inheritanceTier === 'children' ? '1순위 직계비속(자녀)' : sim.inheritanceTier === 'parents' ? '2순위 직계존속(부모) — 자녀 없음' : sim.inheritanceTier === 'spouse_only' ? '배우자 단독상속 — 직계비속·직계존속 모두 없음' : sim.inheritanceTier === 'siblings' ? '3순위 형제자매 — 자녀·부모·배우자 모두 없음' : '확인 필요'}
 - 법정상속분 비율: ${sim.shareText || '확인 필요'}
 - 배우자 법정상속분 추정액: ${formatEok(sim.spouseShareEok)} / 배우자 유류분(법정상속분의 1/2) 추정액: ${formatEok(sim.spouseForcedShareEok)}
-- 자녀 1인당 법정상속분 추정액: ${formatEok(sim.childShareEok)} / 자녀 1인당 유류분(법정상속분의 1/2) 추정액: ${formatEok(sim.childForcedShareEok)}
+${sim.inheritanceTier === 'parents' ? `- 직계존속(부모) 전체 법정상속분 추정액: ${formatEok(sim.childShareEok)} / 직계존속 유류분(법정상속분의 1/3) 추정액: ${formatEok(sim.childForcedShareEok)}` : sim.inheritanceTier === 'siblings' ? `- 형제자매 1인당 법정상속분 추정액: ${formatEok(sim.childShareEok)} (형제자매는 2024년 헌재 위헌 결정으로 유류분 권리 자체가 없음)` : `- 자녀 1인당 법정상속분 추정액: ${formatEok(sim.childShareEok)} / 자녀 1인당 유류분(법정상속분의 1/2) 추정액: ${formatEok(sim.childForcedShareEok)}`}
 - 특정 자녀(가족)에게 더 남기고 싶은 의향: ${answers.unequalIntent || '확인 안 됨'}
 - 사업체·법인 지분율: ${sim.businessShare || '없음 또는 미상'}
 - 상속인(자녀 등) 대상 사전증여 여부: ${sim.giftToHeir ? '예 (시기: '+(sim.priorGiftTiming||'미상')+', 시기와 무관하게 유류분 산정 시 전부 합산됨)':'없음 또는 미상'}
@@ -341,7 +392,11 @@ async function callClaude(answers, types, score, deepAnswers) {
 대습상속인이 될 손주가 외국 시민권이거나 복수국적인 경우, 위에서 설명한 외국국적 자녀와 동일한 서류 절차 문제(한국 인감증명서 발급 불가, 현지 공증+아포스티유+번역공증 필요, 재외공관 인증만으로는 등기소가 거부할 수 있음)가 그대로 적용된다는 점을 안내하세요. 특히 손주가 미성년자이면서 동시에 외국 국적인 경우 특별대리인 선임 절차와 서류 인증 절차가 함께 필요해 더 복잡해질 수 있다는 점도 짚어주세요.`;
   }
 
+  const isParentPerspective = answers.perspective === '부모님 또는 배우자의 상속을 가족 입장에서 준비';
+
   const prompt = `안심상속 유료 상세리포트를 작성하세요.
+
+${isParentPerspective ? '[중요] 이 사용자는 본인이 아니라 부모님(또는 배우자)의 상속을 자녀/가족 입장에서 미리 준비하고 있습니다. 리포트 전체에서 "당신의 재산"이 아니라 "부모님의 재산", "당신이 사망하면"이 아니라 "부모님이 돌아가시면" 식으로 호칭을 사용자(자녀) 기준 3인칭으로 일관되게 작성하세요. summary와 next_steps에는 "부모님과 미리 대화해보기", "부모님 의사 표현이 가능할 때 유언장 작성을 권해드리기" 같은 자녀 입장의 실행 항목을 포함하세요.' : ''}
 
 [진단]
 점수:${score}(${level}), 유형:${types.join('/')}
