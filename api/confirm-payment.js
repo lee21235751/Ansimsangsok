@@ -3,7 +3,7 @@
    역할: 클라이언트에서 결제 인증(카드사 인증)까지 마친 후, 여기서 실제 승인 API를 호출해 결제를 완료시킴.
    결제 승인은 반드시 서버에서 처리해야 함(시크릿 키 노출 방지, 금액 위변조 방지). */
 
-module.exports = async function handler(req, res) {
+export default async function handler(req, res) {
   if (req.method !== 'POST') {
     res.status(405).json({ message: 'Method Not Allowed' });
     return;
@@ -84,4 +84,4 @@ module.exports = async function handler(req, res) {
     console.error('결제 승인 처리 중 오류:', err);
     res.status(500).json({ message: '결제 승인 처리 중 오류가 발생했습니다.' });
   }
-};
+}
