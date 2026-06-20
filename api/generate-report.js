@@ -37,8 +37,9 @@ function matchTypes(a) {
   const conflict = a.conflict || '';
   const docs     = a.documents|| '';
   const overseas = Array.isArray(a.overseas) ? a.overseas : [];
+  const assetTypes = Array.isArray(a.assetTypes) ? a.assetTypes : [];
   const presence = Array.isArray(a.assetPresence) ? a.assetPresence : [];
-  const hasRE    = presence.some(v => !['none','unknown'].includes(v));
+  const hasRE    = presence.some(v => !['none','unknown'].includes(v)) || assetTypes.includes('realestate');
 
   if (family==='배우자와 자녀가 있음')           { add('T01',40); }
   if (family==='재혼가정 또는 전혼 자녀가 있음') { add('T04',50); add('T05',40); add('T13',20); }
@@ -55,14 +56,16 @@ function matchTypes(a) {
 
   if (business==='중요한 비중을 차지함') { add('T17',50); }
   if (business==='조금 있음')           { add('T17',25); }
+  if (assetTypes.includes('business') && business!=='중요한 비중을 차지함' && business!=='조금 있음') { add('T17',15); }
 
-  const hasOverseas = overseas.some(v => !['none','unknown'].includes(v));
+  const hasOverseas = overseas.some(v => !['none','unknown'].includes(v))
+    || assetTypes.includes('overseas_stock') || assetTypes.includes('crypto');
   if (hasOverseas) {
     add('T16',45);
     /* 자산 해외이전·디지털자산은 실무상 더 까다로운 케이스라 가중치 상향 */
     if (overseas.includes('overseas_realestate_or_company')) add('T16',20);
-    if (overseas.includes('overseas_securities')) add('T16',15);
-    if (overseas.includes('crypto')) add('T16',15);
+    if (overseas.includes('overseas_securities') || assetTypes.includes('overseas_stock')) add('T16',15);
+    if (overseas.includes('crypto') || assetTypes.includes('crypto')) add('T16',15);
     if (overseas.includes('permanent_residency')) add('T16',10);
   }
 
@@ -156,11 +159,12 @@ function formatEok(n) {
 function getContext(a, types) {
   const lines = [];
   const overseas = Array.isArray(a.overseas) ? a.overseas : [];
-  const hasOverseas = overseas.some(v=>!['none','unknown'].includes(v));
+  const assetTypes = Array.isArray(a.assetTypes) ? a.assetTypes : [];
+  const hasOverseas = overseas.some(v=>!['none','unknown'].includes(v)) || assetTypes.includes('overseas_stock') || assetTypes.includes('crypto');
   const hasPR = overseas.includes('permanent_residency');
   const hasOverseasRE = overseas.includes('overseas_realestate_or_company');
-  const hasOverseasSec = overseas.includes('overseas_securities');
-  const hasCrypto = overseas.includes('crypto');
+  const hasOverseasSec = overseas.includes('overseas_securities') || assetTypes.includes('overseas_stock');
+  const hasCrypto = overseas.includes('crypto') || assetTypes.includes('crypto');
   const hasDual = overseas.includes('dual_nationality');
   const hasForeignNat = overseas.includes('family_foreign_nationality');
 
