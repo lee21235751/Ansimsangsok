@@ -118,12 +118,16 @@ document.getElementById('F').addEventListener('submit', async (e)=>{
   const st = document.getElementById('ST');
   st.className='st'; st.textContent='';
 
+  let matchedTypes = [];
+  try{ matchedTypes = JSON.parse(sessionStorage.getItem('ansim_matched_types')||'[]'); }catch(e){}
+
   const payload = {
     situation_summary: document.getElementById('summary').value,
     preferred_method: methodSel.value || null,
     region: document.getElementById('region').value || null,
     budget_range: budgetSel.value || null,
-    customer_email: document.getElementById('email').value
+    customer_email: document.getElementById('email').value,
+    matched_types: matchedTypes
   };
 
   if(!payload.situation_summary || !payload.customer_email){

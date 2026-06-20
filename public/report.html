@@ -84,7 +84,7 @@ body{font-family:system-ui,-apple-system,sans-serif;color:#12231d;word-break:kee
   <div class="loading">
     <div class="spin"></div>
     <p>유료 상세리포트를 생성하고 있습니다</p>
-    <small>약 20~30초 소요됩니다. 잠시만 기다려주세요.</small>
+    <small>약 2~3분 소요됩니다. 잠시만 기다려주세요.</small>
   </div>
 </div>
 <div id="Err" class="w dn">
@@ -102,6 +102,7 @@ body{font-family:system-ui,-apple-system,sans-serif;color:#12231d;word-break:kee
 function ge(id){return document.getElementById(id)}
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
 function arr(v){return Array.isArray(v)?v:typeof v==='string'&&v.trim()?[v]:[]}
+function goExpert(){ location.href='/request-help.html'; }
 
 function showErr(msg){
   ge('Loading').classList.add('dn');
@@ -213,10 +214,17 @@ function render(d){
 
   /* 법적 고지·버튼 */
   h+='<div class="notice">'+esc(d.legal_notice||'2026년 최신 법령을 기준으로 작성되었습니다. 실제 진행 시 전문가와 함께 확인하세요.')+'</div>'
-    +'<button class="bg" onclick="window.print()">리포트 저장 (인쇄·PDF)</button>'
+    +'<div class="sec" style="background:#fff7e7;border:2px solid rgba(215,173,85,.4);text-align:center">'
+    +'<h2 class="sec-t" style="margin-bottom:6px">변호사·세무사에게 직접 견적을 받아보세요</h2>'
+    +'<p class="sec-d" style="margin-bottom:14px">상황을 한 번만 적으면 여러 전문가가 상담료와 일정을 제안합니다. 비교 후 직접 선택하시면 됩니다.</p>'
+    +'<button class="bg" onclick="goExpert()" style="margin-bottom:0">전문가 견적 요청하기</button>'
+    +'</div>'
+    +'<button class="bw" onclick="window.print()" style="margin-bottom:9px;margin-top:9px">리포트 저장 (인쇄·PDF)</button>'
     +'<button class="bw" onclick="location.href=\'/\'">처음으로 돌아가기</button>';
 
   h+='</div></div>';
+
+  try{ sessionStorage.setItem('ansim_matched_types', JSON.stringify(arr(d.matchedTypes))); }catch(e){}
 
   var R=ge('Report');
   R.innerHTML=h;
