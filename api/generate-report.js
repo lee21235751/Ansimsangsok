@@ -33,6 +33,7 @@ function matchTypes(a) {
   const family   = a.family   || '';
   const will     = a.will     || '';
   const gift     = a.gift     || '';
+  const unequalIntent = a.unequalIntent || '';
   const business = a.business || '';
   const conflict = a.conflict || '';
   const docs     = a.documents|| '';
@@ -53,6 +54,10 @@ function matchTypes(a) {
 
   if (gift==='일부 있음')    { add('T12',35); add('T13',20); }
   if (gift==='상당히 있음')  { add('T12',50); add('T13',40); }
+
+  /* 핵심: 특정 자녀에게 더 주고 싶은 의향 — 이 서비스의 핵심 타겟 신호 */
+  if (unequalIntent==='있음 — 이미 마음을 정함') { add('T13',55); }
+  if (unequalIntent==='있음 — 아직 확신은 없음') { add('T13',40); }
 
   if (business==='중요한 비중을 차지함') { add('T17',50); }
   if (business==='조금 있음')           { add('T17',25); }
@@ -120,19 +125,33 @@ function buildSimulation(deep) {
   /* 법정상속분 비율 계산 (배우자 1.5, 자녀 1) */
   const childCount = { '0명':0,'1명':1,'2명':2,'3명':3,'4명 이상':4 }[deep.childrenCount];
   let shareText = null;
-  if (childCount != null) {
+  let spouseShareEok = null, childShareEok = null;
+  let spouseForcedShareEok = null, childForcedShareEok = null;
+  if (childCount != null && netEok != null) {
     const spouseShare = spouseAlive ? 1.5 : 0;
     const totalShare = spouseShare + childCount * 1;
     if (totalShare > 0) {
       const parts = [];
-      if (spouseAlive) parts.push(`배우자 ${(spouseShare/totalShare*100).toFixed(1)}%`);
-      if (childCount > 0) parts.push(`자녀 1인당 ${(1/totalShare*100).toFixed(1)}%`);
+      if (spouseAlive) {
+        const ratio = spouseShare/totalShare;
+        parts.push(`배우자 ${(ratio*100).toFixed(1)}%`);
+        spouseShareEok = netEok * ratio;
+        spouseForcedShareEok = spouseShareEok * 0.5; /* 배우자 유류분 = 법정상속분의 1/2 */
+      }
+      if (childCount > 0) {
+        const ratio = 1/totalShare;
+        parts.push(`자녀 1인당 ${(ratio*100).toFixed(1)}%`);
+        childShareEok = netEok * ratio;
+        childForcedShareEok = childShareEok * 0.5; /* 직계비속 유류분 = 법정상속분의 1/2 */
+      }
       shareText = parts.join(', ');
     }
   }
 
-  /* 유류분 침해 가능 여부 판단용 플래그 */
-  const giftWithin10y = deep.priorGiftTiming && deep.priorGiftTiming !== '10년 이상 전';
+  /* 유류분 산정 기초재산 관련 플래그
+     주의: 상속인(자녀 등)에 대한 증여는 시기와 무관하게 전부 합산됨(10년 제한 아님).
+     제3자 증여만 상속개시 전 1년분 합산. 이 서비스의 증여 문항은 가족(상속인) 대상 증여를 전제로 함. */
+  const giftToHeir = !!deep.priorGiftAmount; /* 증여액 입력이 있으면 상속인 증여로 간주, 시기 무관 항상 합산대상 */
   const giftAmountEok = { '1천만원 미만':0.05,'1천만~5천만':0.3,'5천만~1억':0.75,'1억~5억':3,'5억 이상':7 }[deep.priorGiftAmount] ?? null;
 
   return {
@@ -141,7 +160,8 @@ function buildSimulation(deep) {
     overseasAssetType: deep.overseasAssetType || null,
     residencyStatus: deep.residencyStatus || null,
     spouseAlive, childCount, shareText,
-    giftWithin10y, giftAmountEok, priorGiftTiming: deep.priorGiftTiming || null,
+    spouseShareEok, childShareEok, spouseForcedShareEok, childForcedShareEok,
+    giftToHeir, giftAmountEok, priorGiftTiming: deep.priorGiftTiming || null,
     businessShare: deep.businessShare || null,
     caregivingContribution: deep.caregivingContribution || null,
     conflictDetail: deep.conflictDetail || null,
@@ -168,17 +188,22 @@ function getContext(a, types) {
   const hasDual = overseas.includes('dual_nationality');
   const hasForeignNat = overseas.includes('family_foreign_nationality');
 
+  if (a.unequalIntent==='있음 — 이미 마음을 정함' || a.unequalIntent==='있음 — 아직 확신은 없음') {
+    lines.push('핵심: 특정 자녀(가족)에게 더 남기고 싶은 의향이 있는 경우, 단순히 유언장에 "더 준다"고만 적으면 다른 상속인이 유류분반환청구로 법정상속분의 1/2(직계비속·배우자 기준)까지는 결국 가져갈 수 있음. 따라서 "내 뜻대로 더 주는 것"을 실질적으로 지키려면 유류분 자체를 줄이는 합법적 설계(기여분 입증, 시효 활용, 사전 협의)가 함께 필요함. 이것이 일반적인 절세 상담과 다른, 이 리포트의 핵심 목적임.');
+  }
   if (types.some(t=>t.includes('전혼')||t.includes('재혼'))) {
     lines.push('전혼 자녀도 법정상속인으로 현배우자 자녀와 동등한 상속분을 가짐. 상속인 범위 정확히 파악 필요.');
   }
   if (types.some(t=>t.includes('유류분'))) {
-    lines.push('2026.2.12 민법 개정: 형제자매 유류분 폐지, 패륜상속인 상속권 상실 가능, 기여 보상 증여는 유류분 반환 제외.');
+    lines.push('2026.2.12 민법 개정: 형제자매는 유류분 권리 자체가 폐지됨(자녀·배우자·부모만 유류분 보유). 패륜상속인 상속권 상실선고 가능. 기여에 대한 보상 성격 증여는 유류분 반환 대상에서 제외됨.');
+    lines.push('주의: 유언대용신탁은 과거 유류분 회피 수단으로 알려졌으나, 최근 판례는 신탁재산도 유류분 산정 기초재산에 포함시키는 추세이므로 만능 해법이 아님. 신탁만 믿고 다른 준비를 소홀히 하면 안 됨.');
+    lines.push('합법적으로 유류분 영향을 줄이는 실무적 방법 3가지: ① 특정 자녀의 부양·간병·재산형성 기여를 구체적으로 입증할 자료(통장 이체내역, 간병기록, 진단서 등)를 미리 확보해 기여분으로 인정받는 방법(2026 개정으로 기여 보상 증여는 유류분에서 제외됨) ② 유류분반환청구권의 소멸시효(침해를 안 날로부터 1년, 상속개시일로부터 10년)를 정확히 이해하고 시기를 설계하는 방법 ③ 유언장에 증여·유증의 경위와 이유를 구체적으로 명시해 다른 상속인의 이해를 구하고 분쟁 가능성 자체를 낮추는 방법.');
   }
   if (hasPR && !hasForeignNat) {
     lines.push('핵심: 영주권(시민권 아님)은 국적 변경이 아님. 본인이 한국 국적을 유지하면 상속에는 원칙적으로 한국 민법이 그대로 적용됨(국제사법상 본국법주의). 영주권 보유 자체만으로 상속 준거법이 바뀌지 않는다는 점을 명확히 안내할 것.');
   }
   if (hasOverseasRE) {
-    lines.push('해외로 옮긴 부동산·사업체(싱가포르·미국 등)도 피상속인이 한국 국적이면 한국 상속세 과세대상에 포함됨(거주자는 전세계 자산 합산 과세). 해당국 상속법과 한국법이 동시에 적용되어 이중 절차가 필요할 수 있음. 조세조약상 외국납부세액공제 검토 필요.');
+    lines.push('해외로 옮긴 부동산·사업체(싱가포르·미국 등)도 피상속인이 한국 국적이면 한국 민법상 상속재산에 포함되며, 유류분 산정 기초재산에도 합산됨. 해당국 절차와 한국 절차가 동시에 필요해 분배 실행이 늦어질 수 있으므로 미리 준비할 것.');
   }
   if (hasOverseasSec) {
     lines.push('미국·홍콩 등 해외 증권계좌(주식)도 한국 거주자 기준 상속재산에 합산됨. 해외 증권사는 한국 가족관계증명서를 영문공증·아포스티유 받아 별도 상속절차(probate 등)를 거쳐야 인출 가능한 경우가 많아 시간이 오래 걸림.');
@@ -190,13 +215,22 @@ function getContext(a, types) {
     lines.push('해외 거주 상속인은 서명공증 필요, 외국 국적자는 별도 서류, 해외 금융자산은 국내 신고 의무(해외금융계좌 신고제도, 5억 초과 시).');
   }
   if (types.some(t=>t.includes('사업체')||t.includes('지분'))) {
-    lines.push('법인 지분은 정관·주주간 계약 확인 필요. 가업상속공제(최대 600억) 검토 가능하나 요건 까다로움.');
+    lines.push('법인 지분은 정관·주주간 계약 확인 필요. 경영을 맡을 특정 자녀에게 지분을 몰아주려는 경우, 다른 자녀의 유류분 침해 가능성이 매우 높음(지분 평가액이 커서). 가업상속공제(최대 600억)는 상속세 부담을 줄여줄 뿐 유류분 문제 자체를 해결하지 않으므로, 별도로 유류분 대응 설계가 필요함.');
   }
   if (a.conflict==='이미 뚜렷함') {
     lines.push('갈등이 있는 경우 유언장 등 문서화가 핵심. 협의 분할 과정에서 갈등 표면화 가능.');
   }
+  if (a.conflict==='조금 있음') {
+    lines.push('지금은 사이가 괜찮아 보여도, 실제 상속 협의 과정에서 분배 비율에 대한 미묘한 입장 차이가 표면화되는 경우가 많음. 사전에 분배 기준을 명확히 문서화해두는 것이 갈등 예방에 효과적.');
+  }
+  if (a.conflict==='없음') {
+    lines.push('현재 갈등이 없더라도, 국내 상속 관련 소송 건수는 이혼소송의 약 2배이며 그중 다수가 소액(1억원 이하) 분쟁이라는 점을 참고할 것. 사이가 좋은 가족도 막상 상속이 개시되면 입장이 달라질 수 있으므로 미리 정리해두는 것이 안전함.');
+  }
   if (a.gift==='일부 있음'||a.gift==='상당히 있음') {
-    lines.push('10년 이내 상속인 증여는 상속재산 합산. 불균등 증여는 특별수익으로 상속분 조정 가능.');
+    lines.push('핵심: 상속인(자녀 등)에게 한 증여는 시기와 무관하게 기간 제한 없이 전부 유류분 산정 기초재산에 합산됨(10년 제한이 아님). 제3자에 대한 증여만 상속개시 전 1년분만 합산됨. 따라서 특정 자녀에게 일찍 증여했다고 해서 유류분 계산에서 빠지지 않음 — 이 점을 반드시 인지해야 함.');
+  }
+  if (a.documents==='거의 정리되어 있지 않음') {
+    lines.push('재산 목록·가족관계·채무 현황이 정리되어 있지 않으면, 상속 개시 시 상속인들이 전체 그림을 파악하는 데만 상당한 시간이 걸림. 지금 한 장으로 정리해두는 것만으로도 향후 혼란을 크게 줄일 수 있음.');
   }
   return lines.join('\n');
 }
@@ -237,8 +271,11 @@ async function callClaude(answers, types, score, deepAnswers) {
 - 배우자 생존: ${sim.spouseAlive ? '예':'아니오'}
 - 자녀 수: ${sim.childCount ?? '미상'}명
 - 법정상속분 비율: ${sim.shareText || '확인 필요'}
+- 배우자 법정상속분 추정액: ${formatEok(sim.spouseShareEok)} / 배우자 유류분(법정상속분의 1/2) 추정액: ${formatEok(sim.spouseForcedShareEok)}
+- 자녀 1인당 법정상속분 추정액: ${formatEok(sim.childShareEok)} / 자녀 1인당 유류분(법정상속분의 1/2) 추정액: ${formatEok(sim.childForcedShareEok)}
+- 특정 자녀(가족)에게 더 남기고 싶은 의향: ${answers.unequalIntent || '확인 안 됨'}
 - 사업체·법인 지분율: ${sim.businessShare || '없음 또는 미상'}
-- 10년 이내 사전증여 여부: ${sim.giftWithin10y ? '예 ('+sim.priorGiftTiming+')':'아니오 또는 없음'}
+- 상속인(자녀 등) 대상 사전증여 여부: ${sim.giftToHeir ? '예 (시기: '+(sim.priorGiftTiming||'미상')+', 시기와 무관하게 유류분 산정 시 전부 합산됨)':'없음 또는 미상'}
 - 사전증여 추정액: ${formatEok(sim.giftAmountEok)}
 - 부양·간병 등 기여 사실: ${sim.caregivingContribution || '없음 또는 미상'}
 - 갈등 구체 유형: ${sim.conflictDetail || '없음'}
@@ -247,8 +284,10 @@ async function callClaude(answers, types, score, deepAnswers) {
 이 숫자들은 정확한 세액이 아니라 "구간 추정"임을 리포트에 명시하되, 일반론이 아니라 이 숫자를 직접 인용해 계산 과정을 보여주는 방식으로 작성하세요.
 
 [행동지침 — 매우 중요]
+이 리포트의 핵심 목적은 절세가 아니라 "사용자가 원하는 자녀(가족)에게 더 많이 남길 수 있도록, 유류분 분쟁을 합법적으로 최소화하는 것"입니다. 모든 섹션을 이 목적을 중심으로 작성하세요.
 "~점검이 필요합니다", "~확인이 필요합니다", "~검토하세요" 로만 끝나는 문장을 남발하지 마세요. 가능한 모든 곳에서 실제로 선택 가능한 구체적 옵션을 2~3개씩 제시하세요.
-예시: 유류분 문제라면 "① 다른 상속인에게 유류분 상당액을 사전 정산하는 방법 ② 기여분을 인정받을 증빙을 미리 확보하는 방법 ③ 유언장에 증여 경위를 명시해두는 방법" 식으로 구체적 선택지를 나열하세요.
+특정 자녀에게 더 남기고 싶은 의향이 있다면, 위에 제시된 "자녀 1인당 유류분 추정액" 숫자를 직접 인용해 "다른 자녀가 청구 가능한 금액은 약 OO원으로 추정되며, 이를 줄이거나 방어하려면 다음 방법을 검토할 수 있습니다"식으로 구체적으로 작성하세요.
+예시: 유류분 문제라면 "① 다른 상속인에게 유류분 상당액을 사전 정산하는 방법 ② 기여분을 인정받을 증빙을 미리 확보하는 방법(2026 개정으로 기여 보상 증여는 유류분에서 제외됨) ③ 유언장에 증여 경위를 명시해두는 방법" 식으로 구체적 선택지를 나열하세요.
 사업체·지분이 있다면 가업상속공제 요건(피상속인 경영기간, 상속인 가업 종사 등)을 일반론이 아니라 입력된 지분율 기준으로 적용 가능성을 언급하세요.
 기여(부양·간병) 사실이 있다면 기여분 주장의 실질적 근거가 될 수 있는 자료(통장 이체내역, 진단서, 간병 영수증 등)를 구체적으로 안내하세요.
 해외 영주권 상태가 "한국 국적 유지"라면, 영주권은 시민권과 다르며 한국 국적을 유지하는 한 상속에는 한국 민법이 그대로 적용된다는 점을 명확히 안내하세요. 해외로 옮긴 회사·부동산이 있다면 한국 거주자는 전세계 자산이 한국 상속세 과세대상에 합산된다는 점과 해당국 절차가 별도로 필요할 수 있다는 점을 안내하세요. 해외 증권계좌(미국·홍콩 등)가 있다면 가족관계증명서의 영문공증·아포스티유가 필요할 수 있다는 실무 팁을 포함하세요. 암호화폐가 있다면 개인 지갑 시드구문·키 정보를 안전하게 남겨두는 방법을 구체적으로 안내하세요.`;
@@ -278,12 +317,12 @@ ${ctx?'\n[참고]\n'+ctx:''}${simBlock}
       "points": ["핵심사항1", "핵심사항2", "핵심사항3", "핵심사항4"]
     },${sim ? `
     "simulation": {
-      "title": "예상 상속세·법정상속분 시뮬레이션 (구간 추정)",
-      "disclaimer": "아래 수치는 입력하신 구간 정보를 바탕으로 한 단순 추정이며 실제 세액과 다를 수 있습니다. 정확한 금액은 세무사 상담이 필요합니다.",
+      "title": "내가 원하는 대로 남길 수 있는지 시뮬레이션",
+      "disclaimer": "아래 수치는 입력하신 구간 정보를 바탕으로 한 단순 추정이며 실제 금액과 다를 수 있습니다. 정확한 금액은 변호사 상담이 필요합니다.",
       "asset_summary": "전체 재산·채무·순재산을 한 문단으로 정리",
-      "deduction_estimate": "적용 가능한 공제와 과세대상 재산 추정을 한 문단으로 설명",
-      "legal_share": "배우자·자녀 법정상속분 비율을 구체 숫자로 설명",
-      "forced_share_check": "사전증여 시기·금액 기반 유류분 침해 가능성 점검 결과"
+      "legal_share": "배우자·자녀 법정상속분 비율과 금액을 구체 숫자로 설명 — 협의나 유언이 없을 때 강제 적용되는 '디폴트값'임을 명확히 (이것이 사용자가 원하는 분배와 다를 수 있다는 점을 강조)",
+      "forced_share_check": "[가장 중요한 섹션] 사용자가 원하는 분배(특정 자녀에게 더 남기고 싶은 의향)를 실행했을 때, 다른 상속인이 유류분반환청구로 법적으로 가져갈 수 있는 정확한 금액을 구체 숫자로 제시. 그 금액을 줄이거나 방어할 수 있는 실무적 방법을 단계별로 제시. 이 리포트의 핵심 결론에 해당하는 섹션이므로 가장 구체적이고 길게 작성",
+      "tax_note": "상속세는 이 리포트의 핵심이 아니므로, 참고로 과세대상 재산 구간과 대략적 공제 적용 가능성만 한두 문장으로 간단히 언급(상세 계산은 세무사 상담 권유)"
     },` : ''}
     "persons": {
       "title": "확인할 사람 관계",
@@ -334,7 +373,7 @@ ${ctx?'\n[참고]\n'+ctx:''}${simBlock}
     body: JSON.stringify({
       model: 'claude-haiku-4-5-20251001',
       max_tokens: 4500,
-      system: '안심상속 유료 상세리포트 작성 시스템. 법률·세무 조언 금지(단, 입력된 구간 수치 기반 단순 추정 계산은 허용). "점검이 필요합니다"식 모호한 문장 대신, 가능한 곳마다 실제 선택 가능한 구체적 옵션을 제시할 것. 상황 정리와 준비 안내, 구간 추정 시뮬레이션. JSON만 반환.',
+      system: '안심상속 유료 상세리포트 작성 시스템. 이 서비스의 목적은 절세가 아니라 "사용자가 원하는 자녀(가족)에게 더 많이 남길 수 있도록, 유류분 분쟁을 합법적으로 최소화하는 상속 설계를 돕는 것"임. 모든 답변은 이 목적을 중심으로 작성할 것. 법률·세무 조언 금지(단, 입력된 구간 수치 기반 단순 추정 계산 및 일반적인 법령·판례 정보 제공은 허용). "점검이 필요합니다"식 모호한 문장 대신, 가능한 곳마다 실제 선택 가능한 구체적 옵션을 제시할 것. JSON만 반환.',
       messages: [{ role: 'user', content: prompt }]
     })
   });

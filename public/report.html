@@ -138,12 +138,12 @@ function render(d){
   /* 1.5. 시뮬레이션 (심화설문 완료 시에만 존재) */
   if(s.simulation){
     h+='<div class="sec" style="background:#fff8dc;border-color:rgba(184,134,11,.3)"><div class="sec-ey" style="background:#92400e">심화 분석 · 구간 추정</div>'
-      +'<h2 class="sec-t">'+esc(s.simulation.title||'예상 상속세·법정상속분 시뮬레이션')+'</h2>'
+      +'<h2 class="sec-t">'+esc(s.simulation.title||'내가 원하는 대로 남길 수 있는지 시뮬레이션')+'</h2>'
       +(s.simulation.disclaimer?'<p class="sec-d" style="font-style:italic">'+esc(s.simulation.disclaimer)+'</p>':'')
       +(s.simulation.asset_summary?'<div class="pt" style="margin-bottom:8px"><strong>재산 현황</strong><br>'+esc(s.simulation.asset_summary)+'</div>':'')
-      +(s.simulation.deduction_estimate?'<div class="pt" style="margin-bottom:8px"><strong>공제·과세대상 추정</strong><br>'+esc(s.simulation.deduction_estimate)+'</div>':'')
-      +(s.simulation.legal_share?'<div class="pt" style="margin-bottom:8px"><strong>법정상속분</strong><br>'+esc(s.simulation.legal_share)+'</div>':'')
-      +(s.simulation.forced_share_check?'<div class="pt"><strong>유류분 점검</strong><br>'+esc(s.simulation.forced_share_check)+'</div>':'')
+      +(s.simulation.legal_share?'<div class="pt" style="margin-bottom:8px"><strong>법정상속분 (협의·유언이 없을 때 적용되는 기본값)</strong><br>'+esc(s.simulation.legal_share)+'</div>':'')
+      +(s.simulation.forced_share_check?'<div class="pt" style="margin-bottom:8px;padding:12px;border-radius:10px;background:rgba(184,134,11,.1);border:1px solid rgba(184,134,11,.25)"><strong>⚖️ 유류분 점검 — 내 뜻대로 남길 수 있는지</strong><br>'+esc(s.simulation.forced_share_check)+'</div>':'')
+      +(s.simulation.tax_note?'<p class="pt" style="font-size:.85rem;opacity:.7;margin-top:6px">참고(상속세): '+esc(s.simulation.tax_note)+'</p>':'')
       +'</div>';
   }
 
