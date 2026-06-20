@@ -167,6 +167,19 @@ footer{background:var(--FD);color:rgba(255,253,245,.62);padding:36px 0 44px;line
 <footer><div class="w">
 <div class="ft-brand">안심상속</div>
 <p>특정 자녀에게 더 남기고 싶은 마음, 가족도 모르게 정리해보세요. 본인만 조용히 확인하는 상속 준비 서비스입니다.</p>
+<details style="margin-top:14px;padding:12px 0;border-top:1px solid rgba(255,253,245,.15);border-bottom:1px solid rgba(255,253,245,.15)">
+<summary style="cursor:pointer;color:rgba(255,253,245,.75);font-size:.9rem;font-weight:800;list-style:none;display:flex;align-items:center;justify-content:space-between;user-select:none">개인정보 수집 및 이용<span style="font-size:.8rem;opacity:.65">▾</span></summary>
+<div style="margin-top:10px;color:rgba(255,253,245,.7);font-size:.88rem;line-height:1.65;font-weight:700">
+<strong style="display:block;margin-bottom:6px;color:rgba(255,253,245,.9)">수집항목</strong>
+<p style="margin-bottom:10px;margin-left:0">가족관계(배우자, 자녀 수 등), 재산유형, 유언 여부, 가족 내 갈등 여부 등</p>
+<strong style="display:block;margin-bottom:6px;color:rgba(255,253,245,.9)">수집목적</strong>
+<p style="margin-bottom:10px;margin-left:0">귀하의 상속 상황에 맞는 진단 및 리포트 제공</p>
+<strong style="display:block;margin-bottom:6px;color:rgba(255,253,245,.9)">보유기간</strong>
+<p style="margin-bottom:10px;margin-left:0">진단 완료 후 90일 이내 자동 삭제 (고객 요청 시 즉시 삭제)</p>
+<strong style="display:block;margin-bottom:6px;color:rgba(255,253,245,.9)">비공개 보장</strong>
+<p style="margin-bottom:0;margin-left:0">모든 진단 결과는 귀하만 확인 가능하며, 가족이나 제3자와 공유되지 않습니다.</p>
+</div>
+</details>
 <div class="ft-tag">© 안심상속. 모든 진단은 비공개로 처리되며 본인 외에는 결과를 확인할 수 없습니다.</div>
 </div></footer>
 <script>
@@ -179,7 +192,7 @@ var Q=[
   {t:'multi',k:'remarriage',
    q:function(a){return a.perspective==='부모님 또는 배우자의 상속을 가족 입장에서 준비'?'부모님(또는 배우자)에게 아래 중 해당하는 사항이 있나요?':'아래 중 해당하는 사항이 있나요?'},
    h:'여러 개 동시 선택 가능합니다. 해당하는 것이 없으면 "해당 없음"을 선택해주세요.',ex:['none'],
-   o:[{v:'self_remarried',l:'본인이 재혼했음(재혼가정)',s:14},{v:'spouse_remarried',l:'배우자가 재혼한 적이 있음(재혼가정)',s:14},{v:'my_prior_children',l:'나의 전혼 자녀가 있음(이전 혼인에서 낳은 내 친자식)',s:18},{v:'spouse_prior_children',l:'배우자의 전혼 자녀가 있음(배우자가 데려온 자녀)',s:16},{v:'my_child_adopted_away',l:'나의 전혼 자녀가 전 배우자의 재혼 상대에게 친양자로 입양되었음',s:12},{v:'avoid_step_inheritance',l:'내 재산이 배우자를 거쳐 배우자의 전혼 자녀에게 흘러가는 것은 원치 않음',s:22},{v:'none',l:'해당 없음',s:0}]},
+   o:[{v:'self_remarried',l:'본인이 재혼했음(재혼가정)',s:14},{v:'spouse_remarried',l:'배우자가 재혼한 적이 있음(재혼가정)',s:14},{v:'my_prior_children',l:'나의 전혼 자녀가 있음(이전 혼인에서 낳은 내 친자식)',s:18},{v:'spouse_prior_children',l:'배우자의 전혼 자녀가 있음(배우자가 데려온 자녀)',s:16},{v:'my_child_adopted_away',l:'나의 전혼 자녀가 전 배우자의 재혼 상대에게 친양자로 입양되었음',s:12},{v:'avoid_step_inheritance',l:'내 재산이 배우자를 거쳐 배우자의 전혼 자녀에게 흘러가는 것은 원치 않음',s:22},{v:'unrecognized_child',l:'현재 가족관계증명서에 등재되지 않은 자녀가 있음(공식적으로 알려지지 않은 자녀)',s:24},{v:'none',l:'해당 없음',s:0}]},
   {t:'single',k:'will',
    q:function(a){return a.perspective==='부모님 또는 배우자의 상속을 가족 입장에서 준비'?'부모님(또는 배우자)의 유언장이나 재산 분배 계획이 준비되어 있나요?':'유언장이나 재산 분배 계획이 준비되어 있나요?'},
    h:'문서 여부보다 현재 정리 수준을 기준으로 답해주세요.',

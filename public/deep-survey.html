@@ -41,6 +41,7 @@ button,input,select{font:inherit}
   <p>방금 결제하신 유료 상세리포트는 일반 정보가 아니라, 입력하신 숫자를 바탕으로 실제 계산이 포함된 자료입니다. 약 2~3분 정도 소요됩니다.</p>
   <p style="margin-top:10px;color:rgba(255,253,245,.7);font-size:.88rem">💡 정확한 금액이나 수치를 모르셔도 괜찮습니다. 가장 가까운 항목을 선택해주세요. 해당 사항이 없으면 "해당없음"을 선택하시면 됩니다.</p>
 </div></header>
+<div class="w" style="margin:16px auto;padding:12px 14px;border-radius:14px;background:rgba(107,114,108,.09);border-left:3px solid var(--MU);color:var(--FD);font-size:.9rem;line-height:1.55;font-weight:700"><strong style="display:block;margin-bottom:4px">⚠️ 이 진단은 일반적 상속 정보 제공 목적입니다.</strong> 개별 법적 판단이 필요하면 변호사 상담을 받으세요.</div>
 <div class="main w">
   <div id="Survey">
     <div class="pr"><span id="StepTxt"></span><span>구체적인 숫자일수록 정확합니다</span></div>
@@ -80,8 +81,8 @@ var DQ=[
    showIf:function(){ return freeHasOverseas; }},
   {k:'debt',q:'채무(대출·보증·미납세금 등)가 있다면 얼마 정도인가요?',h:'',
    o:['없음','1천만원 미만','1천만~1억','1억 이상','정확한 금액은 모르겠음']},
-  {k:'spouseStatus',q:'배우자는 생존해 계신가요?',h:'정식으로 이혼하지 않았다면 별거 중이거나 이혼소송 중이어도 법적으로는 "생존"으로 답해주세요(상속 자격과 직결됩니다).',
-   o:['생존(혼인관계 유지·동거)','생존 — 별거 중(정식 이혼 안 함)','생존 — 이혼소송 진행 중(아직 미확정)','이미 사망','해당없음(미혼 등)']},
+  {k:'spouseStatus',q:'배우자는 생존해 계신가요?',h:'정식으로 이혼하지 않았다면 별거 중이거나 이혼소송 중이어도 법적으로는 "생존"으로 답해주세요(상속 자격과 직결됩니다). 혼인신고 없이 동거 중이라면 "사실혼"을 선택해주세요.',
+   o:['생존(혼인관계 유지·동거)','생존 — 별거 중(정식 이혼 안 함)','생존 — 이혼소송 진행 중(아직 미확정)','사실혼 — 혼인신고는 하지 않음(동거·내연관계 포함)','이미 사망','해당없음(미혼 등)']},
   {k:'spouseNationality',q:'배우자의 국적·영주권 상태는 어떻게 되나요?',h:'영주권과 시민권(국적 취득)은 다릅니다.',
    o:['한국 국적만 보유','한국 국적 + 해외 영주권 보유','한국 국적 + 외국 시민권 보유(복수국적)','외국 시민권만 보유(한국 국적 없음/상실)','정확히는 모르겠음'],
    showIf:function(d){ return d.spouseStatus==='생존(혼인관계 유지·동거)'||d.spouseStatus==='생존 — 별거 중(정식 이혼 안 함)'||d.spouseStatus==='생존 — 이혼소송 진행 중(아직 미확정)'; }},
