@@ -380,11 +380,11 @@ ${ctx?'\n[참고]\n'+ctx:''}${simBlock}
       ]
     }
   },
-  "legal_notice": "본 리포트는 정보 제공 목적이며 법률·세무 조언을 대체하지 않습니다. 시뮬레이션 수치는 추정치이며 구체적 사항은 변호사·세무사와 상담하세요.",
+  "legal_notice": "2026년 최신 법령(상속권 상실선고 제도, 기여분 인정 확대 등)을 기준으로 작성되었습니다. 시뮬레이션 수치는 입력하신 정보를 바탕으로 한 추정치이며, 실제 진행 시 변호사·세무사와 함께 정확한 금액을 확인하세요.",
   "generated_at": "${new Date().toISOString()}"
 }
 
-규칙: JSON만 반환. 코드블록 없이. 배열 항목은 반드시 별도 문자열로. "~필요합니다/검토하세요/확인하세요"로만 끝나는 문장을 연속 사용하지 말 것 — 최소 절반 이상의 항목에는 실제 선택지나 구체적 행동을 포함할 것.`;
+규칙: JSON만 반환. 코드블록 없이. 배열 항목은 반드시 별도 문자열로. "~필요합니다/검토하세요/확인하세요"로만 끝나는 문장을 연속 사용하지 말 것 — 최소 절반 이상의 항목에는 실제 선택지나 구체적 행동을 포함할 것. 전체 리포트 톤은 담백하고 자신감 있게 작성할 것 — "정보 제공 목적", "조언을 대체하지 않습니다", "법적 책임을 지지 않습니다" 같은 방어적·면책성 표현은 절대 사용하지 말 것. 아무도 묻지 않은 책임 회피를 먼저 꺼내지 말 것.`;
 
   const res = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
@@ -437,9 +437,15 @@ export default async function handler(req, res) {
         sbUrlCheck + '/rest/v1/paid_reports?order_id=eq.' + encodeURIComponent(orderId) + '&select=status,report_generated',
         { headers: { apikey: sbKeyCheck, Authorization: 'Bearer ' + sbKeyCheck } }
       );
+      if (!checkRes.ok) {
+        const errText = await checkRes.text().catch(() => '');
+        console.error('결제 검증 조회 실패. orderId=' + orderId + ' status=' + checkRes.status + ' body=' + errText);
+        return res.status(500).json({ok:false,message:'결제 확인 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.'});
+      }
       const rows = await checkRes.json();
       const record = Array.isArray(rows) ? rows[0] : null;
       if (!record || record.status !== 'paid') {
+        console.error('결제 기록 없음 또는 미결제 상태. orderId=' + orderId + ' found=' + JSON.stringify(rows));
         return res.status(402).json({ok:false,message:'결제가 확인되지 않았습니다. 결제 후 다시 시도해주세요.'});
       }
       if (record.report_generated) {
