@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>전문가 상담 요청 | 안심상속</title>
+<meta name="robots" content="noindex"/>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
+<style>
+:root{--F:#0e3529;--FD:#06251d;--G:#d7ad55;--GL:#f1d586;--CR:#fff8e8;--INK:#12231d;--MU:#5e6b64;--LN:rgba(14,53,41,.18)}
+*,*::before,*::after{box-sizing:border-box;margin:0}
+body{font-family:system-ui,-apple-system,sans-serif;color:var(--INK);word-break:keep-all;overflow-x:hidden;background:#fffdf6}
+button,input,textarea,select{font:inherit}
+.w{width:min(680px,calc(100% - 32px));margin:0 auto}
+.hero{background:linear-gradient(145deg,#082d22,#163b2a 62%,#24381f);color:#fffdf5;padding:30px 0 26px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:900;margin-bottom:16px}
+.bm{width:36px;height:36px;border:1px solid rgba(215,173,85,.85);border-radius:50%;display:grid;place-items:center;color:var(--GL);font-weight:900}
+.hero h1{font-size:clamp(1.5rem,6vw,2rem);line-height:1.25;letter-spacing:-.04em;margin-bottom:10px}
+.hero p{color:rgba(255,253,245,.82);font-size:.96rem;line-height:1.65;font-weight:650}
+.main{padding:24px 0 60px}
+.card{background:#fffaf0;border:1px solid var(--LN);border-radius:20px;padding:clamp(16px,4vw,24px);margin-bottom:16px}
+.fg{display:grid;gap:13px}
+.fl label{display:block;margin-bottom:6px;color:var(--FD);font-weight:950;font-size:.95rem}
+.fl input,.fl textarea,.fl select{width:100%;border:2px solid rgba(14,53,41,.2);border-radius:15px;min-height:50px;padding:12px 14px;color:var(--FD);background:#fff;font-weight:650}
+.fl textarea{min-height:90px;resize:vertical;line-height:1.55}
+.opts{display:flex;flex-wrap:wrap;gap:8px}
+.opt{border:2px solid rgba(14,53,41,.18);border-radius:999px;padding:10px 16px;font-size:.92rem;font-weight:800;color:var(--FD);background:#fff;cursor:pointer;touch-action:manipulation}
+.opt.on{background:var(--FD);color:#fff8dc;border-color:var(--G)}
+.bg{border:0;background:linear-gradient(135deg,#f5dc8a,#c99938);color:#1c221c;border-radius:18px;padding:15px 22px;font-weight:950;box-shadow:0 12px 28px rgba(0,0,0,.22);cursor:pointer;min-height:54px;width:100%;font-size:1.02rem;touch-action:manipulation;margin-top:8px}
+.note{margin-top:14px;padding:13px 15px;border-radius:15px;background:#f7faf7;border:1px solid rgba(31,77,58,.18);color:#334155;font-size:.86rem;line-height:1.6;font-weight:650}
+.st{min-height:22px;margin-top:14px;font-weight:850;line-height:1.55;font-size:.95rem}
+.st.ok{padding:14px 16px;border-radius:17px;background:#fff8dc;border:2px solid rgba(184,134,11,.34);color:var(--FD)}
+.st.er{padding:13px 15px;border-radius:17px;background:#fff3f0;border:2px solid rgba(160,45,25,.28);color:#5f1f14}
+.privacy{margin-top:10px;color:var(--MU);font-size:.84rem;line-height:1.6}
+</style>
+</head>
+<body>
+<header class="hero">
+<div class="w">
+<div class="brand"><div class="bm">안</div><span style="color:#fff8dc">안심상속</span></div>
+<h1>전문가에게 직접 견적을 받아보세요</h1>
+<p>상황을 한 번만 작성하시면, 여러 변호사·세무사가 상담료와 일정을 제안합니다. 비교 후 직접 선택하시면 됩니다. 본인만 조용히 확인 가능합니다.</p>
+</div>
+</header>
+
+<main class="main">
+<div class="w">
+
+<div class="card">
+<form id="F" class="fg">
+
+<div class="fl">
+<label>현재 상황을 간단히 적어주세요</label>
+<textarea id="summary" placeholder="예: 부동산 2건과 해외 예금이 있고, 자녀 중 한 명에게 더 남기고 싶습니다" required></textarea>
+</div>
+
+<div class="fl">
+<label>희망 상담 방식</label>
+<div class="opts" id="methodOpts">
+<button type="button" class="opt" data-v="대면">대면</button>
+<button type="button" class="opt" data-v="전화">전화</button>
+<button type="button" class="opt" data-v="화상">화상</button>
+<button type="button" class="opt" data-v="무관">무관</button>
+</div>
+</div>
+
+<div class="fl">
+<label>희망 지역 (선택)</label>
+<input id="region" type="text" placeholder="서울 강남 등, 비워두면 전체"/>
+</div>
+
+<div class="fl">
+<label>예산 범위 (선택)</label>
+<div class="opts" id="budgetOpts">
+<button type="button" class="opt" data-v="20만원 이하">~20만원</button>
+<button type="button" class="opt" data-v="20~50만원">20~50만원</button>
+<button type="button" class="opt" data-v="50만원 이상">50만원+</button>
+<button type="button" class="opt" data-v="무관">무관</button>
+</div>
+</div>
+
+<div class="fl">
+<label>이메일 (견적 도착 시 안내받을 주소)</label>
+<input id="email" type="email" required placeholder="you@example.com"/>
+</div>
+
+<button class="bg" type="submit">상담 요청 보내기</button>
+<div id="ST" class="st"></div>
+<div class="privacy">제출하신 정보는 매칭된 전문가에게만 전달되며, 가족이나 제3자에게 공유되지 않습니다.</div>
+</form>
+</div>
+
+<div class="note">⚠️ 안심상속은 전문가를 소개·알선하지 않으며, 입찰 정보를 노출하는 공간만 제공합니다. 상담 진행과 비용은 고객과 전문가가 직접 협의합니다.</div>
+
+</div>
+</main>
+
+<script>
+function setupOpts(id, single=true){
+  const el = document.getElementById(id);
+  const sel = single ? {value:null} : new Set();
+  el.addEventListener('click', e=>{
+    const b = e.target.closest('.opt');
+    if(!b) return;
+    if(single){
+      el.querySelectorAll('.opt').forEach(o=>o.classList.remove('on'));
+      b.classList.add('on');
+      sel.value = b.dataset.v;
+    }
+  });
+  return sel;
+}
+const methodSel = setupOpts('methodOpts');
+const budgetSel = setupOpts('budgetOpts');
+
+document.getElementById('F').addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  const st = document.getElementById('ST');
+  st.className='st'; st.textContent='';
+
+  const payload = {
+    situation_summary: document.getElementById('summary').value,
+    preferred_method: methodSel.value || null,
+    region: document.getElementById('region').value || null,
+    budget_range: budgetSel.value || null,
+    customer_email: document.getElementById('email').value
+  };
+
+  if(!payload.situation_summary || !payload.customer_email){
+    st.className='st er'; st.textContent='필수 항목을 입력해주세요.';
+    return;
+  }
+
+  try{
+    const res = await fetch('/api/consultation-request', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    if(data.ok){
+      st.className='st ok';
+      st.innerHTML = '요청이 접수되었습니다. 전문가의 견적이 도착하면 이메일로 안내드립니다. (요청번호: ' + data.id.slice(0,8) + ')'
+        + (data.token ? '<br><br><a href="/bid-compare.html?token='+data.token+'" style="color:var(--FD);font-weight:950;text-decoration:underline">→ 지금 바로 견적 확인 페이지 북마크하기</a>' : '');
+      document.getElementById('F').reset();
+      document.querySelectorAll('.opt.on').forEach(o=>o.classList.remove('on'));
+    } else {
+      st.className='st er'; st.textContent='요청 처리 중 오류가 발생했습니다.';
+    }
+  } catch(err){
+    st.className='st er'; st.textContent='요청 처리 중 오류가 발생했습니다.';
+  }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>전문가 대시보드 | 안심상속</title>
+<meta name="robots" content="noindex"/>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
+<style>
+:root{--F:#0e3529;--FD:#06251d;--G:#d7ad55;--GL:#f1d586;--CR:#fff8e8;--INK:#12231d;--MU:#5e6b64;--LN:rgba(14,53,41,.18)}
+*,*::before,*::after{box-sizing:border-box;margin:0}
+body{font-family:system-ui,-apple-system,sans-serif;color:var(--INK);word-break:keep-all;overflow-x:hidden;background:#fffdf6}
+button,input,textarea{font:inherit}
+.w{width:min(680px,calc(100% - 32px));margin:0 auto}
+.hero{background:linear-gradient(145deg,#082d22,#163b2a 62%,#24381f);color:#fffdf5;padding:26px 0 22px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:900;margin-bottom:10px}
+.bm{width:34px;height:34px;border:1px solid rgba(215,173,85,.85);border-radius:50%;display:grid;place-items:center;color:var(--GL);font-weight:900;font-size:.85rem}
+.hero h1{font-size:clamp(1.3rem,5.5vw,1.7rem);line-height:1.3;letter-spacing:-.03em}
+.hero p{color:rgba(255,253,245,.78);font-size:.92rem;margin-top:6px}
+.main{padding:22px 0 60px}
+.card{background:#fffaf0;border:1px solid var(--LN);border-radius:18px;padding:clamp(14px,4vw,20px);margin-bottom:14px}
+.rcard{background:#fff;border:2px solid rgba(14,53,41,.16);border-radius:16px;padding:16px;margin-bottom:12px}
+.rtags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.rtag{background:var(--FD);color:#fff8dc;border-radius:999px;padding:4px 10px;font-size:.78rem;font-weight:800}
+.rsum{color:var(--FD);font-weight:750;line-height:1.6;font-size:.95rem;margin-bottom:8px}
+.rmeta{color:var(--MU);font-size:.85rem;font-weight:700;margin-bottom:10px}
+.bidbtn{border:0;background:linear-gradient(135deg,#f5dc8a,#c99938);color:#1c221c;border-radius:14px;padding:11px 16px;font-weight:900;cursor:pointer;width:100%;font-size:.95rem}
+.bidform{display:none;margin-top:12px;padding-top:12px;border-top:1px solid var(--LN);gap:10px;flex-direction:column}
+.bidform.on{display:flex}
+.bidform input,.bidform textarea{width:100%;border:2px solid rgba(14,53,41,.18);border-radius:12px;padding:10px 12px;font-weight:650}
+.bidform textarea{min-height:70px;resize:vertical}
+.submitbid{border:0;background:var(--FD);color:#fff8dc;border-radius:12px;padding:11px;font-weight:900;cursor:pointer}
+.empty{text-align:center;color:var(--MU);padding:30px 10px;font-weight:700}
+.st{min-height:18px;font-size:.85rem;font-weight:800;margin-top:6px}
+.st.ok{color:#065f46}
+.st.er{color:#b91c1c}
+.notice{padding:14px;border-radius:14px;background:#fff3f0;border:1px solid rgba(160,45,25,.22);color:#7a2c1c;font-size:.9rem;line-height:1.6;font-weight:700;margin-bottom:14px}
+</style>
+</head>
+<body>
+<header class="hero">
+<div class="w">
+<div class="brand"><div class="bm">안</div><span style="color:#fff8dc">안심상속 · 전문가 대시보드</span></div>
+<h1 id="greet">불러오는 중...</h1>
+<p>전문분야와 매칭된 고객 요청입니다. 견적을 제출하면 고객이 비교 후 선택합니다.</p>
+</div>
+</header>
+
+<main class="main">
+<div class="w" id="content">
+<div class="empty">목록을 불러오는 중입니다...</div>
+</div>
+</main>
+
+<script>
+const params = new URLSearchParams(location.search);
+const token = params.get('token');
+const content = document.getElementById('content');
+const greet = document.getElementById('greet');
+
+if(!token){
+  greet.textContent = '접근 오류';
+  content.innerHTML = '<div class="notice">유효한 접근 링크가 아닙니다. 안심상속에서 발급받은 링크로 다시 접속해주세요.</div>';
+} else {
+  loadRequests();
+}
+
+async function loadRequests(){
+  try{
+    const res = await fetch('/api/expert-requests?token=' + encodeURIComponent(token));
+    const data = await res.json();
+    if(!data.ok){
+      greet.textContent = '접근 오류';
+      content.innerHTML = '<div class="notice">' + (data.message || '요청을 불러올 수 없습니다.') + '</div>';
+      return;
+    }
+    greet.textContent = (data.expert?.name || '전문가') + '님, 안녕하세요';
+
+    if(data.notice){
+      content.innerHTML = '<div class="notice">' + data.notice + '</div>';
+      return;
+    }
+
+    if(!data.requests || !data.requests.length){
+      content.innerHTML = '<div class="card"><div class="empty">현재 매칭되는 새 요청이 없습니다.<br>새 요청이 들어오면 다시 확인해주세요.</div></div>';
+      return;
+    }
+
+    content.innerHTML = data.requests.map(r => renderRequest(r)).join('');
+    attachHandlers();
+
+  } catch(err){
+    content.innerHTML = '<div class="notice">목록을 불러오는 중 오류가 발생했습니다.</div>';
+  }
+}
+
+function renderRequest(r){
+  const tags = (r.matched_types||[]).slice(0,3).map(t=>'<span class="rtag">'+esc(t)+'</span>').join('');
+  const meta = [r.preferred_method, r.region, r.budget_range].filter(Boolean).join(' · ');
+  return `
+  <div class="rcard" data-id="${r.id}">
+    <div class="rtags">${tags}</div>
+    <div class="rsum">${esc(r.situation_summary || '상황 요약 없음')}</div>
+    <div class="rmeta">${esc(meta || '상세 정보 없음')}</div>
+    <button class="bidbtn" data-act="open">견적 제출하기</button>
+    <div class="bidform">
+      <input type="text" class="f-fee" placeholder="제안 상담료 (예: 초회무료, 30만원/1시간)"/>
+      <input type="text" class="f-dates" placeholder="가능 일정 (예: 평일 오후, 이번 주 내)"/>
+      <textarea class="f-msg" placeholder="간단한 메시지 (선택)"></textarea>
+      <button class="submitbid" data-act="submit">제출</button>
+      <div class="st"></div>
+    </div>
+  </div>`;
+}
+
+function esc(s){ return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+function attachHandlers(){
+  content.querySelectorAll('.rcard').forEach(card => {
+    const openBtn = card.querySelector('[data-act="open"]');
+    const form = card.querySelector('.bidform');
+    openBtn.addEventListener('click', ()=>{
+      form.classList.toggle('on');
+    });
+    const submitBtn = card.querySelector('[data-act="submit"]');
+    submitBtn.addEventListener('click', async ()=>{
+      const st = card.querySelector('.st');
+      const fee = card.querySelector('.f-fee').value.trim();
+      const dates = card.querySelector('.f-dates').value.trim();
+      const msg = card.querySelector('.f-msg').value.trim();
+      if(!fee){ st.className='st er'; st.textContent='제안 상담료를 입력해주세요.'; return; }
+      submitBtn.disabled = true;
+      st.className='st'; st.textContent='제출 중...';
+      try{
+        const res = await fetch('/api/submit-bid', {
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({ token, request_id: card.dataset.id, proposed_fee: fee, available_dates: dates, message: msg })
+        });
+        const data = await res.json();
+        if(data.ok){
+          st.className='st ok'; st.textContent='견적이 제출되었습니다.';
+          openBtn.textContent = '견적 제출 완료';
+          openBtn.disabled = true;
+          submitBtn.disabled = true;
+        } else {
+          st.className='st er'; st.textContent = data.message || '제출 실패';
+          submitBtn.disabled = false;
+        }
+      } catch(err){
+        st.className='st er'; st.textContent='제출 중 오류가 발생했습니다.';
+        submitBtn.disabled = false;
+      }
+    });
+  });
+}
+</script>
+</body>
+</html>

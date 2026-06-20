@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>받은 견적 비교 | 안심상속</title>
+<meta name="robots" content="noindex"/>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
+<style>
+:root{--F:#0e3529;--FD:#06251d;--G:#d7ad55;--GL:#f1d586;--CR:#fff8e8;--INK:#12231d;--MU:#5e6b64;--LN:rgba(14,53,41,.18)}
+*,*::before,*::after{box-sizing:border-box;margin:0}
+body{font-family:system-ui,-apple-system,sans-serif;color:var(--INK);word-break:keep-all;overflow-x:hidden;background:#fffdf6}
+button{font:inherit}
+.w{width:min(680px,calc(100% - 32px));margin:0 auto}
+.hero{background:linear-gradient(145deg,#082d22,#163b2a 62%,#24381f);color:#fffdf5;padding:28px 0 24px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:900;margin-bottom:12px}
+.bm{width:34px;height:34px;border:1px solid rgba(215,173,85,.85);border-radius:50%;display:grid;place-items:center;color:var(--GL);font-weight:900;font-size:.85rem}
+.hero h1{font-size:clamp(1.4rem,6vw,1.8rem);line-height:1.3;letter-spacing:-.03em;margin-bottom:8px}
+.hero p{color:rgba(255,253,245,.8);font-size:.92rem;line-height:1.6}
+.main{padding:22px 0 60px}
+.bidcard{background:#fff;border:2px solid rgba(14,53,41,.16);border-radius:18px;padding:18px;margin-bottom:14px}
+.bidcard.selected{border-color:var(--G);background:#fff8e8}
+.expname{font-weight:950;color:var(--FD);font-size:1.05rem;margin-bottom:2px}
+.expoffice{color:var(--MU);font-size:.86rem;font-weight:700;margin-bottom:10px}
+.fee{display:inline-flex;background:var(--FD);color:var(--GL);border-radius:999px;padding:6px 13px;font-weight:900;font-size:.95rem;margin-bottom:8px}
+.dates{color:#49564f;font-size:.9rem;font-weight:700;margin-bottom:6px}
+.msg{color:#334155;line-height:1.6;font-size:.92rem;font-weight:600;margin-bottom:12px;padding:10px 12px;background:#f8fafc;border-radius:12px}
+.selectbtn{border:0;background:linear-gradient(135deg,#f5dc8a,#c99938);color:#1c221c;border-radius:14px;padding:12px;font-weight:900;cursor:pointer;width:100%;font-size:.96rem}
+.selectbtn[disabled]{opacity:.5;cursor:default}
+.badge{display:inline-flex;background:#ecfdf5;color:#065f46;border:1px solid rgba(6,95,70,.2);border-radius:999px;padding:5px 11px;font-weight:900;font-size:.84rem;margin-bottom:8px}
+.empty{text-align:center;color:var(--MU);padding:36px 10px;font-weight:700;line-height:1.6}
+.notice{padding:14px;border-radius:14px;background:#f7faf7;border:1px solid rgba(31,77,58,.18);color:#334155;font-size:.88rem;line-height:1.6;font-weight:650;margin-bottom:16px}
+</style>
+</head>
+<body>
+<header class="hero">
+<div class="w">
+<div class="brand"><div class="bm">안</div><span style="color:#fff8dc">안심상속</span></div>
+<h1>받은 견적을 비교해보세요</h1>
+<p>마음에 드는 전문가를 선택하면 직접 연락이 가능해집니다. 상담료는 전문가에게 직접 지불합니다.</p>
+</div>
+</header>
+
+<main class="main">
+<div class="w" id="content">
+<div class="empty">불러오는 중...</div>
+</div>
+</main>
+
+<script>
+const params = new URLSearchParams(location.search);
+const token = params.get('token');
+const content = document.getElementById('content');
+
+if(!token){
+  content.innerHTML = '<div class="empty">유효한 접근 링크가 아닙니다.</div>';
+} else {
+  load();
+}
+
+async function load(){
+  try{
+    const res = await fetch('/api/get-bids?token=' + encodeURIComponent(token));
+    const data = await res.json();
+    if(!data.ok){
+      content.innerHTML = '<div class="empty">' + (data.message || '불러올 수 없습니다.') + '</div>';
+      return;
+    }
+    render(data.request, data.bids);
+  } catch(err){
+    content.innerHTML = '<div class="empty">오류가 발생했습니다.</div>';
+  }
+}
+
+function render(request, bids){
+  let html = '';
+  if(request.status === 'closed'){
+    html += '<div class="notice">이미 전문가를 선택하셨습니다. 선택하신 전문가에게 직접 연락해 상담을 진행해주세요.</div>';
+  }
+  if(!bids.length){
+    html += '<div class="empty">아직 도착한 견적이 없습니다.<br>전문가가 견적을 제출하면 이 페이지에서 바로 확인하실 수 있습니다.</div>';
+    content.innerHTML = html;
+    return;
+  }
+  html += bids.map(b => renderBid(b, request)).join('');
+  content.innerHTML = html;
+  attachHandlers(request);
+}
+
+function renderBid(b, request){
+  const ex = b.experts || {};
+  const isSelected = b.status === 'selected';
+  const typeLabel = ex.type === 'lawyer' ? '변호사' : ex.type === 'tax_accountant' ? '세무사' : '';
+  return `
+  <div class="bidcard ${isSelected?'selected':''}" data-id="${b.id}">
+    ${isSelected ? '<div class="badge">✓ 선택됨</div>' : ''}
+    <div class="expname">${esc(ex.name||'전문가')} ${typeLabel?'· '+typeLabel:''}</div>
+    <div class="expoffice">${esc(ex.office_name||'')}</div>
+    <div class="fee">${esc(b.proposed_fee)}</div>
+    ${b.available_dates ? '<div class="dates">가능 일정: '+esc(b.available_dates)+'</div>' : ''}
+    ${b.message ? '<div class="msg">'+esc(b.message)+'</div>' : ''}
+    ${request.status === 'open' ? '<button class="selectbtn" data-act="select">이 전문가 선택하기</button>' : ''}
+  </div>`;
+}
+
+function esc(s){ return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+function attachHandlers(request){
+  content.querySelectorAll('[data-act="select"]').forEach(btn=>{
+    btn.addEventListener('click', async (e)=>{
+      const card = e.target.closest('.bidcard');
+      const bidId = card.dataset.id;
+      if(!confirm('이 전문가를 선택하시겠습니까? 선택 후에는 변경할 수 없습니다.')) return;
+      btn.disabled = true; btn.textContent = '처리 중...';
+      try{
+        const res = await fetch('/api/select-bid', {
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({ token, bid_id: bidId })
+        });
+        const data = await res.json();
+        if(data.ok){ load(); }
+        else { alert(data.message || '오류가 발생했습니다.'); btn.disabled=false; btn.textContent='이 전문가 선택하기'; }
+      } catch(err){
+        alert('오류가 발생했습니다.'); btn.disabled=false; btn.textContent='이 전문가 선택하기';
+      }
+    });
+  });
+}
+</script>
+</body>
+</html>
