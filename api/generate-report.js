@@ -166,7 +166,10 @@ function buildSimulation(deep) {
     realEstateEok, hasOverseasAsset, overseasEok,
     realEstateCount: deep.realEstateCount || null,
     overseasAssetType: deep.overseasAssetType || null,
-    residencyStatus: deep.residencyStatus || null,
+    spouseNationality: deep.spouseNationality || null,
+    childrenNationality: deep.childrenNationality || null,
+    predeceasedChild: deep.predeceasedChild || null,
+    grandchildrenNationality: deep.grandchildrenNationality || null,
     spouseAlive, childCount, shareText,
     spouseShareEok, childShareEok, spouseForcedShareEok, childForcedShareEok,
     giftToHeir, giftAmountEok, priorGiftTiming: deep.priorGiftTiming || null,
@@ -299,7 +302,10 @@ async function callClaude(answers, types, score, deepAnswers) {
 - 부동산 보유 현황(무료진단 기준): ${reList}
 - 해외자산 보유: ${sim.hasOverseasAsset ? formatEok(sim.overseasEok)+' 추정' : '없음 또는 모름'}
 - 해외자산 형태: ${sim.overseasAssetType || '해당없음'}
-- 영주권·국적 상태: ${sim.residencyStatus || '해당없음'}
+- 배우자 국적·영주권 상태: ${sim.spouseNationality || '해당없음'}
+- 자녀 국적·영주권 상태: ${sim.childrenNationality || '해당없음'}
+- 먼저 사망한 자녀(대습상속 가능성): ${sim.predeceasedChild && sim.predeceasedChild !== '없음' ? sim.predeceasedChild : '없음'}
+- 대습상속인이 될 손주의 국적·영주권 상태: ${sim.grandchildrenNationality || '해당없음'}
 - 무료진단에서 확인된 해외 요소(전체): ${overseas}
 - 외국 국적(시민권) 보유 자녀 수: ${sim.foreignNatChildren && sim.foreignNatChildren !== '0명' ? sim.foreignNatChildren : '없음 또는 미상'}
 - 채무 추정: ${formatEok(sim.debtEok)}
@@ -329,7 +335,10 @@ async function callClaude(answers, types, score, deepAnswers) {
 사업체·지분이 있다면 가업상속공제 요건(피상속인 경영기간, 상속인 가업 종사 등)을 일반론이 아니라 입력된 지분율 기준으로 적용 가능성을 언급하세요.
 기여(부양·간병) 사실이 있다면 기여분 주장의 실질적 근거가 될 수 있는 자료(통장 이체내역, 진단서, 간병 영수증 등)를 구체적으로 안내하세요.
 해외 영주권 상태가 "한국 국적 유지"라면, 영주권은 시민권과 다르며 한국 국적을 유지하는 한 상속에는 한국 민법이 그대로 적용된다는 점을 명확히 안내하세요. 해외로 옮긴 회사·부동산이 있다면 한국 거주자는 전세계 자산이 한국 상속세 과세대상에 합산된다는 점과 해당국 절차가 별도로 필요할 수 있다는 점을 안내하세요. 해외 증권계좌(미국·홍콩 등)가 있다면 가족관계증명서의 영문공증·아포스티유가 필요할 수 있다는 실무 팁을 포함하세요. 암호화폐가 있다면 개인 지갑 시드구문·키 정보를 안전하게 남겨두는 방법을 구체적으로 안내하세요.
-자녀(가족)가 외국 국적이거나 복수국적인 경우, 핵심은 "상속받을 권리가 없는 게 아니라 서류 절차가 막힌다"는 점입니다. 본인이 한국 국적을 유지하면 외국국적 자녀도 한국 민법상 동일한 상속권이 있다는 점을 먼저 안심시키되, 인감증명서 대체(현지 공증+아포스티유+번역공증), 재외공관 인증만으로는 등기소가 거부하는 경우가 많다는 점, 상속인 전원 서명이 필요해 한 사람의 서류 지연이 전체를 막을 수 있다는 점을 구체적으로 안내하세요. "생전에 위임장 양식을 미리 준비해두기", "자녀가 한국 방문 시 국내 공증으로 처리해두기" 같은 실행 가능한 사전 대비책을 제시하세요.`;
+자녀(가족)가 외국 국적이거나 복수국적인 경우, 핵심은 "상속받을 권리가 없는 게 아니라 서류 절차가 막힌다"는 점입니다. 본인이 한국 국적을 유지하면 외국국적 자녀도 한국 민법상 동일한 상속권이 있다는 점을 먼저 안심시키되, 인감증명서 대체(현지 공증+아포스티유+번역공증), 재외공관 인증만으로는 등기소가 거부하는 경우가 많다는 점, 상속인 전원 서명이 필요해 한 사람의 서류 지연이 전체를 막을 수 있다는 점을 구체적으로 안내하세요. "생전에 위임장 양식을 미리 준비해두기", "자녀가 한국 방문 시 국내 공증으로 처리해두기" 같은 실행 가능한 사전 대비책을 제시하세요.
+먼저 사망한 자녀가 있고 그 자녀에게 자녀(손주)가 있다면, 대습상속이 적용되어 그 손주(들)가 사망한 부모를 대신해 상속인이 된다는 점을 명확히 안내하세요. 손주가 여러 명이면 사망한 자녀의 몫을 손주들이 다시 나눠 받는다는 점, 그리고 이 경우 상속인 구성 자체가 복잡해지므로(미성년 손주가 있다면 특별대리인 선임이 필요할 수 있음) 가족관계를 미리 정확히 파악해두는 것이 중요하다는 점을 안내하세요. 먼저 사망한 자녀에게 자녀(손주)가 없다면 대습상속은 발생하지 않고 그 몫은 다른 상속인들에게 귀속된다는 점도 함께 언급하세요.
+[핵심] 대습상속도 법정상속분일 뿐, 협의나 유언이 없을 때 적용되는 기본값입니다. 본인의 뜻에 따라 그 손주에게 법정상속분보다 더 남기거나 덜 남기는 것 모두 유언으로 설계할 수 있습니다. 다만 손주도 직계비속이므로 사망한 부모(자녀)의 위치를 그대로 물려받아 유류분 권리자가 되며, 유류분(법정상속분의 1/2)까지는 완전히 배제할 수 없다는 점을 명확히 안내하세요. 즉 "줄 수 있는 범위를 줄이거나 늘릴 수는 있지만, 유류분 이하로는 줄일 수 없다"는 원칙을 적용해 다른 유류분 설명과 동일한 논리로 안내하세요.
+대습상속인이 될 손주가 외국 시민권이거나 복수국적인 경우, 위에서 설명한 외국국적 자녀와 동일한 서류 절차 문제(한국 인감증명서 발급 불가, 현지 공증+아포스티유+번역공증 필요, 재외공관 인증만으로는 등기소가 거부할 수 있음)가 그대로 적용된다는 점을 안내하세요. 특히 손주가 미성년자이면서 동시에 외국 국적인 경우 특별대리인 선임 절차와 서류 인증 절차가 함께 필요해 더 복잡해질 수 있다는 점도 짚어주세요.`;
   }
 
   const prompt = `안심상속 유료 상세리포트를 작성하세요.
