@@ -7,7 +7,7 @@
  * POST /api/expert  body:{action:'bid', token, request_id, ...} → 입찰 제출
  */
 
-const SUPABASE_URL = process.env.SUPABASE_URL;
+const SUPABASE_URL = (process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL || '').replace(/\/$/, '');
 const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
 function sbHeaders(extra) {
