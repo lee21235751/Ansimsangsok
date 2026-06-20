@@ -128,6 +128,7 @@ function buildSimulation(deep) {
   /* 별거 중이거나 이혼소송이 진행 중이어도 정식 이혼이 완료되지 않았다면 법적으로는 100% 배우자 상속인 자격을 그대로 유지함 */
   const spouseAlive = deep.spouseStatus === '생존(혼인관계 유지·동거)' || deep.spouseStatus === '생존 — 별거 중(정식 이혼 안 함)' || deep.spouseStatus === '생존 — 이혼소송 진행 중(아직 미확정)';
   const spouseEstranged = deep.spouseStatus === '생존 — 별거 중(정식 이혼 안 함)' || deep.spouseStatus === '생존 — 이혼소송 진행 중(아직 미확정)';
+  const spouseCommonLaw = deep.spouseStatus === '사실혼 — 혼인신고는 하지 않음(동거·내연관계 포함)';
   const baseDeduction = 5; /* 일괄공제 5억 */
   const spouseDeduction = spouseAlive ? 5 : 0; /* 최소 배우자공제 5억 (실제는 최대 30억까지 변동) */
   const totalDeduction = baseDeduction + spouseDeduction;
@@ -221,7 +222,7 @@ function buildSimulation(deep) {
     childrenNationality: deep.childrenNationality || null,
     predeceasedChild: deep.predeceasedChild || null,
     grandchildrenNationality: deep.grandchildrenNationality || null,
-    spouseAlive, spouseEstranged, childCount, shareText, inheritanceTier,
+    spouseAlive, spouseEstranged, spouseCommonLaw, childCount, shareText, inheritanceTier,
     spouseShareEok, childShareEok, spouseForcedShareEok, childForcedShareEok,
     giftToHeir, giftAmountEok, priorGiftTiming: deep.priorGiftTiming || null,
     businessShare: deep.businessShare || null,
@@ -271,6 +272,7 @@ function getContext(a, types, deep, sim) {
   const hasSpousePriorChildren = remarriageArr.includes('spouse_prior_children');
   const hasChildAdoptedAway = remarriageArr.includes('my_child_adopted_away');
   const wantsAvoidStepInheritance = remarriageArr.includes('avoid_step_inheritance');
+  const hasUnrecognizedChild = remarriageArr.includes('unrecognized_child');
   if (hasMyPriorChildren || hasSpousePriorChildren || hasChildAdoptedAway || types.some(t=>t.includes('전혼')||t.includes('재혼'))) {
     if (hasMyPriorChildren) {
       lines.push('나의 전혼 자녀(이전 혼인에서 낳은 친자식)도 법정상속인으로, 현재 배우자와의 사이에서 낳은 자녀와 완전히 동등한 상속분을 가짐. 상속인 범위를 정확히 파악하고 빠뜨리지 않도록 해야 함.');
@@ -287,10 +289,16 @@ function getContext(a, types, deep, sim) {
     }
   }
   if (wantsAvoidStepInheritance) {
-    lines.push('[핵심] 본인이 먼저 사망하면 재산 일부가 배우자에게 가는데, 그 배우자가 나중에 사망하면 그 재산(원래 본인 재산이었던 부분 포함)은 배우자의 고유재산이 되어 배우자의 직계비속(배우자의 전혼 자녀 포함)에게 그대로 상속됨. 본인의 친자식이 아닌 배우자의 전혼 자녀에게 결국 자신의 재산이 흘러가는 것을 막을 방법이 없는가? 답은 "유언만으로는 막기 어렵지만 유언대용신탁으로는 설계 가능"임. 신탁계약에서 1차 수익자를 배우자로, 배우자 사망 후 잔여재산의 2차(후순위) 수익자를 본인의 친자식으로 미리 지정해두면(연속수익자 신탁), 배우자가 그 재산을 다 쓰지 않고 남긴 부분은 배우자의 상속인이 아니라 본인이 지정한 2차 수익자(친자식)에게 귀속됨. 이는 일반 유언장으로는 구현할 수 없는 기능이므로, 이 의향이 있다면 신탁 전문 금융기관 또는 신탁 설계 가능한 변호사 상담을 가장 먼저 권할 것. 다만 배우자의 유류분(법정상속분의 1/2)은 신탁으로도 완전히 배제할 수 없다는 한계도 함께 안내할 것.');
+    lines.push('[핵심] 본인이 먼저 사망하면 재산 일부가 배우자에게 가는데, 그 배우자가 나중에 사망하면 그 재산(원래 본인 재산이었던 부분 포함)은 배우자의 고유재산이 되어 배우자의 직계비속(배우자의 전혼 자녀 포함)에게 그대로 상속됨. 본인의 친자식이 아닌 배우자의 전혼 자녀에게 결국 자신의 재산이 흘러가는 것을 막을 방법이 없는가에 대해, 재산 규모와 무관하게 쓸 수 있는 현실적인 방법부터 순서대로 안내하세요. ① (비용 거의 없음) 유언장에서 배우자 몫을 법정상속분이 아니라 유류분 수준(법정상속분의 1/2)까지만 남기고 나머지는 친자식에게 직접 분배하도록 지정 — 배우자에게 가는 절대액 자체를 줄이면 나중에 의붓자식에게 흘러갈 수 있는 금액도 함께 줄어듦. ② (소액부터 가능) 생전에 친자식에게 직접 사전증여하기 — 배우자를 거치지 않고 바로 자녀에게 재산을 이전하는 가장 단순하고 확실한 방법(10년간 5천만원까지는 증여세 공제). ③ (소액부터 가능) 종신보험 등에서 수익자를 친자식으로 직접 지정 — 보험금은 원칙적으로 상속재산이 아니라 지정된 수익자의 고유재산이 되므로, 큰 목돈 없이도 시작할 수 있는 방법. ④ (여유가 있다면 검토) 유언대용신탁 — 1차 수익자를 배우자로, 배우자 사망 후 잔여재산의 2차(후순위) 수익자를 친자식으로 지정하는 연속수익자 구조로, 일반 유언장으로는 구현할 수 없는 가장 강력한 방법이지만 신탁 설계 비용과 최소 가입금액이 있어 재산 규모가 작다면 ①~③을 우선 검토하고 여력이 될 때 추가로 고려할 것. 어떤 방법을 쓰든 배우자의 유류분(법정상속분의 1/2)은 완전히 배제할 수 없다는 공통 한계도 함께 안내할 것.');
+  }
+  if (hasUnrecognizedChild) {
+    lines.push('[핵심] 가족관계증명서에 등재되지 않은 자녀(혼외자 등)가 있다면, 그 자녀가 친자로 "인지"되는 순간 다른 자녀들과 완전히 동일한 법정상속분을 갖게 됨. 인지는 본인이 생전에 스스로 할 수도 있고(임의인지), 본인 사후에 그 자녀가 유전자 검사 등을 통해 법원에 인지청구소송을 제기해 강제로 인정받을 수도 있음(사망 사실을 안 날로부터 2년 이내). 더 중요한 점은, 다른 상속인들이 이미 상속재산분할을 끝낸 뒤에 그 자녀가 인지되더라도 법적으로는 자신의 상속분에 해당하는 금액을 다른 상속인들에게 청구할 수 있다는 것(민법 제1014조) — 즉 이미 끝난 상속도 나중에 다시 흔들릴 수 있음. 이 문제를 사전에 분명히 하려면 ① 본인이 생전에 그 자녀를 임의인지해 상속인 범위를 명확히 하거나 ② 유언장에 해당 자녀에 대한 입장을 명시해두는 방법을 검토해야 하며, 어느 쪽이든 변호사와의 상담이 필요하다는 점을 신중하고 담담한 톤으로 안내하세요.');
   }
   if (sim && sim.spouseEstranged) {
     lines.push('[핵심] 배우자와 별거 중이거나 이혼소송이 진행 중이지만 아직 정식으로 이혼이 확정되지 않았다면, 사망 당시 법률상 혼인관계만 유효하면 그것으로 충분하므로 배우자는 법정상속인 자격을 100% 그대로 유지함. 별거 기간이 길거나 사실상 관계가 끝났다고 느끼는 것은 법적 효력에 전혀 영향을 주지 않으며, 이는 본인의 의향과 무관하게 적용되는 강력한 기본값임을 분명히 안내하세요. 이를 원하지 않는다면 ① 이혼 절차를 사망 전에 완료하거나 ② 유언장으로 배우자의 몫을 유류분(법정상속분의 1/2) 수준까지로 최소화하는 방법(유류분 이하로는 줄일 수 없음)을 검토해야 한다는 점을 구체적으로 안내하세요.');
+  }
+  if (sim && sim.spouseCommonLaw) {
+    lines.push('[핵심] 혼인신고를 하지 않은 사실혼 관계(동거 포함)는 우리 민법상 상속권이 전혀 인정되지 않음 — 아무리 오래 함께 살았어도 법률혼 배우자와 달리 법정상속인이 될 수 없음. 사실혼 배우자에게 재산을 남기고 싶다면 반드시 유언장에 유증(특정인에게 재산을 남긴다는 명시)을 해야 하며, 그렇지 않으면 사실혼 배우자는 상속에서 완전히 배제됨. 다만 임대차보호법상 임차인 지위 승계, 일부 사회보험(산재·국민연금 등)에서는 사실혼 배우자도 보호받을 수 있다는 점은 별개로 안내하세요. 가장 확실한 보호 방법은 혼인신고를 하는 것이며, 그것이 어렵다면 유언장 작성이 필수라는 점을 강조하세요.');
   }
   if (sim && sim.childCount > 0 && sim.businessShare) {
     lines.push('참고(사업체 지분 보유 + 자녀가 있는 경우): 상속인 중 미성년 자녀가 있다면, 상속재산분할협의나 사업체 지분 승계 시 친권자(보통 배우자)와 미성년 자녀 사이에 이해관계가 충돌할 수 있어 가정법원에 특별대리인 선임을 신청해야 협의가 유효함. 자녀가 아직 어리다면 이 점을 미리 확인하도록 안내할 것(자녀가 이미 성년이라면 해당 없음).');
@@ -393,7 +401,7 @@ async function callClaude(answers, types, score, deepAnswers) {
 - 순재산(재산-채무): ${formatEok(sim.netEok)}
 - 적용 가능 공제 추정(일괄공제5억${sim.spouseAlive?'+배우자공제 최소5억':''}): ${formatEok(sim.totalDeduction)}
 - 과세대상 재산 추정(순재산-공제): ${formatEok(sim.taxableEok)}
-- 배우자 생존: ${sim.spouseAlive ? '예':'아니오'}${sim.spouseEstranged ? ' (단, 별거 중이거나 이혼소송 진행 중 — 정식 이혼이 완료되지 않아 법적으로는 100% 배우자 상속인 자격 유지)' : ''}
+- 배우자 생존: ${sim.spouseAlive ? '예':'아니오'}${sim.spouseEstranged ? ' (단, 별거 중이거나 이혼소송 진행 중 — 정식 이혼이 완료되지 않아 법적으로는 100% 배우자 상속인 자격 유지)' : ''}${sim.spouseCommonLaw ? ' (사실혼 관계 — 혼인신고 없어 법적 상속권 없음)' : ''}
 - 자녀 수: ${sim.childCount ?? '미상'}명
 - 상속순위 구분(inheritanceTier): ${sim.inheritanceTier === 'children' ? '1순위 직계비속(자녀)' : sim.inheritanceTier === 'parents' ? '2순위 직계존속(부모) — 자녀 없음' : sim.inheritanceTier === 'spouse_only' ? '배우자 단독상속 — 직계비속·직계존속 모두 없음' : sim.inheritanceTier === 'siblings' ? '3순위 형제자매 — 자녀·부모·배우자 모두 없음' : '확인 필요'}
 - 법정상속분 비율: ${sim.shareText || '확인 필요'}
