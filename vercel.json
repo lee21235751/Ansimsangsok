@@ -5,7 +5,7 @@
   "trailingSlash": false,
   "functions": {
     "api/generate-report.js": {
-      "maxDuration": 120
+      "maxDuration": 180
     }
   }
 }

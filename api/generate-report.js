@@ -3,8 +3,8 @@
  * POST /api/generate-report
  */
 
-/* Claude API 호출 + 후속 처리가 60초를 넘을 수 있어 함수 최대 실행시간을 늘림 */
-export const maxDuration = 120;
+/* Claude API 호출(+ JSON 파싱 실패 시 1회 재시도)이 시간이 걸릴 수 있어 함수 최대 실행시간을 넉넉히 잡음 */
+export const maxDuration = 180;
 
 /* ── 20개 유형 매칭 ── */
 const TYPES = {
@@ -402,29 +402,41 @@ ${ctx?'\n[참고]\n'+ctx:''}${simBlock}
 
 규칙: JSON만 반환. 코드블록 없이. 배열 항목은 반드시 별도 문자열로. "~필요합니다/검토하세요/확인하세요"로만 끝나는 문장을 연속 사용하지 말 것 — 최소 절반 이상의 항목에는 실제 선택지나 구체적 행동을 포함할 것. 전체 리포트 톤은 담백하고 자신감 있게 작성할 것 — "정보 제공 목적", "조언을 대체하지 않습니다", "법적 책임을 지지 않습니다" 같은 방어적·면책성 표현은 절대 사용하지 말 것. 아무도 묻지 않은 책임 회피를 먼저 꺼내지 말 것.`;
 
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': apiKey,
-      'anthropic-version': '2023-06-01'
-    },
-    body: JSON.stringify({
-      model: 'claude-haiku-4-5-20251001',
-      max_tokens: 6000,
-      system: '안심상속 유료 상세리포트 작성 시스템. 이 서비스의 목적은 절세가 아니라 "사용자가 원하는 자녀(가족)에게 더 많이 남길 수 있도록, 유류분 분쟁을 합법적으로 최소화하는 상속 설계를 돕는 것"임. 모든 답변은 이 목적을 중심으로 작성할 것. 법률·세무 조언 금지(단, 입력된 구간 수치 기반 단순 추정 계산 및 일반적인 법령·판례 정보 제공은 허용). "점검이 필요합니다"식 모호한 문장 대신, 가능한 곳마다 실제 선택 가능한 구체적 옵션을 제시할 것. JSON만 반환.',
-      messages: [{ role: 'user', content: prompt }]
-    })
-  });
+  const callOnce = async (extraInstruction) => {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01'
+      },
+      body: JSON.stringify({
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 10000,
+        system: '안심상속 유료 상세리포트 작성 시스템. 이 서비스의 목적은 절세가 아니라 "사용자가 원하는 자녀(가족)에게 더 많이 남길 수 있도록, 유류분 분쟁을 합법적으로 최소화하는 상속 설계를 돕는 것"임. 모든 답변은 이 목적을 중심으로 작성할 것. 법률·세무 조언 금지(단, 입력된 구간 수치 기반 단순 추정 계산 및 일반적인 법령·판례 정보 제공은 허용). "점검이 필요합니다"식 모호한 문장 대신, 가능한 곳마다 실제 선택 가능한 구체적 옵션을 제시할 것. JSON만 반환.',
+        messages: [{ role: 'user', content: prompt + (extraInstruction || '') }]
+      })
+    });
+    if (!res.ok) throw new Error(`Claude API ${res.status}`);
+    const data = await res.json();
+    const text = data.content.filter(b=>b.type==='text').map(b=>b.text).join('');
+    return { text, stopReason: data.stop_reason };
+  };
 
-  if (!res.ok) throw new Error(`Claude API ${res.status}`);
-  const data = await res.json();
-  const text = data.content.filter(b=>b.type==='text').map(b=>b.text).join('');
+  let first;
   try {
-    return JSON.parse(text.replace(/```json|```/g,'').trim());
+    first = await callOnce();
+    return JSON.parse(first.text.replace(/```json|```/g,'').trim());
   } catch (parseErr) {
-    console.error('JSON 파싱 실패. stop_reason=' + data.stop_reason + ' 응답길이=' + text.length + ' 원본에러=' + parseErr.message);
-    throw parseErr;
+    console.error('1차 JSON 파싱 실패. stop_reason=' + (first && first.stopReason) + ' 응답길이=' + (first && first.text.length) + ' 원본에러=' + parseErr.message + ' - 재시도 진행');
+    const retryInstruction = '\n\n[중요] 이전 응답이 너무 길어 중간에 잘렸습니다. 각 섹션의 설명을 더 간결하게 줄이고, 전체 JSON이 반드시 완전하게 끝나도록 작성하세요.';
+    const second = await callOnce(retryInstruction);
+    try {
+      return JSON.parse(second.text.replace(/```json|```/g,'').trim());
+    } catch (parseErr2) {
+      console.error('2차(재시도) JSON 파싱도 실패. stop_reason=' + second.stopReason + ' 응답길이=' + second.text.length + ' 원본에러=' + parseErr2.message);
+      throw parseErr2;
+    }
   }
 }
 
