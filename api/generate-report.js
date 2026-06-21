@@ -255,6 +255,7 @@ function getContext(a, types, deep, sim) {
   const hasForeignNat = overseas.includes('family_foreign_nationality');
   const presence = Array.isArray(a.assetPresence) ? a.assetPresence : [];
   const hasLand = presence.includes('land');
+  const hasFarmland = presence.includes('farmland');
   const hasIncomeRE = presence.includes('incomeRealEstate');
 
   if (a.unequalIntent==='있음 — 이미 마음을 정함' || a.unequalIntent==='있음 — 아직 확신은 없음') {
@@ -341,7 +342,10 @@ function getContext(a, types, deep, sim) {
     lines.push('갈등이 있는 경우 유언장 등 문서화가 핵심. 협의 분할 과정에서 갈등 표면화 가능.');
   }
   if (hasLand) {
-    lines.push('토지·농지는 현금과 달리 물리적으로 똑같이 나누기 어려워, 공유지분 형태로 상속되는 경우가 많음. 공유지분 상태에서는 처분·개발 시 상속인 전원의 동의가 필요해 한 명이라도 반대하면 장기간 묶이는 경우가 흔함. 특정 자녀에게 농지를 온전히 남기고 싶다면, 다른 자녀에게 유류분 상당액을 현금이나 다른 재산으로 미리 정산해두는 방식이 효과적임.');
+    lines.push('토지는 현금과 달리 물리적으로 똑같이 나누기 어려워, 공유지분 형태로 상속되는 경우가 많음. 공유지분 상태에서는 처분·개발 시 상속인 전원의 동의가 필요해 한 명이라도 반대하면 장기간 묶이는 경우가 흔함. 특정 자녀에게 토지를 온전히 남기고 싶다면, 다른 자녀에게 유류분 상당액을 현금이나 다른 재산으로 미리 정산해두는 방식이 효과적임.');
+  }
+  if (hasFarmland) {
+    lines.push('[핵심] 농지(밭·논·과수원)도 토지와 마찬가지로 현금처럼 똑같이 나누기 어려워 공유지분 형태로 상속되는 경우가 많고, 공유지분 상태에서는 처분 시 상속인 전원의 동의가 필요해 한 명이라도 반대하면 장기간 묶일 수 있음. 특정 자녀에게 농지를 온전히 남기고 싶다면 다른 자녀에게 유류분 상당액을 현금 등으로 미리 정산해두는 방식이 효과적이며, 여기에 더해 농지법의 적용을 받는다는 점도 함께 고려해야 함. 좋은 소식은, 상속(유증 포함)으로 농지를 받는 경우에는 농지취득자격증명 없이 바로 등기가 가능해 일반 매매보다 절차가 오히려 간단함(농지법 제8조제1항 단서). 다만 직접 농사짓지 않는 상속농지는 전체 합산 1만㎡(1ha)까지만 자격증명 없이 계속 보유할 수 있고, 그 이상은 직접 경작하거나 처분해야 함 — 한국농어촌공사(농지은행)에 임대를 위탁하면 면적 제한 없이 계속 보유 가능함. 또한 피상속인(부모님 등)이 8년 이상 직접 경작한 농지라면, 상속받은 날로부터 3년 이내에 매도하면 상속인이 직접 농사를 짓지 않아도 양도소득세를 100% 감면받을 수 있음(연 1억원, 5년간 2억원 한도). 이 3년 기한을 넘기면 감면을 받기 위해 상속인이 직접 1년 이상 경작해야 하므로, 농사를 지을 계획이 없는 상속인이라면 3년 이내 매각 여부를 미리 정해두는 것이 중요함.');
   }
   if (hasIncomeRE) {
     lines.push('임대 목적 상가·건물은 임대수익이 함께 따라오므로, 단순 시가뿐 아니라 누가 임대관리·수익을 가져갈지도 분쟁 요소가 됨. 상속 후 공동소유 상태로 두면 임대료 배분, 관리비용 부담, 매각 여부를 둘러싸고 형제간 갈등이 길어지는 경우가 많아 미리 관리 방식(단독 상속 후 정산 vs 공동관리)을 정해두는 것이 중요함.');
@@ -375,8 +379,8 @@ async function callClaude(answers, types, score, deepAnswers) {
 
   const presence = Array.isArray(answers.assetPresence)?answers.assetPresence:[];
   const counts   = answers.assetCounts||{};
-  const reTypeLabel = {house:'주택',land:'토지·농지',incomeRealEstate:'수익형부동산(상가등)',factory:'공장·창고',otherRealEstate:'기타부동산'};
-  const reList   = ['house','land','incomeRealEstate','factory','otherRealEstate']
+  const reTypeLabel = {house:'주택',land:'토지',farmland:'농지',incomeRealEstate:'수익형부동산(상가등)',factory:'공장·창고',otherRealEstate:'기타부동산'};
+  const reList   = ['house','land','farmland','incomeRealEstate','factory','otherRealEstate']
     .filter(k=>presence.includes(k))
     .map(k=>`${reTypeLabel[k]} ${counts[k]||'1'}건`)
     .join(', ') || '없음';
