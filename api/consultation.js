@@ -19,17 +19,18 @@ function sbHeaders(extra) {
 }
 
 async function handleCreate(req, res) {
-  const { situation_summary, preferred_method, region, budget_range, customer_email, matched_types, report_order_id } = req.body || {};
+  const { situation_summary, preferred_method, region, budget_range, customer_email, matched_types } = req.body || {};
   if (!situation_summary || !customer_email) {
     return res.status(400).json({ ok: false, message: '필수 항목이 누락되었습니다.' });
   }
 
+  /* 주의: consultation_requests 테이블 실제 컬럼은 customer_email (customer_session 아님),
+     report_order_id 컬럼은 테이블에 없음 — 둘 다 이전 버전에서 컬럼명이 안 맞아 insert가 항상 실패하던 원인. */
   const insertRes = await fetch(`${SUPABASE_URL}/rest/v1/consultation_requests`, {
     method: 'POST',
     headers: sbHeaders({ 'Content-Type': 'application/json', 'Prefer': 'return=representation' }),
     body: JSON.stringify({
-      customer_session: customer_email,
-      report_order_id: report_order_id || null,
+      customer_email,
       matched_types: Array.isArray(matched_types) ? matched_types : [],
       situation_summary,
       preferred_method: preferred_method || null,
@@ -55,7 +56,8 @@ async function handleGetBids(req, res) {
   const request = requests[0];
   if (!request) return res.status(404).json({ ok: false, message: '유효하지 않은 접근입니다.' });
 
-  const bidsRes = await fetch(`${SUPABASE_URL}/rest/v1/bids?request_id=eq.${request.id}&select=*,experts(name,office_name,type,career_years,intro)&order=created_at.asc`, { headers: sbHeaders() });
+  /* career_years는 experts 테이블에 없는 컬럼이라 제거 (있으면 PostgREST가 이 쿼리 자체를 실패시킴) */
+  const bidsRes = await fetch(`${SUPABASE_URL}/rest/v1/bids?request_id=eq.${request.id}&select=*,experts(name,office_name,type,intro)&order=created_at.asc`, { headers: sbHeaders() });
   const bids = bidsRes.ok ? await bidsRes.json() : [];
 
   return res.status(200).json({ ok: true, request, bids });
