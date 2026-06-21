@@ -170,8 +170,7 @@ function renderQ(){
   ge('QTitle').innerHTML='<span class="qt">'+esc(q.q)+'</span>';
   ge('QHelp').innerHTML = q.h ? '<p class="qh">'+esc(q.h)+'</p>' : '';
   if(q.multi && !Array.isArray(dans[q.k])) dans[q.k] = [];
-  var sel = dans[q.k];
-  var isOn = function(o){ return q.multi ? sel.indexOf(o)!==-1 : sel===o; };
+  var isOn = function(o){ var s=dans[q.k]; return q.multi ? s.indexOf(o)!==-1 : s===o; };
   ge('QOpts').innerHTML = '<div class="opts">'+q.o.map(function(o){
     return '<button type="button" class="opt'+(isOn(o)?' on':'')+'" data-v="'+esc(o)+'">'+esc(o)+'</button>';
   }).join('')+'</div>';
