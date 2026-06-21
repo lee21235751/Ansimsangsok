@@ -31,6 +31,28 @@ export default async function handler(req, res) {
       return;
     }
 
+    const sbUrl = (process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL || '').replace(/\/$/, '');
+    const sbKey = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
+
+    /* 멱등성(idempotency) 처리: payment-success.html이 새로고침 등으로 같은 orderId를 두 번 보낼 수 있음.
+       이미 paid 상태로 저장돼 있다면 Toss API를 다시 호출하지 않고 즉시 성공으로 응답해
+       중복 행 저장과 불필요한 Toss API 재호출을 막음. */
+    if (sbUrl && sbKey) {
+      try {
+        const existsRes = await fetch(
+          sbUrl + '/rest/v1/paid_reports?order_id=eq.' + encodeURIComponent(orderId) + '&select=status,payment_key',
+          { headers: { apikey: sbKey, Authorization: 'Bearer ' + sbKey } }
+        );
+        const existsRows = existsRes.ok ? await existsRes.json() : [];
+        if (Array.isArray(existsRows) && existsRows.some(r => r.status === 'paid')) {
+          res.status(200).json({ orderId, paymentKey, totalAmount: Number(amount), alreadyConfirmed: true });
+          return;
+        }
+      } catch (idemErr) {
+        console.error('중복확인 조회 실패(승인은 계속 진행):', idemErr.message);
+      }
+    }
+
     const encryptedSecretKey = 'Basic ' + Buffer.from(secretKey + ':').toString('base64');
 
     const tossResponse = await fetch('https://api.tosspayments.com/v1/payments/confirm', {
@@ -52,8 +74,6 @@ export default async function handler(req, res) {
 
     /* 결제 승인 성공. paid_reports 테이블에 저장해 리포트 생성 시 결제 여부를 검증할 수 있게 함.
        이 저장이 없으면 누구나 /api/generate-report를 직접 호출해 결제 없이 리포트를 받을 수 있음. */
-    const sbUrl = (process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL || '').replace(/\/$/, '');
-    const sbKey = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
     if (sbUrl && sbKey) {
       try {
         await fetch(sbUrl + '/rest/v1/paid_reports', {
