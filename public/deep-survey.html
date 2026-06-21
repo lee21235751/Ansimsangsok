@@ -93,8 +93,9 @@ var DQ=[
   {k:'parentsAlive',q:'부모님(직계존속)이 생존해 계신가요?',h:'자녀가 없으면 부모님이 배우자와 함께 1순위 상속인이 됩니다. 양가 부모님 중 한 분이라도 생존해 계시면 "생존"을 선택해주세요.',
    o:['생존','모두 사망','정확히는 모르겠음'],
    showIf:function(d){ return d.childrenCount==='0명'; }},
-  {k:'parentNeglect',q:'생존해 계신 부모님 중, 본인이 미성년이던 시절 양육 의무를 다하지 않았거나 학대 등으로 부당한 대우를 한 분이 있나요?',h:'2026년 시행된 구하라법(상속권 상실 선고 제도)에 따라, 해당된다면 그 부모님의 상속권 제한을 법원에 청구할 수 있습니다. 해당 없으면 "없음"을 선택해주세요.',
+  {k:'parentNeglect',q:'생존해 계신 부모님 중, 본인이 미성년이던 시절 양육 의무를 다하지 않았거나 학대 등으로 부당한 대우를 한 분이 있나요?',h:'2026년 시행된 구하라법(상속권 상실 선고 제도)에 따라, 해당된다면 그 부모님의 상속권 제한을 법원에 청구할 수 있습니다. 해당하는 항목을 모두 선택해주세요. 해당 없으면 "없음"을 선택해주세요.',
    o:['없음','있음 — 양육을 사실상 방기함(장기간 연락 두절·생활비 미지급 등)','있음 — 학대 또는 부당한 대우가 있었음','정확히는 모르겠음'],
+   multi:true, exclusive:['없음','정확히는 모르겠음'],
    showIf:function(d){ return d.childrenCount==='0명' && d.parentsAlive==='생존'; }},
   {k:'siblingsCount',q:'형제자매는 몇 명인가요?',h:'본인 기준 형제자매 수입니다. 자녀와 부모님이 모두 없으면 형제자매가 상속인이 됩니다.',
    o:['0명','1명','2명','3명 이상','정확히는 모르겠음'],
@@ -123,10 +124,12 @@ var DQ=[
   {k:'priorGiftAmount',q:'사전 증여 추정 금액은요?',h:'',
    o:['1천만원 미만','1천만~5천만','5천만~1억','1억~5억','5억 이상'],
    showIf:function(d){ return freeHasGift && d.priorGiftTiming; }},
-  {k:'caregivingContribution',q:'특정 상속인이 부양·간병 등으로 더 기여한 부분이 있나요?',h:'기여분 인정 여부 판단에 참고됩니다.',
-   o:['있음 — 동거하며 장기간 부양','있음 — 간병·병원비 부담','있음 — 재산 형성에 기여','없음 또는 해당없음']},
-  {k:'conflictDetail',q:'가족 갈등이 있다면 어떤 종류에 가까운가요?',h:'가장 가까운 것 하나를 선택해주세요.',
-   o:['해당없음(갈등 없음)','분배 비율에 대한 이견','부양·기여 인정 문제','전혼 자녀와의 관계','연락이 끊긴 상속인 존재','기타']},
+  {k:'caregivingContribution',q:'특정 상속인이 부양·간병 등으로 더 기여한 부분이 있나요?',h:'기여분 인정 여부 판단에 참고됩니다. 해당하는 항목을 모두 선택해주세요.',
+   o:['있음 — 동거하며 장기간 부양','있음 — 간병·병원비 부담','있음 — 재산 형성에 기여','없음 또는 해당없음'],
+   multi:true, exclusive:['없음 또는 해당없음']},
+  {k:'conflictDetail',q:'가족 갈등이 있다면 어떤 종류에 가까운가요?',h:'해당하는 항목을 모두 선택해주세요.',
+   o:['해당없음(갈등 없음)','분배 비율에 대한 이견','부양·기여 인정 문제','전혼 자녀와의 관계','연락이 끊긴 상속인 존재','기타'],
+   multi:true, exclusive:['해당없음(갈등 없음)']},
   {k:'expertNeed',q:'전문가 상담이 필요하다면 어떤 분야인가요?',h:'',
    o:['변호사(분쟁·소송 관련)','세무사(절세·신고 관련)','둘 다 필요','아직 필요 없음']}
 ];
@@ -166,14 +169,34 @@ function renderQ(){
   ge('PrevBtn').disabled = posInVs===0;
   ge('QTitle').innerHTML='<span class="qt">'+esc(q.q)+'</span>';
   ge('QHelp').innerHTML = q.h ? '<p class="qh">'+esc(q.h)+'</p>' : '';
+  if(q.multi && !Array.isArray(dans[q.k])) dans[q.k] = [];
   var sel = dans[q.k];
+  var isOn = function(o){ return q.multi ? sel.indexOf(o)!==-1 : sel===o; };
   ge('QOpts').innerHTML = '<div class="opts">'+q.o.map(function(o){
-    return '<button type="button" class="opt'+(sel===o?' on':'')+'" data-v="'+esc(o)+'">'+esc(o)+'</button>';
+    return '<button type="button" class="opt'+(isOn(o)?' on':'')+'" data-v="'+esc(o)+'">'+esc(o)+'</button>';
   }).join('')+'</div>';
   ge('QOpts').querySelectorAll('.opt').forEach(function(b){
     b.onclick=function(){
-      dans[q.k]=b.getAttribute('data-v');
-      ge('QOpts').querySelectorAll('.opt').forEach(function(x){x.classList.toggle('on',x===b)});
+      var v = b.getAttribute('data-v');
+      if(q.multi){
+        var arr = dans[q.k];
+        var excl = q.exclusive || [];
+        if(excl.indexOf(v)!==-1){
+          /* "없음"류 배타 옵션을 누르면 다른 선택은 모두 해제 */
+          arr = (arr.indexOf(v)!==-1) ? [] : [v];
+        } else {
+          /* 일반 옵션을 누르면 배타 옵션은 자동 해제하고, 자기 자신은 토글 */
+          arr = arr.filter(function(x){ return excl.indexOf(x)===-1; });
+          var idx = arr.indexOf(v);
+          if(idx!==-1) arr.splice(idx,1); else arr.push(v);
+        }
+        dans[q.k] = arr;
+      } else {
+        dans[q.k]=v;
+      }
+      ge('QOpts').querySelectorAll('.opt').forEach(function(x){
+        x.classList.toggle('on', isOn(x.getAttribute('data-v')));
+      });
     };
   });
 }

@@ -6,6 +6,14 @@
 /* Claude API 호출(+ JSON 파싱 실패 시 1회 재시도)이 시간이 걸릴 수 있어 함수 최대 실행시간을 넉넉히 잡음 */
 export const maxDuration = 180;
 
+/* 심화진단의 일부 문항(부양·기여, 부모 방임 이력, 갈등 유형)은 복수선택이 가능해 deep[key]가
+   배열로 들어올 수 있음. 기존 코드가 전부 문자열 비교/보간을 전제로 하므로, 배열이면 콤마로
+   합쳐 문자열로 평탄화해서 하위 로직(===비교, 템플릿 삽입)이 그대로 동작하게 함. */
+function joinAns(v) {
+  if (Array.isArray(v)) return v.length ? v.join(', ') : null;
+  return v || null;
+}
+
 /* ── 20개 유형 매칭 ── */
 const TYPES = {
   T01:'배우자와 자녀가 있는 일반 상속',
@@ -218,7 +226,7 @@ function buildSimulation(deep) {
     realEstateCount: deep.realEstateCount || null,
     overseasAssetType: deep.overseasAssetType || null,
     spouseNationality: deep.spouseNationality || null,
-    parentNeglect: deep.parentNeglect || null,
+    parentNeglect: joinAns(deep.parentNeglect),
     childrenNationality: deep.childrenNationality || null,
     predeceasedChild: deep.predeceasedChild || null,
     grandchildrenNationality: deep.grandchildrenNationality || null,
@@ -227,8 +235,8 @@ function buildSimulation(deep) {
     giftToHeir, giftAmountEok, priorGiftTiming: deep.priorGiftTiming || null,
     businessShare: deep.businessShare || null,
     foreignNatChildren: deep.foreignNatChildren || null,
-    caregivingContribution: deep.caregivingContribution || null,
-    conflictDetail: deep.conflictDetail || null,
+    caregivingContribution: joinAns(deep.caregivingContribution),
+    conflictDetail: joinAns(deep.conflictDetail),
     expertNeed: deep.expertNeed || null
   };
 }
