@@ -202,7 +202,7 @@ var Q=[
    h:'부양해준 자녀, 더 어려운 자녀 등 이유는 다양할 수 있습니다. 솔직하게 답해주세요.',
    o:[{l:'없음 — 균등하게 나눌 생각',s:4},{l:'있음 — 아직 확신은 없음',s:16},{l:'있음 — 이미 마음을 정함',s:20},{l:'아직 생각해보지 않음',s:10}]},
   {t:'multi',k:'assetTypes',q:'아래 중 보유한 재산이 있나요?',h:'부동산, 주식, 코인 등 해당하는 것을 모두 선택해주세요.',ex:['none'],o:[{v:'realestate',l:'부동산(주택·토지·상가 등)',s:0},{v:'kr_stock',l:'국내 주식·펀드',s:2},{v:'overseas_stock',l:'미국·홍콩 등 해외 주식',s:6},{v:'crypto',l:'암호화폐',s:6},{v:'business',l:'사업체·법인 지분',s:0},{v:'other',l:'기타',s:2},{v:'none',l:'해당없음',s:0}]},
-  {t:'multi',k:'assetPresence',q:'보유한 부동산은 어떤 유형인가요?',h:'여러 개 동시 선택 가능합니다.',ex:['none','unknown'],o:[{v:'house',l:'주택',s:5},{v:'land',l:'토지',s:8},{v:'incomeRealEstate',l:'수익형 부동산(상가·오피스텔·펜션)',s:8},{v:'factory',l:'공장·창고',s:8},{v:'otherRealEstate',l:'기타 부동산',s:5},{v:'none',l:'해당 없음',s:0},{v:'unknown',l:'정확히 모르겠음',s:8}],
+  {t:'multi',k:'assetPresence',q:'보유한 부동산은 어떤 유형인가요?',h:'여러 개 동시 선택 가능합니다.',ex:['unknown'],o:[{v:'house',l:'주택',s:5},{v:'land',l:'토지',s:8},{v:'incomeRealEstate',l:'수익형 부동산(상가·오피스텔·펜션)',s:8},{v:'factory',l:'공장·창고',s:8},{v:'otherRealEstate',l:'기타',s:5},{v:'unknown',l:'정확히 모르겠음',s:8}],
    showIf:function(a){ return Array.isArray(a.assetTypes) && a.assetTypes.indexOf('realestate')>=0; }},
   {t:'single',k:'gift',q:'과거에 특정 가족에게 더 많이 준 재산이 있나요?',h:'증여, 명의 이전, 큰 금액 지원 등을 떠올려 답해주세요.',o:[{l:'없음',s:4},{l:'일부 있음',s:16},{l:'상당히 있음',s:26},{l:'정확히 모르겠음',s:14}]},
   {t:'single',k:'business',q:'가족 사업, 지분, 임대수익처럼 나누기 복잡한 재산이 있나요?',h:'사업체, 법인 지분, 공동명의, 임대수익 등을 포함해 생각해주세요.',o:[{l:'없음',s:3},{l:'조금 있음',s:12},{l:'중요한 비중을 차지함',s:24},{l:'정확히 모르겠음',s:12}]},
