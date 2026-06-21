@@ -2,9 +2,9 @@
  * 안심상속 v2: 고객 상담 요청 통합 API
  * 함수 개수 절약을 위해 consultation-request / get-bids / select-bid를 1개로 통합
  *
- * POST /api/consultation  body:{action:'create', ...}              → 상담 요청 작성
- * GET  /api/consultation?action=bids&token=xxx                     → 받은 입찰 목록 조회
- * POST /api/consultation  body:{action:'select', token, bid_id}    → 입찰 선택
+ * POST /api/consultation  body:{action:'create', ...}                              → 상담 요청 작성
+ * GET  /api/consultation?action=bids&token=xxx                                     → 받은 입찰 목록 조회
+ * POST /api/consultation  body:{action:'select', token, bid_id, name, phone}       → 입찰 선택 + 연락처 전달
  */
 
 const SUPABASE_URL = (process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL || '').replace(/\/$/, '');
@@ -18,14 +18,23 @@ function sbHeaders(extra) {
   };
 }
 
+/* 균등 노출을 위한 단순 셔플(Fisher-Yates). 항상 먼저 입찰한 사람이 맨 위에 뜨면
+   "먼저 본 사람이 유리"한 위치편향이 생겨 응답속도만으로 승패가 갈릴 수 있음 — 그래서 매번 무작위 순서로 보여줌. */
+function shuffle(arr) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
 async function handleCreate(req, res) {
   const { situation_summary, preferred_method, region, budget_range, customer_email, matched_types } = req.body || {};
   if (!situation_summary || !customer_email) {
     return res.status(400).json({ ok: false, message: '필수 항목이 누락되었습니다.' });
   }
 
-  /* 주의: consultation_requests 테이블 실제 컬럼은 customer_email (customer_session 아님),
-     report_order_id 컬럼은 테이블에 없음 — 둘 다 이전 버전에서 컬럼명이 안 맞아 insert가 항상 실패하던 원인. */
   const insertRes = await fetch(`${SUPABASE_URL}/rest/v1/consultation_requests`, {
     method: 'POST',
     headers: sbHeaders({ 'Content-Type': 'application/json', 'Prefer': 'return=representation' }),
@@ -56,26 +65,29 @@ async function handleGetBids(req, res) {
   const request = requests[0];
   if (!request) return res.status(404).json({ ok: false, message: '유효하지 않은 접근입니다.' });
 
-  /* career_years는 experts 테이블에 없는 컬럼이라 제거 (있으면 PostgREST가 이 쿼리 자체를 실패시킴) */
-  const bidsRes = await fetch(`${SUPABASE_URL}/rest/v1/bids?request_id=eq.${request.id}&select=*,experts(name,office_name,type,intro)&order=created_at.asc`, { headers: sbHeaders() });
+  const bidsRes = await fetch(`${SUPABASE_URL}/rest/v1/bids?request_id=eq.${request.id}&select=*,experts(name,office_name,type,intro)`, { headers: sbHeaders() });
   const bids = bidsRes.ok ? await bidsRes.json() : [];
 
-  return res.status(200).json({ ok: true, request, bids });
+  /* 시간순이 아니라 무작위 순서로 보여줘서, 먼저 입찰했다는 이유만으로 항상 상단에 노출되는 위치편향을 막음. */
+  return res.status(200).json({ ok: true, request, bids: shuffle(bids) });
 }
 
 async function handleSelect(req, res) {
-  const { token, bid_id } = req.body || {};
-  if (!token || !bid_id) return res.status(400).json({ ok: false, message: '필수 항목이 누락되었습니다.' });
+  const { token, bid_id, name, phone } = req.body || {};
+  if (!token || !bid_id || !name || !phone) {
+    return res.status(400).json({ ok: false, message: '이름과 연락처를 입력해주세요.' });
+  }
 
   const reqRes = await fetch(`${SUPABASE_URL}/rest/v1/consultation_requests?access_token=eq.${token}&select=id,status`, { headers: sbHeaders() });
   const requests = await reqRes.json();
   const request = requests[0];
   if (!request) return res.status(404).json({ ok: false, message: '유효하지 않은 접근입니다.' });
 
+  /* 연락처는 선택 시점에만 받아 저장 — 입찰 비교 단계에서는 고객 신원이 전문가에게 노출되지 않음. */
   await fetch(`${SUPABASE_URL}/rest/v1/consultation_requests?id=eq.${request.id}`, {
     method: 'PATCH',
     headers: sbHeaders({ 'Content-Type': 'application/json' }),
-    body: JSON.stringify({ status: 'closed', selected_bid_id: bid_id })
+    body: JSON.stringify({ status: 'closed', selected_bid_id: bid_id, customer_name: name, customer_phone: phone })
   });
   await fetch(`${SUPABASE_URL}/rest/v1/bids?id=eq.${bid_id}`, {
     method: 'PATCH',

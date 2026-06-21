@@ -3,6 +3,7 @@
  * 함수 개수 절약을 위해 expert-apply / expert-requests / submit-bid를 1개로 통합
  *
  * GET  /api/expert?action=requests&token=xxx        → 매칭된 상담 요청 목록
+ * GET  /api/expert?action=mybids&token=xxx           → 내가 제출한 입찰 현황(선택된 건은 고객 연락처 포함)
  * POST /api/expert  body:{action:'apply', ...}       → 전문가 등록 신청
  * POST /api/expert  body:{action:'bid', token, request_id, ...} → 입찰 제출
  */
@@ -10,12 +11,27 @@
 const SUPABASE_URL = (process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL || '').replace(/\/$/, '');
 const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
+/* 한 요청당 동시에 받을 수 있는 입찰 수 상한. 너무 많으면 고객도 비교 피로감을 느끼고,
+   전문가 입장에서도 당첨 확률이 지나치게 낮아져 이탈 요인이 됨. */
+const MAX_BIDS_PER_REQUEST = 8;
+
 function sbHeaders(extra) {
   return {
     'apikey': SUPABASE_SERVICE_KEY,
     'Authorization': `Bearer ${SUPABASE_SERVICE_KEY}`,
     ...(extra || {})
   };
+}
+
+/* Fisher-Yates 셔플: 노출 순서를 매 요청마다 무작위로 섞어, 특정 전문가가 항상 목록 상단에
+   고정 노출되는 일이 없도록 함(균등 노출 원칙 — 로톡 등 기존 법률플랫폼 선례 참고). */
+function shuffle(arr) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
 }
 
 async function handleApply(req, res) {
@@ -64,6 +80,13 @@ async function handleListRequests(req, res) {
   const reqRes = await fetch(`${SUPABASE_URL}/rest/v1/consultation_requests?status=eq.open&select=*&order=created_at.desc`, { headers: sbHeaders() });
   const allRequests = await reqRes.json();
 
+  /* 요청별 현재 입찰 수를 한 번에 조회해서, 이미 상한(MAX_BIDS_PER_REQUEST)에 도달한 요청은
+     더 이상 노출하지 않음 — 한 요청에 입찰이 쏠려서 다른 요청들 기회가 줄어드는 것을 방지. */
+  const bidCountsRes = await fetch(`${SUPABASE_URL}/rest/v1/bids?select=request_id`, { headers: sbHeaders() });
+  const allBidsForCount = bidCountsRes.ok ? await bidCountsRes.json() : [];
+  const bidCountByRequest = {};
+  allBidsForCount.forEach(b => { bidCountByRequest[b.request_id] = (bidCountByRequest[b.request_id] || 0) + 1; });
+
   const bidsRes = await fetch(`${SUPABASE_URL}/rest/v1/bids?expert_id=eq.${expert.id}&select=request_id`, { headers: sbHeaders() });
   const myBids = bidsRes.ok ? await bidsRes.json() : [];
   const biddedIds = new Set(myBids.map(b => b.request_id));
@@ -71,12 +94,48 @@ async function handleListRequests(req, res) {
   const specialties = expert.specialties || [];
   const matched = allRequests.filter(r => {
     if (biddedIds.has(r.id)) return false;
+    if ((bidCountByRequest[r.id] || 0) >= MAX_BIDS_PER_REQUEST) return false;
     if (!specialties.length) return true;
     const types = r.matched_types || [];
     return specialties.some(s => types.some(t => t.includes(s)) || (r.situation_summary || '').includes(s));
   });
 
-  return res.status(200).json({ ok: true, expert: { id: expert.id, name: expert.name, type: expert.type }, requests: matched });
+  return res.status(200).json({ ok: true, expert: { id: expert.id, name: expert.name, type: expert.type }, requests: shuffle(matched) });
+}
+
+async function handleMyBids(req, res) {
+  const { token } = req.query;
+  if (!token) return res.status(400).json({ ok: false, message: '접근 토큰이 필요합니다.' });
+
+  const expertRes = await fetch(`${SUPABASE_URL}/rest/v1/experts?access_token=eq.${token}&select=id`, { headers: sbHeaders() });
+  const experts = await expertRes.json();
+  const expert = experts[0];
+  if (!expert) return res.status(404).json({ ok: false, message: '유효하지 않은 접근입니다.' });
+
+  /* 선택(selected)된 입찰에 한해서만 고객 연락처가 함께 옴 — 선택 안 된 건은 굳이 고객 정보를
+     전문가에게 노출할 이유가 없음(개인정보 최소수집 원칙). */
+  const bidsRes = await fetch(
+    `${SUPABASE_URL}/rest/v1/bids?expert_id=eq.${expert.id}&select=*,consultation_requests(situation_summary,customer_name,customer_phone,customer_email,status)&order=created_at.desc`,
+    { headers: sbHeaders() }
+  );
+  const bids = bidsRes.ok ? await bidsRes.json() : [];
+
+  const sanitized = bids.map(b => {
+    const cr = b.consultation_requests || {};
+    const isSelected = b.status === 'selected';
+    return {
+      id: b.id,
+      proposed_fee: b.proposed_fee,
+      status: b.status,
+      created_at: b.created_at,
+      situation_summary: cr.situation_summary || null,
+      customer_name: isSelected ? (cr.customer_name || null) : null,
+      customer_phone: isSelected ? (cr.customer_phone || null) : null,
+      customer_email: isSelected ? (cr.customer_email || null) : null
+    };
+  });
+
+  return res.status(200).json({ ok: true, bids: sanitized });
 }
 
 async function handleSubmitBid(req, res) {
@@ -91,6 +150,14 @@ async function handleSubmitBid(req, res) {
   if (!expert) return res.status(404).json({ ok: false, message: '유효하지 않은 접근입니다.' });
   if (expert.subscription_status !== 'active') {
     return res.status(403).json({ ok: false, message: '구독이 활성화되지 않았습니다.' });
+  }
+
+  /* 마지막 안전장치: 제출 시점에 이미 상한에 도달했다면 거절(목록 조회 이후 다른 전문가가
+     먼저 채웠을 수 있는 경쟁 상황 대비). */
+  const countRes = await fetch(`${SUPABASE_URL}/rest/v1/bids?request_id=eq.${request_id}&select=id`, { headers: sbHeaders() });
+  const existing = countRes.ok ? await countRes.json() : [];
+  if (existing.length >= MAX_BIDS_PER_REQUEST) {
+    return res.status(409).json({ ok: false, message: '이미 입찰 인원이 마감된 요청입니다.' });
   }
 
   const insertRes = await fetch(`${SUPABASE_URL}/rest/v1/bids`, {
@@ -123,6 +190,7 @@ export default async function handler(req, res) {
     if (req.method === 'GET') {
       const action = req.query.action;
       if (action === 'requests') return await handleListRequests(req, res);
+      if (action === 'mybids') return await handleMyBids(req, res);
       return res.status(400).json({ ok: false, message: '알 수 없는 action입니다.' });
     }
     if (req.method === 'POST') {

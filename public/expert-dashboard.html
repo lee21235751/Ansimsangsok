@@ -35,6 +35,19 @@ button,input,textarea{font:inherit}
 .st.ok{color:#065f46}
 .st.er{color:#b91c1c}
 .notice{padding:14px;border-radius:14px;background:#fff3f0;border:1px solid rgba(160,45,25,.22);color:#7a2c1c;font-size:.9rem;line-height:1.6;font-weight:700;margin-bottom:14px}
+.tabs{display:flex;gap:8px;margin-bottom:16px}
+.tab{flex:1;border:2px solid rgba(14,53,41,.18);background:#fff;color:var(--MU);border-radius:14px;padding:11px;font-weight:900;cursor:pointer;font-size:.92rem;text-align:center}
+.tab.on{background:var(--FD);color:#fff8dc;border-color:var(--FD)}
+.mbcard{background:#fff;border:2px solid rgba(14,53,41,.16);border-radius:16px;padding:16px;margin-bottom:12px}
+.mbstatus{display:inline-flex;border-radius:999px;padding:5px 11px;font-weight:900;font-size:.8rem;margin-bottom:8px}
+.mbstatus.submitted{background:#f0f9ff;color:#0c4a6e}
+.mbstatus.selected{background:#ecfdf5;color:#065f46}
+.mbstatus.not_selected{background:#f1f3f0;color:var(--MU)}
+.mbsum{color:var(--FD);font-weight:750;line-height:1.6;font-size:.94rem;margin-bottom:6px}
+.mbfee{color:var(--MU);font-size:.88rem;font-weight:700;margin-bottom:8px}
+.contactbox{margin-top:10px;padding:13px;border-radius:14px;background:#fff8e8;border:2px solid rgba(215,173,85,.5)}
+.contactbox b{display:block;color:var(--FD);font-size:.86rem;font-weight:950;margin-bottom:6px}
+.contactbox div{color:var(--FD);font-weight:700;font-size:.94rem;line-height:1.6}
 </style>
 </head>
 <body>
@@ -47,8 +60,14 @@ button,input,textarea{font:inherit}
 </header>
 
 <main class="main">
-<div class="w" id="content">
+<div class="w">
+<div class="tabs">
+<button class="tab on" type="button" id="TabNew">새 요청</button>
+<button class="tab" type="button" id="TabMine">내 입찰 현황</button>
+</div>
+<div id="content">
 <div class="empty">목록을 불러오는 중입니다...</div>
+</div>
 </div>
 </main>
 
@@ -57,6 +76,19 @@ const params = new URLSearchParams(location.search);
 const token = params.get('token');
 const content = document.getElementById('content');
 const greet = document.getElementById('greet');
+
+const tabNew = document.getElementById('TabNew');
+const tabMine = document.getElementById('TabMine');
+let myBidsLoaded = false;
+
+tabNew.addEventListener('click', ()=>{
+  tabNew.classList.add('on'); tabMine.classList.remove('on');
+  loadRequests();
+});
+tabMine.addEventListener('click', ()=>{
+  tabMine.classList.add('on'); tabNew.classList.remove('on');
+  loadMyBids();
+});
 
 if(!token){
   greet.textContent = '접근 오류';
@@ -114,6 +146,45 @@ function renderRequest(r){
 }
 
 function esc(s){ return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+async function loadMyBids(){
+  content.innerHTML = '<div class="empty">불러오는 중...</div>';
+  try{
+    const res = await fetch('/api/expert?action=mybids&token=' + encodeURIComponent(token));
+    const data = await res.json();
+    if(!data.ok){
+      content.innerHTML = '<div class="notice">' + (data.message || '불러올 수 없습니다.') + '</div>';
+      return;
+    }
+    if(!data.bids || !data.bids.length){
+      content.innerHTML = '<div class="card"><div class="empty">아직 제출한 입찰이 없습니다.</div></div>';
+      return;
+    }
+    content.innerHTML = data.bids.map(renderMyBid).join('');
+  } catch(err){
+    content.innerHTML = '<div class="notice">목록을 불러오는 중 오류가 발생했습니다.</div>';
+  }
+}
+
+function renderMyBid(b){
+  const statusLabel = b.status === 'selected' ? '✓ 선택됨' : b.status === 'not_selected' ? '미선택' : '검토 중';
+  let html = `
+  <div class="mbcard">
+    <div class="mbstatus ${esc(b.status)}">${statusLabel}</div>
+    <div class="mbsum">${esc(b.situation_summary || '상황 요약 없음')}</div>
+    <div class="mbfee">제안 상담료: ${esc(b.proposed_fee || '-')}</div>`;
+  if(b.status === 'selected'){
+    html += `
+    <div class="contactbox">
+      <b>고객님이 선택하셨습니다 — 아래로 직접 연락해주세요</b>
+      <div>${esc(b.customer_name || '-')}</div>
+      <div>${esc(b.customer_phone || '-')}</div>
+      ${b.customer_email ? '<div>'+esc(b.customer_email)+'</div>' : ''}
+    </div>`;
+  }
+  html += `</div>`;
+  return html;
+}
 
 function attachHandlers(){
   content.querySelectorAll('.rcard').forEach(card => {
