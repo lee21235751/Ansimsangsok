@@ -15,6 +15,27 @@ const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
    전문가 입장에서도 당첨 확률이 지나치게 낮아져 이탈 요인이 됨. */
 const MAX_BIDS_PER_REQUEST = 8;
 
+/* expert-signup.html의 전문분야 태그(유류분 등)는 한글 짧은 태그인데, 실제 진단 결과의
+   matched_types는 generate-report.js의 TYPES 딕셔너리에서 나온 풀어쓴 문장형 라벨임
+   (예: "해외 거주 가족·해외 재산이 관련된 상속"). 태그 글자가 그 문장 안에 통째로
+   안 들어있는 경우가 많아(특히 해외상속/사업승계/상속분쟁/상속세) 단순 substring 비교로는
+   매칭이 거의 안 됨 — 그래서 태그별로 실제 라벨에 등장하는 키워드를 명시적으로 매핑함.
+   generate-report.js의 TYPES 딕셔너리가 바뀌면 이 매핑도 같이 점검할 것. */
+const SPECIALTY_KEYWORDS = {
+  '유류분': ['유류분'],
+  '재혼가정': ['재혼가정', '전혼 자녀'],
+  '해외상속': ['해외 거주', '해외 재산'],
+  '사업승계': ['사업체', '지분', '법인'],
+  '상속분쟁': ['갈등', '연락이 끊긴'],
+  '상속세': ['세금', '절세', '상속세']
+};
+
+function specialtyMatches(specialty, matchedTypeLabels, situationSummary) {
+  const keywords = SPECIALTY_KEYWORDS[specialty] || [specialty];
+  const haystack = matchedTypeLabels.join(' ') + ' ' + (situationSummary || '');
+  return keywords.some(k => haystack.includes(k));
+}
+
 function sbHeaders(extra) {
   return {
     'apikey': SUPABASE_SERVICE_KEY,
@@ -97,7 +118,7 @@ async function handleListRequests(req, res) {
     if ((bidCountByRequest[r.id] || 0) >= MAX_BIDS_PER_REQUEST) return false;
     if (!specialties.length) return true;
     const types = r.matched_types || [];
-    return specialties.some(s => types.some(t => t.includes(s)) || (r.situation_summary || '').includes(s));
+    return specialties.some(s => specialtyMatches(s, types, r.situation_summary));
   });
 
   return res.status(200).json({ ok: true, expert: { id: expert.id, name: expert.name, type: expert.type }, requests: shuffle(matched) });
