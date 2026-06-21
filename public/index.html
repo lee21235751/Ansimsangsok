@@ -200,7 +200,7 @@ var Q=[
   {t:'single',k:'unequalIntent',
    q:function(a){return a.perspective==='부모님 또는 배우자의 상속을 가족 입장에서 준비'?'부모님(또는 배우자)이 특정 자녀(가족)에게 더 많이 남기고 싶어하는 마음이 있나요?':'특정 자녀(또는 특정 가족)에게 더 많이 남기고 싶은 마음이 있나요?'},
    h:'부양해준 자녀, 더 어려운 자녀 등 이유는 다양할 수 있습니다. 솔직하게 답해주세요.',
-   o:[{l:'있음 — 이미 마음을 정함',s:20},{l:'있음 — 아직 확신은 없음',s:16},{l:'없음 — 균등하게 나눌 생각',s:4},{l:'아직 생각해보지 않음',s:10}]},
+   o:[{l:'없음 — 균등하게 나눌 생각',s:4},{l:'있음 — 아직 확신은 없음',s:16},{l:'있음 — 이미 마음을 정함',s:20},{l:'아직 생각해보지 않음',s:10}]},
   {t:'multi',k:'assetTypes',q:'아래 중 보유한 재산이 있나요?',h:'부동산, 주식, 코인 등 해당하는 것을 모두 선택해주세요.',ex:['none'],o:[{v:'realestate',l:'부동산(주택·토지·상가 등)',s:0},{v:'kr_stock',l:'국내 주식·펀드',s:2},{v:'overseas_stock',l:'미국·홍콩 등 해외 주식',s:6},{v:'crypto',l:'암호화폐',s:6},{v:'business',l:'사업체·법인 지분',s:0},{v:'none',l:'특별히 없음',s:0}]},
   {t:'multi',k:'assetPresence',q:'보유한 부동산은 어떤 유형인가요?',h:'여러 개 동시 선택 가능합니다.',ex:['none','unknown'],o:[{v:'house',l:'주택',s:5},{v:'land',l:'토지',s:8},{v:'incomeRealEstate',l:'수익형 부동산(상가·오피스텔·펜션)',s:8},{v:'factory',l:'공장·창고',s:8},{v:'otherRealEstate',l:'기타 부동산',s:5},{v:'none',l:'해당 없음',s:0},{v:'unknown',l:'정확히 모르겠음',s:8}],
    showIf:function(a){ return Array.isArray(a.assetTypes) && a.assetTypes.indexOf('realestate')>=0; }},
