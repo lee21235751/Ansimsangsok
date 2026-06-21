@@ -587,7 +587,7 @@ export default async function handler(req, res) {
     }
     try {
       const checkRes = await fetch(
-        sbUrlCheck + '/rest/v1/paid_reports?order_id=eq.' + encodeURIComponent(orderId) + '&select=status,report_generated',
+        sbUrlCheck + '/rest/v1/paid_reports?order_id=eq.' + encodeURIComponent(orderId) + '&select=status,report_generated,report_json,score,level,matched_types,created_at',
         { headers: { apikey: sbKeyCheck, Authorization: 'Bearer ' + sbKeyCheck } }
       );
       if (!checkRes.ok) {
@@ -602,7 +602,23 @@ export default async function handler(req, res) {
         return res.status(402).json({ok:false,message:'결제가 확인되지 않았습니다. 결제 후 다시 시도해주세요.'});
       }
       if (record.report_generated) {
-        return res.status(409).json({ok:false,message:'이미 이 결제로 리포트가 발급되었습니다.'});
+        /* 모바일에서 리포트 생성 중 다른 앱으로 나갔다 오는 등으로 재요청이 들어와도 에러 없이
+           기존에 저장해둔 리포트를 그대로 돌려줌. 결제 1건당 리포트는 같은 내용을 몇 번이든
+           다시 받을 수 있어야 함 — 단, 결제일로부터 30일이 지나면 더 이상 제공하지 않음. */
+        const THIRTY_DAYS_MS = 30 * 24 * 60 * 60 * 1000;
+        const createdAt = record.created_at ? new Date(record.created_at).getTime() : 0;
+        if (createdAt && (Date.now() - createdAt) > THIRTY_DAYS_MS) {
+          return res.status(410).json({ok:false,message:'발급일로부터 30일이 지나 더 이상 조회할 수 없습니다.'});
+        }
+        if (!record.report_json) {
+          /* 저장 단계에서 실패했던 구버전 데이터 등 report_json이 없는 예외 케이스 */
+          return res.status(409).json({ok:false,message:'이미 이 결제로 리포트가 발급되었으나 저장된 내용을 찾을 수 없습니다. 안심상속에 문의해주세요.'});
+        }
+        return res.status(200).json({
+          ok:true,
+          report:record.report_json,
+          meta:{matchedTypes:record.matched_types||[],score:record.score||0,level:record.level||'',generatedAt:record.report_json.generated_at}
+        });
       }
     } catch (checkErr) {
       console.error('결제 검증 중 오류:', checkErr.message);

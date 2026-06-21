@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>내 리포트 다시 보기 | 안심상속</title>
+<meta name="robots" content="noindex,nofollow"/>
+<style>
+:root{--FD:#06251d;--F:#0e3529;--G:#d7ad55;--GL:#f1d586;--MU:#5e6b64;--LN:rgba(14,53,41,.15)}
+*,*::before,*::after{box-sizing:border-box;margin:0}
+body{font-family:system-ui,-apple-system,sans-serif;color:#12231d;word-break:keep-all;background:#fffdf6}
+.w{width:min(560px,calc(100% - 32px));margin:0 auto}
+.dn{display:none!important}
+.hdr{background:linear-gradient(145deg,#082d22,#163b2a 60%,#24381f);color:#fffdf5;padding:32px 0 28px}
+.badge{display:inline-flex;border:1px solid rgba(215,173,85,.6);color:var(--GL);border-radius:999px;padding:7px 13px;font-weight:900;font-size:.85rem;margin-bottom:14px}
+.hdr h1{font-size:clamp(1.5rem,6vw,2rem);font-weight:950;letter-spacing:-.05em;line-height:1.25;margin-bottom:8px}
+.hdr p{color:rgba(255,253,245,.75);font-size:.97rem;font-weight:700}
+.body{padding:24px 0 60px}
+.sec{background:#fff;border:1px solid var(--LN);border-radius:20px;padding:clamp(18px,4vw,26px);margin-bottom:14px}
+.fl{margin-bottom:16px}
+.fl label{display:block;margin-bottom:7px;font-weight:900;color:var(--FD);font-size:.95rem}
+.fl input{width:100%;border:2px solid rgba(14,53,41,.2);border-radius:14px;min-height:54px;padding:12px 16px;color:var(--FD);background:#fff;font-weight:650;font-size:1rem}
+.hint{color:var(--MU);font-size:.86rem;line-height:1.6;font-weight:650;margin-bottom:16px}
+.err{min-height:20px;margin-bottom:8px;font-size:.88rem;font-weight:800;color:#a02d19}
+.bg{border:0;background:linear-gradient(135deg,#f5dc8a,#c99938);color:#1c221c;border-radius:18px;padding:15px 22px;font-weight:950;box-shadow:0 12px 28px rgba(0,0,0,.22);cursor:pointer;min-height:54px;width:100%;font-size:1.05rem;touch-action:manipulation}
+.bg[disabled]{opacity:.5;cursor:default}
+.notice{padding:14px;border-radius:14px;background:#f7faf7;border:1px solid rgba(31,77,58,.18);color:#334155;font-size:.86rem;line-height:1.65;font-weight:650}
+.loading{min-height:50vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;color:var(--MU)}
+.spin{width:40px;height:40px;border:3px solid rgba(14,53,41,.1);border-top-color:var(--G);border-radius:50%;animation:sp .8s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+.loading p{font-weight:800;font-size:1rem;color:var(--FD)}
+</style>
+</head>
+<body>
+
+<header class="hdr"><div class="w">
+<div class="badge">안심상속</div>
+<h1>내 상세리포트 다시 보기</h1>
+<p>결제일로부터 30일간, 접속코드만 있으면 언제든 다시 받아보실 수 있습니다.</p>
+</div></header>
+
+<div class="body"><div class="w">
+
+<div id="Loading" class="loading dn">
+  <div class="spin"></div>
+  <p>리포트를 불러오는 중입니다</p>
+</div>
+
+<div id="FormSec" class="sec">
+<form id="F">
+<div class="fl">
+<label for="Code">접속코드(주문번호)</label>
+<input id="Code" type="text" lang="en" inputmode="text" autocomplete="off" placeholder="예: ansim_1750000000000_ab12cd34" required/>
+</div>
+<p class="hint">결제 완료 후 리포트 페이지에 표시된 링크를 북마크해두셨다면, 그 링크의 주소창 끝부분(order= 뒤의 값)이 접속코드입니다. 링크를 그대로 즐겨찾기 해두셨다면 이 페이지 없이 바로 리포트로 이동합니다.</p>
+<div class="err" id="ErrMsg"></div>
+<button type="submit" class="bg" id="GoBtn">리포트 보기</button>
+</form>
+</div>
+
+<div class="notice">접속코드는 결제 1건당 하나이며, 발급일로부터 30일이 지나면 더 이상 조회할 수 없습니다. 코드를 분실하셨다면 안심상속에 문의해주세요.</div>
+
+</div></div>
+
+<script>
+function ge(id){return document.getElementById(id)}
+
+function goToReport(code){
+  try{
+    sessionStorage.setItem('ansim_report_request', JSON.stringify({
+      orderId: code, answers:{}, score:0, deepAnswers:null
+    }));
+  }catch(e){}
+  location.href = '/report.html';
+}
+
+(function(){
+  var params = new URLSearchParams(location.search);
+  var orderFromUrl = params.get('order');
+  if(orderFromUrl){
+    ge('FormSec').classList.add('dn');
+    ge('Loading').classList.remove('dn');
+    goToReport(orderFromUrl);
+    return;
+  }
+  ge('F').addEventListener('submit', function(e){
+    e.preventDefault();
+    var code = ge('Code').value.trim();
+    ge('ErrMsg').textContent='';
+    if(!code){ ge('ErrMsg').textContent='접속코드를 입력해주세요.'; return; }
+    ge('GoBtn').disabled = true; ge('GoBtn').textContent='이동 중...';
+    goToReport(code);
+  });
+})();
+</script>
+</body>
+</html>
