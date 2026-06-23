@@ -84,7 +84,10 @@ body{font-family:system-ui,-apple-system,sans-serif;color:#12231d;word-break:kee
   <div class="loading">
     <div class="spin"></div>
     <p>유료 상세리포트를 생성하고 있습니다</p>
-    <small>약 2~3분 소요됩니다. 잠시만 기다려주세요.</small>
+    <small>약 1분 소요됩니다. 잠시만 기다려주세요.</small>
+    <div style="margin-top:8px;padding:14px 18px;background:#fff3cd;border:1.5px solid #e6a817;border-radius:14px;max-width:340px;text-align:center">
+      <p style="font-size:.95rem;font-weight:900;color:#7a4d00;line-height:1.6">⚠️ 이 화면을 벗어나거나 다른 앱으로 전환하시면<br>리포트 생성이 중단됩니다.</p>
+    </div>
   </div>
 </div>
 <div id="Err" class="w dn">
@@ -103,6 +106,16 @@ function ge(id){return document.getElementById(id)}
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
 function arr(v){return Array.isArray(v)?v:typeof v==='string'&&v.trim()?[v]:[]}
 function goExpert(){ location.href='/request-help.html'; }
+
+/* 생성 중 이탈 방지 — 완료/에러 시 해제 */
+function enableLeaveWarning(){
+  window._leaveWarning = true;
+  window.onbeforeunload = function(){ return '리포트 생성이 진행 중입니다. 이 페이지를 벗어나시겠습니까?'; };
+}
+function disableLeaveWarning(){
+  window._leaveWarning = false;
+  window.onbeforeunload = null;
+}
 
 function showErr(msg){
   ge('Loading').classList.add('dn');
@@ -264,6 +277,8 @@ async function run(){
     if(navigator.wakeLock) wakeLock=await navigator.wakeLock.request('screen');
   }catch(e){}
 
+  enableLeaveWarning();
+
   try{
     var res=await fetch('/api/generate-report',{
       method:'POST',
@@ -272,14 +287,16 @@ async function run(){
     });
     var data=await res.json().catch(function(){return{}});
     if(!res.ok||!data.ok)throw new Error(data.message||'리포트 생성 실패');
-    /* 성공 시 localStorage 백업 정리 */
+    /* 성공 시 localStorage 백업 정리 및 이탈 경고 해제 */
     try{localStorage.removeItem('ansim_report_request_backup')}catch(e){}
     try{localStorage.removeItem('ansim_pending_order')}catch(e){}
     try{sessionStorage.removeItem('ansim_report_request')}catch(e){}
     if(wakeLock){try{wakeLock.release()}catch(e){}}
+    disableLeaveWarning();
     render(data.report, req.orderId);
   }catch(e){
     if(wakeLock){try{wakeLock.release()}catch(e){}}
+    disableLeaveWarning();
     showErr(e.message||'리포트 생성 중 문제가 발생했습니다.')
   }
 }
