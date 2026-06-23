@@ -499,7 +499,7 @@ ${conditionalInstructions}`;
   }
 }
 
-규칙: JSON만 반환. 코드블록 없이.`;
+규칙: JSON만 반환. 코드블록 없이. 각 항목은 2~3문장으로 간결하게 작성하세요. 불필요하게 길게 쓰지 마세요.`;
 
   /* ── 파트 B: 실행 섹션 (documents + blind_spots + questions + next_steps) ── */
   const promptB = `${commonCtx}
@@ -534,16 +534,15 @@ ${conditionalInstructions}`;
   }
 }
 
-규칙: JSON만 반환. 코드블록 없이.`;
+규칙: JSON만 반환. 코드블록 없이. 각 항목은 2~3문장으로 간결하게 작성하세요. 불필요하게 길게 쓰지 마세요.`;
 
   const callPart = async (prompt, partName) => {
-    const maxTok = partName === 'partA' ? 6000 : 5000;
     const res = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey, 'anthropic-version': '2023-06-01' },
       body: JSON.stringify({
         model: 'claude-haiku-4-5-20251001',
-        max_tokens: maxTok,
+        max_tokens: 7000,
         system: systemMsg,
         messages: [{ role: 'user', content: prompt }]
       })
