@@ -61,8 +61,6 @@
       showError(result.data && result.data.message ? result.data.message : '결제 승인 처리 중 문제가 발생했습니다.');
       return;
     }
-    /* 결제 승인 성공 - 결제 완료 표시와 orderId를 진단 데이터에 병합해 심화설문으로 이동.
-       orderId는 이후 generate-report 호출 시 결제 검증용으로 사용됨. */
     try{
       sessionStorage.setItem('ansim_payment_done', JSON.stringify({
         orderId: orderId,
@@ -73,7 +71,16 @@
       var reqRaw = sessionStorage.getItem('ansim_report_request');
       var reqObj = reqRaw ? JSON.parse(reqRaw) : {};
       reqObj.orderId = orderId;
-      sessionStorage.setItem('ansim_report_request', JSON.stringify(reqObj));
+
+      var reqStr = JSON.stringify(reqObj);
+
+      /* sessionStorage: 탭 세션 유지용 */
+      sessionStorage.setItem('ansim_report_request', reqStr);
+
+      /* localStorage: 모바일에서 탭이 kill되어도 복구 가능하도록 이중 저장.
+         리포트 생성 완료 후 report.html에서 삭제됨. */
+      localStorage.setItem('ansim_report_request_backup', reqStr);
+      localStorage.setItem('ansim_pending_order', orderId);
     }catch(e){}
     document.getElementById('Title').textContent='결제가 완료되었습니다';
     document.getElementById('Sub').textContent='심화 설문으로 이동합니다.';

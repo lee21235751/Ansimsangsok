@@ -245,9 +245,25 @@ function render(d, orderId){
 async function run(){
   var raw=null;
   try{raw=sessionStorage.getItem('ansim_report_request')}catch(e){}
+
+  /* 모바일에서 탭이 kill된 후 돌아온 경우 localStorage 백업에서 복구 */
+  if(!raw){
+    try{raw=localStorage.getItem('ansim_report_request_backup')}catch(e){}
+    if(raw){
+      try{sessionStorage.setItem('ansim_report_request',raw)}catch(e){}
+    }
+  }
+
   if(!raw){showErr('진단 결과 데이터가 없습니다. 무료 진단을 먼저 완료해주세요.');return}
   var req;
   try{req=JSON.parse(raw)}catch(e){showErr('데이터 오류가 발생했습니다. 다시 시도해주세요.');return}
+
+  /* Wake Lock: 리포트 생성 중 화면이 꺼지거나 기기가 잠기는 것을 방지 */
+  var wakeLock=null;
+  try{
+    if(navigator.wakeLock) wakeLock=await navigator.wakeLock.request('screen');
+  }catch(e){}
+
   try{
     var res=await fetch('/api/generate-report',{
       method:'POST',
@@ -256,9 +272,16 @@ async function run(){
     });
     var data=await res.json().catch(function(){return{}});
     if(!res.ok||!data.ok)throw new Error(data.message||'리포트 생성 실패');
-    render(data.report, req.orderId);
+    /* 성공 시 localStorage 백업 정리 */
+    try{localStorage.removeItem('ansim_report_request_backup')}catch(e){}
+    try{localStorage.removeItem('ansim_pending_order')}catch(e){}
     try{sessionStorage.removeItem('ansim_report_request')}catch(e){}
-  }catch(e){showErr(e.message||'리포트 생성 중 문제가 발생했습니다.')}
+    if(wakeLock){try{wakeLock.release()}catch(e){}}
+    render(data.report, req.orderId);
+  }catch(e){
+    if(wakeLock){try{wakeLock.release()}catch(e){}}
+    showErr(e.message||'리포트 생성 중 문제가 발생했습니다.')
+  }
 }
 
 run();
