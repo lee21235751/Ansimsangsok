@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>심화설문 테스트 | 안심상속</title>
+<meta name="robots" content="noindex,nofollow"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0}
+body{font-family:-apple-system,sans-serif;background:#fffdf6;color:#06251d;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 20px;gap:16px}
+.badge{background:#06251d;color:#f1d586;border-radius:999px;padding:6px 14px;font-size:.8rem;font-weight:900}
+h1{font-size:1.3rem;font-weight:950;text-align:center;letter-spacing:-.04em}
+p{color:#5e6b64;font-size:.9rem;font-weight:700;text-align:center;line-height:1.6;max-width:360px}
+.card{background:#fff;border:2px solid rgba(14,53,41,.12);border-radius:20px;padding:20px;width:100%;max-width:380px}
+.card-title{font-size:.85rem;font-weight:900;color:#5e6b64;margin-bottom:10px}
+.scenario{display:flex;flex-direction:column;gap:6px}
+.s-btn{background:#f0f7f4;border:2px solid rgba(14,53,41,.15);border-radius:12px;padding:11px 14px;text-align:left;cursor:pointer;font-size:.88rem;font-weight:700;color:#06251d;line-height:1.5}
+.s-btn.on{background:#06251d;color:#f1d586;border-color:#06251d}
+.s-btn:hover:not(.on){background:#e8f5ef}
+.err{color:#a02d19;font-size:.86rem;font-weight:800;text-align:center;min-height:20px}
+.pay-btn{background:linear-gradient(135deg,#f5dc8a,#c99938);color:#1c221c;border:0;border-radius:18px;padding:16px;font-weight:950;font-size:1.05rem;cursor:pointer;width:100%;max-width:380px;box-shadow:0 12px 28px rgba(0,0,0,.18)}
+.pay-btn:disabled{opacity:.5;cursor:default}
+.notice{font-size:.78rem;color:#5e6b64;font-weight:650;text-align:center;max-width:340px;line-height:1.6}
+.test-card{background:#f0f9ff;border:1px solid rgba(12,74,110,.2);border-radius:12px;padding:14px;font-size:.82rem;color:#0c4a6e;font-weight:700;line-height:1.7;width:100%;max-width:380px}
+.test-card b{display:block;margin-bottom:4px}
+</style>
+<script src="https://js.tosspayments.com/v1/payment"></script>
+</head>
+<body>
+
+<div class="badge">🧪 심화설문 테스트 전용</div>
+<h1>심화설문 → 리포트 테스트</h1>
+<p>시나리오를 선택하고 결제하면<br>바로 심화설문 단계로 이동합니다.</p>
+
+<div class="card">
+<div class="card-title">테스트 시나리오 선택</div>
+<div class="scenario" id="Scenarios">
+  <button class="s-btn on" data-id="A" type="button">
+    🏠 A. 일반 (배우자+자녀2, 국내 부동산)
+  </button>
+  <button class="s-btn" data-id="B" type="button">
+    🌏 B. 복잡 (해외 자녀, 사업체 지분, 재혼)
+  </button>
+  <button class="s-btn" data-id="C" type="button">
+    👨‍👩‍👦 C. 분쟁 우려 (갈등 있음, 유류분 이슈)
+  </button>
+  <button class="s-btn" data-id="D" type="button">
+    🏢 D. 사업주 (법인 지분, 고액 자산)
+  </button>
+</div>
+</div>
+
+<div class="err" id="Err"></div>
+<button class="pay-btn" id="PayBtn" type="button" onclick="start()">결제 후 심화설문 시작하기</button>
+
+<div class="test-card">
+  <b>테스트 카드 (카드 직접 입력 선택 시)</b>
+  카드번호: 4330-0000-0000-0000<br/>
+  유효기간: 아무 값 (예: 12/26) / CVC: 아무 값
+</div>
+
+<p class="notice">실제 결제는 발생하지 않습니다.</p>
+
+<script>
+var TOSS_CLIENT_KEY = 'test_ck_oEjb0gm23PNx7RYKd7QvrpGwBJn5';
+var REPORT_PRICE = 49000;
+
+/* 시나리오별 미리 세팅할 무료진단 답변 */
+var SCENARIOS = {
+  A: {
+    label: '일반',
+    answers: {
+      perspective: '본인의 상속을 직접 준비',
+      family: '배우자+자녀 2명',
+      remarriage: ['none'],
+      foreignNatChildren: '0명',
+      assets: ['부동산', '예금'],
+      estateCount: '2채',
+      estateValue: '50억~100억',
+      financialAssets: '5억~10억',
+      debt: '없음',
+      business: '없음',
+      overseas: '없음',
+      will: '없음 — 아직 작성 안 함',
+      gift: '없음',
+      conflict: '없음',
+      unequalIntent: '있음 — 아직 확신은 없음',
+      documents: '거의 없음',
+      testatorHealth: '건강한 상태'
+    },
+    score: 65,
+    matchedTypes: ['배우자와 자녀가 있는 일반 상속', '부동산이 포함된 상속', '유언장이 없거나 확인이 필요한 상속']
+  },
+  B: {
+    label: '복잡',
+    answers: {
+      perspective: '본인의 상속을 직접 준비',
+      family: '배우자+자녀 2명',
+      remarriage: ['재혼 상태 — 현재 배우자와의 자녀 있음'],
+      foreignNatChildren: '전부 외국 시민권 또는 영주권',
+      assets: ['부동산', '예금', '해외 자산'],
+      estateCount: '3채 이상',
+      estateValue: '100억 이상',
+      financialAssets: '10억 이상',
+      debt: '없음',
+      business: '있음 — 법인 지분 보유',
+      overseas: '있음 — 해외에 금융자산 또는 부동산',
+      will: '없음 — 아직 작성 안 함',
+      gift: '있음 — 일부 자녀에게만',
+      conflict: '있음 — 분배 비율 이견',
+      unequalIntent: '있음 — 이미 마음을 정함',
+      documents: '일부 있음',
+      testatorHealth: '건강한 상태'
+    },
+    score: 85,
+    matchedTypes: ['배우자와 자녀가 있는 일반 상속', '해외 거주 가족·해외 재산이 관련된 상속', '사업체·지분·법인 관련 상속', '재혼가정 상속']
+  },
+  C: {
+    label: '분쟁',
+    answers: {
+      perspective: '본인의 상속을 직접 준비',
+      family: '배우자+자녀 3명',
+      remarriage: ['none'],
+      foreignNatChildren: '0명',
+      assets: ['부동산', '예금'],
+      estateCount: '2채',
+      estateValue: '30억~50억',
+      financialAssets: '1억~5억',
+      debt: '없음',
+      business: '없음',
+      overseas: '없음',
+      will: '없음 — 아직 작성 안 함',
+      gift: '있음 — 일부 자녀에게만',
+      conflict: '있음 — 분배 비율 이견',
+      unequalIntent: '있음 — 이미 마음을 정함',
+      documents: '거의 없음',
+      testatorHealth: '건강한 상태'
+    },
+    score: 78,
+    matchedTypes: ['배우자와 자녀가 있는 일반 상속', '가족 간 갈등 가능성이 큰 상속', '유류분 문제가 생길 수 있는 상속', '부동산이 포함된 상속']
+  },
+  D: {
+    label: '사업주',
+    answers: {
+      perspective: '본인의 상속을 직접 준비',
+      family: '배우자+자녀 2명',
+      remarriage: ['none'],
+      foreignNatChildren: '0명',
+      assets: ['부동산', '예금', '사업체/법인 지분'],
+      estateCount: '2채',
+      estateValue: '100억 이상',
+      financialAssets: '10억 이상',
+      debt: '있음 — 사업 관련 부채',
+      business: '있음 — 법인 지분 보유',
+      overseas: '없음',
+      will: '없음 — 아직 작성 안 함',
+      gift: '없음',
+      conflict: '없음',
+      unequalIntent: '있음 — 이미 마음을 정함',
+      documents: '일부 있음',
+      testatorHealth: '건강한 상태'
+    },
+    score: 72,
+    matchedTypes: ['배우자와 자녀가 있는 일반 상속', '사업체·지분·법인 관련 상속', '부동산이 포함된 상속', '채무가 걱정되는 상속']
+  }
+};
+
+var currentScenario = 'A';
+
+document.querySelectorAll('.s-btn').forEach(function(btn){
+  btn.addEventListener('click', function(){
+    document.querySelectorAll('.s-btn').forEach(function(b){ b.classList.remove('on'); });
+    btn.classList.add('on');
+    currentScenario = btn.getAttribute('data-id');
+  });
+});
+
+function genOrderId(){
+  return 'ansim_'+Date.now()+'_'+Math.random().toString(36).slice(2,10);
+}
+
+function start(){
+  var btn = document.getElementById('PayBtn');
+  var err = document.getElementById('Err');
+  err.textContent = '';
+
+  if(typeof TossPayments === 'undefined'){
+    err.textContent = 'Toss 결제 모듈을 불러오지 못했습니다. 새로고침 후 다시 시도해주세요.';
+    return;
+  }
+
+  var sc = SCENARIOS[currentScenario];
+  var orderId = genOrderId();
+
+  /* 선택된 시나리오 답변을 sessionStorage에 미리 세팅 */
+  try{
+    var reqObj = {
+      email: 'test@ansimsangsok.kr',
+      score: sc.score,
+      answers: sc.answers,
+      matchedTypes: sc.matchedTypes,
+      orderId: orderId
+    };
+    sessionStorage.setItem('ansim_report_request', JSON.stringify(reqObj));
+    localStorage.setItem('ansim_report_request_backup', JSON.stringify(reqObj));
+    localStorage.setItem('ansim_pending_order', orderId);
+  }catch(e){}
+
+  btn.disabled = true;
+  btn.textContent = '결제창 여는 중...';
+
+  try{
+    var tossPayments = TossPayments(TOSS_CLIENT_KEY);
+    tossPayments.requestPayment('카드', {
+      amount: REPORT_PRICE,
+      orderId: orderId,
+      orderName: '[테스트] 안심상속 유료 상세리포트 — 시나리오 ' + currentScenario,
+      successUrl: window.location.origin + '/payment-success',
+      failUrl: window.location.origin + '/payment-fail',
+      customerEmail: 'test@ansimsangsok.kr'
+    }).catch(function(e){
+      btn.disabled = false;
+      btn.textContent = '결제 후 심화설문 시작하기';
+      if(e && e.code === 'USER_CANCEL') return;
+      err.textContent = '결제창 오류: ' + (e && e.message ? e.message : '알 수 없는 오류');
+    });
+  }catch(e){
+    btn.disabled = false;
+    btn.textContent = '결제 후 심화설문 시작하기';
+    err.textContent = '초기화 오류: ' + (e && e.message ? e.message : '알 수 없는 오류');
+  }
+}
+</script>
+</body>
+</html>
