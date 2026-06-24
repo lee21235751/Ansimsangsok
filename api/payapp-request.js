@@ -29,7 +29,7 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: '잘못된 결제 금액입니다.' });
     }
 
-    const sbUrl = (process.env.SUPABASE_URL || '').replace(/\/$/, '');
+    const sbUrl = (process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL || '').replace(/\/$/, '');
     const sbKey = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
 
     // ── 중복 orderId 방지 ──

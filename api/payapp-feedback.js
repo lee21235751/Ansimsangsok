@@ -63,7 +63,7 @@ export default async function handler(req, res) {
   const txId    = mul_no || mul_pay_no || '';
 
   // ── 4. Supabase: paid_reports 업데이트 ──
-  const sbUrl = (process.env.SUPABASE_URL || '').replace(/\/$/, '');
+  const sbUrl = (process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL || '').replace(/\/$/, '');
   const sbKey = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
 
   if (sbUrl && sbKey && orderId) {
