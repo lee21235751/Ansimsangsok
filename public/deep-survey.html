@@ -136,6 +136,7 @@ var step=0, dans={};
 var freeAns = (function(){
   try{
     var raw = sessionStorage.getItem('ansim_report_request');
+    if(!raw){ try{ raw = localStorage.getItem('ansim_report_request_backup'); }catch(e){} }
     var req = raw ? JSON.parse(raw) : null;
     return (req && req.answers) ? req.answers : {};
   }catch(e){ return {}; }
@@ -222,6 +223,7 @@ ge('PrevBtn').onclick=function(){
 async function submitDeepSurvey(){
   var raw=null;
   try{ raw=sessionStorage.getItem('ansim_report_request'); }catch(e){}
+  if(!raw){ try{ raw=localStorage.getItem('ansim_report_request_backup'); }catch(e){} }
   if(!raw){ alert('진단 데이터가 없습니다. 처음부터 다시 진행해주세요.'); location.href='/'; return; }
   var req;
   try{ req=JSON.parse(raw); }catch(e){ location.href='/'; return; }
