@@ -63,7 +63,7 @@ button,input,select{font:inherit}
 
 <script>
 var DQ=[
-  {k:'totalAssets',q:'전체 재산 규모를 대략 알려주세요',h:'부동산·금융자산·기타 모두 합산한 추정치입니다. 정확하지 않다면 가장 가까운 구간을 선택해주세요.',
+  {k:'totalAssets',q:'전체 재산 규모를 대략 알려주세요',h:function(){ return freeHasRealEstate ? '부동산·금융자산·기타 모두 합산한 추정치입니다. 정확하지 않다면 가장 가까운 구간을 선택해주세요.' : '부동산·금융자산·기타 모두 합산한 추정치입니다. 앞에서 부동산은 없다고 하셨으니, 예금·주식·보험 등 금융자산과 기타 자산을 합한 금액으로 답해주세요. 부동산이 있는데 빠뜨리셨다면 이전 화면에서 다시 선택해주세요.'; },
    o:['5억 미만','5억~10억','10억~30억','30억~100억','100억 이상','정확한 금액은 모르겠음']},
   {k:'realEstateCount',q:'보유한 부동산은 모두 몇 건인가요?',h:'주택·토지·상가 등 종류 상관없이 전체 건수를 답해주세요. 정확하지 않다면 가장 가까운 구간을 선택해주세요.',
    o:['1건','2건','3~4건','5건 이상','정확한 건수는 모르겠음'],
@@ -167,8 +167,9 @@ function renderQ(){
   ge('NextBtn').textContent = isLast ? '심화 리포트 생성하기' : '다음';
   ge('PrevBtn').style.opacity = posInVs===0 ? '0.4':'1';
   ge('PrevBtn').disabled = posInVs===0;
-  ge('QTitle').innerHTML='<span class="qt">'+esc(q.q)+'</span>';
-  ge('QHelp').innerHTML = q.h ? '<p class="qh">'+esc(q.h)+'</p>' : '';
+  ge('QTitle').innerHTML='<span class="qt">'+esc(typeof q.q==='function'?q.q(dans):q.q)+'</span>';
+  var hText = typeof q.h==='function' ? q.h(dans) : q.h;
+  ge('QHelp').innerHTML = hText ? '<p class="qh">'+esc(hText)+'</p>' : '';
   if(q.multi && !Array.isArray(dans[q.k])) dans[q.k] = [];
   var isOn = function(o){ var s=dans[q.k]; return q.multi ? s.indexOf(o)!==-1 : s===o; };
   ge('QOpts').innerHTML = '<div class="opts">'+q.o.map(function(o){
