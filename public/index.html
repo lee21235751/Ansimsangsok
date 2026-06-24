@@ -18,12 +18,12 @@ button,input,textarea{font:inherit}
 .hero{background:linear-gradient(145deg,#082d22,#163b2a 62%,#24381f);color:#fffdf5;padding:24px 0 28px}
 .nav{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:28px}
 .brand{display:flex;align-items:center;gap:10px;font-weight:900;letter-spacing:-.04em}
-.bm{width:40px;height:40px;border:1px solid rgba(215,173,85,.85);border-radius:50%;display:grid;place-items:center;color:var(--GL);font-weight:900}
 .ey{display:inline-flex;border:1px solid rgba(215,173,85,.65);color:var(--GL);border-radius:999px;padding:9px 15px;font-weight:900;font-size:.9rem;background:rgba(255,255,255,.04);margin-bottom:16px}
 .hero h1{font-size:clamp(2.2rem,9vw,3.6rem);line-height:1.05;letter-spacing:-.07em;margin-bottom:14px}
 .hero p{color:rgba(255,253,245,.82);font-size:clamp(1rem,4vw,1.18rem);line-height:1.72;font-weight:650;margin-bottom:22px}
 .pills{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
 .pill{border:1px solid rgba(215,173,85,.5);color:var(--GL);padding:8px 13px;border-radius:999px;font-weight:900;font-size:.88rem}
+.tag{display:inline-flex;align-items:center;padding:5px 11px;border-radius:999px;background:rgba(255,253,245,.08);border:1px solid rgba(255,253,245,.18);color:rgba(255,253,245,.75);font-size:.78rem;font-weight:700}
 .bg{border:0;background:linear-gradient(135deg,#f5dc8a,#c99938);color:#1c221c;border-radius:18px;padding:15px 22px;font-weight:950;box-shadow:0 12px 28px rgba(0,0,0,.22);cursor:pointer;min-height:54px;width:100%;font-size:1.05rem;touch-action:manipulation}
 .bd{border:0;background:var(--FD);color:#fff8dc;border-radius:18px;padding:15px 22px;font-weight:950;cursor:pointer;min-height:54px;width:100%;font-size:1.05rem;touch-action:manipulation;box-shadow:0 12px 28px rgba(6,37,29,.22)}
 .bw{border:1px solid rgba(14,53,41,.2);background:#fff;color:var(--MU);border-radius:18px;padding:14px 18px;font-weight:900;cursor:pointer;min-height:54px;width:100%;font-size:1.05rem;touch-action:manipulation}
@@ -34,15 +34,11 @@ button,input,textarea{font:inherit}
 .pf{height:100%;background:linear-gradient(90deg,#f6dc86,#b9862f);border-radius:999px;transition:width .22s}
 .qt{display:block;padding:15px 17px;border-radius:20px;background:#fff;border:2px solid rgba(14,53,41,.22);color:var(--FD);font-size:clamp(1.2rem,5vw,1.6rem);line-height:1.35;font-weight:950;letter-spacing:-.045em;margin-bottom:10px;box-shadow:0 8px 22px rgba(14,53,41,.07)}
 .qh{color:#536058;font-weight:750;line-height:1.7;font-size:.96rem;margin-bottom:16px}
-.ag{margin-top:14px;padding:15px;border-radius:20px;background:#fff7e5;border:1px solid rgba(14,53,41,.14)}
-.agt{display:inline-flex;padding:6px 13px;border-radius:999px;background:var(--FD);color:#fff8dc;font-weight:950;font-size:clamp(.98rem,4vw,1.18rem);margin-bottom:10px}
-.agq{color:var(--FD);font-size:clamp(1rem,4vw,1.22rem);font-weight:950;line-height:1.45;margin-bottom:10px}
 .opts{display:flex;flex-direction:column;gap:9px}
 .opt{display:flex;flex-direction:column;align-items:flex-start;gap:3px;width:100%;min-height:56px;padding:14px 16px;border:2px solid rgba(14,53,41,.2);border-radius:16px;background:#fff;color:var(--FD);font-size:1rem;font-weight:800;text-align:left;line-height:1.4;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-select:none}
 .opt.on{background:var(--FD);color:#fff8dc;border-color:var(--G)}
 .ck{display:none;font-size:.8rem;font-weight:800;color:var(--G)}
 .opt.on .ck{display:block}
-.en{color:#536058;font-weight:700;line-height:1.6;font-size:.95rem;padding:8px 0}
 .snav{display:flex;flex-direction:column;gap:9px;margin-top:18px;padding-bottom:120px}
 .rs{padding:22px;border-radius:20px;background:#fff7e7;border:2px solid rgba(215,173,85,.45);margin-bottom:16px}
 .rh{font-size:clamp(1.55rem,5.5vw,2.1rem);line-height:1.2;color:var(--FD);font-weight:950;letter-spacing:-.05em;margin-bottom:10px}
@@ -120,10 +116,10 @@ footer{background:var(--FD);color:rgba(255,253,245,.62);padding:36px 0 44px;line
 </div>
 <div class="pills"><span class="pill">혼자 조용히</span><span class="pill">본인만 확인</span><span class="pill">비공개</span></div>
 <div style="display:flex;flex-wrap:wrap;gap:7px;margin-bottom:16px">
-<span style="display:inline-flex;align-items:center;padding:5px 11px;border-radius:999px;background:rgba(255,253,245,.08);border:1px solid rgba(255,253,245,.18);color:rgba(255,253,245,.75);font-size:.78rem;font-weight:700">부동산</span>
-<span style="display:inline-flex;align-items:center;padding:5px 11px;border-radius:999px;background:rgba(255,253,245,.08);border:1px solid rgba(255,253,245,.18);color:rgba(255,253,245,.75);font-size:.78rem;font-weight:700">미국·홍콩 주식</span>
-<span style="display:inline-flex;align-items:center;padding:5px 11px;border-radius:999px;background:rgba(255,253,245,.08);border:1px solid rgba(255,253,245,.18);color:rgba(255,253,245,.75);font-size:.78rem;font-weight:700">암호화폐</span>
-<span style="display:inline-flex;align-items:center;padding:5px 11px;border-radius:999px;background:rgba(255,253,245,.08);border:1px solid rgba(255,253,245,.18);color:rgba(255,253,245,.75);font-size:.78rem;font-weight:700">해외 영주권</span>
+<span class="tag">부동산</span>
+<span class="tag">미국·홍콩 주식</span>
+<span class="tag">암호화폐</span>
+<span class="tag">해외 영주권</span>
 </div>
 <div style="padding:16px 18px;border-radius:18px;background:rgba(241,213,134,.12);border:1.5px solid rgba(241,213,134,.4);margin-bottom:18px;text-align:left">
 <strong style="display:block;font-size:1.02rem;font-weight:950;color:var(--GL);margin-bottom:8px">2분 후 확인되는 것</strong>
@@ -246,9 +242,6 @@ function calcScore(){
     var a=ans[q.k];if(!a)return sum;
     if(q.t==='single'){var o=q.o.find(function(x){return x.l===a});return sum+(o?o.s:0)}
     if(q.t==='multi'){if(!Array.isArray(a))return sum;return sum+a.reduce(function(s2,v){var o=q.o.find(function(x){return x.v===v});return s2+(o?o.s:0)},0)}
-    if(q.t==='counts'){
-      var pres=Array.isArray(ans[q.pk])?ans[q.pk].filter(function(k){return k!=='none'&&k!=='unknown'}):[];
-      return sum+q.a.filter(function(x){return pres.indexOf(x.k)>=0}).reduce(function(s3,x){var idx=x.l.indexOf(a[x.k]);return s3+(idx>=0?x.s[idx]:0)},0)}
     return sum;
   },0));
 }
@@ -281,28 +274,14 @@ function buildOpts(q){
     var sel=Array.isArray(ans[q.k])?ans[q.k]:[];
     return '<div class="opts">'+q.o.map(function(o){return'<button type="button" class="opt'+(sel.indexOf(o.v)>=0?' on':'')+'" data-v="'+esc(o.v)+'"><span>'+esc(o.l)+'</span><span class="ck">✓ 선택됨</span></button>'}).join('')+'</div>';
   }
-  if(q.t==='counts'){
-    var pres=Array.isArray(ans[q.pk])?ans[q.pk].filter(function(k){return k!=='none'&&k!=='unknown'}):[];
-    var assets=q.a.filter(function(x){return pres.indexOf(x.k)>=0});
-    if(!assets.length)return '<p class="en">앞 질문에서 부동산을 선택하면 수량을 확인합니다. 없으면 다음으로 넘어가세요.</p>';
-    var ct=ans[q.k]||{};
-    return assets.map(function(a){
-      return '<div class="ag"><div class="agt">'+esc(a.t)+'</div><p class="agq">'+esc(a.q)+'</p>'
-        +'<div class="opts">'+a.l.map(function(lb){return'<button type="button" class="opt'+(ct[a.k]===lb?' on':'')+'" data-v="'+esc(lb)+'" data-ak="'+esc(a.k)+'"><span>'+esc(lb)+'</span><span class="ck">✓ 선택됨</span></button>'}).join('')+'</div></div>';
-    }).join('');
-  }
   return '';
 }
 
 function onOpt(b){
-  var q=Q[step],v=b.getAttribute('data-v'),ak=b.getAttribute('data-ak');
+  var q=Q[step],v=b.getAttribute('data-v');
   if(q.t==='single'){
     ans[q.k]=v;
     ge('QOpts').querySelectorAll('.opt').forEach(function(x){x.classList.toggle('on',x.getAttribute('data-v')===v)});
-  } else if(q.t==='counts'){
-    if(!ak)return;
-    if(!ans[q.k])ans[q.k]={};ans[q.k][ak]=v;
-    ge('QOpts').querySelectorAll('.opt[data-ak="'+ak+'"]').forEach(function(x){x.classList.toggle('on',x.getAttribute('data-v')===v)});
   } else if(q.t==='multi'){
     var ex=q.ex||[],sel=Array.isArray(ans[q.k])?ans[q.k].slice():[];
     if(ex.indexOf(v)>=0){sel=sel.indexOf(v)>=0?[]:[v]}
