@@ -69,6 +69,11 @@
         paidAt: new Date().toISOString()
       }));
       var reqRaw = sessionStorage.getItem('ansim_report_request');
+      /* 모바일에서 결제창을 거치며 탭이 정리되면 sessionStorage가 비어 무료설문 답이 사라질 수 있음.
+         이 경우 결제 직전 index에서 저장해둔 localStorage 백업에서 복구한다. */
+      if(!reqRaw){
+        try{ reqRaw = localStorage.getItem('ansim_report_request_backup'); }catch(e){}
+      }
       var reqObj = reqRaw ? JSON.parse(reqRaw) : {};
       reqObj.orderId = orderId;
 

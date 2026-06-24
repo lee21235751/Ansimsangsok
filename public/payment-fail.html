@@ -12,7 +12,7 @@
   h1{font-size:1.15rem;font-weight:800;margin-bottom:10px}
   p{font-size:.92rem;color:rgba(255,253,245,.7);line-height:1.6;margin-bottom:8px}
   .reason{background:rgba(220,80,80,.12);border:1px solid rgba(220,80,80,.35);border-radius:14px;padding:16px;margin:18px 0;font-size:.88rem;color:#ffb4b4;text-align:left;word-break:break-word}
-  .btn{display:inline-block;margin-top:8px;background:#f1d586;color:#0d1f17;border:none;border-radius:10px;padding:13px 22px;font-weight:800;font-size:.92rem;cursor:pointer;text-decoration:none}
+  .btn{display:block;width:100%;max-width:280px;margin:8px auto 0;background:#f1d586;color:#0d1f17;border:none;border-radius:10px;padding:14px 22px;font-weight:800;font-size:.95rem;cursor:pointer;text-decoration:none}
 </style>
 </head>
 <body>
@@ -20,7 +20,9 @@
   <h1>결제가 완료되지 않았습니다</h1>
   <p>결제 진행 중 문제가 발생했습니다. 카드 정보를 다시 확인해주시거나, 다른 결제수단으로 시도해주세요.</p>
   <div class="reason" id="ReasonBox" style="display:none"></div>
-  <a class="btn" href="/">처음으로 돌아가기</a>
+  <p style="color:rgba(255,253,245,.85);font-weight:700;margin-top:14px">입력하신 진단 내용은 그대로 저장되어 있습니다. 처음부터 다시 하실 필요 없이, 아래 버튼으로 바로 다시 시도하실 수 있습니다.</p>
+  <a class="btn" href="/?resume=1">다시 결제하기</a>
+  <a class="btn" href="/" style="background:transparent;color:rgba(255,253,245,.7);border:1px solid rgba(255,253,245,.3);margin-top:10px">처음 화면으로</a>
 </div>
 <script>
 (function(){

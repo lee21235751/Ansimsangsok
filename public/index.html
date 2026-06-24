@@ -489,11 +489,16 @@ function showResult(){
 
   ge('PaidBtn').onclick=function(){
     try{
-      sessionStorage.setItem('ansim_report_request',JSON.stringify({
+      var payload=JSON.stringify({
         email:(ge('fEmail')&&ge('fEmail').value?ge('fEmail').value.trim():''),
         score:sc,
         answers:ans
-      }));
+      });
+      sessionStorage.setItem('ansim_report_request',payload);
+      /* 모바일에서 결제창으로 이동했다가 돌아올 때 탭이 메모리에서 정리되면 sessionStorage가
+         비워질 수 있음 — 무료설문 답이 사라지면 심화설문 분기와 리포트 정확도가 무너지므로
+         결제 직전에 localStorage에도 백업해, 결제 완료 페이지에서 복구할 수 있게 함. */
+      localStorage.setItem('ansim_report_request_backup',payload);
     }catch(e){}
     openPaymentSheet();
   };
@@ -559,6 +564,26 @@ async function handleSubmit(){
   }catch(e){st.textContent='잠시 후 다시 신청해 주세요.';st.className='st er'}
   finally{btn.disabled=false;btn.textContent='상세리포트 안내 받기'}
 }
+
+/* 결제 실패 후 돌아온 경우(?resume=1): 무료설문을 처음부터 다시 하게 하지 않고
+   직전에 저장해둔 답으로 결과화면을 바로 복원해, 곧장 다시 결제할 수 있게 한다. */
+(function(){
+  try{
+    var params=new URLSearchParams(location.search);
+    if(params.get('resume')!=='1') return;
+    var raw=sessionStorage.getItem('ansim_report_request');
+    if(!raw){ try{ raw=localStorage.getItem('ansim_report_request_backup'); }catch(e){} }
+    if(!raw) return;
+    var saved=JSON.parse(raw);
+    if(!saved || !saved.answers) return;
+    ans=saved.answers;
+    ge('Intro').classList.add('dn');
+    ge('Survey').classList.add('dn');
+    ge('HB').classList.remove('dn');
+    showResult();
+    window.scrollTo({top:0});
+  }catch(e){}
+})();
 </script>
 </body>
 </html>
