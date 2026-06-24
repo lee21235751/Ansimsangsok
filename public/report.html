@@ -268,7 +268,7 @@ function render(d, orderId){
   }
 
   /* 법적 고지·버튼 */
-  h+='<div class="notice">'+esc(d.legal_notice||'2026년 최신 법령을 기준으로 작성되었습니다. 실제 진행 시 전문가와 함께 확인하세요.')+'</div>';
+  h+='<div class="notice">'+esc(d.legal_notice||'이 리포트는 일반적 상속 정보 제공 목적이며 개별 법적·세무적 판단을 대체하지 않습니다. 세법은 개정 논의가 진행 중이므로 실제 진행 시 최신 내용을 전문가와 함께 확인하세요.')+'</div>';
 
   if(orderId){
     var saveUrl = location.origin + '/my-report.html?order=' + encodeURIComponent(orderId);
