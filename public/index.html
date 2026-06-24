@@ -506,11 +506,6 @@ function showResult(){
   ge('SubBtn').onclick=handleSubmit;
   ge('RetryBtn').onclick=startSurvey;
 }
-
-/* ===== Toss 결제창 연동 (API 개별 연동 키 방식) =====
-   사업자등록 전이라도 회원가입만으로 바로 발급되는 "API 개별 연동 키"(test_ck_...)를 사용.
-   결제위젯(test_gck_...)은 사업자등록 완료 후에만 키가 발급되는 구조라 지금 단계에서는 결제창 방식이 맞음.
-   사업자등록 후 PG 실계약 시 결제위젯으로 전환하고 싶다면, 이 블록 전체를 결제위젯 SDK 패턴으로 교체하면 됨. */
 var REPORT_PRICE=49000;
 var PAYAPP_USERID='ansimsangsok';
 

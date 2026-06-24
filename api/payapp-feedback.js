@@ -31,8 +31,8 @@ export default async function handler(req, res) {
     mul_pay_no,
     linkval,    // 연동 VALUE (보안 검증)
     price,
-    var1,       // email (payapp-request에서 전달)
-    var2,       // orderId (payapp-request에서 전달)
+    var1,       // email (미사용)
+    var2,       // orderId
     pay_date,
     pay_type,
   } = body;
