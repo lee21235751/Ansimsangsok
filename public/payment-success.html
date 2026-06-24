@@ -77,8 +77,8 @@
 
   /* Supabase 폴링: status='paid' 될 때까지 확인 */
   var tries = 0;
-  var MAX_TRIES = 20;      // 20회
-  var INTERVAL  = 1500;    // 1.5초 간격 → 최대 30초
+  var MAX_TRIES = 120;      // 20회
+  var INTERVAL = 2000;    // 1.5초 간격 → 최대 30초
 
   function poll(){
     tries++;
