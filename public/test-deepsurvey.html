@@ -3,233 +3,120 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>심화설문 테스트 | 안심상속</title>
 <meta name="robots" content="noindex,nofollow"/>
+<title>심화설문 테스트 런처 (내부용)</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0}
-body{font-family:-apple-system,sans-serif;background:#fffdf6;color:#06251d;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 20px;gap:16px}
-.badge{background:#06251d;color:#f1d586;border-radius:999px;padding:6px 14px;font-size:.8rem;font-weight:900}
-h1{font-size:1.3rem;font-weight:950;text-align:center;letter-spacing:-.04em}
-p{color:#5e6b64;font-size:.9rem;font-weight:700;text-align:center;line-height:1.6;max-width:360px}
-.card{background:#fff;border:2px solid rgba(14,53,41,.12);border-radius:20px;padding:20px;width:100%;max-width:380px}
-.card-title{font-size:.85rem;font-weight:900;color:#5e6b64;margin-bottom:10px}
-.scenario{display:flex;flex-direction:column;gap:6px}
-.s-btn{background:#f0f7f4;border:2px solid rgba(14,53,41,.15);border-radius:12px;padding:11px 14px;text-align:left;cursor:pointer;font-size:.88rem;font-weight:700;color:#06251d;line-height:1.5}
-.s-btn.on{background:#06251d;color:#f1d586;border-color:#06251d}
-.s-btn:hover:not(.on){background:#e8f5ef}
-.err{color:#a02d19;font-size:.86rem;font-weight:800;text-align:center;min-height:20px}
-.pay-btn{background:linear-gradient(135deg,#f5dc8a,#c99938);color:#1c221c;border:0;border-radius:18px;padding:16px;font-weight:950;font-size:1.05rem;cursor:pointer;width:100%;max-width:380px;box-shadow:0 12px 28px rgba(0,0,0,.18)}
-.pay-btn:disabled{opacity:.5;cursor:default}
-.notice{font-size:.78rem;color:#5e6b64;font-weight:650;text-align:center;max-width:340px;line-height:1.6}
-.test-card{background:#f0f9ff;border:1px solid rgba(12,74,110,.2);border-radius:12px;padding:14px;font-size:.82rem;color:#0c4a6e;font-weight:700;line-height:1.7;width:100%;max-width:380px}
-.test-card b{display:block;margin-bottom:4px}
+body{font-family:system-ui,-apple-system,sans-serif;background:#0f1c17;color:#e8efe9;padding:20px;line-height:1.6}
+.w{max-width:640px;margin:0 auto}
+h1{font-size:1.25rem;font-weight:900;margin-bottom:6px;color:#f1d586}
+.sub{color:#9bb0a6;font-size:.88rem;margin-bottom:8px}
+.warn{background:#3a2a12;border:1px solid #8a6d1a;border-radius:12px;padding:12px 14px;color:#f1d586;font-size:.85rem;font-weight:700;margin-bottom:20px;line-height:1.5}
+.card{background:#16271f;border:1px solid #2a3f34;border-radius:14px;padding:16px;margin-bottom:12px}
+.card h2{font-size:1rem;font-weight:900;color:#fff;margin-bottom:4px}
+.card .desc{color:#9bb0a6;font-size:.85rem;margin-bottom:6px}
+.card .expect{color:#7fd1a8;font-size:.82rem;font-weight:700;margin-bottom:12px}
+.card .free{color:#7a8d82;font-size:.76rem;font-family:ui-monospace,monospace;margin-bottom:12px;word-break:break-all;background:#0f1c17;padding:8px 10px;border-radius:8px}
+.btn{display:block;width:100%;background:linear-gradient(135deg,#f5dc8a,#c99938);color:#1c221c;border:0;border-radius:12px;padding:13px;font-weight:900;font-size:.95rem;cursor:pointer}
+.btn.alt{background:#22382c;color:#cfe6d8;border:1px solid #3a5546}
+.foot{color:#7a8d82;font-size:.8rem;margin-top:18px;line-height:1.6}
+.foot code{background:#0f1c17;padding:2px 6px;border-radius:5px;color:#cfe6d8}
 </style>
-<script src="https://js.tosspayments.com/v1/payment"></script>
 </head>
 <body>
+<div class="w">
+<h1>심화설문 테스트 런처</h1>
+<p class="sub">결제 없이 심화설문(deep-survey)을 바로 띄웁니다. 무료설문 답변(freeAns)을 시나리오별로 미리 세팅해 showIf 분기·동적 도움말·정합성 안내를 눈으로 확인하는 내부 도구입니다.</p>
+<div class="warn">⚠️ 내부 테스트 전용. 결제 검증을 우회하지 않으므로 마지막 "심화 리포트 생성하기"를 누르면 결제가 없어 리포트 생성 단계(/report)에서 막힙니다. 설문 화면 동작 확인까지만 가능합니다.</div>
 
-<div class="badge">🧪 심화설문 테스트 전용</div>
-<h1>심화설문 → 리포트 테스트</h1>
-<p>시나리오를 선택하고 결제하면<br>바로 심화설문 단계로 이동합니다.</p>
+<div id="cards"></div>
 
-<div class="card">
-<div class="card-title">테스트 시나리오 선택</div>
-<div class="scenario" id="Scenarios">
-  <button class="s-btn on" data-id="A" type="button">
-    🏠 A. 일반 (배우자+자녀2, 국내 부동산)
-  </button>
-  <button class="s-btn" data-id="B" type="button">
-    🌏 B. 복잡 (해외 자녀, 사업체 지분, 재혼)
-  </button>
-  <button class="s-btn" data-id="C" type="button">
-    👨‍👩‍👦 C. 분쟁 우려 (갈등 있음, 유류분 이슈)
-  </button>
-  <button class="s-btn" data-id="D" type="button">
-    🏢 D. 사업주 (법인 지분, 고액 자산)
-  </button>
+<div class="foot">
+각 버튼은 해당 시나리오의 freeAns를 <code>sessionStorage</code>에 심고 <code>/deep-survey.html</code>로 이동합니다. 심화설문에서 "전체 재산"을 거액으로 답해 정합성 안내가 뜨는지 확인하세요. 다시 이 페이지로 오면 시나리오를 바꿔 다시 테스트할 수 있습니다.
 </div>
 </div>
-
-<div class="err" id="Err"></div>
-<button class="pay-btn" id="PayBtn" type="button" onclick="start()">결제 후 심화설문 시작하기</button>
-
-<div class="test-card">
-  <b>테스트 카드 (카드 직접 입력 선택 시)</b>
-  카드번호: 4330-0000-0000-0000<br/>
-  유효기간: 아무 값 (예: 12/26) / CVC: 아무 값
-</div>
-
-<p class="notice">실제 결제는 발생하지 않습니다.</p>
 
 <script>
-var TOSS_CLIENT_KEY = 'test_ck_oEjb0gm23PNx7RYKd7QvrpGwBJn5';
-var REPORT_PRICE = 49000;
-
-/* 시나리오별 미리 세팅할 무료진단 답변 */
-var SCENARIOS = {
-  A: {
-    label: '일반',
-    answers: {
-      perspective: '본인의 상속을 직접 준비',
-      family: '배우자+자녀 2명',
-      remarriage: ['none'],
-      foreignNatChildren: '0명',
-      assets: ['부동산', '예금'],
-      estateCount: '2채',
-      estateValue: '50억~100억',
-      financialAssets: '5억~10억',
-      debt: '없음',
-      business: '없음',
-      overseas: '없음',
-      will: '없음 — 아직 작성 안 함',
-      gift: '없음',
-      conflict: '없음',
-      unequalIntent: '있음 — 아직 확신은 없음',
-      documents: '거의 없음',
-      testatorHealth: '건강한 상태'
-    },
-    score: 65,
-    matchedTypes: ['배우자와 자녀가 있는 일반 상속', '부동산이 포함된 상속', '유언장이 없거나 확인이 필요한 상속']
+/* 심화설문이 freeAns에서 읽는 키: assetPresence, business, gift, overseas
+   + 관점 전환을 위한 perspective, 그리고 score/answers 래퍼 구조 유지 */
+var SCENARIOS = [
+  {
+    title: "① 부동산 없음 + 거액 (정합성 모순 테스트)",
+    desc: "무료설문에서 부동산을 선택하지 않은 상태. 심화설문에서 '전체 재산'을 100억 이상으로 답하면 모순이 감지되어야 함.",
+    expect: "→ 전체 재산 질문에서 '부동산 없다고 하셨으니 금융자산만…' 동적 도움말이 떠야 정상. 부동산 시가·건수 질문은 안 나와야 함.",
+    free: { perspective:"나(본인)의 상속을 미리 준비", family:"배우자 또는 자녀가 있음",
+            assetPresence:[], assetTypes:["kr_stock"], business:"없음", gift:"없음", overseas:["none"],
+            unequalIntent:"있음 — 이미 마음을 정함" }
   },
-  B: {
-    label: '복잡',
-    answers: {
-      perspective: '본인의 상속을 직접 준비',
-      family: '배우자+자녀 2명',
-      remarriage: ['재혼 상태 — 현재 배우자와의 자녀 있음'],
-      foreignNatChildren: '전부 외국 시민권 또는 영주권',
-      assets: ['부동산', '예금', '해외 자산'],
-      estateCount: '3채 이상',
-      estateValue: '100억 이상',
-      financialAssets: '10억 이상',
-      debt: '없음',
-      business: '있음 — 법인 지분 보유',
-      overseas: '있음 — 해외에 금융자산 또는 부동산',
-      will: '없음 — 아직 작성 안 함',
-      gift: '있음 — 일부 자녀에게만',
-      conflict: '있음 — 분배 비율 이견',
-      unequalIntent: '있음 — 이미 마음을 정함',
-      documents: '일부 있음',
-      testatorHealth: '건강한 상태'
-    },
-    score: 85,
-    matchedTypes: ['배우자와 자녀가 있는 일반 상속', '해외 거주 가족·해외 재산이 관련된 상속', '사업체·지분·법인 관련 상속', '재혼가정 상속']
+  {
+    title: "② 부동산 있음 (정상 케이스)",
+    desc: "부동산을 선택한 정상 상태. 부동산 시가·건수 질문이 나오고, 정합성 안내는 안 떠야 함.",
+    expect: "→ 부동산 합산 시가·건수 질문이 표시됨. 전체 재산 도움말은 일반 문구.",
+    free: { perspective:"나(본인)의 상속을 미리 준비", family:"배우자 또는 자녀가 있음",
+            assetPresence:["land","house"], assetTypes:["realestate"], business:"없음", gift:"없음", overseas:["none"],
+            unequalIntent:"있음 — 이미 마음을 정함" }
   },
-  C: {
-    label: '분쟁',
-    answers: {
-      perspective: '본인의 상속을 직접 준비',
-      family: '배우자+자녀 3명',
-      remarriage: ['none'],
-      foreignNatChildren: '0명',
-      assets: ['부동산', '예금'],
-      estateCount: '2채',
-      estateValue: '30억~50억',
-      financialAssets: '1억~5억',
-      debt: '없음',
-      business: '없음',
-      overseas: '없음',
-      will: '없음 — 아직 작성 안 함',
-      gift: '있음 — 일부 자녀에게만',
-      conflict: '있음 — 분배 비율 이견',
-      unequalIntent: '있음 — 이미 마음을 정함',
-      documents: '거의 없음',
-      testatorHealth: '건강한 상태'
-    },
-    score: 78,
-    matchedTypes: ['배우자와 자녀가 있는 일반 상속', '가족 간 갈등 가능성이 큰 상속', '유류분 문제가 생길 수 있는 상속', '부동산이 포함된 상속']
+  {
+    title: "③ 전혼자녀 + 사업체 + 해외",
+    desc: "복합 시나리오. 사업 지분 질문, 해외자산 질문이 추가로 나와야 함.",
+    expect: "→ 사업 지분율 질문, 해외 자산 규모·형태 질문 표시. 부동산 질문도 표시.",
+    free: { perspective:"나(본인)의 상속을 미리 준비", family:"배우자 또는 자녀가 있음",
+            assetPresence:["incomeRealEstate"], assetTypes:["realestate","business","overseas_stock"],
+            business:"중요한 비중을 차지함", gift:"일부 있음", overseas:["overseas_securities","family_foreign_nationality"],
+            remarriage:["my_prior_children"], unequalIntent:"있음 — 이미 마음을 정함" }
   },
-  D: {
-    label: '사업주',
-    answers: {
-      perspective: '본인의 상속을 직접 준비',
-      family: '배우자+자녀 2명',
-      remarriage: ['none'],
-      foreignNatChildren: '0명',
-      assets: ['부동산', '예금', '사업체/법인 지분'],
-      estateCount: '2채',
-      estateValue: '100억 이상',
-      financialAssets: '10억 이상',
-      debt: '있음 — 사업 관련 부채',
-      business: '있음 — 법인 지분 보유',
-      overseas: '없음',
-      will: '없음 — 아직 작성 안 함',
-      gift: '없음',
-      conflict: '없음',
-      unequalIntent: '있음 — 이미 마음을 정함',
-      documents: '일부 있음',
-      testatorHealth: '건강한 상태'
-    },
-    score: 72,
-    matchedTypes: ['배우자와 자녀가 있는 일반 상속', '사업체·지분·법인 관련 상속', '부동산이 포함된 상속', '채무가 걱정되는 상속']
+  {
+    title: "④ 부모님 상속 준비 (3인칭 관점)",
+    desc: "가족 입장에서 부모님 상속을 준비하는 관점. 질문 문구가 '부모님' 기준으로 바뀌는지 확인.",
+    expect: "→ 심화설문 질문들이 부모님 기준 표현으로 표시되는지 확인.",
+    free: { perspective:"부모님 또는 배우자의 상속을 가족 입장에서 준비", family:"배우자 또는 자녀가 있음",
+            assetPresence:["farmland"], assetTypes:["realestate"], business:"없음", gift:"없음", overseas:["none"] }
+  },
+  {
+    title: "⑤ 미혼·자녀 없음 (형제자매 분기)",
+    desc: "자녀 0명으로 답하면 부모님·형제자매 분기가 나와야 함.",
+    expect: "→ 심화설문에서 자녀 0명 선택 시 부모님 생존·형제자매 수 질문이 이어짐.",
+    free: { perspective:"나(본인)의 상속을 미리 준비", family:"자녀가 없거나 형제자매와 관련될 수 있음",
+            assetPresence:[], assetTypes:["crypto","overseas_stock"], business:"없음", gift:"없음",
+            overseas:["crypto","overseas_securities"] }
   }
-};
+];
 
-var currentScenario = 'A';
+function launch(s){
+  var req = { score: 65, answers: s.free };
+  try { sessionStorage.setItem('ansim_report_request', JSON.stringify(req)); }
+  catch(e) { alert('세션 저장 실패: '+e.message); return; }
+  location.href = '/deep-survey.html';
+}
 
-document.querySelectorAll('.s-btn').forEach(function(btn){
-  btn.addEventListener('click', function(){
-    document.querySelectorAll('.s-btn').forEach(function(b){ b.classList.remove('on'); });
-    btn.classList.add('on');
-    currentScenario = btn.getAttribute('data-id');
-  });
+function clearAll(){
+  try { sessionStorage.removeItem('ansim_report_request'); } catch(e){}
+  alert('세션을 비웠습니다. 빈 상태(무료설문 답변 없음)로 심화설문을 띄우려면 아래 버튼을 다시 누르세요.');
+}
+
+var box = document.getElementById('cards');
+SCENARIOS.forEach(function(s, i){
+  var d = document.createElement('div');
+  d.className = 'card';
+  d.innerHTML =
+    '<h2>'+s.title+'</h2>'
+    + '<div class="desc">'+s.desc+'</div>'
+    + '<div class="expect">'+s.expect+'</div>'
+    + '<div class="free">freeAns = '+JSON.stringify(s.free)+'</div>';
+  var b = document.createElement('button');
+  b.className = 'btn';
+  b.textContent = '이 시나리오로 심화설문 열기 →';
+  b.onclick = function(){ launch(s); };
+  d.appendChild(b);
+  box.appendChild(d);
 });
 
-function genOrderId(){
-  return 'ansim_'+Date.now()+'_'+Math.random().toString(36).slice(2,10);
-}
-
-function start(){
-  var btn = document.getElementById('PayBtn');
-  var err = document.getElementById('Err');
-  err.textContent = '';
-
-  if(typeof TossPayments === 'undefined'){
-    err.textContent = 'Toss 결제 모듈을 불러오지 못했습니다. 새로고침 후 다시 시도해주세요.';
-    return;
-  }
-
-  var sc = SCENARIOS[currentScenario];
-  var orderId = genOrderId();
-
-  /* 선택된 시나리오 답변을 sessionStorage에 미리 세팅 */
-  try{
-    var reqObj = {
-      email: 'test@ansimsangsok.kr',
-      score: sc.score,
-      answers: sc.answers,
-      matchedTypes: sc.matchedTypes,
-      orderId: orderId
-    };
-    sessionStorage.setItem('ansim_report_request', JSON.stringify(reqObj));
-    localStorage.setItem('ansim_report_request_backup', JSON.stringify(reqObj));
-    localStorage.setItem('ansim_pending_order', orderId);
-  }catch(e){}
-
-  btn.disabled = true;
-  btn.textContent = '결제창 여는 중...';
-
-  try{
-    var tossPayments = TossPayments(TOSS_CLIENT_KEY);
-    tossPayments.requestPayment('카드', {
-      amount: REPORT_PRICE,
-      orderId: orderId,
-      orderName: '[테스트] 안심상속 유료 상세리포트 — 시나리오 ' + currentScenario,
-      successUrl: window.location.origin + '/payment-success',
-      failUrl: window.location.origin + '/payment-fail',
-      customerEmail: 'test@ansimsangsok.kr'
-    }).catch(function(e){
-      btn.disabled = false;
-      btn.textContent = '결제 후 심화설문 시작하기';
-      if(e && e.code === 'USER_CANCEL') return;
-      err.textContent = '결제창 오류: ' + (e && e.message ? e.message : '알 수 없는 오류');
-    });
-  }catch(e){
-    btn.disabled = false;
-    btn.textContent = '결제 후 심화설문 시작하기';
-    err.textContent = '초기화 오류: ' + (e && e.message ? e.message : '알 수 없는 오류');
-  }
-}
+var clr = document.createElement('button');
+clr.className = 'btn alt';
+clr.style.marginTop = '8px';
+clr.textContent = '세션 비우기 (freeAns 초기화)';
+clr.onclick = clearAll;
+box.appendChild(clr);
 </script>
 </body>
 </html>
