@@ -42,15 +42,34 @@
     document.getElementById('RetryBtn').style.display='inline-block';
   }
 
-  /* 저장해 둔 orderId 복구 */
+  /* orderId 복구: URL 쿼리(?orderId=) 우선 → 없으면 storage.
+     URL 우선이라 브라우저/컨텍스트가 갈려 localStorage가 비어도 폴링 가능. */
   var orderId = '';
   try{
-    orderId = localStorage.getItem('ansim_pending_order') || '';
-    if(!orderId){
-      var raw = sessionStorage.getItem('ansim_report_request') || localStorage.getItem('ansim_report_request_backup');
-      if(raw){ var o = JSON.parse(raw); orderId = o.orderId || ''; }
-    }
+    var qs = new URLSearchParams(window.location.search);
+    orderId = (qs.get('orderId') || '').trim();
   }catch(e){}
+  if(!orderId){
+    try{
+      orderId = localStorage.getItem('ansim_pending_order') || '';
+      if(!orderId){
+        var raw = sessionStorage.getItem('ansim_report_request') || localStorage.getItem('ansim_report_request_backup');
+        if(raw){ var o = JSON.parse(raw); orderId = o.orderId || ''; }
+      }
+    }catch(e){}
+  }
+  /* URL로 받은 orderId를 storage에도 심어 둠 → 이후 deep-survey/report가 storage를 참조 */
+  if(orderId){
+    try{
+      localStorage.setItem('ansim_pending_order', orderId);
+      var rb = sessionStorage.getItem('ansim_report_request') || localStorage.getItem('ansim_report_request_backup');
+      var ro = rb ? JSON.parse(rb) : {};
+      ro.orderId = orderId;
+      var rs = JSON.stringify(ro);
+      sessionStorage.setItem('ansim_report_request', rs);
+      localStorage.setItem('ansim_report_request_backup', rs);
+    }catch(e){}
+  }
 
   if(!orderId){
     showError('주문 정보를 찾을 수 없습니다. 결제가 완료되었다면 처음 화면에서 다시 진행해주세요.');

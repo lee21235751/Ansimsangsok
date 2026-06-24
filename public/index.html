@@ -514,6 +514,26 @@ function genOrderId(){
   return 'ansim_'+Date.now()+'_'+Math.random().toString(36).slice(2,10);
 }
 
+function showPayReturnOverlay(successUrl){
+  try{
+    var ex=document.getElementById('PayReturnOv');
+    if(ex){ var g=document.getElementById('PayReturnGo'); if(g){ g.setAttribute('href', successUrl); } return; }
+    var ov=document.createElement('div');
+    ov.id='PayReturnOv';
+    ov.style.cssText='position:fixed;inset:0;z-index:99999;background:rgba(13,31,23,.93);display:flex;align-items:center;justify-content:center;padding:24px';
+    ov.innerHTML=''
+      +'<div style="max-width:380px;width:100%;text-align:center;color:#fffdf5;font-family:-apple-system,BlinkMacSystemFont,Pretendard,\'Noto Sans KR\',sans-serif">'
+      +'<div style="font-size:1.12rem;font-weight:800;margin-bottom:10px">결제를 완료하셨나요?</div>'
+      +'<p style="font-size:.92rem;line-height:1.65;color:rgba(255,253,245,.75);margin-bottom:22px">결제창에서 결제를 마치셨다면 아래 버튼을 눌러주세요.<br>결제가 확인되면 다음 단계로 넘어갑니다.</p>'
+      +'<a id="PayReturnGo" href="'+successUrl+'" style="display:block;background:#f1d586;color:#0d1f17;border-radius:12px;padding:15px;font-weight:800;font-size:1rem;text-decoration:none;margin-bottom:12px">결제를 마쳤어요 ▸ 결과 확인하기</a>'
+      +'<button type="button" id="PayReturnCancel" style="background:none;border:none;color:rgba(255,253,245,.55);font-size:.85rem;cursor:pointer;text-decoration:underline;padding:6px">아직 결제 전이에요 · 닫기</button>'
+      +'</div>';
+    document.body.appendChild(ov);
+    var c=document.getElementById('PayReturnCancel');
+    if(c){ c.onclick=function(){ ov.remove(); }; }
+  }catch(e){}
+}
+
 function openPaymentSheet(){
   if(typeof PayApp==='undefined'){
     toast('\uacb0\uc81c \ubaa8\ub4c8\uc774 \uc544\uc9c1 \uc900\ube44\ub418\uc9c0 \uc54a\uc558\uc2b5\ub2c8\ub2e4. \uc7a0\uc2dc \ud6c4 \ub2e4\uc2dc \uc2dc\ub3c4\ud574\uc8fc\uc138\uc694.');
@@ -538,23 +558,23 @@ function openPaymentSheet(){
     PayApp.setParam('recvphone', '');
     PayApp.setParam('reqaddr', '0');
     PayApp.setParam('feedbackurl', window.location.origin+'/api/payapp-feedback');
-    PayApp.setParam('returnurl', window.location.origin+'/payment-success');
+    PayApp.setParam('returnurl', window.location.origin+'/payment-success?orderId='+encodeURIComponent(orderId));
     PayApp.setParam('var2', orderId);
     PayApp.payrequest();
-    /* After the pay window opens, mobile may background this tab and throttle setTimeout,
-       so move to the confirm page on timeout AND when the tab becomes visible again
-       (pageshow / visibilitychange). Idempotent. PC still works via the timeout path. */
+    /* 카톡 인앱 → 카카오페이 앱 → 복귀 흐름에선 returnurl 자동복귀가 끊기고,
+       localStorage도 컨텍스트가 갈리면 사라진다. 그래서 orderId를 URL로 들고 가는
+       '결제 확인' 버튼(오버레이)을 띄워 사용자가 같은 브라우저에서 직접 복귀하게 한다.
+       (이 방식이 모바일·PC 모두에서 가장 안정적이다.) */
+    var __ansimSuccessUrl = window.location.origin + '/payment-success?orderId=' + encodeURIComponent(orderId);
+    showPayReturnOverlay(__ansimSuccessUrl);
+    /* bfcache로 탭이 되살아나면(주로 모바일 '뒤로') 자동으로도 이동 시도 */
     var __ansimMoved = false;
     function __ansimGoSuccess(){
       if (__ansimMoved) return;
       __ansimMoved = true;
-      window.location.href = window.location.origin + '/payment-success';
+      window.location.href = __ansimSuccessUrl;
     }
-    setTimeout(__ansimGoSuccess, 800);
-    window.addEventListener('pageshow', __ansimGoSuccess);
-    document.addEventListener('visibilitychange', function(){
-      if (document.visibilityState === 'visible') { __ansimGoSuccess(); }
-    });
+    window.addEventListener('pageshow', function(e){ if (e && e.persisted) { __ansimGoSuccess(); } });
   }catch(err){
     toast('\uacb0\uc81c \ubaa8\ub4c8 \ud638\ucd9c\uc5d0 \uc2e4\ud328\ud588\uc2b5\ub2c8\ub2e4. \uc7a0\uc2dc \ud6c4 \ub2e4\uc2dc \uc2dc\ub3c4\ud574\uc8fc\uc138\uc694.');
   }
