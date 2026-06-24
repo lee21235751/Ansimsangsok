@@ -99,11 +99,12 @@ export default async function handler(req, res) {
     const rawText = await payappRes.text();
     const result  = Object.fromEntries(new URLSearchParams(rawText));
 
-    if (result.state !== '00000' && result.state !== '100') {
+    // 페이앱 성공 응답: state === '1' (결제요청성공)
+    if (result.state !== '1') {
       console.error('[payapp-request] API 오류:', result);
       return res.status(502).json({
         error: result.errorMessage || '결제 요청에 실패했습니다.',
-        code:  result.state,
+        code:  result.errno || result.state,
       });
     }
 

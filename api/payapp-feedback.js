@@ -26,7 +26,7 @@ export default async function handler(req, res) {
   }
 
   const {
-    pay_state,  // 1=요청, 2=결제완료, 3=취소
+    pay_state,  // 1=요청, 4=결제완료, (8,16,32)=요청취소, (9,64)=승인취소
     mul_no,     // 페이앱 거래번호 (중복방지용)
     mul_pay_no,
     linkval,    // 연동 VALUE (보안 검증)
@@ -46,8 +46,9 @@ export default async function handler(req, res) {
     return res.status(200).send('FAIL');
   }
 
-  // ── 2. 결제완료(2)만 처리 ──
-  if (pay_state !== '2') {
+  // ── 2. 결제완료(pay_state='4')만 처리 ──
+  //    pay_state: 1=요청, 4=결제완료, (8,16,32)=요청취소, (9,64)=승인취소
+  if (pay_state !== '4') {
     console.log('[payapp-feedback] pay_state=%s — 건너뜀', pay_state);
     return res.status(200).send('SUCCESS');
   }
