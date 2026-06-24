@@ -81,8 +81,6 @@ var DQ=[
    showIf:function(){ return freeHasOverseas; }},
   {k:'debt',q:'채무(대출·보증·미납세금 등)가 있다면 얼마 정도인가요?',h:'',
    o:['없음','1천만원 미만','1천만~1억','1억 이상','정확한 금액은 모르겠음']},
-  {k:'testatorHealth',q:'유언장을 작성하는 분(본인 또는 부모님 등)의 건강 상태는 어떤가요?',h:'나중에 유언장 효력을 두고 다투는 분쟁을 예방하기 위한 질문입니다. 가벼운 변화도 솔직하게 답해주시면 더 정확한 안내가 가능합니다.',
-   o:['특별한 변화 없음','가벼운 건망증 등 경미한 변화가 있음','인지 능력 저하가 진행 중(치매 진단 등)','잘 모르겠음']},
   {k:'spouseStatus',q:'배우자는 생존해 계신가요?',h:'정식으로 이혼하지 않았다면 별거 중이거나 이혼소송 중이어도 법적으로는 "생존"으로 답해주세요(상속 자격과 직결됩니다). 혼인신고 없이 동거 중이라면 "사실혼"을 선택해주세요.',
    o:['생존(혼인관계 유지·동거)','생존 — 별거 중(정식 이혼 안 함)','생존 — 이혼소송 진행 중(아직 미확정)','사실혼 — 혼인신고는 하지 않음(동거·내연관계 포함)','이미 사망','해당없음(미혼 등)']},
   {k:'spouseNationality',q:'배우자의 국적·영주권 상태는 어떻게 되나요?',h:'영주권과 시민권(국적 취득)은 다릅니다.',
@@ -142,10 +140,14 @@ var freeAns = (function(){
     return (req && req.answers) ? req.answers : {};
   }catch(e){ return {}; }
 })();
-var freeHasRealEstate = Array.isArray(freeAns.assetPresence) && freeAns.assetPresence.some(function(v){ return v!=='none' && v!=='unknown'; });
-var freeHasOverseas = Array.isArray(freeAns.overseas) && freeAns.overseas.some(function(v){ return v!=='none' && v!=='unknown'; });
+var freeTypes = Array.isArray(freeAns.assetTypes) ? freeAns.assetTypes : [];
+var freeHasRealEstate = (Array.isArray(freeAns.assetPresence) && freeAns.assetPresence.some(function(v){ return v!=='none' && v!=='unknown'; }))
+  || freeTypes.indexOf('realestate') >= 0;
+var freeHasOverseas = (Array.isArray(freeAns.overseas) && freeAns.overseas.some(function(v){ return v!=='none' && v!=='unknown'; }))
+  || freeTypes.indexOf('overseas_stock') >= 0 || freeTypes.indexOf('crypto') >= 0;
 var freeHasGift = freeAns.gift && freeAns.gift !== '없음';
-var freeHasBusiness = freeAns.business && freeAns.business !== '없음';
+var freeHasBusiness = (freeAns.business && freeAns.business !== '없음')
+  || freeTypes.indexOf('business') >= 0;
 function ge(id){return document.getElementById(id)}
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
 
