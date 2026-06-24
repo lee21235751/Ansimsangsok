@@ -265,6 +265,48 @@ function formatEok(n) {
   return n >= 1 ? `약 ${n.toFixed(1)}억 원` : `약 ${Math.round(n*10000)}만 원`;
 }
 
+/* ── 검증된 법령 고정 문장 (LLM 생성에 맡기지 않고 코드가 직접 삽입) ── */
+const LEGAL_FACTS = {
+  gift: '지금까지 자녀 등 상속인에게 한 증여는 시기와 무관하게 기간 제한 없이 유류분 계산의 기초재산에 합산됩니다. 흔히 말하는 "10년이 지나면 빠진다"는 것은 상속세 합산에 관한 규정이지 유류분과는 다릅니다(제3자에 대한 증여만 원칙적으로 상속개시 전 1년 이내분이 합산됩니다). 따라서 한 자녀에게 일찍 증여했더라도 다른 자녀의 유류분 청구를 막지는 못합니다.',
+  realEstate: '부동산이 여러 건일 때 "똑같이 나눈다"는 것은 현금을 나누는 것과 전혀 다릅니다. 주택·토지·상가는 입지·환금성·관리부담이 제각각이라, 누가 어떤 부동산을 가질지 미리 정해두지 않으면 다툼이 길어집니다. 가치 차이는 다른 재산이나 현금으로 정산하는 방식이 분쟁을 줄입니다.',
+  foreign: '외국 국적 자녀도 상속받을 권리는 한국 국적 자녀와 똑같습니다. 다만 외국 단일국적 자녀는 한국 인감증명서를 발급받을 수 없어, 서류에 ①현지 공증 ②아포스티유(국제 인증) ③한국어 번역 공증의 3단계가 필요합니다(복수국적 자녀는 한국 국민으로 처리되어 인감증명 발급이 가능합니다). 미리 위임장을 준비해두면 자녀가 한국에 오지 못해도 절차를 진행할 수 있습니다.',
+  overseas: '해외에 있는 예금·주식도 한국 상속세 신고 대상입니다. 특히 해외 금융기관은 한국 가족관계증명서의 영문 번역·공증과 아포스티유를 요구하는 경우가 많아 시간이 걸리므로, 각 기관에 필요한 서류를 미리 문의해두는 것이 좋습니다.',
+  business: '사업체 지분을 특정 자녀에게 몰아주려는 경우, 지분 평가액이 커서 다른 자녀의 유류분을 침해하기 쉽습니다. 가업상속공제는 상속세 부담을 줄여줄 뿐 유류분 문제 자체를 해결하지 않으며, 그 요건도 피상속인이 장기간(통상 10년 이상) 경영한 기업인지 등 여러 조건이 핵심이므로 세무사 상담이 필요합니다. 유류분은 별도로 대비해야 합니다.',
+  caregiving: '부양·간병 기여를 나중에 법적으로 인정받으려면 지금부터 증거를 남겨야 합니다. 통장 이체 내역, 병원·요양비 영수증, 함께 산 기간을 보여주는 주민등록 등본 등을 모아두세요. 2026년 개정으로 기여 보상으로 받은 증여는 유류분 반환 대상에서 제외될 수 있어, 이런 기록이 더욱 중요해졌습니다.',
+  valueReturn: '유류분 반환은 현재 원물반환(부동산 지분 그 자체를 돌려주는 것)이 원칙이며, 가액(현금)반환 원칙으로 바꾸는 개정안이 2026년 2월 국회를 통과해 시행을 앞두고 있습니다(공포일부터 적용되며 그 전에 개시된 상속에는 소급되지 않습니다). 어느 경우든 현금·보험으로 정산 재원을 미리 마련해두면 부동산·사업체 자체를 지키기에 유리합니다.',
+  conflict: '지금 갈등이 없어도 안심할 수는 없습니다. 상속재산분할 소송은 2024년 처음 3천 건을 넘어 10년 새 3.6배로 늘었고, 그중 82.7%가 1억원 이하의 소액 분쟁입니다. 사이가 좋던 가족도 막상 상속이 시작되면 입장이 달라지는 경우가 많아, 미리 정리해두는 것이 안전합니다.',
+};
+
+function buildLegalShareText(sim){
+  if(!sim || !sim.netEok) return null;
+  const pct = (e)=> (sim.netEok>0 ? (e/sim.netEok*100).toFixed(1) : '0');
+  if(sim.spouseAlive && sim.childCount>0){
+    return '배우자는 법정상속분으로 순재산의 약 '+pct(sim.spouseShareEok)+'%인 '+formatEok(sim.spouseShareEok)+'을, 자녀는 1명당 약 '+pct(sim.childShareEok)+'%인 '+formatEok(sim.childShareEok)+'을 받습니다(협의나 유언이 없을 때 적용되는 기본값). 누군가 이보다 적게 받으면 최소한 받아야 하는 몫인 유류분을 청구할 수 있는데, 그 금액은 배우자 약 '+formatEok(sim.spouseForcedShareEok)+', 자녀 1명당 약 '+formatEok(sim.childForcedShareEok)+'입니다(각자 법정상속분의 절반).';
+  }
+  if(!sim.spouseAlive && sim.childCount>0){
+    return '자녀는 1명당 약 '+pct(sim.childShareEok)+'%인 '+formatEok(sim.childShareEok)+'을 법정상속분으로 받습니다(협의나 유언이 없을 때 기준). 유류분은 그 절반인 1명당 약 '+formatEok(sim.childForcedShareEok)+'입니다.';
+  }
+  return sim.shareText ? (sim.shareText+'. 형제자매에게는 유류분이 인정되지 않습니다.') : null;
+}
+
+function buildBlindSpots(sim){
+  if(!sim) return [];
+  const items=[];
+  const push=(t,c)=>{ if(c) items.push({title:t,content:c}); };
+  const hasForcedShare = (sim.spouseForcedShareEok>0)||(sim.childForcedShareEok>0);
+  const reCount = sim.realEstateCount ? Number(String(sim.realEstateCount).replace(/[^0-9]/g,''))||0 : 0;
+  const foreign = (sim.foreignNatChildren && !['0명','없음',''].includes(String(sim.foreignNatChildren))) || (sim.childrenNationality && /외국|복수|시민/.test(String(sim.childrenNationality)));
+  if(sim.giftToHeir) push('사전증여는 유류분 계산에서 빠지지 않습니다', LEGAL_FACTS.gift);
+  if(reCount>=2 || (sim.realEstateEok>0 && sim.childCount>1)) push('부동산을 "똑같이 나눈다"는 건 현금 나누기와 다릅니다', LEGAL_FACTS.realEstate);
+  if(foreign) push('외국 국적 자녀가 있으면 서류 준비가 더 복잡합니다', LEGAL_FACTS.foreign);
+  if(sim.hasOverseasAsset) push('해외 예금·주식도 한국 상속세 신고 대상입니다', LEGAL_FACTS.overseas);
+  if(sim.businessShare) push('사업체 지분은 유류분 침해 위험이 큽니다', LEGAL_FACTS.business);
+  if(sim.caregivingContribution) push('부양·간병 기여는 지금부터 증거를 남겨야 합니다', LEGAL_FACTS.caregiving);
+  if(hasForcedShare) push('유류분 반환 방식이 바뀌고 있습니다', LEGAL_FACTS.valueReturn);
+  push('지금 갈등이 없어도 안심할 수 없습니다', LEGAL_FACTS.conflict);
+  return items.slice(0,6);
+}
+
 /* ── 상황별 컨텍스트 모듈 ── */
 function getContext(a, types, deep, sim) {
   deep = deep || {};
@@ -616,7 +658,7 @@ ${conditionalInstructions}`;
     callPartChecked(promptB, 'partB')
   ]);
 
-  return {
+  const __report = {
     title: '안심상속 유료 상세리포트',
     subtitle: '내 상황에 맞춰 정리한 상속 준비 자료',
     level,
@@ -635,6 +677,18 @@ ${conditionalInstructions}`;
     legal_notice: '이 리포트는 입력하신 정보를 바탕으로 한 일반적 상속 정보 제공 목적이며, 개별 법적·세무적 판단을 대체하지 않습니다. 유류분 시뮬레이션 수치는 추정치이며, 실제 상속세액은 공제·공시지가 변동 등으로 달라질 수 있으므로 세무사 상담을 받으세요. 형제자매 유류분 폐지(2024.4.25 위헌), 구하라법 상속권 상실선고 제도(2026.1.1 시행), 기여 보상 증여의 유류분 반환 제외 등 최근 개정 사항을 반영했습니다. 상속세 자녀공제 확대(1인 5억) 및 최고세율 인하 등은 2026년 현재 국회를 통과하지 않아 반영하지 않았으며, 현행 공제(일괄공제 5억, 배우자공제 최소 5억) 기준으로 안내합니다. 세법은 개정 논의가 진행 중이므로 신고 시점에 최신 내용을 확인하세요.',
     generated_at: new Date().toISOString()
   };
+
+  /* 법령 핵심 섹션을 코드 결정형으로 덮어써 LLM 환각을 원천 차단(재현성 확보) */
+  try {
+    if (__report.sections.simulation) {
+      const ls = buildLegalShareText(sim);
+      if (ls) __report.sections.simulation.legal_share = ls;
+    }
+    const bs = buildBlindSpots(sim);
+    if (bs && bs.length) __report.sections.blind_spots = { title: '놓치기 쉬운 항목', items: bs };
+  } catch(e){ console.error('법령 섹션 override 실패:', e.message); }
+
+  return __report;
 }
 
 /* ── 메인 핸들러 ── */
@@ -650,18 +704,23 @@ export default async function handler(req, res) {
     const score   = Number.isFinite(Number(body.score)) ? Number(body.score) : 0;
     const deepAnswers = body.deepAnswers && typeof body.deepAnswers==='object' ? body.deepAnswers : null;
     const orderId = typeof body.orderId === 'string' ? body.orderId : null;
+    /* 개발/검증용 우회: 환경변수 DEV_REPORT_TOKEN과 일치하는 devToken이 오면 결제검증·저장을 건너뜀.
+       토큰을 모르면 우회 불가하므로 실고객 경로는 영향 없음. */
+    const DEV_TOKEN = process.env.DEV_REPORT_TOKEN || '';
+    const isDev = !!(DEV_TOKEN && body.devToken === DEV_TOKEN);
 
     /* 결제 검증: orderId가 paid_reports에 status='paid'로 존재하고 아직 리포트를 발급받지 않았는지 확인.
        이 검증이 없으면 누구나 이 엔드포인트를 직접 호출해 결제 없이 리포트를 받을 수 있음. */
     const sbUrlCheck = (process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL || '').replace(/\/$/,'');
     const sbKeyCheck = process.env.SUPABASE_SERVICE_ROLE_KEY||'';
-    if (!sbUrlCheck || !sbKeyCheck) {
+    if (!isDev && (!sbUrlCheck || !sbKeyCheck)) {
       console.error('SUPABASE 환경변수 누락 - 결제 검증 불가');
       return res.status(500).json({ok:false,message:'서버 설정 오류입니다. 잠시 후 다시 시도해주세요.'});
     }
-    if (!orderId) {
+    if (!isDev && !orderId) {
       return res.status(402).json({ok:false,message:'결제 정보가 확인되지 않았습니다. 처음부터 다시 진행해주세요.'});
     }
+    if (!isDev) {
     try {
       const checkRes = await fetch(
         sbUrlCheck + '/rest/v1/paid_reports?order_id=eq.' + encodeURIComponent(orderId) + '&select=status,report_generated,report_json,score,level,matched_types,created_at',
@@ -701,6 +760,7 @@ export default async function handler(req, res) {
       console.error('결제 검증 중 오류:', checkErr.message);
       return res.status(500).json({ok:false,message:'결제 확인 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.'});
     }
+    }
 
     const types = matchTypes(answers);
 
@@ -714,7 +774,7 @@ export default async function handler(req, res) {
 
     /* 리포트 발급 완료 표시 + 리포트 본문 저장 (결제 시점에 만들어둔 같은 order_id 행을 업데이트)
        실패해도 무시 (리포트 자체는 이미 사용자에게 정상 응답됨) */
-    try {
+    if (!isDev) try {
       await fetch(
         sbUrlCheck + '/rest/v1/paid_reports?order_id=eq.' + encodeURIComponent(orderId),
         {
