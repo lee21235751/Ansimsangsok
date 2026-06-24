@@ -1,206 +1,107 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>결제 완료 | 안심상속</title>
-<meta name="robots" content="noindex, nofollow">
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+<title>결제 처리 중 | 안심상속</title>
+<meta name="robots" content="noindex"/>
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body {
-    font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
-    background: #f8f9fa;
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 24px;
-  }
-  .card {
-    background: #fff;
-    border-radius: 20px;
-    padding: 48px 36px;
-    max-width: 480px;
-    width: 100%;
-    text-align: center;
-    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
-  }
-  .icon { font-size: 52px; margin-bottom: 20px; }
-  h1 { font-size: 22px; color: #1a3a5c; font-weight: 700; margin-bottom: 12px; line-height: 1.4; }
-  .sub { font-size: 15px; color: #555; line-height: 1.7; margin-bottom: 28px; }
-  .progress-box {
-    background: #f0f4f8;
-    border-radius: 12px;
-    padding: 20px;
-    margin-bottom: 28px;
-  }
-  .progress-label { font-size: 13px; color: #666; margin-bottom: 10px; }
-  .progress-bar-wrap { background: #dde5ee; border-radius: 99px; height: 8px; overflow: hidden; }
-  .progress-bar { background: #1a3a5c; height: 8px; border-radius: 99px; width: 0%; transition: width 0.4s; }
-  .progress-status { font-size: 13px; color: #1a3a5c; font-weight: 600; margin-top: 10px; }
-  .notice { font-size: 13px; color: #888; line-height: 1.6; margin-bottom: 28px; }
-  .btn-home {
-    display: inline-block;
-    background: #1a3a5c;
-    color: #fff;
-    text-decoration: none;
-    padding: 14px 36px;
-    border-radius: 10px;
-    font-size: 15px;
-    font-weight: 600;
-  }
-  #error-box {
-    display: none;
-    background: #fff5f5;
-    border: 1px solid #fed7d7;
-    border-radius: 10px;
-    padding: 16px;
-    color: #c53030;
-    font-size: 14px;
-    line-height: 1.6;
-    margin-bottom: 20px;
-  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Pretendard","Noto Sans KR",sans-serif;background:#0d1f17;color:#fffdf5;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+  .box{max-width:420px;width:100%;text-align:center}
+  .spinner{width:44px;height:44px;border:4px solid rgba(241,213,134,.25);border-top-color:#f1d586;border-radius:50%;margin:0 auto 24px;animation:spin 0.9s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  h1{font-size:1.15rem;font-weight:800;margin-bottom:10px}
+  p{font-size:.92rem;color:rgba(255,253,245,.7);line-height:1.6}
+  .err{display:none;background:rgba(220,80,80,.12);border:1px solid rgba(220,80,80,.35);border-radius:14px;padding:18px;margin-top:18px;font-size:.88rem;color:#ffb4b4;text-align:left}
+  .retry{display:none;margin-top:16px;background:#f1d586;color:#0d1f17;border:none;border-radius:10px;padding:12px 20px;font-weight:800;font-size:.9rem;cursor:pointer}
 </style>
 </head>
 <body>
-<div class="card">
-  <div id="icon-area" class="icon">⏳</div>
-  <h1 id="title">리포트 생성 중...</h1>
-  <p class="sub" id="subtitle">
-    결제가 확인되었습니다.<br>
-    상세 리포트를 생성하고 있습니다.
-  </p>
-
-  <div class="progress-box" id="progress-box">
-    <p class="progress-label">리포트 생성 진행률</p>
-    <div class="progress-bar-wrap">
-      <div class="progress-bar" id="progress-bar"></div>
-    </div>
-    <p class="progress-status" id="progress-status">분석 중...</p>
-  </div>
-
-  <div id="error-box"></div>
-
-  <p class="notice" id="notice" style="display:none;">
-    리포트 수신에 문제가 있으시면<br>
-    <a href="mailto:help@ansimsangsok.kr" style="color:#1a3a5c;">help@ansimsangsok.kr</a>로 문의해주세요.
-  </p>
-
-  <a href="/" class="btn-home" id="btn-home" style="display:none;">홈으로 돌아가기</a>
+<div class="box">
+  <div class="spinner" id="Spin"></div>
+  <h1 id="Title">결제를 확인하고 있습니다</h1>
+  <p id="Sub">잠시만 기다려주세요. 화면을 닫지 마세요.</p>
+  <div class="err" id="ErrBox"></div>
+  <button class="retry" id="RetryBtn" type="button" onclick="window.location.href='/'">처음으로 돌아가기</button>
 </div>
 
 <script>
-(function () {
-  // ── localStorage에서 결제 정보 복원 ──
-  var orderId, answers, deepAnswers;
-  try {
-    orderId     = localStorage.getItem('ansimsangsok_order_id') || '';
-    answers     = JSON.parse(localStorage.getItem('ansimsangsok_answers')     || 'null');
-    deepAnswers = JSON.parse(localStorage.getItem('ansimsangsok_deep_answers')|| 'null');
-  } catch (e) {
-    orderId = ''; answers = null; deepAnswers = null;
+(function(){
+  /* 페이앱은 returnurl 도착 시 결제정보를 URL로 주지 않는다.
+     결제완료는 feedbackurl(서버)이 Supabase에 status='paid'로 기록한다.
+     이 화면은 저장해 둔 orderId로 Supabase를 폴링해 결제 확인 후 /deep-survey로 이동한다. */
+
+  function showError(msg){
+    document.getElementById('Spin').style.display='none';
+    document.getElementById('Title').textContent='결제 확인에 실패했습니다';
+    document.getElementById('Sub').textContent='아래 내용을 확인해주세요.';
+    var eb = document.getElementById('ErrBox');
+    eb.style.display='block';
+    eb.textContent = msg || '알 수 없는 오류가 발생했습니다. 결제가 정상 처리되었다면 잠시 후 다시 시도해주세요.';
+    document.getElementById('RetryBtn').style.display='inline-block';
   }
 
-  function setProgress(pct, label) {
-    document.getElementById('progress-bar').style.width = pct + '%';
-    document.getElementById('progress-status').textContent = label;
-  }
-
-  function showDone(email) {
-    document.getElementById('icon-area').textContent = '✅';
-    document.getElementById('title').textContent = '리포트가 이메일로 발송되었습니다';
-    document.getElementById('subtitle').textContent =
-      (email ? (email + ' 으로') : '') + ' 상세 리포트가 발송되었습니다.\n스팸함도 확인해주세요.';
-    document.getElementById('progress-box').style.display = 'none';
-    document.getElementById('notice').style.display = 'block';
-    document.getElementById('btn-home').style.display = 'inline-block';
-    // 사용한 로컬스토리지 정리
-    localStorage.removeItem('ansimsangsok_order_id');
-    localStorage.removeItem('ansimsangsok_answers');
-    localStorage.removeItem('ansimsangsok_deep_answers');
-  }
-
-  function showError(msg) {
-    document.getElementById('icon-area').textContent = '⚠️';
-    document.getElementById('title').textContent = '리포트 생성 중 오류';
-    document.getElementById('subtitle').textContent = '';
-    document.getElementById('progress-box').style.display = 'none';
-    var errBox = document.getElementById('error-box');
-    errBox.style.display = 'block';
-    errBox.innerHTML = msg;
-    document.getElementById('notice').style.display = 'block';
-    document.getElementById('btn-home').style.display = 'inline-block';
-  }
-
-  async function generateReport() {
-    if (!orderId) {
-      // orderId 없으면 결제 확인만 표시
-      document.getElementById('icon-area').textContent = '✅';
-      document.getElementById('title').textContent = '결제가 완료되었습니다';
-      document.getElementById('subtitle').textContent =
-        '리포트는 이메일로 발송됩니다.\n이메일이 도착하지 않으면 스팸함을 확인해주세요.';
-      document.getElementById('progress-box').style.display = 'none';
-      document.getElementById('btn-home').style.display = 'inline-block';
-      return;
+  /* 저장해 둔 orderId 복구 */
+  var orderId = '';
+  try{
+    orderId = localStorage.getItem('ansim_pending_order') || '';
+    if(!orderId){
+      var raw = sessionStorage.getItem('ansim_report_request') || localStorage.getItem('ansim_report_request_backup');
+      if(raw){ var o = JSON.parse(raw); orderId = o.orderId || ''; }
     }
+  }catch(e){}
 
-    if (!answers || typeof answers !== 'object') {
-      showError(
-        '설문 데이터를 찾을 수 없습니다.<br>' +
-        '결제는 정상 처리되었습니다. 리포트 발급을 위해<br>' +
-        '<a href="mailto:help@ansimsangsok.kr" style="color:#1a3a5c;">help@ansimsangsok.kr</a>로 문의해주세요.<br>' +
-        '(주문번호: ' + orderId + ')'
-      );
-      return;
-    }
+  if(!orderId){
+    showError('주문 정보를 찾을 수 없습니다. 결제가 완료되었다면 처음 화면에서 다시 진행해주세요.');
+    return;
+  }
 
-    // 프로그레스 애니메이션
-    setProgress(10, '결제 확인 중...');
-    await sleep(600);
-    setProgress(25, '설문 분석 중...');
-    await sleep(800);
-    setProgress(45, 'AI 리포트 생성 중...');
+  function goNext(){
+    /* sessionStorage 복구(모바일 탭 정리 대비) — 토스 원본과 동일하게 deep-survey로 이동 */
+    try{
+      var reqRaw = sessionStorage.getItem('ansim_report_request');
+      if(!reqRaw){ reqRaw = localStorage.getItem('ansim_report_request_backup'); }
+      var reqObj = reqRaw ? JSON.parse(reqRaw) : {};
+      reqObj.orderId = orderId;
+      var reqStr = JSON.stringify(reqObj);
+      sessionStorage.setItem('ansim_report_request', reqStr);
+      localStorage.setItem('ansim_report_request_backup', reqStr);
+      localStorage.setItem('ansim_pending_order', orderId);
+      sessionStorage.setItem('ansim_payment_done', JSON.stringify({ orderId: orderId, paidAt: new Date().toISOString() }));
+    }catch(e){}
+    document.getElementById('Title').textContent='결제가 완료되었습니다';
+    document.getElementById('Sub').textContent='심화 설문으로 이동합니다.';
+    setTimeout(function(){ window.location.href = '/deep-survey'; }, 600);
+  }
 
-    try {
-      var resp = await fetch('/api/generate-report', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          orderId:     orderId,
-          answers:     answers,
-          deepAnswers: deepAnswers || {},
-        }),
+  /* Supabase 폴링: status='paid' 될 때까지 확인 */
+  var tries = 0;
+  var MAX_TRIES = 20;      // 20회
+  var INTERVAL  = 1500;    // 1.5초 간격 → 최대 30초
+
+  function poll(){
+    tries++;
+    fetch('/api/payapp-status?orderId=' + encodeURIComponent(orderId), { cache:'no-store' })
+      .then(function(res){ return res.json(); })
+      .then(function(data){
+        if(data && data.paid){ goNext(); return; }
+        if(tries >= MAX_TRIES){
+          showError('결제 확인이 지연되고 있습니다. 결제가 완료되었다면 1~2분 후 처음 화면에서 다시 진행하시거나 고객센터로 문의해주세요. (주문번호: ' + orderId + ')');
+          return;
+        }
+        setTimeout(poll, INTERVAL);
+      })
+      .catch(function(){
+        if(tries >= MAX_TRIES){
+          showError('네트워크 오류로 결제 확인이 지연되고 있습니다. 잠시 후 다시 시도해주세요. (주문번호: ' + orderId + ')');
+          return;
+        }
+        setTimeout(poll, INTERVAL);
       });
-
-      setProgress(80, '리포트 마무리 중...');
-
-      if (!resp.ok) {
-        var errData = await resp.json().catch(function() { return {}; });
-        throw new Error(errData.message || 'generate-report API 오류 ' + resp.status);
-      }
-
-      var data = await resp.json();
-      if (!data.ok) throw new Error(data.message || '리포트 생성 실패');
-
-      setProgress(100, '완료!');
-      await sleep(400);
-      showDone(answers.email || '');
-
-    } catch (err) {
-      console.error('[payment-success] generate-report 오류:', err);
-      showError(
-        '리포트 생성 중 오류가 발생했습니다.<br>' +
-        '결제는 정상 처리되었습니다. 아래 이메일로 문의해주세요.<br>' +
-        '<a href="mailto:help@ansimsangsok.kr" style="color:#1a3a5c;">help@ansimsangsok.kr</a><br>' +
-        '(주문번호: ' + orderId + ')'
-      );
-    }
   }
 
-  function sleep(ms) { return new Promise(function(r) { setTimeout(r, ms); }); }
-
-  // 페이지 로드 즉시 실행
-  generateReport();
+  poll();
 })();
 </script>
 </body>

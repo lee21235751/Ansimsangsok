@@ -69,36 +69,62 @@ export default async function handler(req, res) {
 
   if (sbUrl && sbKey && orderId) {
     try {
-      // 중복 처리 방지: 이미 paid인지 확인
+      // 기존 row 확인
       const existsRes = await fetch(
         `${sbUrl}/rest/v1/paid_reports?order_id=eq.${encodeURIComponent(orderId)}&select=status`,
         { headers: { apikey: sbKey, Authorization: `Bearer ${sbKey}` } }
       );
       const existsRows = existsRes.ok ? await existsRes.json() : [];
+
+      // 이미 paid면 중복 — 그대로 성공 응답
       if (Array.isArray(existsRows) && existsRows.some(r => r.status === 'paid')) {
         console.log('[payapp-feedback] 이미 처리된 orderId:', orderId);
         return res.status(200).send('SUCCESS');
       }
 
-      // status → paid 업데이트
-      await fetch(
-        `${sbUrl}/rest/v1/paid_reports?order_id=eq.${encodeURIComponent(orderId)}`,
-        {
-          method: 'PATCH',
-          headers: {
-            apikey: sbKey,
-            Authorization: `Bearer ${sbKey}`,
-            'Content-Type': 'application/json',
-            Prefer: 'return=minimal',
-          },
-          body: JSON.stringify({
-            status:      'paid',
-            payment_key: txId,
-            amount:      parsedPrice,
-          }),
-        }
-      );
-      console.log('[payapp-feedback] paid_reports 업데이트 완료 orderId=%s', orderId);
+      if (Array.isArray(existsRows) && existsRows.length > 0) {
+        // row가 있으면 paid로 업데이트 (REST 방식 호환)
+        await fetch(
+          `${sbUrl}/rest/v1/paid_reports?order_id=eq.${encodeURIComponent(orderId)}`,
+          {
+            method: 'PATCH',
+            headers: {
+              apikey: sbKey,
+              Authorization: `Bearer ${sbKey}`,
+              'Content-Type': 'application/json',
+              Prefer: 'return=minimal',
+            },
+            body: JSON.stringify({
+              status:      'paid',
+              payment_key: txId,
+              amount:      parsedPrice,
+            }),
+          }
+        );
+        console.log('[payapp-feedback] paid_reports 업데이트(PATCH) 완료 orderId=%s', orderId);
+      } else {
+        // row가 없으면 새로 삽입 (JS 방식: 결제 전 pending 저장이 없음)
+        await fetch(
+          `${sbUrl}/rest/v1/paid_reports`,
+          {
+            method: 'POST',
+            headers: {
+              apikey: sbKey,
+              Authorization: `Bearer ${sbKey}`,
+              'Content-Type': 'application/json',
+              Prefer: 'return=minimal',
+            },
+            body: JSON.stringify({
+              order_id:         orderId,
+              status:           'paid',
+              payment_key:      txId,
+              amount:           parsedPrice,
+              report_generated: false,
+            }),
+          }
+        );
+        console.log('[payapp-feedback] paid_reports 신규 삽입(INSERT) 완료 orderId=%s', orderId);
+      }
 
     } catch (dbErr) {
       console.error('[payapp-feedback] Supabase 오류:', dbErr.message);
