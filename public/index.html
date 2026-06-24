@@ -81,7 +81,7 @@ footer{background:var(--FD);color:rgba(255,253,245,.62);padding:36px 0 44px;line
 .ft-brand{display:flex;align-items:center;gap:8px;font-weight:900;color:#fff8dc;font-size:1.02rem;margin-bottom:10px}
 .ft-tag{color:rgba(255,253,245,.55);font-size:.85rem;margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,253,245,.12)}
 </style>
-
+<script src="https://lite.payapp.kr/public/api/v2/payapp-lite.js"></script>
 </head>
 <body>
 <div id="T" class="toast dn"></div>
@@ -500,7 +500,7 @@ function showResult(){
          결제 직전에 localStorage에도 백업해, 결제 완료 페이지에서 복구할 수 있게 함. */
       localStorage.setItem('ansim_report_request_backup',payload);
     }catch(e){}
-    openPaymentModal();
+    openPaymentSheet();
   };
 
   ge('SubBtn').onclick=handleSubmit;
@@ -511,69 +511,42 @@ function showResult(){
    사업자등록 전이라도 회원가입만으로 바로 발급되는 "API 개별 연동 키"(test_ck_...)를 사용.
    결제위젯(test_gck_...)은 사업자등록 완료 후에만 키가 발급되는 구조라 지금 단계에서는 결제창 방식이 맞음.
    사업자등록 후 PG 실계약 시 결제위젯으로 전환하고 싶다면, 이 블록 전체를 결제위젯 SDK 패턴으로 교체하면 됨. */
-/* ===== Payapp payment integration ===== */
 var REPORT_PRICE=49000;
+var PAYAPP_USERID='ansimsangsok';
 
 function genOrderId(){
-  if(typeof crypto!=="undefined"&&crypto.randomUUID){
-    return "PA-"+crypto.randomUUID().replace(/-/g,"").slice(0,20);
-  }
-  return "PA-"+Date.now().toString(36)+Math.random().toString(36).slice(2,8);
+  /* 영문 대소문자/숫자/특수문자(-,_) 6~64자 요구사항 충족하는 주문번호 생성 */
+  return 'ansim_'+Date.now()+'_'+Math.random().toString(36).slice(2,10);
 }
 
-(function(){
-  function inject(){
-    if(document.getElementById("pay-modal"))return;
-    var m=document.createElement("div");
-    m.id="pay-modal";
-    m.style.cssText="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:9999;align-items:center;justify-content:center;padding:20px;";
-    m.innerHTML="<div style=\"background:#fff;border-radius:16px;padding:32px 28px;width:100%;max-width:400px;box-shadow:0 20px 60px rgba(0,0,0,0.3);\"><h3 style=\"margin:0 0 6px;font-size:18px;color:#1a3a5c;font-weight:700;\">결제 정보 입력</h3><p style=\"margin:0 0 24px;font-size:13px;color:#888;\">리포트를 받을 이메일을 입력해주세요.<br>전화번호는 결제 확인용으로만 사용됩니다.</p><div style=\"margin-bottom:16px;\"><label style=\"display:block;font-size:13px;color:#555;font-weight:600;margin-bottom:6px;\">이메일 <span style=\"color:#e53e3e;\">*</span></label><input id=\"pay-email\" type=\"email\" inputmode=\"email\" placeholder=\"example@email.com\" autocomplete=\"email\" style=\"width:100%;padding:12px 14px;border:1.5px solid #ddd;border-radius:8px;font-size:15px;box-sizing:border-box;outline:none;\"></div><div style=\"margin-bottom:24px;\"><label style=\"display:block;font-size:13px;color:#555;font-weight:600;margin-bottom:6px;\">전화번호 <span style=\"color:#e53e3e;\">*</span></label><input id=\"pay-phone\" type=\"tel\" inputmode=\"tel\" placeholder=\"010-0000-0000\" autocomplete=\"tel\" style=\"width:100%;padding:12px 14px;border:1.5px solid #ddd;border-radius:8px;font-size:15px;box-sizing:border-box;outline:none;\"></div><div id=\"pay-err\" style=\"display:none;background:#fff5f5;border:1px solid #fed7d7;border-radius:8px;padding:10px 14px;font-size:13px;color:#c53030;margin-bottom:16px;\"></div><button id=\"pay-ok\" onclick=\"submitPayment()\" style=\"width:100%;background:#1a3a5c;color:#fff;border:none;border-radius:10px;padding:15px;font-size:16px;font-weight:700;cursor:pointer;margin-bottom:10px;\">49,000원 결제하기</button><button onclick=\"closePaymentModal()\" style=\"width:100%;background:transparent;color:#999;border:none;padding:10px;font-size:14px;cursor:pointer;\">취소</button></div>";
-    m.addEventListener("click",function(e){if(e.target===m)closePaymentModal();});
-    document.body.appendChild(m);
+function openPaymentSheet(){
+  if(typeof PayApp==='undefined'){
+    toast('\uacb0\uc81c \ubaa8\ub4c8\uc774 \uc544\uc9c1 \uc900\ube44\ub418\uc9c0 \uc54a\uc558\uc2b5\ub2c8\ub2e4. \uc7a0\uc2dc \ud6c4 \ub2e4\uc2dc \uc2dc\ub3c4\ud574\uc8fc\uc138\uc694.');
+    return;
   }
-  if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",inject);}else{inject();}
-})();
-
-function openPaymentModal(){
-  var m=document.getElementById("pay-modal");
-  if(m)m.style.display="flex";
-  var ef=ge("fEmail");
-  if(ef&&ef.value){var pe=document.getElementById("pay-email");if(pe)pe.value=ef.value.trim();}
-  var p=document.getElementById("pay-email");if(p)setTimeout(function(){p.focus();},100);
-}
-function closePaymentModal(){
-  var m=document.getElementById("pay-modal");if(m)m.style.display="none";
-  var e=document.getElementById("pay-err");if(e)e.style.display="none";
-}
-async function submitPayment(){
-  var email=(document.getElementById("pay-email")||{value:""}).value.trim();
-  var phone=(document.getElementById("pay-phone")||{value:""}).value.trim();
-  var errDiv=document.getElementById("pay-err");
-  var btn=document.getElementById("pay-ok");
-  function showErr(msg){if(errDiv){errDiv.textContent=msg;errDiv.style.display="block";}}
-  if(!email||email.indexOf("@")<0){showErr("이메일 주소를 올바르게 입력해주세요.");return;}
-  if(!phone||phone.replace(/[^0-9]/g,"").length<10){showErr("전화번호를 올바르게 입력해주세요. (예: 010-1234-5678)");return;}
-  if(btn){btn.disabled=true;btn.textContent="결제창 여는 중...";}
-  if(errDiv)errDiv.style.display="none";
-  var orderId=genOrderId();
   try{
-    localStorage.setItem("ansimsangsok_order_id",orderId);
-    localStorage.setItem("ansimsangsok_answers",JSON.stringify(typeof ans!=="undefined"?ans:{}));
-    localStorage.setItem("ansimsangsok_deep_answers",JSON.stringify({}));
-  }catch(_){}
-  try{
-    var resp=await fetch("/api/payapp-request",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({orderId:orderId,email:email,phone:phone,price:REPORT_PRICE})});
-    var data=await resp.json();
-    if(!resp.ok||!data.ok){
-      showErr(data.error||"결제 요청에 실패했습니다. 잠시 후 다시 시도해주세요.");
-      if(btn){btn.disabled=false;btn.textContent="49,000원 결제하기";}
-      return;
-    }
-    closePaymentModal();
-    window.location.href=data.payurl;
-  }catch(e){
-    showErr("네트워크 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
-    if(btn){btn.disabled=false;btn.textContent="49,000원 결제하기";}
+    var orderId=genOrderId();
+    try{
+      var raw=sessionStorage.getItem('ansim_report_request');
+      if(!raw){ try{ raw=localStorage.getItem('ansim_report_request_backup'); }catch(e){} }
+      var obj=raw?JSON.parse(raw):{};
+      obj.orderId=orderId;
+      var sset=JSON.stringify(obj);
+      sessionStorage.setItem('ansim_report_request',sset);
+      localStorage.setItem('ansim_report_request_backup',sset);
+      localStorage.setItem('ansim_pending_order',orderId);
+    }catch(e){}
+    PayApp.setDefault('userid', PAYAPP_USERID);
+    PayApp.setParam('goodname', '\uc548\uc2ec\uc0c1\uc18d \uc720\ub8cc \uc0c1\uc138\ub9ac\ud3ec\ud2b8');
+    PayApp.setParam('goodprice', String(REPORT_PRICE));
+    PayApp.setParam('recvphone', '');
+    PayApp.setParam('reqaddr', '0');
+    PayApp.setParam('feedbackurl', window.location.origin+'/api/payapp-feedback');
+    PayApp.setParam('returnurl', window.location.origin+'/payment-success');
+    PayApp.setParam('var2', orderId);
+    PayApp.pay();
+  }catch(err){
+    toast('\uacb0\uc81c \ubaa8\ub4c8 \ud638\ucd9c\uc5d0 \uc2e4\ud328\ud588\uc2b5\ub2c8\ub2e4. \uc7a0\uc2dc \ud6c4 \ub2e4\uc2dc \uc2dc\ub3c4\ud574\uc8fc\uc138\uc694.');
   }
 }
 
