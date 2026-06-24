@@ -110,7 +110,9 @@ body{font-family:system-ui,-apple-system,sans-serif;color:#12231d;word-break:kee
   <div class="err">
     <p class="err-t">리포트를 불러올 수 없습니다</p>
     <p class="err-d" id="ErrMsg">잠시 후 다시 시도해주세요.</p>
-    <div style="width:100%;max-width:400px;margin-top:16px">
+    <div style="margin-top:14px;padding:12px 14px;border-radius:12px;background:#f7faf7;border:1px solid rgba(31,77,58,.18);color:#334155;font-size:.88rem;line-height:1.6;font-weight:650;max-width:400px">결제는 정상적으로 완료되어 있으니 안심하세요. 아래 '다시 시도'를 누르시면 같은 리포트를 다시 받아보실 수 있습니다. 결제일로부터 30일간 언제든 다시 조회할 수 있습니다.</div>
+    <div style="width:100%;max-width:400px;margin-top:16px;display:grid;gap:10px">
+      <button class="bg" onclick="location.reload()">다시 시도</button>
       <button class="bw" onclick="history.back()">이전으로 돌아가기</button>
     </div>
   </div>

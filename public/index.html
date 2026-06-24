@@ -142,7 +142,7 @@ footer{background:var(--FD);color:rgba(255,253,245,.62);padding:36px 0 44px;line
 <div class="rsec" style="background:#fdf6e3;border-color:rgba(194,137,28,.35)">
 <h4>진단은 이렇게 진행됩니다</h4>
 <ul>
-<li>9개 질문에 답하면, 내 상황에서 분쟁으로 번질 수 있는 지점을 바로 확인합니다</li>
+<li>몇 가지 질문에 답하면, 내 상황에서 분쟁으로 번질 수 있는 지점을 바로 확인합니다</li>
 <li>결과는 화면에서 바로 확인하고, 원하시면 이메일로도 받아보실 수 있습니다</li>
 <li>가족과 공유하지 않아도 됩니다. 본인만 조용히 확인하는 진단입니다</li>
 </ul>
@@ -462,12 +462,12 @@ function showResult(){
     +'<div class="rsec"><h4>이제 "어떻게 할 것인지"가 남았습니다</h4><ul><li>원하는 자녀(가족)에게 더 남기는 합법적 방법</li><li>유류분 분쟁을 최소화하는 구체적 절차</li><li>지금 당장 해야 할 것, 순서대로</li></ul></div>'
     +'<div class="pc"><div class="pe">유료 상세리포트에서 확인하세요</div>'
     +'<h3>'+esc(ctaHook)+'</h3>'
-    +(sc<50?'<p style="font-size:.86rem;font-weight:650;color:rgba(255,253,245,.7);margin:-4px 0 10px">재산 규모가 크지 않아도 괜찮습니다. 상속 분쟁의 대부분은 적은 금액에서 시작됩니다.</p>':'')
+    +(sc<50?'<p style="font-size:.9rem;font-weight:750;color:rgba(6,37,29,.72);margin:-4px 0 10px">재산 규모가 크지 않아도 괜찮습니다. 상속 분쟁의 대부분은 적은 금액에서 시작됩니다.</p>':'')
     +'<p class="pl">특가 ₩49,000 <span style="text-decoration:line-through;opacity:.6;">정가 79,000원</span> — 본인만 확인하는 비공개 자료입니다.</p>'
     +'<div class="pcs">'+['특정 자녀(가족)에게 더 남기기 위한 합법적 설계 방법','유류분 반환청구를 최소화하는 3가지 실무 방법 (형제자매 유류분 폐지 등 최신 판례 반영)','해외주식·암호화폐·해외부동산까지 포함한 자산 점검',(isParent?'부모님이':'내가')+' 원하는 분배가 실제로 지켜지는지 시뮬레이션','전문가 상담 전 반드시 확인할 질문 목록'].map(function(t){return'<div class="pci">'+esc(t)+'</div>'}).join('')+'</div>'
     +'<button class="bg" type="button" id="PaidBtn" style="margin-top:4px">유료 상세리포트 결제 — 특가 ₩49,000</button>'
-    +'<p style="text-align:center;font-size:.82rem;color:rgba(255,253,245,.55);margin-top:10px;font-weight:600">결제 후 몇 가지 구체 정보를 추가로 입력하면, 입력하신 숫자 기준으로 계산된 시뮬레이션이 리포트에 포함됩니다.</p>'
-    +'<p style="text-align:center;font-size:.78rem;color:rgba(255,253,245,.4);margin-top:6px">🔒 안전한 결제 · 본인만 확인 가능한 비공개 자료</p>'
+    +'<p style="text-align:center;font-size:.88rem;color:rgba(6,37,29,.75);margin-top:10px;font-weight:700">결제 후 몇 가지 구체 정보를 추가로 입력하면, 입력하신 숫자 기준으로 계산된 시뮬레이션이 리포트에 포함됩니다.</p>'
+    +'<p style="text-align:center;font-size:.85rem;color:rgba(6,37,29,.7);margin-top:8px;font-weight:800">🔒 안전한 결제 · 본인만 확인 가능한 비공개 자료</p>'
     +'</div>'
     +'<details class="fc" style="margin-top:14px">'
     +'<summary style="cursor:pointer;font-weight:900;color:var(--FD);font-size:1rem;list-style:none;display:flex;align-items:center;justify-content:space-between">아직 결제 전이고, 먼저 이메일로 안내만 받고 싶다면<span style="font-size:.85rem;color:var(--MU);font-weight:700">열기 ▾</span></summary>'
