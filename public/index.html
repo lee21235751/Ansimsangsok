@@ -537,6 +537,7 @@ function openPaymentSheet(){
       localStorage.setItem('ansim_pending_order',orderId);
     }catch(e){}
     PayApp.setDefault('userid', PAYAPP_USERID);
+    PayApp.setParam('shopname', '\uc548\uc2ec\uc0c1\uc18d');
     PayApp.setParam('goodname', '\uc548\uc2ec\uc0c1\uc18d \uc720\ub8cc \uc0c1\uc138\ub9ac\ud3ec\ud2b8');
     PayApp.setParam('goodprice', String(REPORT_PRICE));
     PayApp.setParam('recvphone', '');
@@ -544,7 +545,7 @@ function openPaymentSheet(){
     PayApp.setParam('feedbackurl', window.location.origin+'/api/payapp-feedback');
     PayApp.setParam('returnurl', window.location.origin+'/payment-success');
     PayApp.setParam('var2', orderId);
-    PayApp.pay();
+    PayApp.payrequest();
   }catch(err){
     toast('\uacb0\uc81c \ubaa8\ub4c8 \ud638\ucd9c\uc5d0 \uc2e4\ud328\ud588\uc2b5\ub2c8\ub2e4. \uc7a0\uc2dc \ud6c4 \ub2e4\uc2dc \uc2dc\ub3c4\ud574\uc8fc\uc138\uc694.');
   }
