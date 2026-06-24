@@ -353,6 +353,51 @@ function showResult(){
   var bc=sc>=70?'lc':sc>=40?'lb':'la';
   var isParent = ans.perspective==='부모님 또는 배우자의 상속을 가족 입장에서 준비';
   var poss = isParent ? '부모님' : '내';
+
+  /* ── 유료 전환 CTA 후크: 판정된 신호별로 위기지점을 직접 찌르는 헤드라인 ──
+     페르소나 고정이 아니라 사용자 답변(ans)에서 신호를 읽어 위기 강도순으로 분기.
+     첫 매칭 하나만 사용. 매칭 없으면 일반형 폴백. */
+  function buildCtaHook(){
+    var rm = Array.isArray(ans.remarriage)?ans.remarriage:[];
+    var ovh = Array.isArray(ans.overseas)?ans.overseas:[];
+    var ath = Array.isArray(ans.assetTypes)?ans.assetTypes:[];
+    var aph = Array.isArray(ans.assetPresence)?ans.assetPresence:[];
+    var wantsUnequal = ans.unequalIntent==='있음 — 이미 마음을 정함' || ans.unequalIntent==='있음 — 아직 확신은 없음';
+    var subj = isParent ? '부모님이' : '내가';
+    var subjPoss = isParent ? '부모님' : '본인';
+
+    /* 1순위: 미인지 자녀 — 이미 끝난 상속도 흔들 수 있는 최고위험 */
+    if(rm.indexOf('unrecognized_child')>=0)
+      return '가족관계증명서에 없는 자녀가 나중에 인지되면, 이미 끝난 분배도 다시 흔들릴 수 있습니다. 지금 무엇을 정리해두면 그 위험을 막을 수 있는지 확인하세요.';
+    /* 2순위: 내 재산이 배우자 전혼자녀에게 흘러가는 것 차단 */
+    if(rm.indexOf('avoid_step_inheritance')>=0)
+      return (isParent?'부모님의 재산이':'내 재산이')+' 의도와 달리 배우자의 전혼 자녀에게까지 흘러갈 수 있습니다. 이를 막고 친자녀에게 온전히 남기는 합법적 설계를 확인하세요.';
+    /* 3순위: 전혼/재혼 자녀 — 동등 상속권 + 유류분 */
+    if(rm.indexOf('my_prior_children')>=0 || rm.indexOf('spouse_prior_children')>=0)
+      return '전혼 자녀도 법적으로 동등한 상속권과 유류분을 가집니다. 누가 얼마를 청구할 수 있고, '+subjPoss+' 뜻대로 남기려면 무엇을 준비해야 하는지 확인하세요.';
+    /* 4순위: 사업체 + 특정자녀 우대 — 승계 vs 유류분 */
+    if((ans.business==='중요한 비중을 차지함' || at_has(ath,'business')) && wantsUnequal)
+      return '사업을 물려줄 때 다른 자녀가 법적으로 청구할 수 있는 금액이 회사를 흔들 수 있습니다. 그 청구를 합법적으로 줄여 회사를 지키는 방법을 확인하세요.';
+    /* 5순위: 외국국적 자녀 — 절차 교착 */
+    if(ovh.indexOf('family_foreign_nationality')>=0)
+      return '외국 국적 자녀가 있으면 원하는 대로 나눠도 서류 절차 때문에 전체가 수개월 묶일 수 있습니다. 지금 위임장 하나로 막을 수 있는 지연이 무엇인지 확인하세요.';
+    /* 6순위: 토지·농지 — 공유 부동산 교착 */
+    if(aph.indexOf('farmland')>=0 || aph.indexOf('land')>=0)
+      return '토지·농지를 여러 자녀가 나눠 받으면 한 명만 반대해도 수년간 묶입니다. 어떻게 분배하면 매각·분쟁 없이 정리되는지, 지금 해둘 수 있는 것을 확인하세요.';
+    /* 7순위: 특정자녀 우대 (위 신호 없을 때) */
+    if(wantsUnequal)
+      return '특정 자녀에게 더 남기고 싶어도, 준비 없이는 다른 자녀가 법으로 정해진 몫을 청구할 수 있습니다. 누가 얼마를 청구할 수 있고 이를 줄이는 방법을 확인하세요.';
+    /* 8순위: 갈등 뚜렷 */
+    if(ans.conflict==='이미 뚜렷함')
+      return '이미 갈등 조짐이 있다면, 준비 없이 상속이 개시될 때 다툼이 어디서 터질지 미리 알아야 합니다. 분쟁 지점과 막는 방법을 확인하세요.';
+    /* 9순위: 해외주식·코인 — 접근성 */
+    if(at_has(ath,'crypto') || at_has(ath,'overseas_stock'))
+      return '해외 주식과 암호화폐는 '+subj+' 없으면 가족이 접근조차 못 할 수 있습니다. 자산이 묶이지 않게 지금 무엇을 남겨둬야 하는지 확인하세요.';
+    /* 폴백: 일반형 */
+    return '변호사·세무사 상담 1회보다 저렴하게, '+poss+' 상속 설계의 전체 그림을 잡으세요.';
+  }
+  function at_has(arr, v){ return Array.isArray(arr) && arr.indexOf(v)>=0; }
+  var ctaHook = buildCtaHook();
   var sigs=[];
   if(sc>=70)sigs.push('상속인 구성, 재산 구조, 사전 정리 상태를 나누어 확인할 필요가 있습니다.');
   else if(sc>=40)sigs.push('재산 목록, 상속인 관계, 분배 계획을 정리해두면 충분합니다.');
@@ -414,7 +459,7 @@ function showResult(){
     +'<div class="rsec"><h4>'+esc(poss)+' 상황이 파악됐습니다</h4><ul><li>지금 상태로 상속이 개시되면, '+esc(poss)+' 뜻이 그대로 반영되지 않을 수 있습니다.</li><li>유언장이 없으면 법정상속분대로 나뉘어, 더 주고 싶은 자녀가 있어도 강제로 균등 분배됩니다.</li><li>준비한 사람과 준비하지 않은 사람의 결과는 완전히 다릅니다.</li></ul></div>'
     +'<div class="rsec"><h4>이제 "어떻게 할 것인지"가 남았습니다</h4><ul><li>원하는 자녀(가족)에게 더 남기는 합법적 방법</li><li>유류분 분쟁을 최소화하는 구체적 절차</li><li>지금 당장 해야 할 것, 순서대로</li></ul></div>'
     +'<div class="pc"><div class="pe">유료 상세리포트에서 확인하세요</div>'
-    +'<h3>변호사·세무사 상담 1회보다 저렴하게,<br>'+esc(poss)+' 상속 설계의 전체 그림을 잡으세요.</h3>'
+    +'<h3>'+esc(ctaHook)+'</h3>'
     +(sc<50?'<p style="font-size:.86rem;font-weight:650;color:rgba(255,253,245,.7);margin:-4px 0 10px">재산 규모가 크지 않아도 괜찮습니다. 상속 분쟁의 대부분은 적은 금액에서 시작됩니다.</p>':'')
     +'<p class="pl">특가 ₩49,000 <span style="text-decoration:line-through;opacity:.6;">정가 79,000원</span> — 본인만 확인하는 비공개 자료입니다.</p>'
     +'<div class="pcs">'+['특정 자녀(가족)에게 더 남기기 위한 합법적 설계 방법','유류분 반환청구를 최소화하는 3가지 실무 방법 (2026 최신 개정 반영)','해외주식·암호화폐·해외부동산까지 포함한 자산 점검',(isParent?'부모님이':'내가')+' 원하는 분배가 실제로 지켜지는지 시뮬레이션','전문가 상담 전 반드시 확인할 질문 목록'].map(function(t){return'<div class="pci">'+esc(t)+'</div>'}).join('')+'</div>'
