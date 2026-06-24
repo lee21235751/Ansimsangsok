@@ -92,7 +92,18 @@ body{font-family:system-ui,-apple-system,sans-serif;color:#12231d;word-break:kee
 .err-t{font-size:1.2rem;font-weight:950;color:var(--FD)}
 .err-d{color:var(--MU);font-weight:700;line-height:1.7}
 
-@media print{.bg,.bw{display:none}}
+.hdr-row{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}
+.hdr-main{flex:1;min-width:0}
+.hdr-save{flex:none;margin-top:6px;background:rgba(255,255,255,.12);color:#fffdf5;border:1.5px solid rgba(215,173,85,.7);border-radius:12px;padding:10px 16px;font-weight:900;font-size:.9rem;cursor:pointer;white-space:nowrap;transition:background .15s}
+.hdr-save:hover{background:rgba(255,255,255,.22)}
+/* 데스크톱(넓은 화면)에서는 생성 중 이탈 경고 박스 숨김 — 데스크톱은 탭 전환해도 생성 안 끊김 */
+#leaveWarnBox{display:none}
+@media (max-width:720px){
+  #leaveWarnBox{display:block}
+  .hdr-row{flex-direction:column}
+  .hdr-save{align-self:flex-start;margin-top:0}
+}
+@media print{.bg,.bw,.hdr-save{display:none}}
 </style>
 </head>
 <body>
@@ -101,7 +112,7 @@ body{font-family:system-ui,-apple-system,sans-serif;color:#12231d;word-break:kee
     <div class="spin"></div>
     <p>유료 상세리포트를 생성하고 있습니다</p>
     <small>약 1분 소요됩니다. 잠시만 기다려주세요.</small>
-    <div style="margin-top:8px;padding:14px 18px;background:#fff3cd;border:1.5px solid #e6a817;border-radius:14px;max-width:340px;text-align:center">
+    <div id="leaveWarnBox" style="margin-top:8px;padding:14px 18px;background:#fff3cd;border:1.5px solid #e6a817;border-radius:14px;max-width:340px;text-align:center">
       <p style="font-size:.95rem;font-weight:900;color:#7a4d00;line-height:1.6">⚠️ 이 화면을 벗어나거나 다른 앱으로 전환하시면<br>리포트 생성이 중단됩니다.</p>
     </div>
   </div>
@@ -146,7 +157,8 @@ function render(d, orderId){
   var h='';
 
   /* 헤더 */
-  h+='<header class="hdr"><div class="w">'
+  h+='<header class="hdr"><div class="w hdr-row">'
+    +'<div class="hdr-main">'
     +'<div class="badge">안심상속 유료 상세리포트</div>'
     +'<h1>'+esc(d.title||'유료 상세리포트')+'</h1>'
     +'<p>'+esc(d.subtitle||'내 상황에 맞춰 정리한 상속 준비 자료')+'</p>'
@@ -154,7 +166,9 @@ function render(d, orderId){
     +'<span class="chip">진단 점수 '+esc(String(d.score||0))+'점</span>'
     +'<span class="chip">'+esc(d.level||'')+'</span>'
     +arr(d.matchedTypes).map(function(t){return'<span class="chip">'+esc(t)+'</span>'}).join('')
-    +'</div></div></header>';
+    +'</div></div>'
+    +'<button class="hdr-save" onclick="window.print()">⬇ PDF 저장</button>'
+    +'</div></header>';
 
   h+='<div class="body"><div class="w">';
 
@@ -286,8 +300,7 @@ function render(d, orderId){
     +'<p class="sec-d" style="margin-bottom:14px">상황을 한 번만 적으면 여러 전문가가 상담료와 일정을 제안합니다. 비교 후 직접 선택하시면 됩니다.</p>'
     +'<button class="bg" onclick="goExpert()" style="margin-bottom:0">전문가 견적 요청하기</button>'
     +'</div>'
-    +'<button class="bw" onclick="window.print()" style="margin-bottom:9px;margin-top:9px">리포트 저장 (인쇄·PDF)</button>'
-    +'<button class="bw" onclick="location.href=\'/\'">처음으로 돌아가기</button>';
+    +'<button class="bw" onclick="location.href=\'/\'" style="margin-top:9px">처음으로 돌아가기</button>';
 
   h+='</div></div>';
 
