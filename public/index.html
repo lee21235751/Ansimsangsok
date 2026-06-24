@@ -541,7 +541,20 @@ function openPaymentSheet(){
     PayApp.setParam('returnurl', window.location.origin+'/payment-success');
     PayApp.setParam('var2', orderId);
     PayApp.payrequest();
-    setTimeout(function(){ window.location.href='/payment-success'; }, 800);
+    /* After the pay window opens, mobile may background this tab and throttle setTimeout,
+       so move to the confirm page on timeout AND when the tab becomes visible again
+       (pageshow / visibilitychange). Idempotent. PC still works via the timeout path. */
+    var __ansimMoved = false;
+    function __ansimGoSuccess(){
+      if (__ansimMoved) return;
+      __ansimMoved = true;
+      window.location.href = window.location.origin + '/payment-success';
+    }
+    setTimeout(__ansimGoSuccess, 800);
+    window.addEventListener('pageshow', __ansimGoSuccess);
+    document.addEventListener('visibilitychange', function(){
+      if (document.visibilityState === 'visible') { __ansimGoSuccess(); }
+    });
   }catch(err){
     toast('\uacb0\uc81c \ubaa8\ub4c8 \ud638\ucd9c\uc5d0 \uc2e4\ud328\ud588\uc2b5\ub2c8\ub2e4. \uc7a0\uc2dc \ud6c4 \ub2e4\uc2dc \uc2dc\ub3c4\ud574\uc8fc\uc138\uc694.');
   }
