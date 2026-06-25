@@ -122,16 +122,19 @@ export default async function handler(req, res) {
       if (writeOk) {
         console.log('[payapp-feedback] paid_reports 결제확정 기록 완료 orderId=%s', orderId);
       } else {
-        /* 결제는 됐는데 DB 기록에 최종 실패 — 절대 유실되면 안 되는 데이터라 전부 로그에 남겨 수동 복구한다.
-           (PayApp에 FAIL을 반환해 자동 재시도를 받는 방법도 있으나, PayApp 재시도 의미가 확실할 때만 권장.) */
-        console.error('[payapp-feedback] CRITICAL 결제확정 DB기록 최종실패 수동복구필요 orderId=%s txId=%s amount=%s', orderId, txId, parsedPrice);
+        /* 결제는 됐는데 DB 기록에 실패 — 데이터를 전부 로그에 남겨 수동 복구 가능하게 하고,
+           PayApp에 FAIL(비-SUCCESS)을 반환해 통보 재전송(최대 10회)을 유도한다. PayApp은 결제를
+           취소하지 않고 통보만 재전송하며, 위의 "이미 paid면 SUCCESS" 멱등 처리로 중복도 안전하다. */
+        console.error('[payapp-feedback] CRITICAL 결제확정 DB기록 실패 재시도유도 orderId=%s txId=%s amount=%s', orderId, txId, parsedPrice);
+        return res.status(200).send('FAIL');
       }
 
     } catch (dbErr) {
-      console.error('[payapp-feedback] CRITICAL Supabase 예외 orderId=%s txId=%s amount=%s msg=%s', orderId, txId, parsedPrice, dbErr.message);
+      console.error('[payapp-feedback] CRITICAL Supabase 예외 재시도유도 orderId=%s txId=%s amount=%s msg=%s', orderId, txId, parsedPrice, dbErr.message);
+      return res.status(200).send('FAIL');
     }
   } else {
-    console.warn('[payapp-feedback] Supabase 환경변수 없음 또는 orderId 없음');
+    console.error('[payapp-feedback] CRITICAL Supabase 환경변수 없음 또는 orderId 없음 결제기록불가 orderId=%s txId=%s amount=%s', orderId, txId, parsedPrice);
   }
 
   // ── 5. 페이앱에 SUCCESS 응답 ──

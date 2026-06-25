@@ -558,6 +558,7 @@ function openPaymentSheet(){
     PayApp.setParam('recvphone', '');
     PayApp.setParam('reqaddr', '0');
     PayApp.setParam('feedbackurl', window.location.origin+'/api/payapp-feedback');
+    PayApp.setParam('checkretry', 'y');
     PayApp.setParam('returnurl', window.location.origin+'/payment-success?orderId='+encodeURIComponent(orderId));
     PayApp.setParam('var2', orderId);
     PayApp.payrequest();
