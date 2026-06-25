@@ -245,9 +245,10 @@ function buildSimulation(deep, freeAns) {
     overseasAssetType: joinAns(deep.overseasAssetType),
     spouseNationality: deep.spouseNationality || null,
     parentNeglect: joinAns(deep.parentNeglect),
-    childrenNationality: deep.childrenNationality || null,
+    childrenNationality: joinAns(deep.childrenNationality),
     predeceasedChild: deep.predeceasedChild || null,
-    grandchildrenNationality: deep.grandchildrenNationality || null,
+    grandchildrenNationality: joinAns(deep.grandchildrenNationality),
+    minorChildren: deep.minorChildren || null,
     spouseAlive, spouseEstranged, spouseCommonLaw, childCount, shareText, inheritanceTier,
     spouseShareEok, childShareEok, spouseForcedShareEok, childForcedShareEok,
     giftToHeir, giftAmountEok, priorGiftTiming: deep.priorGiftTiming || null,
@@ -282,7 +283,7 @@ const LEGAL_FACTS = {
   priorChildren: '이전 혼인에서 낳은 친자녀(전혼 자녀)는 지금 배우자와의 자녀와 똑같은 상속분을 가진 법적 상속인입니다. 반대로 배우자가 데려온 자녀(의붓자녀)는 정식 입양을 하지 않았다면 법적으로 상속인이 아닙니다 — 오래 함께 살아 친자식처럼 느껴져도 그렇습니다. 의붓자녀에게 남기고 싶다면 입양을 하거나 유언으로 명시해야 합니다.',
   parentNeglect: '어린 시절 본인을 돌보지 않았거나 학대한 부모님이 있다면, 2026년 시행된 구하라법(상속권 상실 선고 제도)으로 그 부모님의 상속권을 법원에 제한해달라고 청구할 수 있습니다. 다만 자동으로 배제되는 것이 아니라 반드시 법원에 따로 청구해야 하며, 양육비 미지급 내역·주민등록 분리 기간·학교나 복지기관 기록 등이 증거가 됩니다. 본인이 생전에 공증으로 의사를 미리 남겨두는 방법도 있습니다.',
   predecease: '자녀 중 먼저 세상을 떠난 분이 있어도 그 몫은 사라지지 않습니다 — 그 자녀의 자녀(손주)가 대신 물려받습니다(대습상속). 손주가 미성년자라면 상속 절차에서 대신 결정해줄 어른(특별대리인)을 법원에서 지정받아야 협의가 유효합니다. 상속인 범위를 정확히 파악할 때 빠뜨리기 쉬운 부분입니다.',
-  minorGuardian: '상속인 중 미성년 자녀가 있으면, 재산 나누기 협의나 사업 지분 승계 때 친권자(보통 배우자)와 그 자녀의 이해가 충돌할 수 있어, 법원에서 특별대리인(미성년자를 대신할 어른)을 지정받아야 협의가 유효합니다. 자녀가 어리다면 이 점을 미리 확인해두는 것이 좋습니다(이미 성년이면 해당 없음).',
+  minorGuardian: '상속인 중 미성년 자녀(만 19세 미만)가 있으면, 재산 나누기 협의나 상속포기를 할 때 친권자(보통 배우자)와 그 자녀의 이해가 충돌할 수 있어, 법원에서 특별대리인(미성년자를 대신할 어른)을 따로 지정받아야 합니다. 이를 빠뜨리면 협의분할이나 상속포기 자체가 무효가 될 수 있으니, 자녀가 어리다면 반드시 미리 확인해두세요(이미 성년이면 해당 없음).',
   farmland: '농지(논·밭·과수원)도 토지처럼 똑같이 나누기 어려워 공유 상태가 되기 쉽고, 그러면 처분할 때 상속인 전원의 동의가 필요해 한 명만 반대해도 오래 묶입니다. 다행히 상속으로 농지를 받을 때는 농지취득자격증명 없이 바로 등기할 수 있어 매매보다 절차가 간단합니다. 또 부모님이 8년 이상 직접 농사지은 농지라면 상속받은 날로부터 3년 안에 팔 경우 직접 농사짓지 않아도 양도소득세를 감면받을 수 있으니(한도 있음), 농사 계획이 없다면 이 3년 기한을 기억해두세요.',
 };
 
@@ -329,7 +330,7 @@ function buildBlindSpots(sim, answers, deep){
                                                                 push('전혼 자녀와 의붓자녀는 법적 지위가 다릅니다', LEGAL_FACTS.priorChildren);
   if(!neg(sim.parentNeglect))                                    push('돌보지 않은 부모의 상속권은 제한을 청구할 수 있습니다', LEGAL_FACTS.parentNeglect);
   if(!neg(sim.predeceasedChild))                                 push('먼저 떠난 자녀의 몫은 손주가 대신 받습니다', LEGAL_FACTS.predecease);
-  if(sim.childCount>0 && hasBusiness)                            push('미성년 상속인이 있으면 특별대리인이 필요합니다', LEGAL_FACTS.minorGuardian);
+  if(sim.minorChildren && /있음/.test(String(sim.minorChildren)))  push('미성년 상속인이 있으면 특별대리인이 필요합니다', LEGAL_FACTS.minorGuardian);
   if(sim.giftToHeir)                                            push('사전증여는 유류분 계산에서 빠지지 않습니다', LEGAL_FACTS.gift);
   if(presence.includes('farmland'))                             push('농지는 나누기 어렵지만 상속 시 절세 혜택이 있습니다', LEGAL_FACTS.farmland);
   if(reCount>=2 || (sim.realEstateEok>0 && sim.childCount>1))   push('부동산을 "똑같이 나눈다"는 건 현금 나누기와 다릅니다', LEGAL_FACTS.realEstate);
@@ -564,6 +565,7 @@ async function callClaude(answers, types, score, deepAnswers) {
 - 해외자산 형태: ${sim.overseasAssetType || '해당없음'}
 - 배우자 국적·영주권 상태: ${sim.spouseNationality || '해당없음'}
 - 자녀 국적·영주권 상태: ${sim.childrenNationality || '해당없음'}
+- 미성년 자녀 여부: ${sim.minorChildren && /있음/.test(String(sim.minorChildren)) ? '있음 — 협의분할·상속포기 시 특별대리인 선임 필요(미선임 시 무효)' : (sim.minorChildren || '해당없음')}
 - 먼저 사망한 자녀(대습상속 가능성): ${sim.predeceasedChild && sim.predeceasedChild !== '없음' ? sim.predeceasedChild : '없음'}
 - 대습상속인이 될 손주의 국적·영주권 상태: ${sim.grandchildrenNationality || '해당없음'}
 - 부모(직계존속)의 과거 양육의무 위반/학대 이력: ${sim.parentNeglect && sim.parentNeglect !== '없음' ? sim.parentNeglect + ' (구하라법 적용 검토 대상)' : '없음 또는 해당없음'}
