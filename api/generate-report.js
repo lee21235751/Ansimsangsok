@@ -304,6 +304,44 @@ function buildTaxNote(sim){
   return '상속세는 순재산 '+formatEok(sim.netEok)+'에서 일괄공제 5억 원과 배우자공제(배우자가 실제 상속받는 금액에 따라 최소 5억~최대 30억 원)를 뺀 뒤 누진세율(최고 50%)로 계산됩니다. 실제 세액은 배우자가 실제로 얼마를 상속받는지와 부동산 평가액 등에 따라 크게 달라지므로, 정확한 금액은 세무사 상담이 필요합니다. 사업체 지분이 있다면 가업상속공제 적용 여부도 함께 확인하세요.';
 }
 
+/* 방어수단 카드 — 코드 고정(LLM 환각·과잉 자문 차단). 일반 정보 + 비용 낮은 순, 단정 금지. */
+function buildDefenseOptions(sim){
+  if(!sim) return null;
+  const neto = (typeof sim.netEok === 'number') ? sim.netEok : null;
+  const hasRE = sim.realEstateEok && sim.realEstateEok > 0;
+  const hasBiz = sim.businessShare && sim.businessShare !== '없음 또는 미상';
+  const needsCash = hasRE || hasBiz;
+  const opts = [];
+  opts.push({ name:'유언장 작성', cost:'낮음',
+    effect:'분배 의도를 직접 명시해, 유언이 없을 때 적용되는 법정상속분과 다르게 남길 수 있습니다.',
+    note:'자필증서 유언은 전문 자필·연월일·주소·성명·날인 5가지를 모두 갖춰야 효력이 있고, 하나라도 빠지면 무효가 될 수 있습니다. 분쟁이 우려되면 공정증서 유언이 더 안전합니다.' });
+  opts.push({ name:'생전 증여', cost:'낮음~중간',
+    effect:'생전에 일부를 미리 넘겨 분배를 조정할 수 있습니다.',
+    note:'다만 상속인에게 한 증여는 시기와 무관하게 유류분 산정에 합산되므로, 증여만으로 유류분을 피할 수는 없습니다.' });
+  if(needsCash || (neto!==null && neto>=1)){
+    opts.push({ name:'종신보험 등 정산 재원 마련', cost:'중간',
+      effect:'현금 재원을 미리 마련해두면, 부동산이나 사업체를 팔지 않고도 다른 상속인의 유류분 청구에 정산하기 유리합니다.',
+      note:'수익자 지정을 통해 특정 상속인에게 자금을 남기는 설계도 가능합니다. 필요한 재원 규모는 분배 설계에 따라 달라집니다.' });
+  }
+  if(neto!==null && neto>=5){
+    opts.push({ name:'유언대용신탁', cost:'높음',
+      effect:'신탁 계약으로 분배 방법과 시점을 세밀하게 정해둘 수 있습니다.',
+      note:'다만 최근 판례는 신탁재산도 유류분 산정 기초에 포함하는 추세여서 만능 해법은 아니며, 최소 가입금액이 큰 편입니다.' });
+  }
+  return opts;
+}
+
+/* "준비하면" 요약 — 코드 고정. 일반 진술, 구체 숫자·단정 금지. */
+function buildAfterDefense(sim){
+  if(!sim) return null;
+  const hasRE = sim.realEstateEok && sim.realEstateEok > 0;
+  const hasBiz = sim.businessShare && sim.businessShare !== '없음 또는 미상';
+  if(hasRE || hasBiz){
+    return '현금·보험으로 정산 재원을 미리 마련해두면, 부동산이나 사업체를 팔지 않고도 다른 상속인의 유류분에 정산할 수 있어 원하는 분배에 더 가깝게 지킬 수 있습니다. 유류분 반환은 원물반환이 원칙이나 가액(현금)반환 원칙으로 전환되는 추세이므로(시행 시점 확인 필요), 정산 재원을 확보해두는 것이 더욱 유효한 대비가 됩니다.';
+  }
+  return '유언으로 분배 의도를 분명히 하고 정산에 쓸 재원을 미리 마련해두면, 의도한 분배와 실제 결과의 차이를 줄일 수 있습니다. 구체적인 적용 방법은 변호사·세무사 상담으로 확인하시는 것이 좋습니다.';
+}
+
 function buildBlindSpots(sim, answers, deep){
   if(!sim) return [];
   const a = answers || {};
@@ -802,6 +840,10 @@ ${conditionalInstructions}`;
       if (ls) __report.sections.simulation.legal_share = ls;
       const tn = buildTaxNote(sim);
       if (tn) __report.sections.simulation.tax_note = tn;
+      const dopt = buildDefenseOptions(sim);
+      if (dopt && dopt.length) __report.sections.simulation.defense_options = dopt;
+      const ad = buildAfterDefense(sim);
+      if (ad) __report.sections.simulation.after_defense = ad;
     }
     const bs = buildBlindSpots(sim, answers, deepAnswers);
     if (bs && bs.length) __report.sections.blind_spots = { title: '놓치기 쉬운 항목', items: bs };
