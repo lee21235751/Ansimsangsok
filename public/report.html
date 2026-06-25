@@ -177,6 +177,9 @@ function render(d, orderId){
 
   h+='<div class="body"><div class="w">';
 
+  /* 비-법률자문 고지 (상단·상시 노출) */
+  h+='<div style="background:#f3f6f4;border:1px solid rgba(31,77,58,.28);border-radius:12px;padding:13px 15px;margin-bottom:20px;font-size:.84rem;line-height:1.62;color:#3a4a44;font-weight:650">이 리포트는 입력하신 정보를 바탕으로 <strong>일반적인 상속 정보를 정리해 제공</strong>하는 자료입니다. 특정 사건에 대한 <strong>법률 자문이나 법률 상담이 아니며</strong>, 변호사·세무사의 개별 상담을 대체하지 않습니다. 실제 진행 시에는 전문가와 함께 확인하시기 바랍니다.</div>';
+
   /* 1. 요약 */
   if(s.summary){
     h+='<div class="sec"><div class="sec-ey">01 내 상황 요약</div>'
