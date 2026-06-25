@@ -103,7 +103,13 @@ body{font-family:system-ui,-apple-system,sans-serif;color:#12231d;word-break:kee
   #leaveWarnBox{display:block}
   .hdr-save{align-self:flex-start}
 }
-@media print{.bg,.bw,.hdr-save{display:none}}
+@media print{
+  .bg,.bw,.hdr-save{display:none}
+  /* 페이지 분할 보정: 제목이 페이지 끝에 고아로 남거나, 카드 내부 원자 블록이 잘리는 것을 방지 */
+  .sec-ey,.sec-t,.step-t,.bs-t,h1,h2,h3{break-after:avoid;page-break-after:avoid}
+  .step,.bs,.qi,.ck,.notice{break-inside:avoid;page-break-inside:avoid}
+  .sec-d,p,li{orphans:3;widows:3}
+}
 </style>
 </head>
 <body>

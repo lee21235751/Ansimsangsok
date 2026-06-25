@@ -699,131 +699,151 @@ ${conditionalInstructions}`;
   return __report;
 }
 
+/* ── paid_reports DB 헬퍼 ──
+   Supabase REST(PostgREST) 호출을 한 곳에 모아 핸들러를 단순하게 유지한다.
+   주의: fetch는 HTTP 4xx/5xx에서 throw하지 않으므로 모든 응답에서 res.ok를 직접 확인한다. */
+function sbConfig() {
+  const url = (process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL || '').replace(/\/$/, '');
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
+  return { url, key, ok: !!(url && key) };
+}
+function sbHeaders(cfg, extra) {
+  return Object.assign({ apikey: cfg.key, Authorization: 'Bearer ' + cfg.key }, extra || {});
+}
+/* order_id로 paid_reports 한 행 조회. 성공 시 행(없으면 null) 반환, HTTP 실패 시 throw. */
+async function sbSelectOrder(cfg, orderId, selectCols) {
+  const url = cfg.url + '/rest/v1/paid_reports?order_id=eq.' + encodeURIComponent(orderId) + '&select=' + selectCols;
+  const r = await fetch(url, { headers: sbHeaders(cfg) });
+  if (!r.ok) {
+    const t = await r.text().catch(() => '');
+    throw new Error('select status=' + r.status + ' body=' + t);
+  }
+  const rows = await r.json();
+  return Array.isArray(rows) ? (rows[0] || null) : null;
+}
+/* order_id 행을 PATCH. res.ok 확인 + 최대 maxAttempts 재시도. 성공 시 true 반환.
+   label은 로그 식별용(예: 선저장, 본문저장). 호출측에서 false 처리(로깅/CRITICAL)를 결정한다. */
+async function sbPatchOrder(cfg, orderId, patchObj, label, maxAttempts) {
+  const url = cfg.url + '/rest/v1/paid_reports?order_id=eq.' + encodeURIComponent(orderId);
+  const headers = sbHeaders(cfg, { 'Content-Type': 'application/json', Prefer: 'return=minimal' });
+  const bodyStr = JSON.stringify(patchObj);
+  const attempts = maxAttempts || 2;
+  for (let i = 1; i <= attempts; i++) {
+    try {
+      const r = await fetch(url, { method: 'PATCH', headers, body: bodyStr });
+      if (r.ok) return true;
+      const t = await r.text().catch(() => '');
+      console.error(label + ' PATCH 실패 attempt=' + i + ' orderId=' + orderId + ' status=' + r.status + ' body=' + t);
+    } catch (e) {
+      console.error(label + ' PATCH 예외 attempt=' + i + ' orderId=' + orderId + ' msg=' + e.message);
+    }
+  }
+  return false;
+}
+
 /* ── 메인 핸들러 ── */
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
-    res.setHeader('Allow','POST');
-    return res.status(405).json({ok:false,message:'Method not allowed'});
+    res.setHeader('Allow', 'POST');
+    return res.status(405).json({ ok: false, message: 'Method not allowed' });
   }
 
   try {
-    const body    = req.body||{};
-    const answers = body.answers && typeof body.answers==='object' ? body.answers : {};
-    const score   = Number.isFinite(Number(body.score)) ? Number(body.score) : 0;
-    const deepAnswers = body.deepAnswers && typeof body.deepAnswers==='object' ? body.deepAnswers : null;
-    const orderId = typeof body.orderId === 'string' ? body.orderId : null;
+    const body        = req.body || {};
+    const answers     = body.answers && typeof body.answers === 'object' ? body.answers : {};
+    const score       = Number.isFinite(Number(body.score)) ? Number(body.score) : 0;
+    const deepAnswers = body.deepAnswers && typeof body.deepAnswers === 'object' ? body.deepAnswers : null;
+    const orderId     = typeof body.orderId === 'string' ? body.orderId : null;
+
     /* 개발/검증용 우회: 환경변수 DEV_REPORT_TOKEN과 일치하는 devToken이 오면 결제검증·저장을 건너뜀.
        토큰을 모르면 우회 불가하므로 실고객 경로는 영향 없음. */
     const DEV_TOKEN = process.env.DEV_REPORT_TOKEN || '';
     const isDev = !!(DEV_TOKEN && body.devToken === DEV_TOKEN);
 
-    /* 결제 검증: orderId가 paid_reports에 status='paid'로 존재하고 아직 리포트를 발급받지 않았는지 확인.
-       이 검증이 없으면 누구나 이 엔드포인트를 직접 호출해 결제 없이 리포트를 받을 수 있음. */
-    const sbUrlCheck = (process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL || '').replace(/\/$/,'');
-    const sbKeyCheck = process.env.SUPABASE_SERVICE_ROLE_KEY||'';
-    if (!isDev && (!sbUrlCheck || !sbKeyCheck)) {
+    const sb = sbConfig();
+    if (!isDev && !sb.ok) {
       console.error('SUPABASE 환경변수 누락 - 결제 검증 불가');
-      return res.status(500).json({ok:false,message:'서버 설정 오류입니다. 잠시 후 다시 시도해주세요.'});
+      return res.status(500).json({ ok: false, message: '서버 설정 오류입니다. 잠시 후 다시 시도해주세요.' });
     }
     if (!isDev && !orderId) {
-      return res.status(402).json({ok:false,message:'결제 정보가 확인되지 않았습니다. 처음부터 다시 진행해주세요.'});
+      return res.status(402).json({ ok: false, message: '결제 정보가 확인되지 않았습니다. 처음부터 다시 진행해주세요.' });
     }
+
+    /* 결제 검증: paid_reports에 status=paid로 존재하고 아직 발급 전인지 확인.
+       이미 발급된 건이면 저장해둔 리포트를 그대로 재제공(모바일 재진입 등). */
     if (!isDev) {
-    try {
-      const checkRes = await fetch(
-        sbUrlCheck + '/rest/v1/paid_reports?order_id=eq.' + encodeURIComponent(orderId) + '&select=status,report_generated,report_json,score,level,matched_types,created_at',
-        { headers: { apikey: sbKeyCheck, Authorization: 'Bearer ' + sbKeyCheck } }
-      );
-      if (!checkRes.ok) {
-        const errText = await checkRes.text().catch(() => '');
-        console.error('결제 검증 조회 실패. orderId=' + orderId + ' status=' + checkRes.status + ' body=' + errText);
-        return res.status(500).json({ok:false,message:'결제 확인 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.'});
+      let record;
+      try {
+        record = await sbSelectOrder(sb, orderId, 'status,report_generated,report_json,score,level,matched_types,created_at');
+      } catch (checkErr) {
+        console.error('결제 검증 조회 실패 orderId=' + orderId + ' ' + checkErr.message);
+        return res.status(500).json({ ok: false, message: '결제 확인 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.' });
       }
-      const rows = await checkRes.json();
-      const record = Array.isArray(rows) ? rows[0] : null;
       if (!record || record.status !== 'paid') {
-        console.error('결제 기록 없음 또는 미결제 상태. orderId=' + orderId + ' found=' + JSON.stringify(rows));
-        return res.status(402).json({ok:false,message:'결제가 확인되지 않았습니다. 결제 후 다시 시도해주세요.'});
+        console.error('결제 기록 없음 또는 미결제 orderId=' + orderId + ' record=' + JSON.stringify(record));
+        return res.status(402).json({ ok: false, message: '결제가 확인되지 않았습니다. 결제 후 다시 시도해주세요.' });
       }
       if (record.report_generated) {
-        /* 모바일에서 리포트 생성 중 다른 앱으로 나갔다 오는 등으로 재요청이 들어와도 에러 없이
-           기존에 저장해둔 리포트를 그대로 돌려줌. 결제 1건당 리포트는 같은 내용을 몇 번이든
-           다시 받을 수 있어야 함 — 단, 결제일로부터 30일이 지나면 더 이상 제공하지 않음. */
+        /* 결제 1건당 같은 리포트를 몇 번이든 다시 받을 수 있음 — 단 발급일로부터 30일까지. */
         const THIRTY_DAYS_MS = 30 * 24 * 60 * 60 * 1000;
         const createdAt = record.created_at ? new Date(record.created_at).getTime() : 0;
         if (createdAt && (Date.now() - createdAt) > THIRTY_DAYS_MS) {
-          return res.status(410).json({ok:false,message:'발급일로부터 30일이 지나 더 이상 조회할 수 없습니다.'});
+          return res.status(410).json({ ok: false, message: '발급일로부터 30일이 지나 더 이상 조회할 수 없습니다.' });
         }
         if (!record.report_json) {
-          /* 저장 단계에서 실패했던 구버전 데이터 등 report_json이 없는 예외 케이스 */
-          return res.status(409).json({ok:false,message:'이미 이 결제로 리포트가 발급되었으나 저장된 내용을 찾을 수 없습니다. 안심상속에 문의해주세요.'});
+          /* 저장 단계에서 실패해 본문이 없는 예외 케이스(구버전 데이터 등) */
+          return res.status(409).json({ ok: false, message: '이미 이 결제로 리포트가 발급되었으나 저장된 내용을 찾을 수 없습니다. 안심상속에 문의해주세요.' });
         }
         return res.status(200).json({
-          ok:true,
-          report:record.report_json,
-          meta:{matchedTypes:record.matched_types||[],score:record.score||0,level:record.level||'',generatedAt:record.report_json.generated_at}
+          ok: true,
+          report: record.report_json,
+          meta: { matchedTypes: record.matched_types || [], score: record.score || 0, level: record.level || '', generatedAt: record.report_json.generated_at },
         });
       }
-    } catch (checkErr) {
-      console.error('결제 검증 중 오류:', checkErr.message);
-      return res.status(500).json({ok:false,message:'결제 확인 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.'});
-    }
     }
 
     const types = matchTypes(answers);
 
+    /* 선저장: Claude 호출 전에 설문 입력을 먼저 저장한다. 생성이 502 등으로 실패해도
+       survey_input이 남아 있어 나중에 서버에서 같은 입력으로 재생성/복구할 수 있다.
+       선저장 실패는 생성 자체를 막지 않고 로그만 남긴다. */
+    if (!isDev) {
+      const presaved = await sbPatchOrder(sb, orderId, {
+        survey_input: { answers, deepAnswers, score, matched_types: types, saved_at: new Date().toISOString() },
+      }, '선저장', 2);
+      if (!presaved) {
+        console.error('선저장 실패(생성은 계속 진행) orderId=' + orderId);
+      }
+    }
+
     let report;
     try {
       report = await callClaude(answers, types, score, deepAnswers);
-    } catch(e) {
-      console.error('Claude 오류:', e.message);
-      return res.status(502).json({ok:false,message:'리포트 생성 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요.'});
+    } catch (e) {
+      console.error('Claude 오류 orderId=' + (orderId || '(dev)') + ' msg=' + e.message);
+      return res.status(502).json({ ok: false, message: '리포트 생성 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요.' });
     }
 
-    /* 리포트 발급 완료 표시 + 리포트 본문 저장 (결제 시점에 만들어둔 같은 order_id 행을 업데이트).
-       주의: fetch는 HTTP 4xx/5xx에서 throw하지 않으므로 반드시 res.ok를 직접 확인해야 한다.
-       이 확인이 없어 과거에 PATCH가 조용히 실패하고 report_generated=false / report_json=null로
-       남는 사고가 있었음(고객 화면엔 리포트가 떴는데 DB만 미기록). 실패하면 1회 재시도하고,
-       그래도 실패하면 order_id가 박힌 CRITICAL 로그를 남겨 Vercel 로그에서 추적/복구 가능하게 한다.
-       사용자에게는 리포트가 이미 정상 응답되므로 저장 실패와 무관하게 200을 유지한다. */
+    /* 본문 저장 + 발급완료 표시. 헬퍼가 res.ok 확인·재시도까지 처리한다.
+       최종 실패 시 CRITICAL 로그를 남기되, 리포트는 이미 사용자에게 응답되므로 200을 유지한다.
+       선저장 덕분에 이 단계가 실패해도 survey_input으로 복구할 수 있다. */
     if (!isDev) {
-      const patchUrl = sbUrlCheck + '/rest/v1/paid_reports?order_id=eq.' + encodeURIComponent(orderId);
-      const patchHeaders = {
-        apikey: sbKeyCheck,
-        Authorization: 'Bearer ' + sbKeyCheck,
-        'Content-Type': 'application/json',
-        Prefer: 'return=minimal',
-      };
-      const patchBody = JSON.stringify({
+      const saved = await sbPatchOrder(sb, orderId, {
         report_generated: true,
         score,
         level: report.level,
         matched_types: types,
         report_json: report,
-      });
-      let saved = false;
-      for (let attempt = 1; attempt <= 2 && !saved; attempt++) {
-        try {
-          const patchRes = await fetch(patchUrl, { method: 'PATCH', headers: patchHeaders, body: patchBody });
-          if (patchRes.ok) {
-            saved = true;
-          } else {
-            const errText = await patchRes.text().catch(() => '');
-            console.error('리포트 저장 PATCH 실패 attempt=' + attempt + ' orderId=' + orderId + ' status=' + patchRes.status + ' body=' + errText);
-          }
-        } catch (markErr) {
-          console.error('리포트 저장 PATCH 예외 attempt=' + attempt + ' orderId=' + orderId + ' msg=' + markErr.message);
-        }
-      }
+      }, '본문저장', 2);
       if (!saved) {
-        console.error('CRITICAL 리포트본문 저장 최종실패 orderId=' + orderId + ' 사용자에게는 응답됨 DB는 report_generated=false 상태 수동확인필요');
+        console.error('CRITICAL 리포트본문 저장 최종실패 orderId=' + orderId + ' 사용자에게는 응답됨 survey_input으로 복구가능');
       }
     }
 
-    return res.status(200).json({ok:true,report,meta:{matchedTypes:types,score,level:report.level,generatedAt:report.generated_at}});
+    return res.status(200).json({ ok: true, report, meta: { matchedTypes: types, score, level: report.level, generatedAt: report.generated_at } });
 
-  } catch(e) {
+  } catch (e) {
     console.error('핸들러 오류:', e);
-    return res.status(500).json({ok:false,message:'리포트 생성 중 오류가 발생했습니다.'});
+    return res.status(500).json({ ok: false, message: '리포트 생성 중 오류가 발생했습니다.' });
   }
 }
