@@ -242,7 +242,7 @@ function buildSimulation(deep, freeAns) {
     totalEok, debtEok, netEok, totalDeduction, taxableEok,
     realEstateEok, hasOverseasAsset, overseasEok, finEok, assetMismatch,
     realEstateCount: deep.realEstateCount || null,
-    overseasAssetType: deep.overseasAssetType || null,
+    overseasAssetType: joinAns(deep.overseasAssetType),
     spouseNationality: deep.spouseNationality || null,
     parentNeglect: joinAns(deep.parentNeglect),
     childrenNationality: deep.childrenNationality || null,
