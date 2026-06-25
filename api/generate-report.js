@@ -227,10 +227,9 @@ function buildSimulation(deep, freeAns) {
   } else if (inheritanceTier === 'siblings' && netEok != null) {
     /* 자녀·부모 모두 없고 배우자도 없으면 형제자매가 균등 상속. 형제자매는 2024년 헌재 위헌 결정으로 유류분 자체가 폐지됨 */
     const n = Math.max(1, siblingsCount || 1);
-    const sibUnknown = (siblingsCount == null);
     childShareEok = netEok / n;
     childForcedShareEok = 0; /* 형제자매는 유류분 없음 */
-    shareText = `형제자매 ${n}인 균등상속 (1인당 ${(100/n).toFixed(1)}%, 유류분 권리 없음)` + (sibUnknown ? ' — 형제자매 수가 확인되지 않아 1인 기준으로 추정했습니다' : '');
+    shareText = `형제자매 ${n}인 균등상속 (1인당 ${(100/n).toFixed(1)}%, 유류분 권리 없음)`;
   }
 
   /* 유류분 산정 기초재산 관련 플래그
@@ -276,6 +275,15 @@ const LEGAL_FACTS = {
   caregiving: '부양·간병 기여를 나중에 법적으로 인정받으려면 지금부터 증거를 남겨야 합니다. 통장 이체 내역, 병원·요양비 영수증, 함께 산 기간을 보여주는 주민등록 등본 등을 모아두세요. 2026년 개정으로 기여 보상으로 받은 증여는 유류분 반환 대상에서 제외될 수 있어, 이런 기록이 더욱 중요해졌습니다.',
   valueReturn: '유류분 반환은 현재 원물반환(부동산 지분 그 자체를 돌려주는 것)이 원칙이며, 가액(현금)반환 원칙으로 바꾸는 개정안이 2026년 2월 국회를 통과해 시행을 앞두고 있습니다(공포일부터 적용되며 그 전에 개시된 상속에는 소급되지 않습니다). 어느 경우든 현금·보험으로 정산 재원을 미리 마련해두면 부동산·사업체 자체를 지키기에 유리합니다.',
   conflict: '지금 갈등이 없어도 안심할 수는 없습니다. 상속재산분할 소송은 2024년 처음 3천 건을 넘어 10년 새 3.6배로 늘었고, 그중 82.7%가 1억원 이하의 소액 분쟁입니다. 사이가 좋던 가족도 막상 상속이 시작되면 입장이 달라지는 경우가 많아, 미리 정리해두는 것이 안전합니다.',
+  unrecognizedChild: '가족관계증명서에 올라 있지 않은 자녀(혼외자 등)가 있다면, 그 자녀가 친자로 인정(인지)되는 순간 다른 자녀와 똑같은 상속분을 갖습니다. 더 중요한 점은, 이미 상속 재산을 다 나눈 뒤에 그 자녀가 인정되더라도 자기 몫에 해당하는 금액을 다른 상속인들에게 청구할 수 있다는 것입니다(민법 제1014조) — 끝난 줄 알았던 상속이 다시 흔들릴 수 있습니다. 생전에 미리 정리하거나 유언에 입장을 명시해두는 것이 안전합니다.',
+  estrangedSpouse: '별거 중이거나 이혼소송이 진행 중이어도, 사망 시점에 정식으로 이혼이 끝나지 않았다면 배우자는 법적으로 100% 상속인 자격을 그대로 가집니다. 별거 기간이 아무리 길어도 마찬가지입니다. 이를 원하지 않는다면 사망 전에 이혼 절차를 마치거나, 유언으로 배우자 몫을 유류분(법적으로 최소한 받는 몫, 법정상속분의 절반) 수준까지 줄이는 방법이 있습니다(그 아래로는 줄일 수 없습니다).',
+  commonLawSpouse: '혼인신고를 하지 않은 사실혼·동거 관계는 아무리 오래 함께 살았어도 법적으로 상속권이 전혀 없습니다. 그분에게 재산을 남기고 싶다면 반드시 유언장에 "누구에게 무엇을 남긴다(유증)"를 명시해야 하며, 그렇지 않으면 한 푼도 받지 못합니다. 가장 확실한 방법은 혼인신고이고, 어렵다면 유언장 작성이 사실상 필수입니다.',
+  dementia: '유언을 작성하는 분의 판단력(인지능력)이 떨어진 상태라면, 나중에 다른 가족이 "그때 정상적으로 판단할 수 없었다"며 유언 무효를 주장할 수 있습니다 — 유언 분쟁에서 가장 흔한 사유입니다. 이를 막으려면 ①공증인과 증인 2명이 확인하는 공정증서 유언으로 작성하고 ②작성 무렵 의사 진단서를 함께 받아 보관하며 ③가능하면 작성 과정을 영상으로 남겨두는 것이 효과적입니다. 시간이 지날수록 입증이 어려워지므로 미루지 않는 것이 안전합니다.',
+  priorChildren: '이전 혼인에서 낳은 친자녀(전혼 자녀)는 지금 배우자와의 자녀와 똑같은 상속분을 가진 법적 상속인입니다. 반대로 배우자가 데려온 자녀(의붓자녀)는 정식 입양을 하지 않았다면 법적으로 상속인이 아닙니다 — 오래 함께 살아 친자식처럼 느껴져도 그렇습니다. 의붓자녀에게 남기고 싶다면 입양을 하거나 유언으로 명시해야 합니다.',
+  parentNeglect: '어린 시절 본인을 돌보지 않았거나 학대한 부모님이 있다면, 2026년 시행된 구하라법(상속권 상실 선고 제도)으로 그 부모님의 상속권을 법원에 제한해달라고 청구할 수 있습니다. 다만 자동으로 배제되는 것이 아니라 반드시 법원에 따로 청구해야 하며, 양육비 미지급 내역·주민등록 분리 기간·학교나 복지기관 기록 등이 증거가 됩니다. 본인이 생전에 공증으로 의사를 미리 남겨두는 방법도 있습니다.',
+  predecease: '자녀 중 먼저 세상을 떠난 분이 있어도 그 몫은 사라지지 않습니다 — 그 자녀의 자녀(손주)가 대신 물려받습니다(대습상속). 손주가 미성년자라면 상속 절차에서 대신 결정해줄 어른(특별대리인)을 법원에서 지정받아야 협의가 유효합니다. 상속인 범위를 정확히 파악할 때 빠뜨리기 쉬운 부분입니다.',
+  minorGuardian: '상속인 중 미성년 자녀가 있으면, 재산 나누기 협의나 사업 지분 승계 때 친권자(보통 배우자)와 그 자녀의 이해가 충돌할 수 있어, 법원에서 특별대리인(미성년자를 대신할 어른)을 지정받아야 협의가 유효합니다. 자녀가 어리다면 이 점을 미리 확인해두는 것이 좋습니다(이미 성년이면 해당 없음).',
+  farmland: '농지(논·밭·과수원)도 토지처럼 똑같이 나누기 어려워 공유 상태가 되기 쉽고, 그러면 처분할 때 상속인 전원의 동의가 필요해 한 명만 반대해도 오래 묶입니다. 다행히 상속으로 농지를 받을 때는 농지취득자격증명 없이 바로 등기할 수 있어 매매보다 절차가 간단합니다. 또 부모님이 8년 이상 직접 농사지은 농지라면 상속받은 날로부터 3년 안에 팔 경우 직접 농사짓지 않아도 양도소득세를 감면받을 수 있으니(한도 있음), 농사 계획이 없다면 이 3년 기한을 기억해두세요.',
 };
 
 function buildLegalShareText(sim){
@@ -295,22 +303,44 @@ function buildTaxNote(sim){
   return '상속세는 순재산 '+formatEok(sim.netEok)+'에서 일괄공제 5억 원과 배우자공제(배우자가 실제 상속받는 금액에 따라 최소 5억~최대 30억 원)를 뺀 뒤 누진세율(최고 50%)로 계산됩니다. 실제 세액은 배우자가 실제로 얼마를 상속받는지와 부동산 평가액 등에 따라 크게 달라지므로, 정확한 금액은 세무사 상담이 필요합니다. 사업체 지분이 있다면 가업상속공제 적용 여부도 함께 확인하세요.';
 }
 
-function buildBlindSpots(sim){
+function buildBlindSpots(sim, answers, deep){
   if(!sim) return [];
+  const a = answers || {};
+  const d = deep || {};
+  const remarriage = Array.isArray(a.remarriage) ? a.remarriage : [];
+  const presence   = Array.isArray(a.assetPresence) ? a.assetPresence : [];
+  const health     = d.testatorHealth || a.testatorHealth || '';
   const items=[];
-  const push=(t,c)=>{ if(c) items.push({title:t,content:c}); };
+  const push=(t,c)=>{ if(c && !items.some(x=>x.title===t)) items.push({title:t,content:c}); };
+  /* "없음/해당없음/0명/미상" 류는 신호로 보지 않는다(존재만으로 오판 방지) */
+  const neg = (v)=>{ const s=String(v==null?'':v).trim(); return !s || /없음|해당\s*없|^0(명|%|건)?$|모름|미상|아니/.test(s); };
+
   const hasForcedShare = (sim.spouseForcedShareEok>0)||(sim.childForcedShareEok>0);
   const reCount = sim.realEstateCount ? Number(String(sim.realEstateCount).replace(/[^0-9]/g,''))||0 : 0;
-  const foreign = (sim.foreignNatChildren && !['0명','없음',''].includes(String(sim.foreignNatChildren))) || (sim.childrenNationality && /외국|복수|시민/.test(String(sim.childrenNationality)));
-  if(sim.giftToHeir) push('사전증여는 유류분 계산에서 빠지지 않습니다', LEGAL_FACTS.gift);
-  if(reCount>=2 || (sim.realEstateEok>0 && sim.childCount>1)) push('부동산을 "똑같이 나눈다"는 건 현금 나누기와 다릅니다', LEGAL_FACTS.realEstate);
-  if(foreign) push('외국 국적 자녀가 있으면 서류 준비가 더 복잡합니다', LEGAL_FACTS.foreign);
-  if(sim.hasOverseasAsset) push('해외 예금·주식도 한국 상속세 신고 대상입니다', LEGAL_FACTS.overseas);
-  if(sim.businessShare) push('사업체 지분은 유류분 침해 위험이 큽니다', LEGAL_FACTS.business);
-  if(sim.caregivingContribution) push('부양·간병 기여는 지금부터 증거를 남겨야 합니다', LEGAL_FACTS.caregiving);
-  if(hasForcedShare) push('유류분 반환 방식이 바뀌고 있습니다', LEGAL_FACTS.valueReturn);
+  const foreign = (sim.foreignNatChildren && !neg(sim.foreignNatChildren)) || (sim.childrenNationality && /외국|복수|시민/.test(String(sim.childrenNationality)));
+  const hasBusiness = sim.businessShare && !neg(sim.businessShare);
+
+  /* 상속인 범위·기본값이 통째로 흔들리는 충격도 높은 항목부터(케이스 특화 우선) */
+  if(remarriage.includes('unrecognized_child'))                 push('이미 끝난 상속도 나중에 다시 흔들릴 수 있습니다', LEGAL_FACTS.unrecognizedChild);
+  if(sim.spouseEstranged)                                        push('별거·이혼소송 중이어도 배우자는 100% 상속인입니다', LEGAL_FACTS.estrangedSpouse);
+  if(sim.spouseCommonLaw)                                        push('혼인신고 없는 사실혼은 상속권이 전혀 없습니다', LEGAL_FACTS.commonLawSpouse);
+  if(health === '인지 능력 저하가 진행 중(치매 진단 등)')        push('판단력이 떨어진 상태의 유언은 무효 다툼이 생깁니다', LEGAL_FACTS.dementia);
+  if(remarriage.includes('my_prior_children') || remarriage.includes('spouse_prior_children'))
+                                                                push('전혼 자녀와 의붓자녀는 법적 지위가 다릅니다', LEGAL_FACTS.priorChildren);
+  if(!neg(sim.parentNeglect))                                    push('돌보지 않은 부모의 상속권은 제한을 청구할 수 있습니다', LEGAL_FACTS.parentNeglect);
+  if(!neg(sim.predeceasedChild))                                 push('먼저 떠난 자녀의 몫은 손주가 대신 받습니다', LEGAL_FACTS.predecease);
+  if(sim.childCount>0 && hasBusiness)                            push('미성년 상속인이 있으면 특별대리인이 필요합니다', LEGAL_FACTS.minorGuardian);
+  if(sim.giftToHeir)                                            push('사전증여는 유류분 계산에서 빠지지 않습니다', LEGAL_FACTS.gift);
+  if(presence.includes('farmland'))                             push('농지는 나누기 어렵지만 상속 시 절세 혜택이 있습니다', LEGAL_FACTS.farmland);
+  if(reCount>=2 || (sim.realEstateEok>0 && sim.childCount>1))   push('부동산을 "똑같이 나눈다"는 건 현금 나누기와 다릅니다', LEGAL_FACTS.realEstate);
+  if(foreign)                                                  push('외국 국적 자녀가 있으면 서류 준비가 더 복잡합니다', LEGAL_FACTS.foreign);
+  if(sim.hasOverseasAsset)                                     push('해외 예금·주식도 한국 상속세 신고 대상입니다', LEGAL_FACTS.overseas);
+  if(hasBusiness)                                              push('사업체 지분은 유류분 침해 위험이 큽니다', LEGAL_FACTS.business);
+  if(!neg(sim.caregivingContribution))                        push('부양·간병 기여는 지금부터 증거를 남겨야 합니다', LEGAL_FACTS.caregiving);
+  if(hasForcedShare)                                          push('유류분 반환 방식이 바뀌고 있습니다', LEGAL_FACTS.valueReturn);
+  /* 마지막: 특화 항목이 부족할 때 채우는 일반 안내(자리가 남을 때만 노출됨) */
   push('지금 갈등이 없어도 안심할 수 없습니다', LEGAL_FACTS.conflict);
-  return items.slice(0,6);
+  return items.slice(0,7);
 }
 
 /* ── 상황별 컨텍스트 모듈 ── */
@@ -771,7 +801,7 @@ ${conditionalInstructions}`;
       const tn = buildTaxNote(sim);
       if (tn) __report.sections.simulation.tax_note = tn;
     }
-    const bs = buildBlindSpots(sim);
+    const bs = buildBlindSpots(sim, answers, deepAnswers);
     if (bs && bs.length) __report.sections.blind_spots = { title: '놓치기 쉬운 항목', items: bs };
   } catch(e){ console.error('법령 섹션 override 실패:', e.message); }
 
