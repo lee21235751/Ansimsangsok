@@ -33,6 +33,8 @@
     <button class="sec preset" type="button" data-p="foreign">외국국적+부동산3+사업체</button>
     <button class="sec preset" type="button" data-p="house1">주택1채 형제균등</button>
     <button class="sec preset" type="button" data-p="gift">사전증여+간병</button>
+    <button class="sec preset" type="button" data-p="simple">① 단순 → Haiku</button>
+    <button class="sec preset" type="button" data-p="complex">② 복잡(해외) → Sonnet</button>
   </div>
 
   <label>입력 JSON (자유롭게 편집 — answers / score / deepAnswers)</label>
@@ -82,6 +84,28 @@ var PRESETS = {
       childrenNationality:'모두 한국 국적', foreignNatChildren:'0명',
       realEstateCount:'2건', priorGiftAmount:'1억~5억', priorGiftTiming:'5년 전',
       caregivingContribution:'있음', conflictDetail:'형제간 갈등 조짐'
+    }
+  },
+  simple: {
+    score:45,
+    answers:{ assetPresence:['house'], assetCounts:{house:'1'}, overseas:[], assetTypes:[] },
+    deepAnswers:{
+      totalAssets:'5억~10억', realEstateValue:'5억~10억', debt:'없음',
+      financialAssets:'1억 미만',
+      spouseStatus:'생존(혼인관계 유지·동거)', childrenCount:'2명', parentsAlive:'사망', siblingsCount:'0명',
+      childrenNationality:'모두 한국 국적', foreignNatChildren:'0명',
+      realEstateCount:'1건', priorGiftAmount:'', caregivingContribution:'', conflictDetail:'', predeceasedChild:'없음'
+    }
+  },
+  complex: {
+    score:70,
+    answers:{ assetPresence:['house'], assetCounts:{house:'1'}, overseas:['overseas_bank'], assetTypes:[] },
+    deepAnswers:{
+      totalAssets:'5억~10억', realEstateValue:'5억~10억', debt:'없음',
+      financialAssets:'1억 미만', overseasAssetValue:'1억 미만', overseasAssetType:'예금',
+      spouseStatus:'생존(혼인관계 유지·동거)', childrenCount:'2명', parentsAlive:'사망', siblingsCount:'0명',
+      childrenNationality:'모두 한국 국적', foreignNatChildren:'0명',
+      realEstateCount:'1건', priorGiftAmount:'', caregivingContribution:'', conflictDetail:'', predeceasedChild:'없음'
     }
   }
 };

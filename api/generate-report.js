@@ -456,33 +456,38 @@ function pickModel(sim, types, answers) {
   const assetTypes = Array.isArray(a.assetTypes) ? a.assetTypes : [];
   const remarriage = Array.isArray(a.remarriage) ? a.remarriage : [];
 
+  /* 값이 "없음/0명/해당없음/모두 한국 국적" 류면 신호로 보지 않는다(존재만으로 오판 방지). */
+  const isNeg     = (v) => !v || /^\s*$/.test(String(v)) || /없음|없다|해당\s*없|0\s*명|모두\s*한국|아니/.test(String(v));
+  const isForeign = (v) => !!v && /외국|영주권|시민권|해외/.test(String(v));
+
   const reasons = [];
   /* 해외자산·외국국적·복수국적·영주권: 서류·아포스티유·신고 등 실무 난이도 최상 */
   if (s.hasOverseasAsset
       || overseas.some(v => ['overseas_realestate_or_company','overseas_securities','overseas_bank','crypto','permanent_residency','dual_nationality','family_foreign_nationality'].includes(v))
       || assetTypes.includes('overseas_stock') || assetTypes.includes('crypto')
-      || s.foreignNatChildren || s.childrenNationality || s.grandchildrenNationality || s.spouseNationality) {
+      || (s.foreignNatChildren && !isNeg(s.foreignNatChildren))
+      || isForeign(s.childrenNationality) || isForeign(s.grandchildrenNationality) || isForeign(s.spouseNationality)) {
     reasons.push('해외/외국국적');
   }
   /* 전혼·재혼 자녀 */
   if (remarriage.some(v => v !== 'none')) reasons.push('전혼/재혼');
   /* 사업·법인지분 승계 */
   if (a.business === '중요한 비중을 차지함' || a.business === '조금 있음'
-      || assetTypes.includes('business') || s.businessShare) {
+      || assetTypes.includes('business') || (s.businessShare && !isNeg(s.businessShare))) {
     reasons.push('사업승계');
   }
   /* 특정 자녀 우대(불균등 의도) — 이 서비스의 핵심 분쟁 신호 */
   if (typeof a.unequalIntent === 'string' && a.unequalIntent.indexOf('있음') === 0) reasons.push('불균등의도');
-  /* 거액: 상속세·유류분 복잡도 상승 */
+  /* 거액: 과세대상 발생 또는 총재산 30억 이상 */
   if ((s.taxableEok || 0) > 0 || (s.totalEok || 0) >= 30) reasons.push('거액/과세대상');
   /* 기여·간병 보상(특별수익·기여분 분쟁) */
-  if (s.caregivingContribution) reasons.push('기여/간병');
+  if (s.caregivingContribution && !isNeg(s.caregivingContribution)) reasons.push('기여/간병');
   /* 별거·이혼소송 중·사실혼 배우자 */
   if (s.spouseEstranged || s.spouseCommonLaw) reasons.push('배우자특수');
   /* 대습·사망 자녀(구하라법 등) */
-  if (s.predeceasedChild) reasons.push('대습/사망자녀');
+  if (s.predeceasedChild && !isNeg(s.predeceasedChild)) reasons.push('대습/사망자녀');
   /* 패륜·상속권 상실 맥락 */
-  if (s.parentNeglect) reasons.push('상속권상실');
+  if (s.parentNeglect && !isNeg(s.parentNeglect)) reasons.push('상속권상실');
   /* 재산 구성 입력 불일치(서술 정밀도 필요) */
   if (s.assetMismatch) reasons.push('입력불일치');
 
