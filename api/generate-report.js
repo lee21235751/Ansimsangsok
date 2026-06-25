@@ -463,7 +463,7 @@ function pickModel(sim, types, answers) {
   const reasons = [];
   /* 해외자산·외국국적·복수국적·영주권: 서류·아포스티유·신고 등 실무 난이도 최상 */
   if (s.hasOverseasAsset
-      || overseas.some(v => ['overseas_realestate_or_company','overseas_securities','overseas_bank','crypto','permanent_residency','dual_nationality','family_foreign_nationality'].includes(v))
+      || overseas.some(v => v && v !== 'none' && v !== 'unknown')
       || assetTypes.includes('overseas_stock') || assetTypes.includes('crypto')
       || (s.foreignNatChildren && !isNeg(s.foreignNatChildren))
       || isForeign(s.childrenNationality) || isForeign(s.grandchildrenNationality) || isForeign(s.spouseNationality)) {

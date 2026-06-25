@@ -418,7 +418,7 @@ function showResult(){
     sigs.push('집 한 채가 주된 재산인 경우, 여러 자녀가 나눠 가지려면 누구도 온전히 갖지 못하거나 결국 팔아야 하는 상황이 생깁니다. 실제 상속 분쟁의 대부분은 재산이 많아서가 아니라, 이렇게 나누기 어려운 부동산 한 채를 두고 일어납니다. 누가 집을 갖고 나머지를 어떻게 정산할지 미리 정해두는 것이 중요합니다.');
 
   /* ⑦이지은: 미혼·자녀 없음 케이스 → 부모·형제자매 상속인 안내 */
-  var isUnmarried = ans.family==='자녀가 없거나 형제자매와 관련될 수 있음' && !ans.remarriage;
+  var isUnmarried = ans.family==='자녀가 없거나 형제자매와 관련될 수 있음' && (!Array.isArray(ans.remarriage) || ans.remarriage.length===0 || (ans.remarriage.length===1 && ans.remarriage[0]==='none'));
   var hasNoSpouseAsset = ap.length===0 || (ap.length===1 && ap[0]==='unknown');
   if(isUnmarried && (at.indexOf('overseas_stock')>=0 || at.indexOf('crypto')>=0 || at.indexOf('kr_stock')>=0))
     sigs.push('미혼이거나 자녀가 없다면, 지금 상속인은 부모님입니다. 부모님이 이미 돌아가셨다면 형제자매가 상속인이 됩니다. 해외 주식·암호화폐도 한국 거주자라면 상속 신고 대상입니다. "내 자산은 적으니 괜찮겠지"라는 생각이 나중에 문제가 될 수 있습니다.');

@@ -68,6 +68,26 @@ export default async function handler(req, res) {
   const sbKey = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
 
   if (sbUrl && sbKey && orderId) {
+    /* Supabase 쓰기 헬퍼: fetch는 HTTP 4xx/5xx에서 throw하지 않으므로 res.ok를 직접 확인하고 1회 재시도한다.
+       이 확인이 없어 결제 확정 기록이 조용히 실패하면 고객이 돈을 내고도 미결제 상태로 남는다(과거 사고 클래스). */
+    const sbWrite = async (url, method, bodyObj) => {
+      for (let i = 1; i <= 2; i++) {
+        try {
+          const r = await fetch(url, {
+            method,
+            headers: { apikey: sbKey, Authorization: `Bearer ${sbKey}`, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
+            body: JSON.stringify(bodyObj),
+          });
+          if (r.ok) return true;
+          const t = await r.text().catch(() => '');
+          console.error(`[payapp-feedback] ${method} 실패 attempt=${i} orderId=${orderId} status=${r.status} body=${t}`);
+        } catch (e) {
+          console.error(`[payapp-feedback] ${method} 예외 attempt=${i} orderId=${orderId} msg=${e.message}`);
+        }
+      }
+      return false;
+    };
+
     try {
       // 기존 row 확인
       const existsRes = await fetch(
@@ -82,53 +102,33 @@ export default async function handler(req, res) {
         return res.status(200).send('SUCCESS');
       }
 
+      let writeOk;
       if (Array.isArray(existsRows) && existsRows.length > 0) {
-        // row가 있으면 paid로 업데이트 (REST 방식 호환)
-        await fetch(
+        // row가 있으면 paid로 업데이트
+        writeOk = await sbWrite(
           `${sbUrl}/rest/v1/paid_reports?order_id=eq.${encodeURIComponent(orderId)}`,
-          {
-            method: 'PATCH',
-            headers: {
-              apikey: sbKey,
-              Authorization: `Bearer ${sbKey}`,
-              'Content-Type': 'application/json',
-              Prefer: 'return=minimal',
-            },
-            body: JSON.stringify({
-              status:      'paid',
-              payment_key: txId,
-              amount:      parsedPrice,
-            }),
-          }
+          'PATCH',
+          { status: 'paid', payment_key: txId, amount: parsedPrice }
         );
-        console.log('[payapp-feedback] paid_reports 업데이트(PATCH) 완료 orderId=%s', orderId);
       } else {
-        // row가 없으면 새로 삽입 (JS 방식: 결제 전 pending 저장이 없음)
-        await fetch(
+        // row가 없으면 새로 삽입
+        writeOk = await sbWrite(
           `${sbUrl}/rest/v1/paid_reports`,
-          {
-            method: 'POST',
-            headers: {
-              apikey: sbKey,
-              Authorization: `Bearer ${sbKey}`,
-              'Content-Type': 'application/json',
-              Prefer: 'return=minimal',
-            },
-            body: JSON.stringify({
-              order_id:         orderId,
-              status:           'paid',
-              payment_key:      txId,
-              amount:           parsedPrice,
-              report_generated: false,
-            }),
-          }
+          'POST',
+          { order_id: orderId, status: 'paid', payment_key: txId, amount: parsedPrice, report_generated: false }
         );
-        console.log('[payapp-feedback] paid_reports 신규 삽입(INSERT) 완료 orderId=%s', orderId);
+      }
+
+      if (writeOk) {
+        console.log('[payapp-feedback] paid_reports 결제확정 기록 완료 orderId=%s', orderId);
+      } else {
+        /* 결제는 됐는데 DB 기록에 최종 실패 — 절대 유실되면 안 되는 데이터라 전부 로그에 남겨 수동 복구한다.
+           (PayApp에 FAIL을 반환해 자동 재시도를 받는 방법도 있으나, PayApp 재시도 의미가 확실할 때만 권장.) */
+        console.error('[payapp-feedback] CRITICAL 결제확정 DB기록 최종실패 수동복구필요 orderId=%s txId=%s amount=%s', orderId, txId, parsedPrice);
       }
 
     } catch (dbErr) {
-      console.error('[payapp-feedback] Supabase 오류:', dbErr.message);
-      // DB 오류가 있어도 SUCCESS 반환 (페이앱 재시도 방지)
+      console.error('[payapp-feedback] CRITICAL Supabase 예외 orderId=%s txId=%s amount=%s msg=%s', orderId, txId, parsedPrice, dbErr.message);
     }
   } else {
     console.warn('[payapp-feedback] Supabase 환경변수 없음 또는 orderId 없음');
