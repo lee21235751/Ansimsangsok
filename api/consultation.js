@@ -79,26 +79,38 @@ async function handleSelect(req, res) {
   }
 
   const reqRes = await fetch(`${SUPABASE_URL}/rest/v1/consultation_requests?access_token=eq.${token}&select=id,status`, { headers: sbHeaders() });
-  const requests = await reqRes.json();
-  const request = requests[0];
+  const requests = reqRes.ok ? await reqRes.json() : [];
+  const request = Array.isArray(requests) ? requests[0] : null;
   if (!request) return res.status(404).json({ ok: false, message: '유효하지 않은 접근입니다.' });
 
-  /* 연락처는 선택 시점에만 받아 저장 — 입찰 비교 단계에서는 고객 신원이 전문가에게 노출되지 않음. */
-  await fetch(`${SUPABASE_URL}/rest/v1/consultation_requests?id=eq.${request.id}`, {
+  /* 연락처는 선택 시점에만 받아 저장 — 입찰 비교 단계에서는 고객 신원이 전문가에게 노출되지 않음.
+     이 PATCH는 고객 선택을 확정하는 핵심 쓰기이므로 res.ok를 반드시 확인한다(조용히 실패하면
+     고객은 성공으로 알지만 전문가에게 연결되지 않음). */
+  const selRes = await fetch(`${SUPABASE_URL}/rest/v1/consultation_requests?id=eq.${request.id}`, {
     method: 'PATCH',
     headers: sbHeaders({ 'Content-Type': 'application/json' }),
     body: JSON.stringify({ status: 'closed', selected_bid_id: bid_id, customer_name: name, customer_phone: phone })
   });
-  await fetch(`${SUPABASE_URL}/rest/v1/bids?id=eq.${bid_id}`, {
+  if (!selRes.ok) {
+    const t = await selRes.text().catch(() => '');
+    console.error(`[consultation] 선택 확정 PATCH 실패 reqId=${request.id} bidId=${bid_id} status=${selRes.status} body=${t}`);
+    return res.status(500).json({ ok: false, message: '선택을 처리하지 못했습니다. 잠시 후 다시 시도해주세요.' });
+  }
+
+  /* 입찰 상태 갱신(부가) — 실패해도 선택 자체는 확정됐으므로 로그만 남긴다. */
+  const selBidRes = await fetch(`${SUPABASE_URL}/rest/v1/bids?id=eq.${bid_id}`, {
     method: 'PATCH',
     headers: sbHeaders({ 'Content-Type': 'application/json' }),
     body: JSON.stringify({ status: 'selected' })
   });
-  await fetch(`${SUPABASE_URL}/rest/v1/bids?request_id=eq.${request.id}&id=neq.${bid_id}`, {
+  if (!selBidRes.ok) console.error(`[consultation] 선택 입찰 상태갱신 실패 bidId=${bid_id} status=${selBidRes.status}`);
+
+  const otherBidsRes = await fetch(`${SUPABASE_URL}/rest/v1/bids?request_id=eq.${request.id}&id=neq.${bid_id}`, {
     method: 'PATCH',
     headers: sbHeaders({ 'Content-Type': 'application/json' }),
     body: JSON.stringify({ status: 'not_selected' })
   });
+  if (!otherBidsRes.ok) console.error(`[consultation] 비선택 입찰 상태갱신 실패 reqId=${request.id} status=${otherBidsRes.status}`);
 
   return res.status(200).json({ ok: true });
 }
