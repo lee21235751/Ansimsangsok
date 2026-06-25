@@ -74,6 +74,16 @@ button,input,textarea{font:inherit}
 .pci{display:flex;align-items:flex-start;gap:8px;font-size:.96rem;font-weight:850;color:var(--FD);line-height:1.5}
 .pci::before{content:"✓";color:var(--G);font-weight:900;flex-shrink:0;margin-top:1px}
 .fc{padding:22px;border-radius:20px;background:var(--CR);border:2px solid rgba(215,173,85,.45);margin-bottom:16px}
+.faqsec{margin-top:24px}
+.faqsec .fh{font-size:clamp(1.35rem,5vw,1.75rem);font-weight:950;color:var(--FD);letter-spacing:-.04em;margin-bottom:6px;text-align:center}
+.faqsec .fhs{text-align:center;color:var(--MU);font-weight:700;font-size:.9rem;margin-bottom:16px}
+.faq{background:#fff;border:1px solid var(--LN);border-radius:14px;margin-bottom:9px;overflow:hidden}
+.faq>summary{cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px 16px;font-weight:900;color:var(--FD);font-size:.98rem;line-height:1.45;user-select:none}
+.faq>summary::-webkit-details-marker{display:none}
+.faq>summary .ar{flex-shrink:0;color:var(--G);font-size:.82rem;transition:transform .2s}
+.faq[open]>summary .ar{transform:rotate(180deg)}
+.faq .fa{padding:0 16px 16px;color:#41514a;font-weight:650;font-size:.93rem;line-height:1.66}
+.faq .fa a{color:var(--FD);font-weight:850;text-decoration:underline}
 .fc h3{font-size:clamp(1.2rem,4.5vw,1.6rem);letter-spacing:-.04em;color:var(--FD);margin-bottom:8px}
 .fc p{color:#49564f;line-height:1.7;font-weight:750;margin-bottom:16px;font-size:.97rem}
 .fg{display:grid;gap:11px}
@@ -184,6 +194,20 @@ footer{background:var(--FD);color:rgba(255,253,245,.62);padding:36px 0 44px;line
 <div class="rsec" style="background:#fdf6e3;border-color:rgba(194,137,28,.35)">
 <h4>절세가 아니라, 분쟁 예방이 목적입니다</h4>
 <p style="font-size:.92rem;line-height:1.65;font-weight:650;color:var(--MU);margin-top:6px">세금을 줄이는 방법은 이미 다른 곳에도 많습니다. 안심상속은 "내가 원하는 대로 분배가 실제로 지켜지는지"를 중심으로, 유류분 분쟁을 합법적으로 최소화하는 데 집중합니다.</p>
+</div>
+<div class="faqsec">
+<div class="fh">자주 묻는 질문</div>
+<div class="fhs">궁금한 항목을 눌러 확인하세요</div>
+<details class="faq"><summary>이건 그냥 정보 아닌가요? AI에 물어보면 안 되나요?<span class="ar">▾</span></summary><div class="fa">범용 AI는 현행 상속법을 자주 틀립니다(형제자매 유류분 폐지, 구하라법 등 최신 변경). 안심상속은 핵심 법령·계산을 변호사 검토를 거쳐 코드로 고정하고, 입력하신 가족·재산으로 직접 계산합니다. 또 민감한 정보를 공개 AI에 입력하지 않고 본인만 비공개로 확인합니다.</div></details>
+<details class="faq"><summary>상속할 재산이 많지 않은데도 필요한가요?<span class="ar">▾</span></summary><div class="fa">상속재산 분쟁의 82.7%가 1억원 이하에서 일어납니다. 재산이 많고 적음과 분쟁은 별개이며, 오히려 나눌 것이 적을수록 다툼이 잦습니다.</div></details>
+<details class="faq"><summary>제 정보는 안전한가요? 가족이 볼 수 있나요?<span class="ar">▾</span></summary><div class="fa">진단은 본인만 조용히 확인하는 비공개 자료입니다. 결과는 본인 외에 누구에게도 공유되지 않으며, 유언장 작성 도구의 입력값은 이 기기에서만 처리되고 저장·전송되지 않습니다.</div></details>
+<details class="faq"><summary>무료 진단과 유료 리포트는 무엇이 다른가요?<span class="ar">▾</span></summary><div class="fa">무료 진단은 2분 설문으로 내 상속 위험 수준과 주요 항목을 확인합니다. 유료 리포트는 결제 후 구체 정보를 추가 입력하면, 입력하신 숫자로 계산된 유류분 시뮬레이션과 상황별 점검·준비 사항까지 담깁니다.</div></details>
+<details class="faq"><summary>형제자매도 유류분을 청구할 수 있나요?<span class="ar">▾</span></summary><div class="fa">아니요. 형제자매의 유류분은 2024년 4월 위헌 결정으로 폐지되어, 형제자매가 상속인이어도 유류분은 청구할 수 없습니다. 다만 자녀·배우자·부모의 유류분은 그대로 유지됩니다.</div></details>
+<details class="faq"><summary>자녀에게 미리 증여하면 유류분을 피할 수 있나요?<span class="ar">▾</span></summary><div class="fa">그렇지 않습니다. 상속인(자녀 등)에게 한 증여는 시기와 무관하게 유류분 산정에 합산됩니다. 증여만으로 유류분을 피할 수는 없어, 별도의 대비가 필요합니다.</div></details>
+<details class="faq"><summary>유언장만 쓰면 제 뜻대로 되나요?<span class="ar">▾</span></summary><div class="fa">유언장은 기본이지만, 유언으로 정한 분배도 다른 상속인이 유류분을 청구하면 흔들릴 수 있습니다. 유언장 작성과 함께 그 분배가 유류분 청구를 부르는지 확인하는 것이 안전합니다. 유언장은 <a href="/will">무료 유언장 작성</a>에서 바로 만들 수 있습니다.</div></details>
+<details class="faq"><summary>자필 유언장은 어떻게 써야 효력이 있나요?<span class="ar">▾</span></summary><div class="fa">전문 자필·연월일·주소·성명·날인 다섯 가지를 모두 갖춰야 하며, 하나라도 빠지면 전부 무효가 됩니다. 타이핑·출력물은 효력이 없습니다. <a href="/will">무료 유언장 작성</a>에서 요건을 실시간으로 확인하며 초안을 만들 수 있습니다.</div></details>
+<details class="faq"><summary>해외 주식·암호화폐·해외 부동산도 포함되나요?<span class="ar">▾</span></summary><div class="fa">네. 미국·홍콩 주식, 암호화폐, 해외 부동산, 외국 국적 자녀까지 포함해 점검합니다. 해외 자산과 외국 국적 상속인은 절차가 복잡해, 미리 확인해두면 지연을 줄일 수 있습니다.</div></details>
+<details class="faq"><summary>이 진단·리포트가 법률 자문인가요?<span class="ar">▾</span></summary><div class="fa">아닙니다. 일반적인 상속 정보를 정리해 제공하는 자료이며, 특정 사건에 대한 법률 자문이나 법률 상담이 아닙니다. 변호사·세무사의 개별 상담을 대체하지 않습니다.</div></details>
 </div>
 </div>
 <div id="Survey" class="dn">
