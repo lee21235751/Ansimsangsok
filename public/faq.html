@@ -17,7 +17,7 @@
 <style>
 :root{--F:#0e3529;--FD:#06251d;--G:#d7ad55;--GL:#f1d586;--CR:#fff8e8;--INK:#12231d;--MU:#5e6b64;--LN:rgba(14,53,41,.18)}
 *,*::before,*::after{box-sizing:border-box;margin:0}
-body{font-family:system-ui,-apple-system,sans-serif;color:var(--INK);word-break:keep-all;overflow-x:hidden;background:#fffdf6;line-height:1.5}
+body{font-family:system-ui,-apple-system,sans-serif;color:var(--INK);word-break:keep-all;overflow-x:hidden;background:#0d3026;line-height:1.5}
 .w{width:min(680px,calc(100% - 32px));margin:0 auto}
 a{color:inherit}
 .top{background:var(--FD);position:sticky;top:0;z-index:20}
@@ -30,13 +30,13 @@ a{color:inherit}
 .head h1{font-size:clamp(1.7rem,6.5vw,2.3rem);line-height:1.2;letter-spacing:-.04em;font-weight:950}
 .head p{font-size:.98rem;color:rgba(255,253,245,.84);font-weight:650;margin-top:10px}
 .body{padding:26px 0 10px}
-.faq{background:#fff;border:1px solid var(--LN);border-radius:14px;margin-bottom:10px;overflow:hidden}
-.faq>summary{cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 17px;font-weight:900;color:var(--FD);font-size:1rem;line-height:1.45;user-select:none}
+.faq{background:rgba(255,255,255,.045);border:1px solid rgba(241,213,134,.22);border-radius:14px;margin-bottom:10px;overflow:hidden}
+.faq>summary{cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 17px;font-weight:900;color:#fffdf5;font-size:1rem;line-height:1.45;user-select:none}
 .faq>summary::-webkit-details-marker{display:none}
 .faq>summary .ar{flex-shrink:0;color:var(--G);font-size:.85rem;transition:transform .2s}
 .faq[open]>summary .ar{transform:rotate(180deg)}
-.faq .fa{padding:0 17px 17px;color:#41514a;font-weight:650;font-size:.95rem;line-height:1.7}
-.faq .fa a{color:var(--FD);font-weight:850;text-decoration:underline}
+.faq .fa{padding:0 17px 17px;color:rgba(255,253,245,.82);font-weight:650;font-size:.95rem;line-height:1.7}
+.faq .fa a{color:var(--GL);font-weight:850;text-decoration:underline}
 .cta{background:linear-gradient(160deg,#0e3529,#06251d);border-radius:20px;padding:26px 20px;color:#fffdf5;text-align:center;margin:24px 0 10px}
 .cta h3{font-size:clamp(1.25rem,5vw,1.6rem);line-height:1.3;font-weight:950;letter-spacing:-.03em;margin-bottom:14px}
 .cta h3 .gl{color:var(--GL)}
