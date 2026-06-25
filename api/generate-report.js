@@ -441,6 +441,59 @@ function getContext(a, types, deep, sim) {
   return lines.join('\n');
 }
 
+/* ── 모델 라우팅 ──
+   법적으로 까다롭거나 틀리면 안 되는 케이스만 정확도 우선(Sonnet), 단순 케이스는 속도 우선(Haiku).
+   환경변수로 강제 가능: REPORT_MODEL(전체 고정), REPORT_MODEL_COMPLEX / REPORT_MODEL_SIMPLE(분기별 고정). */
+function pickModel(sim, types, answers) {
+  const FORCE = process.env.REPORT_MODEL || '';
+  if (FORCE) return FORCE;
+  const COMPLEX = process.env.REPORT_MODEL_COMPLEX || 'claude-sonnet-4-6';
+  const SIMPLE  = process.env.REPORT_MODEL_SIMPLE  || 'claude-haiku-4-5-20251001';
+
+  const a = answers || {};
+  const s = sim || {};
+  const overseas   = Array.isArray(a.overseas) ? a.overseas : [];
+  const assetTypes = Array.isArray(a.assetTypes) ? a.assetTypes : [];
+  const remarriage = Array.isArray(a.remarriage) ? a.remarriage : [];
+
+  const reasons = [];
+  /* 해외자산·외국국적·복수국적·영주권: 서류·아포스티유·신고 등 실무 난이도 최상 */
+  if (s.hasOverseasAsset
+      || overseas.some(v => ['overseas_realestate_or_company','overseas_securities','overseas_bank','crypto','permanent_residency','dual_nationality','family_foreign_nationality'].includes(v))
+      || assetTypes.includes('overseas_stock') || assetTypes.includes('crypto')
+      || s.foreignNatChildren || s.childrenNationality || s.grandchildrenNationality || s.spouseNationality) {
+    reasons.push('해외/외국국적');
+  }
+  /* 전혼·재혼 자녀 */
+  if (remarriage.some(v => v !== 'none')) reasons.push('전혼/재혼');
+  /* 사업·법인지분 승계 */
+  if (a.business === '중요한 비중을 차지함' || a.business === '조금 있음'
+      || assetTypes.includes('business') || s.businessShare) {
+    reasons.push('사업승계');
+  }
+  /* 특정 자녀 우대(불균등 의도) — 이 서비스의 핵심 분쟁 신호 */
+  if (typeof a.unequalIntent === 'string' && a.unequalIntent.indexOf('있음') === 0) reasons.push('불균등의도');
+  /* 거액: 상속세·유류분 복잡도 상승 */
+  if ((s.taxableEok || 0) > 0 || (s.totalEok || 0) >= 30) reasons.push('거액/과세대상');
+  /* 기여·간병 보상(특별수익·기여분 분쟁) */
+  if (s.caregivingContribution) reasons.push('기여/간병');
+  /* 별거·이혼소송 중·사실혼 배우자 */
+  if (s.spouseEstranged || s.spouseCommonLaw) reasons.push('배우자특수');
+  /* 대습·사망 자녀(구하라법 등) */
+  if (s.predeceasedChild) reasons.push('대습/사망자녀');
+  /* 패륜·상속권 상실 맥락 */
+  if (s.parentNeglect) reasons.push('상속권상실');
+  /* 재산 구성 입력 불일치(서술 정밀도 필요) */
+  if (s.assetMismatch) reasons.push('입력불일치');
+
+  if (reasons.length) {
+    console.log('[generate-report] model=COMPLEX(' + COMPLEX + ') 사유=' + reasons.join(','));
+    return COMPLEX;
+  }
+  console.log('[generate-report] model=SIMPLE(' + SIMPLE + ')');
+  return SIMPLE;
+}
+
 /* ── Claude API 호출 ── */
 async function callClaude(answers, types, score, deepAnswers) {
   const apiKey = process.env.ANTHROPIC_API_KEY;
@@ -449,6 +502,7 @@ async function callClaude(answers, types, score, deepAnswers) {
   const level = score>=70?'주의 필요':score>=40?'확인 필요':'기본 정리';
   const sim   = buildSimulation(deepAnswers, answers);
   const ctx   = getContext(answers, types, deepAnswers, sim);
+  const model = pickModel(sim, types, answers);
 
   const presence = Array.isArray(answers.assetPresence)?answers.assetPresence:[];
   const counts   = answers.assetCounts||{};
@@ -617,10 +671,9 @@ ${conditionalInstructions}`;
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey, 'anthropic-version': '2023-06-01' },
       body: JSON.stringify({
-        /* 모델: 정확도를 위해 Sonnet 기본. 비용 절감이 필요하면 Vercel 환경변수
-           REPORT_MODEL=claude-haiku-4-5-20251001 로 즉시 되돌릴 수 있음.
+        /* 모델은 pickModel이 케이스 복잡도로 선택(Sonnet/Haiku). 환경변수로 강제 가능.
            temperature 0: 같은 입력에 같은 출력(재현성) 확보 — 답변이 매번 바뀌는 문제의 핵심 차단. */
-        model: process.env.REPORT_MODEL || 'claude-sonnet-4-6',
+        model,
         max_tokens: 7000,
         temperature: 0,
         system: systemMsg,
