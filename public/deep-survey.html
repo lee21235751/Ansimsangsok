@@ -2,13 +2,14 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8"/>
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendard-variable.min.css"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>안심상속 — 심화 진단</title>
 <meta name="robots" content="noindex,nofollow"/>
 <style>
 :root{--F:#0e3529;--FD:#06251d;--G:#d7ad55;--GL:#f1d586;--CR:#fff8e8;--INK:#12231d;--MU:#5e6b64;--LN:rgba(14,53,41,.18)}
 *,*::before,*::after{box-sizing:border-box;margin:0}
-body{font-family:system-ui,-apple-system,sans-serif;color:var(--INK);word-break:keep-all;background:#fffdf6}
+body{font-family:"Pretendard Variable",Pretendard,system-ui,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;color:var(--INK);word-break:keep-all;background:#0d3026}
 button,input,select{font:inherit}
 .w{width:min(680px,calc(100% - 32px));margin:0 auto}
 .dn{display:none!important}
@@ -17,10 +18,10 @@ button,input,select{font:inherit}
 .hero h1{font-size:clamp(1.6rem,6vw,2.2rem);line-height:1.15;letter-spacing:-.05em;margin-bottom:8px}
 .hero p{color:rgba(255,253,245,.8);font-size:.97rem;line-height:1.65;font-weight:650}
 .main{padding:24px 0 60px}
-.pr{display:flex;justify-content:space-between;align-items:center;color:var(--F);font-weight:950;font-size:.93rem;margin-bottom:9px}
+.pr{display:flex;justify-content:space-between;align-items:center;color:rgba(255,253,245,.82);font-weight:850;font-size:.93rem;margin-bottom:9px}
 .pt{height:7px;background:#e4dfd0;border-radius:999px;overflow:hidden;margin-bottom:18px}
 .pf{height:100%;background:linear-gradient(90deg,#f6dc86,#b9862f);border-radius:999px;transition:width .2s}
-.card{background:#fffaf0;border:1px solid var(--LN);border-radius:20px;padding:clamp(16px,4vw,24px)}
+.card{background:linear-gradient(180deg,#fffdf3,#fff6e2);border:2px solid rgba(215,173,85,.55);border-radius:20px;padding:clamp(16px,4vw,24px);box-shadow:0 18px 50px rgba(6,37,29,.45)}
 .qt{display:block;padding:14px 16px;border-radius:18px;background:#fff;border:2px solid rgba(14,53,41,.22);color:var(--FD);font-size:clamp(1.08rem,4.4vw,1.35rem);line-height:1.4;font-weight:900;letter-spacing:-.03em;margin-bottom:10px}
 .qh{color:#536058;font-weight:700;line-height:1.65;font-size:.92rem;margin-bottom:14px}
 .opts{display:flex;flex-direction:column;gap:8px}
@@ -35,13 +36,14 @@ button,input,select{font:inherit}
 </style>
 </head>
 <body>
+<div style="position:sticky;top:0;z-index:30;background:var(--FD);border-bottom:1px solid rgba(241,213,134,.28);text-align:center;padding:9px 12px;font-size:.84rem;font-weight:900;color:var(--GL);letter-spacing:-.01em">✓ 결제 완료 · 맞춤 상세 리포트 작성 중</div>
 <header class="hero"><div class="w">
   <div class="ey">결제 완료 · 심화 진단</div>
   <h1>몇 가지만 더<br>구체적으로 확인합니다</h1>
   <p>방금 결제하신 유료 상세리포트는 일반 정보가 아니라, 입력하신 숫자를 바탕으로 실제 계산이 포함된 자료입니다. 약 2~3분 정도 소요됩니다.</p>
   <p style="margin-top:10px;color:rgba(255,253,245,.7);font-size:.88rem">💡 정확한 금액이나 수치를 모르셔도 괜찮습니다. 가장 가까운 항목을 선택해주세요. 해당 사항이 없으면 "해당없음"을 선택하시면 됩니다.</p>
 </div></header>
-<div class="w" style="margin:16px auto;padding:12px 14px;border-radius:14px;background:rgba(107,114,108,.09);border-left:3px solid var(--MU);color:var(--FD);font-size:.9rem;line-height:1.55;font-weight:700"><strong style="display:block;margin-bottom:4px">⚠️ 이 진단은 일반적 상속 정보 제공 목적입니다.</strong> 개별 법적 판단이 필요하면 변호사 상담을 받으세요.</div>
+<div class="w" style="margin:16px auto;padding:12px 14px;border-radius:14px;background:rgba(255,255,255,.05);border-left:3px solid rgba(241,213,134,.5);color:rgba(255,253,245,.8);font-size:.9rem;line-height:1.55;font-weight:700"><strong style="display:block;margin-bottom:4px;color:var(--GL)">⚠️ 이 진단은 일반적 상속 정보 제공 목적입니다.</strong> 개별 법적 판단이 필요하면 변호사 상담을 받으세요.</div>
 <div class="main w">
   <div id="Survey">
     <div class="pr"><span id="StepTxt"></span><span>구체적인 숫자일수록 정확합니다</span></div>
