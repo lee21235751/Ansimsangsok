@@ -780,30 +780,44 @@ export default async function handler(req, res) {
       return res.status(502).json({ok:false,message:'리포트 생성 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요.'});
     }
 
-    /* 리포트 발급 완료 표시 + 리포트 본문 저장 (결제 시점에 만들어둔 같은 order_id 행을 업데이트)
-       실패해도 무시 (리포트 자체는 이미 사용자에게 정상 응답됨) */
-    if (!isDev) try {
-      await fetch(
-        sbUrlCheck + '/rest/v1/paid_reports?order_id=eq.' + encodeURIComponent(orderId),
-        {
-          method: 'PATCH',
-          headers: {
-            apikey: sbKeyCheck,
-            Authorization: 'Bearer ' + sbKeyCheck,
-            'Content-Type': 'application/json',
-            Prefer: 'return=minimal',
-          },
-          body: JSON.stringify({
-            report_generated: true,
-            score,
-            level: report.level,
-            matched_types: types,
-            report_json: report,
-          }),
+    /* 리포트 발급 완료 표시 + 리포트 본문 저장 (결제 시점에 만들어둔 같은 order_id 행을 업데이트).
+       주의: fetch는 HTTP 4xx/5xx에서 throw하지 않으므로 반드시 res.ok를 직접 확인해야 한다.
+       이 확인이 없어 과거에 PATCH가 조용히 실패하고 report_generated=false / report_json=null로
+       남는 사고가 있었음(고객 화면엔 리포트가 떴는데 DB만 미기록). 실패하면 1회 재시도하고,
+       그래도 실패하면 order_id가 박힌 CRITICAL 로그를 남겨 Vercel 로그에서 추적/복구 가능하게 한다.
+       사용자에게는 리포트가 이미 정상 응답되므로 저장 실패와 무관하게 200을 유지한다. */
+    if (!isDev) {
+      const patchUrl = sbUrlCheck + '/rest/v1/paid_reports?order_id=eq.' + encodeURIComponent(orderId);
+      const patchHeaders = {
+        apikey: sbKeyCheck,
+        Authorization: 'Bearer ' + sbKeyCheck,
+        'Content-Type': 'application/json',
+        Prefer: 'return=minimal',
+      };
+      const patchBody = JSON.stringify({
+        report_generated: true,
+        score,
+        level: report.level,
+        matched_types: types,
+        report_json: report,
+      });
+      let saved = false;
+      for (let attempt = 1; attempt <= 2 && !saved; attempt++) {
+        try {
+          const patchRes = await fetch(patchUrl, { method: 'PATCH', headers: patchHeaders, body: patchBody });
+          if (patchRes.ok) {
+            saved = true;
+          } else {
+            const errText = await patchRes.text().catch(() => '');
+            console.error('리포트 저장 PATCH 실패 attempt=' + attempt + ' orderId=' + orderId + ' status=' + patchRes.status + ' body=' + errText);
+          }
+        } catch (markErr) {
+          console.error('리포트 저장 PATCH 예외 attempt=' + attempt + ' orderId=' + orderId + ' msg=' + markErr.message);
         }
-      );
-    } catch (markErr) {
-      console.error('리포트 발급 완료 표시 실패(리포트 자체는 정상 발급됨):', markErr.message);
+      }
+      if (!saved) {
+        console.error('CRITICAL 리포트본문 저장 최종실패 orderId=' + orderId + ' 사용자에게는 응답됨 DB는 report_generated=false 상태 수동확인필요');
+      }
     }
 
     return res.status(200).json({ok:true,report,meta:{matchedTypes:types,score,level:report.level,generatedAt:report.generated_at}});
