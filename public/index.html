@@ -24,7 +24,7 @@
 <style>
 :root{--F:#0e3529;--FD:#06251d;--G:#d7ad55;--GL:#f1d586;--CR:#fff8e8;--INK:#12231d;--MU:#5e6b64;--LN:rgba(14,53,41,.18)}
 *,*::before,*::after{box-sizing:border-box;margin:0}
-body{font-family:system-ui,-apple-system,sans-serif;color:var(--INK);word-break:keep-all;overflow-x:hidden;background:#fffdf6}
+body{font-family:system-ui,-apple-system,sans-serif;color:var(--INK);word-break:keep-all;overflow-x:hidden;background:#0d3026}
 button,input,textarea{font:inherit}
 .w{width:min(680px,calc(100% - 32px));margin:0 auto}
 @media(min-width:721px){.w{width:min(900px,calc(100% - 40px))}}
@@ -41,7 +41,7 @@ button,input,textarea{font:inherit}
 .bg{border:0;background:linear-gradient(135deg,#f5dc8a,#c99938);color:#1c221c;border-radius:18px;padding:15px 22px;font-weight:950;box-shadow:0 12px 28px rgba(0,0,0,.22);cursor:pointer;min-height:54px;width:100%;font-size:1.05rem;touch-action:manipulation}
 .bd{border:0;background:var(--FD);color:#fff8dc;border-radius:18px;padding:15px 22px;font-weight:950;cursor:pointer;min-height:54px;width:100%;font-size:1.05rem;touch-action:manipulation;box-shadow:0 12px 28px rgba(6,37,29,.22)}
 .bw{border:1px solid rgba(14,53,41,.2);background:#fff;color:var(--MU);border-radius:18px;padding:14px 18px;font-weight:900;cursor:pointer;min-height:54px;width:100%;font-size:1.05rem;touch-action:manipulation}
-.main{background:#fffdf6;padding:28px 0 0}
+.main{background:#0d3026;padding:28px 0 0}
 .card{background:#fffaf0;border:1px solid var(--LN);border-radius:20px;padding:clamp(16px,4vw,26px)}
 .pr{display:flex;justify-content:space-between;align-items:center;color:var(--F);font-weight:950;font-size:.95rem;margin-bottom:10px}
 .pt{height:8px;background:#d9d5c7;border-radius:999px;overflow:hidden;margin-bottom:18px}
@@ -63,10 +63,10 @@ button,input,textarea{font:inherit}
 .rsigs{display:grid;gap:9px}
 .rsig{background:#fff;border:1px solid rgba(14,53,41,.12);border-radius:17px;padding:13px;color:var(--FD);line-height:1.55;font-weight:750;font-size:.97rem}
 .rn{display:inline-flex;margin-top:14px;padding:6px 12px;border-radius:999px;background:rgba(14,53,41,.07);color:rgba(14,53,41,.65);font-size:.88rem;font-weight:850}
-.rsec{margin-bottom:14px;padding:18px;border-radius:20px;background:#f8fafc;border:1px solid #dbe3ee}
-.rsec h4{font-size:1.05rem;font-weight:900;margin-bottom:10px;color:var(--FD)}
+.rsec{margin-bottom:14px;padding:18px;border-radius:20px;background:rgba(255,255,255,.045);border:1px solid rgba(241,213,134,.22)}
+.rsec h4{font-size:1.05rem;font-weight:900;margin-bottom:10px;color:var(--GL)}
 .rsec ul{margin:0;padding-left:18px;display:grid;gap:6px}
-.rsec li{line-height:1.6;font-weight:700;font-size:.97rem}
+.rsec li{line-height:1.6;font-weight:700;font-size:.97rem;color:rgba(255,253,245,.9)}
 .pc{padding:22px;border-radius:20px;background:linear-gradient(180deg,#fff8dc,#fffdf2);border:2px solid rgba(184,134,11,.32);box-shadow:0 18px 40px rgba(6,37,29,.12);margin-bottom:16px}
 .pe{display:inline-flex;padding:6px 12px;border-radius:999px;background:var(--FD);color:#d4af37;font-size:.82rem;font-weight:950;margin-bottom:12px}
 .pc h3{font-size:clamp(1.2rem,4.5vw,1.55rem);line-height:1.25;color:var(--FD);letter-spacing:-.04em;font-weight:950;margin-bottom:8px}
@@ -101,8 +101,7 @@ button,input,textarea{font:inherit}
 .st.er{padding:13px 15px;border-radius:17px;background:#fff3f0;border:2px solid rgba(160,45,25,.28);color:#5f1f14}
 .toast{position:fixed;left:50%;bottom:calc(22px + env(safe-area-inset-bottom,0));transform:translateX(-50%);z-index:9999;width:min(92vw,540px);padding:15px 18px;border-radius:20px;background:#fff8dc;border:2px solid rgba(184,134,11,.42);color:var(--FD);font-weight:950;font-size:clamp(1rem,3.6vw,1.1rem);line-height:1.55;text-align:center;box-shadow:0 18px 44px rgba(0,0,0,.22);pointer-events:none}
 .hb{position:fixed;top:calc(12px + env(safe-area-inset-top,0));right:12px;z-index:9998;border:0;background:var(--FD);color:#fff8dc;border-radius:999px;padding:10px 15px;font-weight:900;font-size:.9rem;cursor:pointer;box-shadow:0 10px 24px rgba(0,0,0,.18);touch-action:manipulation}
-footer{color:rgba(255,253,245,.62);padding:0 0 28px;line-height:1.7;font-weight:650;font-size:.92rem}
-footer>.w{background:var(--FD);border-radius:20px;padding:24px 24px 26px}
+footer{background:var(--FD);color:rgba(255,253,245,.62);padding:30px 0 38px;line-height:1.7;font-weight:650;font-size:.92rem}
 .ft-brand{display:flex;align-items:center;gap:8px;font-weight:900;color:#fff8dc;font-size:1.02rem;margin-bottom:10px}
 .ft-tag{color:rgba(255,253,245,.55);font-size:.85rem;margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,253,245,.12)}
 </style>
@@ -178,7 +177,7 @@ footer>.w{background:var(--FD);border-radius:20px;padding:24px 24px 26px}
 </ul>
 <p style="font-size:.72rem;color:rgba(255,253,245,.5);margin-top:13px;line-height:1.5">출처: 대법원 사법연감(2024년 상속재산분할 심판사건) · 서울신문 2026.4.30 보도</p>
 </div>
-<div class="rsec" style="background:#fdf6e3;border-color:rgba(194,137,28,.35)">
+<div class="rsec">
 <h4>이런 경우, 특히 확인이 필요합니다</h4>
 <ul>
 <li>특정 자녀에게 더 남기고 싶은 마음이 있지만, 다른 자녀에게 어떻게 설명할지 막막한 경우</li>
@@ -188,7 +187,7 @@ footer>.w{background:var(--FD);border-radius:20px;padding:24px 24px 26px}
 <li>부모님이 아직 정리를 안 하셔서, 자녀가 미리 알아보려는 경우</li>
 </ul>
 </div>
-<div class="rsec" style="background:#fdf6e3;border-color:rgba(194,137,28,.35)">
+<div class="rsec">
 <h4>진단은 이렇게 진행됩니다</h4>
 <ul>
 <li>몇 가지 질문에 답하면, 내 상황에서 분쟁으로 번질 수 있는 지점을 바로 확인합니다</li>
@@ -488,8 +487,8 @@ function showResult(){
     +'<div class="rb '+bc+'">'+esc(lv)+'</div>'
     +'<div class="rsigs">'+sigs.map(function(s){return'<div class="rsig">'+esc(s)+'</div>'}).join('')+'</div>'
     +'<span class="rn">진단 점수 '+sc+'점</span></div>'
-    +'<div class="rsec" style="background:#fdf6e3;border-color:rgba(194,137,28,.35)"><h4>알아두면 좋은 사실</h4><p style="font-size:.92rem;line-height:1.65;font-weight:650;color:var(--MU);margin-top:6px">상속재산을 두고 다투는 소송은 2024년 한 해 3,000건을 처음 넘어, 10년 전보다 3.6배로 늘었습니다. 그중 82.7%는 다투는 금액이 1억원 이하였습니다. 재산의 많고 적음과 상속 분쟁의 가능성은 별개의 문제입니다.</p></div>'
-    +(isParent?'<div class="rsec" style="background:#fff3f0;border-color:rgba(160,45,25,.22)"><h4>의사 표현이 어려운 상태라면</h4><p style="font-size:.92rem;line-height:1.65;font-weight:650;color:var(--MU);margin-top:6px">부모님이 치매 등으로 이미 의사 표현이 어려운 상태라면, 본인이 직접 유언장을 작성하기 어려울 수 있습니다. 이 경우 성년후견제도를 통한 재산관리, 또는 이미 작성해두신 유언이 있는지 확인하는 것이 우선입니다. 아직 의사 표현이 가능하시다면, 지금이 유언장을 정리할 수 있는 마지막 시점일 수 있습니다.</p></div>':'')
+    +'<div class="rsec"><h4>알아두면 좋은 사실</h4><p style="font-size:.92rem;line-height:1.65;font-weight:650;color:rgba(255,253,245,.82);margin-top:6px">상속재산을 두고 다투는 소송은 2024년 한 해 3,000건을 처음 넘어, 10년 전보다 3.6배로 늘었습니다. 그중 82.7%는 다투는 금액이 1억원 이하였습니다. 재산의 많고 적음과 상속 분쟁의 가능성은 별개의 문제입니다.</p></div>'
+    +(isParent?'<div class="rsec" style="border-color:rgba(184,134,11,.45)"><h4 style="color:var(--GL)">의사 표현이 어려운 상태라면</h4><p style="font-size:.92rem;line-height:1.65;font-weight:650;color:rgba(255,253,245,.82);margin-top:6px">부모님이 치매 등으로 이미 의사 표현이 어려운 상태라면, 본인이 직접 유언장을 작성하기 어려울 수 있습니다. 이 경우 성년후견제도를 통한 재산관리, 또는 이미 작성해두신 유언이 있는지 확인하는 것이 우선입니다. 아직 의사 표현이 가능하시다면, 지금이 유언장을 정리할 수 있는 마지막 시점일 수 있습니다.</p></div>':'')
     +'<div class="rsec"><h4>'+esc(poss)+' 상황이 파악됐습니다</h4><ul><li>지금 상태로 상속이 개시되면, '+esc(poss)+' 뜻이 그대로 반영되지 않을 수 있습니다.</li><li>유언장이 없으면 법정상속분대로 나뉘어, 더 주고 싶은 자녀가 있어도 강제로 균등 분배됩니다.</li><li>준비한 사람과 준비하지 않은 사람의 결과는 완전히 다릅니다.</li></ul></div>'
     +'<div class="rsec"><h4>이제 "어떻게 할 것인지"가 남았습니다</h4><ul><li>원하는 자녀(가족)에게 더 남기는 합법적 방법</li><li>유류분 분쟁을 최소화하는 구체적 절차</li><li>지금 당장 해야 할 것, 순서대로</li></ul></div>'
     +'<div class="pc"><div class="pe">유료 상세리포트에서 확인하세요</div>'
