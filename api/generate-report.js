@@ -927,7 +927,7 @@ export default async function handler(req, res) {
     if (!isDev) {
       let record;
       try {
-        record = await sbSelectOrder(sb, orderId, 'status,report_generated,report_json,score,level,matched_types,created_at');
+        record = await sbSelectOrder(sb, orderId, 'status,report_generated,report_json,score,level,matched_types,created_at,survey_input');
       } catch (checkErr) {
         console.error('결제 검증 조회 실패 orderId=' + orderId + ' ' + checkErr.message);
         return res.status(500).json({ ok: false, message: '결제 확인 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.' });
@@ -951,6 +951,7 @@ export default async function handler(req, res) {
           ok: true,
           report: record.report_json,
           meta: { matchedTypes: record.matched_types || [], score: record.score || 0, level: record.level || '', generatedAt: record.report_json.generated_at },
+          surveyInput: record.survey_input || null,
         });
       }
     }

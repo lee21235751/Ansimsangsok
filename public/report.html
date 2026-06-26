@@ -418,8 +418,11 @@ async function run(){
     });
     var data=await res.json().catch(function(){return{}});
     if(!res.ok||!data.ok)throw new Error(data.message||'리포트 생성 실패');
-    /* 결제 완료자 한정: 상담 메모 도구용 seed를 데이터 삭제 전에 추출 */
-    buildWillPlanSeed(req);
+    /* 결제 완료자 한정: 상담 메모 도구용 seed 생성.
+       신규 결제는 req.answers에, 재방문은 서버가 돌려준 data.surveyInput에 설문이 있다. */
+    var seedSource = (req && req.answers && Object.keys(req.answers).length) ? req
+                     : (data.surveyInput || req);
+    buildWillPlanSeed(seedSource);
     /* 성공 시 localStorage 백업 정리 및 이탈 경고 해제 */
     try{localStorage.removeItem('ansim_report_request_backup')}catch(e){}
     try{localStorage.removeItem('ansim_pending_order')}catch(e){}
