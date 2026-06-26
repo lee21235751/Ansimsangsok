@@ -1,0 +1,362 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"/>
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendard-variable.min.css"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta name="robots" content="noindex"/>
+<title>상속 상담 준비 메모 만들기 | 안심상속</title>
+<meta name="description" content="전문가 상담 갈 때 가져갈 분배 계획을 본인이 직접 정리하는 도구입니다. 법률자문이 아니며, 입력값은 본인 기기에서만 처리되고 저장되지 않습니다."/>
+<style>
+:root{--F:#0e3529;--FD:#06251d;--G:#d7ad55;--GL:#f1d586;--CR:#fff8e8;--INK:#12231d;--MU:#5e6b64;--LN:rgba(14,53,41,.18)}
+*,*::before,*::after{box-sizing:border-box;margin:0}
+body{font-family:"Pretendard Variable",Pretendard,system-ui,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;color:var(--INK);word-break:keep-all;overflow-x:hidden;background:#0d3026;line-height:1.5}
+.w{width:min(680px,calc(100% - 32px));margin:0 auto}
+a{color:inherit}
+/* 헤더 */
+.top{background:var(--FD);position:sticky;top:0;z-index:20}
+.top .w{display:flex;align-items:center;justify-content:space-between;padding:11px 0}
+.brand{display:flex;align-items:center;gap:9px;color:var(--GL);font-weight:950;font-size:1.05rem;letter-spacing:-.02em;text-decoration:none}
+.brand .seal{width:30px;height:30px;border-radius:7px;border:1.5px solid var(--G);display:flex;align-items:center;justify-content:center;font-size:.62rem;font-weight:900;color:var(--GL);line-height:1;text-align:center;background:rgba(255,255,255,.04)}
+.tnav{color:rgba(255,253,245,.82);font-weight:850;font-size:.84rem;text-decoration:none;border:1px solid rgba(241,213,134,.4);border-radius:999px;padding:7px 13px}
+/* 히어로 */
+.hero{background:linear-gradient(165deg,var(--F),var(--FD));color:#fffdf5;padding:40px 0 44px}
+.ey{display:inline-flex;border:1px solid rgba(215,173,85,.6);color:var(--GL);border-radius:999px;padding:8px 14px;font-weight:900;font-size:.85rem;background:rgba(255,255,255,.04);margin-bottom:18px}
+.hero h1{font-size:clamp(1.85rem,7vw,2.6rem);line-height:1.18;letter-spacing:-.045em;font-weight:950;margin-bottom:14px}
+.hero h1 .gl{color:var(--GL)}
+.hero p.sub{font-size:1.02rem;line-height:1.6;font-weight:650;color:rgba(255,253,245,.86);margin-bottom:22px}
+.pills{display:flex;flex-wrap:wrap;gap:7px;margin-top:18px}
+.pill{border:1px solid rgba(215,173,85,.45);color:var(--GL);padding:7px 12px;border-radius:999px;font-weight:850;font-size:.82rem}
+.bg{border:0;background:var(--GL);color:var(--FD);border-radius:16px;padding:16px 22px;font-weight:950;cursor:pointer;min-height:56px;width:100%;font-size:1.08rem;box-shadow:0 12px 30px rgba(241,213,134,.25);touch-action:manipulation}
+.bd{border:0;background:var(--FD);color:#fff8dc;border-radius:16px;padding:15px 20px;font-weight:950;cursor:pointer;min-height:54px;width:100%;font-size:1.04rem;touch-action:manipulation}
+.bw{border:1.5px solid rgba(14,53,41,.22);background:#fff;color:var(--FD);border-radius:14px;padding:13px 16px;font-weight:900;cursor:pointer;min-height:50px;font-size:.98rem;touch-action:manipulation}
+/* 섹션 */
+.sec{padding:34px 0}
+.sec-ey{display:inline-block;font-size:.78rem;font-weight:950;color:var(--G);letter-spacing:.04em;margin-bottom:9px}
+.sec h2{font-size:clamp(1.45rem,5.5vw,1.95rem);line-height:1.25;letter-spacing:-.04em;color:var(--GL);font-weight:950;margin-bottom:14px}
+.sec p.lead{font-size:1rem;line-height:1.68;font-weight:650;color:rgba(255,253,245,.84);margin-bottom:8px}
+.warn{background:#fff4ec;border:1px solid rgba(180,80,30,.28);border-radius:14px;padding:14px 16px;color:#7a3c12;font-weight:750;font-size:.95rem;line-height:1.6;margin-top:14px}
+/* 안내 단계 카드 */
+.steps{display:grid;gap:10px;margin-top:6px}
+.stp{background:rgba(255,255,255,.045);border:1px solid rgba(241,213,134,.22);border-radius:14px;padding:14px 16px}
+.stp b{display:block;color:var(--GL);font-weight:900;font-size:1rem;margin-bottom:4px}
+.stp b .n{display:inline-flex;width:23px;height:23px;border-radius:7px;background:var(--FD);color:var(--GL);font-size:.82rem;align-items:center;justify-content:center;margin-right:8px;vertical-align:middle}
+.stp span{font-size:.92rem;line-height:1.55;color:rgba(255,253,245,.8);font-weight:600}
+/* 폼 */
+.tool{background:var(--CR);border:1px solid rgba(215,173,85,.4);border-radius:20px;padding:22px 18px;margin-top:6px}
+.grp{margin-bottom:22px}
+.grp>.gh{font-weight:950;color:var(--FD);font-size:1.05rem;margin-bottom:4px}
+.grp>.gs{font-size:.85rem;color:var(--MU);font-weight:650;line-height:1.5;margin-bottom:12px}
+.fld{margin-bottom:14px}
+.fld>label{display:block;font-weight:900;color:var(--FD);font-size:.92rem;margin-bottom:6px}
+.fld input,.fld textarea{width:100%;border:1.5px solid rgba(14,53,41,.2);border-radius:12px;padding:13px 14px;font-size:1rem;font-family:inherit;background:#fff;color:var(--INK);min-height:50px}
+.fld input:focus,.fld textarea:focus{outline:none;border-color:var(--G)}
+.hint{font-size:.8rem;color:var(--MU);font-weight:650;margin-top:5px;line-height:1.5}
+/* 재산-수령인 묶음 카드 */
+.item{background:#fff;border:1px solid var(--LN);border-radius:14px;padding:14px;margin-bottom:12px}
+.item .ih{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.item .it{font-weight:900;color:var(--FD);font-size:.9rem}
+.item .del{border:0;background:none;color:#b4501e;font-weight:850;font-size:.85rem;cursor:pointer;padding:4px 8px}
+.item .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.item .toline{display:flex;align-items:center;gap:8px;margin-top:10px}
+.item .toline .arr{color:var(--MU);font-weight:900;flex-shrink:0}
+.undecided{display:flex;align-items:center;gap:8px;margin-top:10px;font-size:.85rem;color:var(--MU);font-weight:700;cursor:pointer}
+.undecided input{width:18px;height:18px;min-height:0;flex-shrink:0}
+.addb{border:1.5px dashed rgba(14,53,41,.3);background:#fff;color:var(--FD);border-radius:12px;padding:12px;font-weight:900;cursor:pointer;width:100%;font-size:.95rem;min-height:48px}
+/* 확인할 점 체크 */
+.advbox{background:#fff;border:1px solid var(--LN);border-radius:14px;padding:6px 14px 14px;margin-top:4px}
+.adv{display:flex;align-items:flex-start;gap:10px;padding:11px 0;border-bottom:1px solid rgba(14,53,41,.08)}
+.adv:last-child{border-bottom:0}
+.adv .mk{flex-shrink:0;width:22px;height:22px;border-radius:50%;background:#c9a23a;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:900;color:#fff}
+.adv .tx{font-size:.9rem;line-height:1.5;font-weight:700;color:var(--FD)}
+.adv .tx em{font-style:normal;color:var(--MU);font-weight:600;display:block;font-size:.82rem;margin-top:2px}
+/* 미리보기 문서 */
+.paper{background:#fffdf7;border:1px solid rgba(14,53,41,.2);border-radius:6px;padding:30px 26px;margin-top:8px;font-family:'Batang','Nanum Myeongjo',serif;color:#1a1a1a;line-height:1.9;box-shadow:0 10px 30px rgba(14,53,41,.1),inset 0 0 0 1px rgba(14,53,41,.04)}
+.paper .pt-title{text-align:center;font-size:1.4rem;font-weight:800;letter-spacing:.15em;margin-bottom:6px}
+.paper .pt-cap{text-align:center;font-size:.82rem;color:#7a6a3a;font-family:"Pretendard Variable",sans-serif;margin-bottom:22px;line-height:1.5}
+.paper .pt-sec{font-size:1.02rem;font-weight:800;margin:18px 0 6px;padding-bottom:3px;border-bottom:1px solid rgba(14,53,41,.2)}
+.paper .pt-item{font-size:1rem;margin-bottom:3px;padding-left:4px}
+.paper .pt-sub{font-size:.92rem;color:#555;padding-left:14px;margin-bottom:2px}
+.paper .ph{color:#8a6914;font-style:normal;border-bottom:1px dotted #b08a2e;padding:0 2px}
+.paper .pt-foot{margin-top:22px;font-size:.86rem;color:#666;font-family:"Pretendard Variable",sans-serif;line-height:1.6;border-top:1px solid rgba(14,53,41,.15);padding-top:12px}
+/* 부록 가이드 */
+.guide{background:rgba(255,255,255,.045);border:1px solid rgba(241,213,134,.22);border-radius:14px;padding:18px 16px;margin-top:8px}
+.guide h4{color:var(--GL);font-weight:900;font-size:1rem;margin-bottom:10px}
+.greq{margin-bottom:10px;font-size:.9rem;line-height:1.55;color:rgba(255,253,245,.82);font-weight:600}
+.greq b{color:var(--GL);font-weight:850}
+.greq em{font-style:normal;color:#f0b35a;font-weight:800}
+/* 브리지 */
+.bridge{background:linear-gradient(160deg,#0e3529,#06251d);border-radius:20px;padding:26px 20px;color:#fffdf5;text-align:center}
+.bridge h3{font-size:clamp(1.3rem,5vw,1.7rem);line-height:1.3;font-weight:950;letter-spacing:-.03em;margin-bottom:10px}
+.bridge h3 .gl{color:var(--GL)}
+.bridge p{font-size:.96rem;line-height:1.6;font-weight:650;color:rgba(255,253,245,.85);margin-bottom:18px}
+/* 고지 */
+.notice{font-size:.82rem;line-height:1.6;color:rgba(255,253,245,.7);font-weight:600;background:rgba(255,255,255,.04);border:1px solid rgba(241,213,134,.2);border-radius:12px;padding:14px 16px;margin-top:22px}
+/* 푸터 */
+footer{background:var(--FD);color:rgba(255,253,245,.62);padding:34px 0 42px;line-height:1.7;font-weight:650;font-size:.9rem;margin-top:30px}
+footer a{color:rgba(255,253,245,.65);text-decoration:underline}
+.ft-tag{margin-top:14px;font-size:.82rem;color:rgba(255,253,245,.5)}
+/* 인쇄 */
+@media print{
+  .top,.hero,#howsec,#toolform,#bridgesec,.notice,footer,.noprint{display:none!important}
+  body{background:#fff}
+  #printarea{display:block!important}
+  .paper{box-shadow:none;border:none;padding:10px 0}
+}
+#printarea{display:none}
+</style>
+</head>
+<body>
+
+<div class="top"><div class="w">
+  <a class="brand" href="/"><span class="seal">안심<br>상속</span> 안심상속</a>
+  <a class="tnav" href="/will">유언장 작성 →</a>
+</div></div>
+
+<header class="hero"><div class="w">
+  <div class="ey">안심상속 · 상담 준비 메모</div>
+  <h1>상담 가시기 전에,<br><span class="gl">분배 계획을 정리하세요.</span></h1>
+  <p class="sub">전문가를 만나기 전에 "무엇을 누구에게 남길지"를 본인이 직접 정리해 가면, 상담이 훨씬 빠르고 정확해집니다. 이 메모는 본인이 정하시는 그대로 정리될 뿐, 분배를 대신 정해드리지 않습니다.</p>
+  <button class="bg" type="button" id="startBtn">상담 메모 정리 시작</button>
+  <div class="pills"><span class="pill">상담 준비용</span><span class="pill">본인만 확인</span><span class="pill">저장되지 않음</span></div>
+</div></header>
+
+<main>
+<!-- HOW -->
+<section class="sec" id="howsec"><div class="w">
+  <span class="sec-ey">이 메모는 무엇인가요</span>
+  <h2>분배는 본인이, 정리는 안심상속이</h2>
+  <p class="lead" style="margin-bottom:14px">이 도구는 유언장을 대신 써주거나 분배 비율을 추천하지 않습니다. 본인이 이미 생각하고 계신 계획을 받아, 전문가 상담 때 보여드릴 정리표로 만들어 드립니다.</p>
+  <div class="steps">
+    <div class="stp"><b><span class="n">1</span>재산 정리</b><span>남기실 재산을 항목별로 적습니다. 진단에서 파악된 항목이 빈칸으로 채워져 있어, 이름만 적으시면 됩니다.</span></div>
+    <div class="stp"><b><span class="n">2</span>분배 계획</b><span>각 재산을 누구에게 남기실지 직접 적습니다. 아직 못 정하셨다면 "상담 시 논의"로 표시할 수 있습니다.</span></div>
+    <div class="stp"><b><span class="n">3</span>상담 메모 완성</b><span>정리된 내용과 "상담 때 확인할 점"이 한 장으로 출력됩니다. 인쇄해서 전문가에게 가져가세요.</span></div>
+  </div>
+  <div class="warn">⚠️ 이 메모는 <strong>상담 준비 자료</strong>이며, 그 자체로 법적 효력이 있는 유언장이 아닙니다. 실제 유언장 작성과 분배의 법적 검토는 변호사·세무사 상담에서 진행하세요.</div>
+</div></section>
+
+<!-- TOOL -->
+<section class="sec" id="toolsec"><div class="w">
+  <span class="sec-ey">메모 정리하기</span>
+  <h2>아래를 채우면, 상담용 메모가 만들어집니다</h2>
+  <p class="lead" style="margin-bottom:16px"><strong>입력값은 이 기기에서만 처리되고 저장·전송되지 않습니다.</strong></p>
+
+  <div class="tool" id="toolform">
+
+    <!-- 그룹 1: 재산 + 분배 -->
+    <div class="grp">
+      <div class="gh">남길 재산과, 누구에게 남길지</div>
+      <div class="gs">각 재산을 어떤 이름으로 부르실지와, 누구에게 남기실지를 적어주세요. 비율이나 분배 방법은 본인이 정하시는 대로 자유롭게 적으시면 됩니다.</div>
+      <div id="itemList"></div>
+      <button class="addb" type="button" id="addItem">+ 재산 항목 추가</button>
+    </div>
+
+    <!-- 그룹 2: 유언집행자 -->
+    <div class="grp">
+      <div class="gh">유언집행자 (선택)</div>
+      <div class="gs">유언 내용을 실제로 처리해 줄 사람입니다. 한 명을 단독으로 정해두면 나중에 분쟁이 줄어듭니다.</div>
+      <div class="fld"><input id="iExec" type="text" placeholder="예: 장남 홍철수" autocomplete="off"></div>
+    </div>
+
+    <!-- 그룹 3: 작성자/날짜 -->
+    <div class="grp">
+      <div class="gh">작성 정보</div>
+      <div class="fld"><label>작성자 성명</label><input id="iName" type="text" placeholder="예: 홍길동" autocomplete="off"></div>
+      <div class="fld"><label>작성일</label><input id="iDate" type="text" placeholder="예: 2026년 6월 26일" autocomplete="off"><div class="hint" id="todayHint" style="cursor:pointer;text-decoration:underline">오늘 날짜로 채우기</div></div>
+    </div>
+
+  </div>
+
+  <!-- 미리보기 -->
+  <div style="margin-top:22px">
+    <div class="sec-ey" style="margin-bottom:8px">미리보기 — 이대로 인쇄해 상담에 가져가세요</div>
+    <div class="paper" id="preview"></div>
+  </div>
+
+  <div style="display:grid;gap:10px;margin-top:16px" class="noprint">
+    <button class="bd" type="button" id="printBtn">🖨 인쇄용으로 보기 / 저장</button>
+  </div>
+
+  <div class="warn" style="margin-top:16px">📌 이 메모는 <strong>상담 준비용 정리자료</strong>입니다. 법률 자문이나 유언장이 아니며, 여기 적은 분배가 법적으로 가능한지(특히 다른 상속인의 유류분과 충돌하는지)는 반드시 변호사 상담에서 확인하세요.</div>
+</div></section>
+
+<!-- 부록: 자필 유언장 작성 가이드 -->
+<section class="sec" id="guidesec"><div class="w">
+  <span class="sec-ey">부록 · 자필 유언장 5요건 (민법 제1066조)</span>
+  <h2>상담 후 직접 작성하실 때 참고하세요</h2>
+  <div class="guide">
+    <div class="greq"><b>1. 전문 자필 —</b> 유언 내용 전체를 <em>직접 손으로</em> 써야 합니다. 타이핑·대필·복사·출력물은 모두 무효입니다.</div>
+    <div class="greq"><b>2. 연월일 —</b> 작성한 <em>연·월·일을 모두</em> 적어야 합니다. "어느 날"처럼 날짜가 빠지면 무효입니다.</div>
+    <div class="greq"><b>3. 주소 —</b> 유언자의 주소를 <em>동·호수까지 상세히</em> 적어야 합니다. "서울에서"처럼 모호하면 무효가 될 수 있습니다.</div>
+    <div class="greq"><b>4. 성명 —</b> 유언자 본인의 이름을 자필로 적습니다.</div>
+    <div class="greq"><b>5. 날인 —</b> 이름 옆에 <em>도장 또는 지장(손도장)</em>을 찍어야 합니다. 서명만 있고 날인이 없으면 무효가 될 수 있습니다.</div>
+    <div class="warn" style="margin-top:4px">✍️ 분쟁이 우려되거나 재산이 복잡하면, 공증인 앞에서 작성하는 <strong>공정증서 유언</strong>이 더 안전합니다. 위 메모를 바탕으로 변호사와 상의하세요. 바로 따라 쓸 초안이 필요하면 <a href="/will" style="color:var(--GL);text-decoration:underline">무료 유언장 작성</a>을 이용하세요.</div>
+  </div>
+</div></section>
+
+<!-- BRIDGE -->
+<section class="sec" id="bridgesec"><div class="w">
+  <div class="bridge">
+    <h3>이제 전문가와<br><span class="gl">구체적으로 상의하세요.</span></h3>
+    <p>정리하신 메모를 가지고 상담하면, 이 분배가 실제로 지켜지는지·유류분은 어떻게 되는지·세금은 얼마인지를 빠르게 확인할 수 있습니다.</p>
+    <a href="/request-help" style="text-decoration:none"><button class="bg" type="button">전문가 상담 알아보기 →</button></a>
+  </div>
+  <div class="notice" id="legalNotice"></div>
+</div></section>
+</main>
+
+<!-- 인쇄 전용 영역 -->
+<div id="printarea"><div class="w"><div class="paper" id="printpaper"></div></div></div>
+
+<footer><div class="w">
+  <div class="brand" style="margin-bottom:10px"><span class="seal" style="border-color:rgba(241,213,134,.4)">안심<br>상속</span> 안심상속</div>
+  <div>분배 계획 정리부터 전문가 상담까지, 내 뜻대로 남기는 상속을 본인만 조용히 준비하는 서비스입니다.</div>
+  <div class="ft-tag">© 안심상속. 입력 정보는 본인 기기에서만 처리되며 저장·전송되지 않습니다.<br><a href="/terms" style="margin-right:12px">이용약관</a><a href="/privacy">개인정보 처리방침</a></div>
+</div></footer>
+
+<script>
+/* ============================================================
+   [법적 민감 설정] — 변호사 회신(검수) 시 이 블록만 수정하면 됩니다.
+   안전지대 원칙:
+   1) 이 도구는 분배 비율을 추천/자동계산하지 않는다 (사용자 자유입력만).
+   2) 산출물은 "상담 준비 메모"이며 유언장이 아니다 (명칭 고정).
+   3) "상담 때 확인할 점"은 질문형으로만 표시한다 (해법 제시 금지).
+   ============================================================ */
+var NOTICE = "이 페이지는 상담 준비를 돕기 위해, 본인이 입력한 분배 계획을 표준 양식으로 정리해 드리는 도구입니다. 특정 사건에 대한 법률 자문이나 법률 상담이 아니며, 변호사·세무사의 개별 상담을 대체하지 않습니다. 여기 정리된 분배가 법적으로 유효한지, 다른 상속인의 유류분을 침해하는지는 반드시 전문가 상담에서 확인하시기 바랍니다.";
+
+/* "상담 때 확인할 점" 문안 — 전부 질문/환기형. 절대 해법 제시 금지. */
+var ADVISORY_TEXT = {
+  minorChildren: { t:"미성년 자녀가 있습니다", e:"미성년 상속인이 있으면 재산분할에 특별대리인 선임이 필요한지 상담 때 확인하세요." },
+  foreignHeirs:  { t:"해외 거주 또는 외국 국적 상속인이 있습니다", e:"국외 상속인의 서류·세금 절차가 어떻게 되는지 상담 때 확인하세요." },
+  priorMarriageChild: { t:"전혼 자녀 등 관계가 복잡한 상속인이 있습니다", e:"각 상속인의 상속권 범위가 어떻게 되는지 상담 때 확인하세요." },
+  business: { t:"사업체·법인 지분이 있습니다", e:"지분 승계와 세금 문제를 상담 때 확인하세요." },
+  forcedShare: { t:"분배 계획이 있으십니다", e:"정하신 분배가 다른 상속인의 유류분(법이 보장하는 최소 몫)과 충돌하는지 상담 때 확인하세요." }
+};
+/* ============================================================ */
+
+function $(id){return document.getElementById(id)}
+function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function ph(v,label){ return (v&&String(v).trim())? esc(v) : '<span class="ph">['+label+']</span>'; }
+
+/* ---- seed 읽기 (report.html이 넘긴 감지 플래그) ---- */
+var seed = (function(){
+  try{
+    var raw = sessionStorage.getItem('ansim_will_plan_seed');
+    return raw ? JSON.parse(raw) : null;
+  }catch(e){ return null; }
+})();
+
+/* ---- 재산 항목 초기 구성 ---- */
+/* seed.flags 기반으로 빈 항목을 미리 깔아준다 (금액 없음, 항목 라벨만) */
+var items = [];
+function seedItems(){
+  if(seed && seed.flags){
+    var f = seed.flags;
+    var n = (f.realEstateCount && f.realEstateCount>0) ? f.realEstateCount : (f.hasRealEstate?1:0);
+    for(var i=0;i<n;i++){ items.push({asset:"", assetHint:"부동산", to:"", undecided:false}); }
+    if(f.hasFinancial) items.push({asset:"", assetHint:"금융자산(예적금·주식 등)", to:"", undecided:false});
+    if(f.hasOverseas)  items.push({asset:"", assetHint:"해외 자산", to:"", undecided:false});
+    if(f.hasBusiness)  items.push({asset:"", assetHint:"사업체·법인 지분", to:"", undecided:false});
+  }
+  if(items.length===0){ items.push({asset:"", assetHint:"", to:"", undecided:false}); }
+}
+seedItems();
+
+function itemRow(it,idx){
+  var d=document.createElement("div"); d.className="item";
+  var label = it.assetHint ? ("재산 "+(idx+1)+" · "+it.assetHint) : ("재산 "+(idx+1));
+  d.innerHTML =
+    '<div class="ih"><div class="it">'+esc(label)+'</div>'+(items.length>1?'<button class="del" data-i="'+idx+'">삭제</button>':'')+'</div>'
+    +'<input data-f="asset" data-i="'+idx+'" placeholder="'+(it.assetHint?('예: '+esc(it.assetHint==="부동산"?"○○동 아파트":it.assetHint)):"무엇을 (예: ○○동 아파트)")+'" value="'+esc(it.asset)+'">'
+    +'<div class="toline"><input data-f="to" data-i="'+idx+'" placeholder="누구에게 (예: 장남 홍철수 / 배우자에게 전부)" value="'+esc(it.to)+'"'+(it.undecided?' disabled style="opacity:.5"':'')+'></div>'
+    +'<label class="undecided"><input type="checkbox" data-f="undecided" data-i="'+idx+'"'+(it.undecided?' checked':'')+'> 아직 못 정함 — 상담 시 논의하겠습니다</label>';
+  return d;
+}
+function renderItems(){
+  var L=$("itemList"); L.innerHTML="";
+  items.forEach(function(it,i){ L.appendChild(itemRow(it,i)); });
+  L.querySelectorAll("input").forEach(function(inp){
+    var ev = (inp.type==="checkbox") ? "change" : "input";
+    inp.addEventListener(ev,function(){
+      var f=this.dataset.f, i=+this.dataset.i;
+      if(f==="undecided"){ items[i].undecided=this.checked; if(this.checked) items[i].to=""; renderItems(); render(); }
+      else { items[i][f]=this.value; render(); }
+    });
+  });
+  L.querySelectorAll(".del").forEach(function(btn){
+    btn.addEventListener("click",function(){ items.splice(+this.dataset.i,1); renderItems(); render(); });
+  });
+}
+
+/* ---- 미리보기(메모) 생성 — 전부 코드, LLM 없음 ---- */
+function buildPaper(){
+  var name=$("iName").value, exec=$("iExec").value, date=$("iDate").value;
+  var h='<div class="pt-title">상속 상담 준비 메모</div>';
+  h+='<div class="pt-cap">본인이 직접 정리한 자료입니다 · 법률자문이나 유언장이 아닙니다 · 상담 참고용</div>';
+
+  /* 1. 재산과 분배 */
+  h+='<div class="pt-sec">1. 남길 재산과 분배 계획</div>';
+  var any=false;
+  items.forEach(function(it,i){
+    if(it.asset || it.to || it.undecided){
+      any=true;
+      var to = it.undecided ? '<span style="color:#8a6914">아직 미정 (상담 시 논의)</span>' : ph(it.to,"누구에게");
+      h+='<div class="pt-item">· '+ph(it.asset,"재산")+' → '+to+'</div>';
+    }
+  });
+  if(!any) h+='<div class="pt-item">· '+ph("","재산")+' → '+ph("","누구에게")+'</div>';
+
+  /* 2. 유언집행자 */
+  if(exec && exec.trim()){
+    h+='<div class="pt-sec">2. 유언집행자</div>';
+    h+='<div class="pt-item">· '+esc(exec)+'</div>';
+  }
+
+  /* 3. 상담 때 확인할 점 — seed 기반, 질문형만 */
+  var advs = buildAdvisories();
+  if(advs.length){
+    h+='<div class="pt-sec">'+(exec&&exec.trim()?"3":"2")+'. 상담 때 꼭 확인할 점</div>';
+    advs.forEach(function(a){
+      h+='<div class="pt-item">· '+esc(a.t)+'</div><div class="pt-sub">'+esc(a.e)+'</div>';
+    });
+  }
+
+  /* 푸터: 작성자/날짜 + 고지 */
+  h+='<div class="pt-foot">';
+  h+='작성자: '+ph(name,"성명")+' · 작성일: '+ph(date,"연월일")+'<br>';
+  h+='※ 이 메모는 상담 준비용이며 법적 효력이 있는 유언장이 아닙니다. 분배의 법적 유효성과 유류분 충돌 여부는 변호사 상담에서 확인하세요.';
+  h+='</div>';
+  return h;
+}
+
+/* "상담 때 확인할 점" 목록 구성 — seed.advisory 플래그 + 분배 입력 여부 */
+function buildAdvisories(){
+  var out=[];
+  if(seed && seed.advisory){
+    var a=seed.advisory;
+    if(a.minorChildren) out.push(ADVISORY_TEXT.minorChildren);
+    if(a.foreignHeirs)  out.push(ADVISORY_TEXT.foreignHeirs);
+    if(a.priorMarriageChild) out.push(ADVISORY_TEXT.priorMarriageChild);
+  }
+  if(seed && seed.flags && seed.flags.hasBusiness) out.push(ADVISORY_TEXT.business);
+  /* 분배를 하나라도 적었으면 유류분 확인 환기(항상 질문형) */
+  var hasDistribution = items.some(function(it){ return (it.to && it.to.trim()) || it.undecided; });
+  if(hasDistribution) out.push(ADVISORY_TEXT.forcedShare);
+  return out;
+}
+
+function render(){ $("preview").innerHTML=buildPaper(); }
+
+/* ---- 이벤트 ---- */
+["iName","iExec","iDate"].forEach(function(id){ $(id).addEventListener("input",render); });
+$("addItem").addEventListener("click",function(){ items.push({asset:"",assetHint:"",to:"",undecided:false}); renderItems(); render(); });
+$("todayHint").addEventListener("click",function(){ var t=new Date(); $("iDate").value=t.getFullYear()+"년 "+(t.getMonth()+1)+"월 "+t.getDate()+"일"; render(); });
+$("startBtn").addEventListener("click",function(){ $("toolsec").scrollIntoView({behavior:"smooth",block:"start"}); });
+$("printBtn").addEventListener("click",function(){ $("printpaper").innerHTML=buildPaper(); window.print(); });
+
+/* ---- 초기화 ---- */
+renderItems(); render();
+$("legalNotice").textContent=NOTICE;
+</script>
+</body>
+</html>
