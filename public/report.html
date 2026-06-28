@@ -141,7 +141,6 @@ body{font-family:"Pretendard Variable",Pretendard,system-ui,-apple-system,"Apple
 function ge(id){return document.getElementById(id)}
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
 function arr(v){return Array.isArray(v)?v:typeof v==='string'&&v.trim()?[v]:[]}
-function goExpert(){ location.href='/request-help.html'; }
 
 /* 생성 중 이탈 방지 — 완료/에러 시 해제 */
 function enableLeaveWarning(){
