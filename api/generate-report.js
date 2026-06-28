@@ -795,7 +795,7 @@ ${conditionalInstructions}`;
   /* 생성 후 법률 위험표현 검증 — LLM 환각(예: 유류분 "10년", 가업 자녀 근무연수) 차단.
      걸리면 1회 재생성하고, 그래도 잔존하면 에러 로그(수동 검토 신호)를 남긴다. */
   const RISK_PATTERNS = [
-    { re: /(유류분[\s\S]{0,60}10\s*년)|(10\s*년[\s\S]{0,60}유류분)/, name: "유류분 맥락 '10년'(제3자 증여는 1년)" },
+    { re: /((유류분[\s\S]{0,60}10\s*년)|(10\s*년[\s\S]{0,60}유류분))[\s\S]{0,30}(빠진다|빠집니다|빠지지\s*않|제외|소멸|지나면\s*(빠|없|청구|반환\s*못)|청구\s*(못|불)|받을\s*수\s*없)/, exempt: /(상속세|증여세|다릅니다|다르다|무관|관한\s*규정|기간\s*제한\s*없|시기와\s*무관)/, name: "유류분 맥락 '10년' 오결론(제3자 증여는 1년)" },
     { re: /(가업상속공제[\s\S]{0,80}자녀[\s\S]{0,12}\d+\s*년)|(자녀[\s\S]{0,12}\d+\s*년[\s\S]{0,80}가업상속공제)/, name: '가업상속공제 자녀 근무연수 단정' },
     { re: /유류분[\s\S]{0,40}(현금으로만|가액으로만)\s*반환/, name: "유류분 가액반환 단정('~으로만')" },
     { re: /배우자[\s\S]{0,40}영주권[\s\S]{0,55}(공증|아포스티유)/, name: '배우자 영주권에 공증/아포스티유 오기재(배우자는 한국국적이면 인감)' },
@@ -816,7 +816,11 @@ ${conditionalInstructions}`;
     }
     return out;
   };
-  const checkLegal = (obj) => RISK_PATTERNS.filter(p => p.re.test(JSON.stringify(obj))).map(p => p.name).concat(ctxChecks(obj));
+  const checkLegal = (obj) => {
+    const s = JSON.stringify(obj);
+    /* exempt가 있고 매치되면 그 패턴은 정확한 서술로 보아 건너뛴다(오탐 방지). */
+    return RISK_PATTERNS.filter(p => p.re.test(s) && !(p.exempt && p.exempt.test(s))).map(p => p.name).concat(ctxChecks(obj));
+  };
   const callPartChecked = async (prompt, partName) => {
     let obj = await callPart(prompt, partName);
     let issues = checkLegal(obj);
