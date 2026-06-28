@@ -292,30 +292,26 @@ function render(d, orderId){
       }).join('')+'</div></div>';
   }
 
-  /* 법적 고지·버튼 */
+  /* 법적 고지 */
   h+='<div class="notice">'+esc(d.legal_notice||'이 리포트는 일반적 상속 정보 제공 목적이며 개별 법적·세무적 판단을 대체하지 않습니다. 세법은 개정 논의가 진행 중이므로 실제 진행 시 최신 내용을 전문가와 함께 확인하세요.')+'</div>';
 
-  if(orderId){
-    var saveUrl = location.origin + '/my-report.html?order=' + encodeURIComponent(orderId);
-    h+='<div class="sec" style="background:#f7faf7;border:2px solid rgba(31,77,58,.2);text-align:center">'
-      +'<h2 class="sec-t" style="margin-bottom:6px">이 리포트, 30일간 언제든 다시 볼 수 있습니다</h2>'
-      +'<p class="sec-d" style="margin-bottom:10px">아래 링크를 북마크해두시면 결제일로부터 30일간 이 리포트를 다시 받아보실 수 있습니다.</p>'
-      +'<a href="'+esc(saveUrl)+'" style="display:block;word-break:break-all;color:var(--FD);font-weight:950;text-decoration:underline;font-size:.92rem">'+esc(saveUrl)+'</a>'
-      +'</div>';
-  }
-
-  h+='<div class="sec" style="background:#f4f9f6;border:2px solid rgba(31,77,58,.18);text-align:center">'
-    +'<h2 class="sec-t" style="margin-bottom:6px">상담 가시기 전에, 분배 계획을 정리하세요</h2>'
-    +'<p class="sec-d" style="margin-bottom:14px">누구에게 무엇을 남기실지 정리해, 전문가 상담에 가져갈 <strong>상담 준비 메모</strong>를 만들어 드립니다. 분배는 직접 정하시고, 정리는 안심상속이 도와드립니다.</p>'
-    +'<button class="bd" onclick="location.href=\'/will-plan\'" style="margin-bottom:0">상담 준비 메모 정리하기 →</button>'
+  /* 단일 다음 행동: 상담 준비 메모 정리 (유일한 주 CTA) */
+  h+='<div class="sec" style="background:#f4f9f6;border:2px solid rgba(31,77,58,.2);text-align:center">'
+    +'<div class="sec-ey" style="margin-bottom:6px">다음 단계</div>'
+    +'<h2 class="sec-t" style="margin-bottom:8px">이제, 분배 계획을 정리해 보세요</h2>'
+    +'<p class="sec-d" style="margin-bottom:16px">누구에게 무엇을 남기실지 직접 정리하면, 나중에 전문가와 상담할 때 그대로 가져가실 수 있는 <strong>준비 자료</strong>가 됩니다. 분배는 직접 정하시고, 정리는 안심상속이 도와드립니다. 전문가 상담 연결은 이 정리를 마친 뒤 안내해 드립니다.</p>'
+    +'<button class="bg" onclick="location.href=\'/will-plan\'" style="margin-bottom:0">분배 계획 정리하기 →</button>'
     +'</div>';
 
-  h+='<div class="sec" style="background:#fff7e7;border:2px solid rgba(215,173,85,.4);text-align:center">'
-    +'<h2 class="sec-t" style="margin-bottom:6px">변호사·세무사에게 직접 견적을 받아보세요</h2>'
-    +'<p class="sec-d" style="margin-bottom:14px">상황을 한 번만 적으면 여러 전문가가 상담료와 일정을 제안합니다. 비교 후 직접 선택하시면 됩니다.</p>'
-    +'<button class="bg" onclick="goExpert()" style="margin-bottom:0">전문가 견적 요청하기</button>'
-    +'</div>'
-    +'<button class="bw" onclick="location.href=\'/\'" style="margin-top:9px">처음으로 돌아가기</button>';
+  /* 보조 안내: 30일 다시보기 (작게) + 처음으로 */
+  if(orderId){
+    var saveUrl = location.origin + '/my-report.html?order=' + encodeURIComponent(orderId);
+    h+='<div style="margin-top:16px;padding:12px 14px;border-radius:10px;background:#f7faf7;border:1px solid rgba(31,77,58,.15);font-size:.85rem;line-height:1.55;color:#475569">'
+      +'이 리포트는 결제일로부터 30일간 다시 볼 수 있습니다. 아래 링크를 저장해 두세요.<br>'
+      +'<a href="'+esc(saveUrl)+'" style="word-break:break-all;color:var(--FD);font-weight:850;text-decoration:underline">'+esc(saveUrl)+'</a>'
+      +'</div>';
+  }
+  h+='<button class="bw" onclick="location.href=\'/\'" style="margin-top:12px">처음으로 돌아가기</button>';
 
   h+='</div></div>';
 

@@ -62,6 +62,9 @@ a{color:inherit}
 .item .toline .arr{color:var(--MU);font-weight:900;flex-shrink:0}
 .undecided{display:flex;align-items:center;gap:8px;margin-top:10px;font-size:.85rem;color:var(--MU);font-weight:700;cursor:pointer}
 .undecided input{width:18px;height:18px;min-height:0;flex-shrink:0}
+.wchips{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+.wchip{border:1.5px solid rgba(14,53,41,.22);background:#fff;color:var(--FD);border-radius:999px;padding:9px 14px;font-size:.9rem;font-weight:800;cursor:pointer;min-height:42px;touch-action:manipulation}
+.wchip.on{background:var(--FD);color:#fff8dc;border-color:var(--FD)}
 .addb{border:1.5px dashed rgba(14,53,41,.3);background:#fff;color:var(--FD);border-radius:12px;padding:12px;font-weight:900;cursor:pointer;width:100%;font-size:.95rem;min-height:48px}
 /* 확인할 점 체크 */
 .advbox{background:#fff;border:1px solid var(--LN);border-radius:14px;padding:6px 14px 14px;margin-top:4px}
@@ -110,7 +113,6 @@ footer a{color:rgba(255,253,245,.65);text-decoration:underline}
 
 <div class="top"><div class="w">
   <a class="brand" href="/"><span class="seal">안심<br>상속</span> 안심상속</a>
-  <a class="tnav" href="/will">유언장 작성 →</a>
 </div></div>
 
 <header class="hero"><div class="w">
@@ -151,11 +153,20 @@ footer a{color:rgba(255,253,245,.65);text-decoration:underline}
       <button class="addb" type="button" id="addItem">+ 재산 항목 추가</button>
     </div>
 
-    <!-- 그룹 2: 유언집행자 -->
+    <!-- 그룹 2: 유언 관련 (집행자 + 방식 의향) -->
     <div class="grp">
-      <div class="gh">유언집행자 (선택)</div>
-      <div class="gs">유언 내용을 실제로 처리해 줄 사람입니다. 한 명을 단독으로 정해두면 나중에 분쟁이 줄어듭니다.</div>
-      <div class="fld"><input id="iExec" type="text" placeholder="예: 장남 홍철수" autocomplete="off"></div>
+      <div class="gh">유언 관련 (선택)</div>
+      <div class="gs">유언 내용을 실제로 처리해 줄 사람과, 어떤 방식의 유언을 생각 중인지 적어두면 상담이 수월해집니다.</div>
+      <div class="fld"><label>유언집행자</label><input id="iExec" type="text" placeholder="예: 장남 홍철수 (한 명을 정해두면 분쟁이 줄어듭니다)" autocomplete="off"></div>
+      <div class="fld"><label>유언 방식 의향</label>
+        <div class="wchips" id="willTypeChips">
+          <button type="button" class="wchip" data-v="아직 모름">아직 모름</button>
+          <button type="button" class="wchip" data-v="자필 유언">자필 유언</button>
+          <button type="button" class="wchip" data-v="공정증서 유언">공정증서 유언</button>
+          <button type="button" class="wchip" data-v="상담 후 결정">상담 후 결정</button>
+        </div>
+        <div class="hint">자필·공정증서 중 무엇이 적합한지는 상담에서 확인하시면 됩니다.</div>
+      </div>
     </div>
 
     <!-- 그룹 3: 작성자/날짜 -->
@@ -180,7 +191,16 @@ footer a{color:rgba(255,253,245,.65);text-decoration:underline}
   <div class="warn" style="margin-top:16px">📌 이 메모는 <strong>상담 준비용 정리자료</strong>입니다. 법률 자문이나 유언장이 아니며, 여기 적은 분배가 법적으로 가능한지(특히 다른 상속인의 유류분과 충돌하는지)는 반드시 변호사 상담에서 확인하세요.</div>
 </div></section>
 
-<!-- 부록: 자필 유언장 작성 가이드 -->
+<!-- BRIDGE: 메모 정리 직후 다음 단계 = 전문가 상담 -->
+<section class="sec" id="bridgesec"><div class="w">
+  <div class="bridge">
+    <h3>이제 전문가와<br><span class="gl">구체적으로 상의하세요.</span></h3>
+    <p>정리하신 메모(분배 계획과 유언 의향)를 가지고 상담하면, 이 분배가 실제로 지켜지는지·유류분은 어떻게 되는지·세금은 얼마인지를 빠르게 확인할 수 있습니다.</p>
+    <a href="/request-help" style="text-decoration:none"><button class="bg" type="button">전문가 상담 알아보기 →</button></a>
+  </div>
+</div></section>
+
+<!-- 부록: 자필 유언장 작성 가이드 (상담 후 단계) -->
 <section class="sec" id="guidesec"><div class="w">
   <span class="sec-ey">부록 · 자필 유언장 5요건 (민법 제1066조)</span>
   <h2>상담 후 직접 작성하실 때 참고하세요</h2>
@@ -192,17 +212,9 @@ footer a{color:rgba(255,253,245,.65);text-decoration:underline}
     <div class="greq"><b>5. 날인 —</b> 이름 옆에 <em>도장 또는 지장(손도장)</em>을 찍어야 합니다. 서명만 있고 날인이 없으면 무효가 될 수 있습니다.</div>
     <div class="warn" style="margin-top:4px">✍️ 분쟁이 우려되거나 재산이 복잡하면, 공증인 앞에서 작성하는 <strong>공정증서 유언</strong>이 더 안전합니다. 위 메모를 바탕으로 변호사와 상의하세요. 바로 따라 쓸 초안이 필요하면 <a href="/will" style="color:var(--GL);text-decoration:underline">무료 유언장 작성</a>을 이용하세요.</div>
   </div>
-</div></section>
-
-<!-- BRIDGE -->
-<section class="sec" id="bridgesec"><div class="w">
-  <div class="bridge">
-    <h3>이제 전문가와<br><span class="gl">구체적으로 상의하세요.</span></h3>
-    <p>정리하신 메모를 가지고 상담하면, 이 분배가 실제로 지켜지는지·유류분은 어떻게 되는지·세금은 얼마인지를 빠르게 확인할 수 있습니다.</p>
-    <a href="/request-help" style="text-decoration:none"><button class="bg" type="button">전문가 상담 알아보기 →</button></a>
-  </div>
   <div class="notice" id="legalNotice"></div>
 </div></section>
+
 </main>
 
 <!-- 인쇄 전용 영역 -->
@@ -249,6 +261,7 @@ var seed = (function(){
 /* ---- 재산 항목 초기 구성 ---- */
 /* seed.flags 기반으로 빈 항목을 미리 깔아준다 (금액 없음, 항목 라벨만) */
 var items = [];
+var willTypeSel = ""; /* 선택된 유언 방식 의향 */
 function seedItems(){
   if(seed && seed.flags){
     var f = seed.flags;
@@ -291,6 +304,7 @@ function renderItems(){
 /* ---- 미리보기(메모) 생성 — 전부 코드, LLM 없음 ---- */
 function buildPaper(){
   var name=$("iName").value, exec=$("iExec").value, date=$("iDate").value;
+  var willType = willTypeSel; /* 선택된 유언 방식 의향(없으면 "") */
   var h='<div class="pt-title">상속 상담 준비 메모</div>';
   h+='<div class="pt-cap">본인이 직접 정리한 자료입니다 · 법률자문이나 유언장이 아닙니다 · 상담 참고용</div>';
 
@@ -306,16 +320,18 @@ function buildPaper(){
   });
   if(!any) h+='<div class="pt-item">· '+ph("","재산")+' → '+ph("","누구에게")+'</div>';
 
-  /* 2. 유언집행자 */
-  if(exec && exec.trim()){
-    h+='<div class="pt-sec">2. 유언집행자</div>';
-    h+='<div class="pt-item">· '+esc(exec)+'</div>';
+  /* 2. 유언 관련 (집행자 또는 방식 의향 중 하나라도 있으면 표시) */
+  var hasWillInfo = (exec && exec.trim()) || (willType && willType.trim());
+  if(hasWillInfo){
+    h+='<div class="pt-sec">2. 유언 관련</div>';
+    if(exec && exec.trim()) h+='<div class="pt-item">· 유언집행자: '+esc(exec)+'</div>';
+    if(willType && willType.trim()) h+='<div class="pt-item">· 유언 방식 의향: '+esc(willType)+'</div>';
   }
 
   /* 3. 상담 때 확인할 점 — seed 기반, 질문형만 */
   var advs = buildAdvisories();
   if(advs.length){
-    h+='<div class="pt-sec">'+(exec&&exec.trim()?"3":"2")+'. 상담 때 꼭 확인할 점</div>';
+    h+='<div class="pt-sec">'+(hasWillInfo?"3":"2")+'. 상담 때 꼭 확인할 점</div>';
     advs.forEach(function(a){
       h+='<div class="pt-item">· '+esc(a.t)+'</div><div class="pt-sub">'+esc(a.e)+'</div>';
     });
@@ -351,6 +367,17 @@ function render(){ $("preview").innerHTML=buildPaper(); }
 ["iName","iExec","iDate"].forEach(function(id){ $(id).addEventListener("input",render); });
 $("addItem").addEventListener("click",function(){ items.push({asset:"",assetHint:"",to:"",undecided:false}); renderItems(); render(); });
 $("todayHint").addEventListener("click",function(){ var t=new Date(); $("iDate").value=t.getFullYear()+"년 "+(t.getMonth()+1)+"월 "+t.getDate()+"일"; render(); });
+(function(){
+  var box=$("willTypeChips"); if(!box) return;
+  box.querySelectorAll(".wchip").forEach(function(btn){
+    btn.addEventListener("click",function(){
+      var v=this.dataset.v;
+      if(willTypeSel===v){ willTypeSel=""; this.classList.remove("on"); }      /* 같은 칩 재클릭 시 해제 */
+      else { willTypeSel=v; box.querySelectorAll(".wchip").forEach(function(b){ b.classList.remove("on"); }); this.classList.add("on"); }
+      render();
+    });
+  });
+})();
 $("startBtn").addEventListener("click",function(){ $("toolsec").scrollIntoView({behavior:"smooth",block:"start"}); });
 $("printBtn").addEventListener("click",function(){ $("printpaper").innerHTML=buildPaper(); window.print(); });
 
