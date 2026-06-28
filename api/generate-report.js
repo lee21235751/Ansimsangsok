@@ -933,23 +933,18 @@ export default async function handler(req, res) {
     const deepAnswers = body.deepAnswers && typeof body.deepAnswers === 'object' ? body.deepAnswers : null;
     const orderId     = typeof body.orderId === 'string' ? body.orderId : null;
 
-    /* 개발/검증용 우회: 환경변수 DEV_REPORT_TOKEN과 일치하는 devToken이 오면 결제검증·저장을 건너뜀.
-       토큰을 모르면 우회 불가하므로 실고객 경로는 영향 없음. */
-    const DEV_TOKEN = process.env.DEV_REPORT_TOKEN || '';
-    const isDev = !!(DEV_TOKEN && body.devToken === DEV_TOKEN);
-
     const sb = sbConfig();
-    if (!isDev && !sb.ok) {
+    if (!sb.ok) {
       console.error('SUPABASE 환경변수 누락 - 결제 검증 불가');
       return res.status(500).json({ ok: false, message: '서버 설정 오류입니다. 잠시 후 다시 시도해주세요.' });
     }
-    if (!isDev && !orderId) {
+    if (!orderId) {
       return res.status(402).json({ ok: false, message: '결제 정보가 확인되지 않았습니다. 처음부터 다시 진행해주세요.' });
     }
 
     /* 결제 검증: paid_reports에 status=paid로 존재하고 아직 발급 전인지 확인.
        이미 발급된 건이면 저장해둔 리포트를 그대로 재제공(모바일 재진입 등). */
-    if (!isDev) {
+    {
       let record;
       try {
         record = await sbSelectOrder(sb, orderId, 'status,report_generated,report_json,score,level,matched_types,created_at,survey_input');
@@ -986,7 +981,7 @@ export default async function handler(req, res) {
     /* 선저장: Claude 호출 전에 설문 입력을 먼저 저장한다. 생성이 502 등으로 실패해도
        survey_input이 남아 있어 나중에 서버에서 같은 입력으로 재생성/복구할 수 있다.
        선저장 실패는 생성 자체를 막지 않고 로그만 남긴다. */
-    if (!isDev) {
+    {
       const presaved = await sbPatchOrder(sb, orderId, {
         survey_input: { answers, deepAnswers, score, matched_types: types, saved_at: new Date().toISOString() },
       }, '선저장', 2);
@@ -999,14 +994,14 @@ export default async function handler(req, res) {
     try {
       report = await callClaude(answers, types, score, deepAnswers);
     } catch (e) {
-      console.error('Claude 오류 orderId=' + (orderId || '(dev)') + ' msg=' + e.message);
+      console.error('Claude 오류 orderId=' + orderId + ' msg=' + e.message);
       return res.status(502).json({ ok: false, message: '리포트 생성 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요.' });
     }
 
     /* 본문 저장 + 발급완료 표시. 헬퍼가 res.ok 확인·재시도까지 처리한다.
        최종 실패 시 CRITICAL 로그를 남기되, 리포트는 이미 사용자에게 응답되므로 200을 유지한다.
        선저장 덕분에 이 단계가 실패해도 survey_input으로 복구할 수 있다. */
-    if (!isDev) {
+    {
       const saved = await sbPatchOrder(sb, orderId, {
         report_generated: true,
         score,
