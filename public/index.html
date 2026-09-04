@@ -214,7 +214,7 @@ footer{background:var(--FD);color:rgba(255,253,245,.62);padding:30px 0 38px;line
 <footer><div class="w">
 <div class="ft-brand">안심상속</div>
 <p>특정 자녀에게 더 남기고 싶은 마음, 가족도 모르게 정리해보세요. 본인만 조용히 확인하는 상속 준비 서비스입니다.</p>
-<div class="ft-tag">© 안심상속. 진단 내용은 비공개로 처리되며 가족이나 다른 사람에게 자동으로 공유되지 않습니다.<br><a href="/terms" style="color:rgba(255,253,245,.65);text-decoration:underline;margin-right:12px">이용약관</a><a href="/privacy" style="color:rgba(255,253,245,.65);text-decoration:underline;margin-right:12px">개인정보 처리방침</a><details style="display:inline-block;vertical-align:top"><summary style="display:inline;cursor:pointer;color:rgba(255,253,245,.65);text-decoration:underline;list-style:none">개인정보 수집 및 이용</summary><div style="margin-top:10px;text-align:left;color:rgba(255,253,245,.7);font-size:.85rem;line-height:1.65;font-weight:700;border-top:1px solid rgba(255,253,245,.12);padding-top:10px"><strong style="display:block;margin-bottom:5px;color:rgba(255,253,245,.9)">수집항목</strong><p style="margin-bottom:9px">가족관계(배우자, 자녀 수 등), 재산유형, 유언 여부, 가족 내 갈등 여부 등</p><strong style="display:block;margin-bottom:5px;color:rgba(255,253,245,.9)">수집목적</strong><p style="margin-bottom:9px">귀하의 상속 상황에 맞는 진단 및 리포트 제공</p><strong style="display:block;margin-bottom:5px;color:rgba(255,253,245,.9)">보유기간</strong><p style="margin-bottom:9px">진단 완료 후 90일 이내 자동 삭제 (고객 요청 시 즉시 삭제)</p><strong style="display:block;margin-bottom:5px;color:rgba(255,253,245,.9)">비공개 보장</strong><p style="margin-bottom:0">진단 내용은 비공개로 처리되며 가족이나 다른 사람에게 자동으로 공유되지 않습니다.</p></div></details></div>
+<div class="ft-tag">© 안심상속. 진단 내용은 비공개로 처리되며 가족이나 다른 사람에게 자동으로 공유되지 않습니다.<br><a href="/terms" style="color:rgba(255,253,245,.65);text-decoration:underline;margin-right:12px">이용약관</a><a href="/privacy" style="color:rgba(255,253,245,.65);text-decoration:underline;margin-right:12px">개인정보 처리방침</a><details style="display:inline-block;vertical-align:top"><summary style="display:inline;cursor:pointer;color:rgba(255,253,245,.65);text-decoration:underline;list-style:none">개인정보 수집 및 이용</summary><div style="margin-top:10px;text-align:left;color:rgba(255,253,245,.7);font-size:.85rem;line-height:1.65;font-weight:700;border-top:1px solid rgba(255,253,245,.12);padding-top:10px"><strong style="display:block;margin-bottom:5px;color:rgba(255,253,245,.9)">수집항목</strong><p style="margin-bottom:9px">가족관계(배우자, 자녀 수 등), 재산유형, 유언 여부, 가족 내 갈등 여부 등</p><strong style="display:block;margin-bottom:5px;color:rgba(255,253,245,.9)">수집목적</strong><p style="margin-bottom:9px">귀하의 상속 상황에 맞는 진단 및 리포트 제공</p><strong style="display:block;margin-bottom:5px;color:rgba(255,253,245,.9)">보유기간</strong><p style="margin-bottom:9px">브라우저의 결제·리포트 진행 복구용 임시 데이터는 최대 7일간 보관되며, 리포트 생성 완료 시 삭제됩니다. 서버 저장정보의 보유기간은 개인정보 처리방침을 따릅니다.</p><strong style="display:block;margin-bottom:5px;color:rgba(255,253,245,.9)">비공개 보장</strong><p style="margin-bottom:0">진단 내용은 비공개로 처리되며 가족이나 다른 사람에게 자동으로 공유되지 않습니다.</p></div></details></div>
 </div></footer>
 <script>
 var Q=[
@@ -262,6 +262,29 @@ var Q=[
 var step=0,ans={};
 
 function ge(id){return document.getElementById(id)}
+var REPORT_BACKUP_TTL = 7 * 24 * 60 * 60 * 1000;
+function saveReportBackup(raw){
+  try{
+    localStorage.setItem('ansim_report_request_backup', raw);
+    localStorage.setItem('ansim_report_request_backup_at', String(Date.now()));
+  }catch(e){}
+}
+function clearReportBackup(){
+  try{localStorage.removeItem('ansim_report_request_backup')}catch(e){}
+  try{localStorage.removeItem('ansim_report_request_backup_at')}catch(e){}
+  try{localStorage.removeItem('ansim_pending_order')}catch(e){}
+}
+function readReportBackup(){
+  try{
+    var raw = localStorage.getItem('ansim_report_request_backup');
+    if(!raw) return null;
+    var at = localStorage.getItem('ansim_report_request_backup_at');
+    if(!at){ localStorage.setItem('ansim_report_request_backup_at', String(Date.now())); return raw; }
+    var ts = parseInt(at,10);
+    if(!ts || Date.now() - ts > REPORT_BACKUP_TTL){ clearReportBackup(); return null; }
+    return raw;
+  }catch(e){ return null; }
+}
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
 
 var toastEl=ge('T'),toastTm;
@@ -555,7 +578,7 @@ function showResult(){
       /* 모바일에서 결제창으로 이동했다가 돌아올 때 탭이 메모리에서 정리되면 sessionStorage가
          비워질 수 있음 — 무료설문 답이 사라지면 심화설문 분기와 리포트 정확도가 무너지므로
          결제 직전에 localStorage에도 백업해, 결제 완료 페이지에서 복구할 수 있게 함. */
-      localStorage.setItem('ansim_report_request_backup',payload);
+      saveReportBackup(payload);
     }catch(e){}
     openPaymentSheet();
   };
@@ -568,6 +591,18 @@ var PAYAPP_USERID='ansimsangsok';
 
 function genOrderId(){
   /* 영문 대소문자/숫자/특수문자(-,_) 6~64자 요구사항 충족하는 주문번호 생성 */
+  try{
+    if(window.crypto && typeof window.crypto.randomUUID==='function'){
+      return 'ansim_'+crypto.randomUUID();
+    }
+    if(window.crypto && typeof window.crypto.getRandomValues==='function'){
+      var a=new Uint32Array(4);
+      crypto.getRandomValues(a);
+      return 'ansim_'+Date.now()+'_'+Array.from(a).map(function(n){
+        return n.toString(36);
+      }).join('');
+    }
+  }catch(e){}
   return 'ansim_'+Date.now()+'_'+Math.random().toString(36).slice(2,10);
 }
 
@@ -600,12 +635,12 @@ function openPaymentSheet(){
     var orderId=genOrderId();
     try{
       var raw=sessionStorage.getItem('ansim_report_request');
-      if(!raw){ try{ raw=localStorage.getItem('ansim_report_request_backup'); }catch(e){} }
+      if(!raw){ raw=readReportBackup(); }
       var obj=raw?JSON.parse(raw):{};
       obj.orderId=orderId;
       var sset=JSON.stringify(obj);
       sessionStorage.setItem('ansim_report_request',sset);
-      localStorage.setItem('ansim_report_request_backup',sset);
+      saveReportBackup(sset);
       localStorage.setItem('ansim_pending_order',orderId);
     }catch(e){}
     PayApp.setDefault('userid', PAYAPP_USERID);
@@ -667,7 +702,7 @@ async function handleSubmit(){
     var params=new URLSearchParams(location.search);
     if(params.get('resume')!=='1') return;
     var raw=sessionStorage.getItem('ansim_report_request');
-    if(!raw){ try{ raw=localStorage.getItem('ansim_report_request_backup'); }catch(e){} }
+    if(!raw){ raw=readReportBackup(); }
     if(!raw) return;
     var saved=JSON.parse(raw);
     if(!saved || !saved.answers) return;

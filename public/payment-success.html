@@ -43,6 +43,30 @@
     document.getElementById('RetryBtn').style.display='inline-block';
   }
 
+  var REPORT_BACKUP_TTL = 7 * 24 * 60 * 60 * 1000;
+  function saveReportBackup(raw){
+    try{
+      localStorage.setItem('ansim_report_request_backup', raw);
+      localStorage.setItem('ansim_report_request_backup_at', String(Date.now()));
+    }catch(e){}
+  }
+  function clearReportBackup(){
+    try{localStorage.removeItem('ansim_report_request_backup')}catch(e){}
+    try{localStorage.removeItem('ansim_report_request_backup_at')}catch(e){}
+    try{localStorage.removeItem('ansim_pending_order')}catch(e){}
+  }
+  function readReportBackup(){
+    try{
+      var raw = localStorage.getItem('ansim_report_request_backup');
+      if(!raw) return null;
+      var at = localStorage.getItem('ansim_report_request_backup_at');
+      if(!at){ localStorage.setItem('ansim_report_request_backup_at', String(Date.now())); return raw; }
+      var ts = parseInt(at,10);
+      if(!ts || Date.now() - ts > REPORT_BACKUP_TTL){ clearReportBackup(); return null; }
+      return raw;
+    }catch(e){ return null; }
+  }
+
   /* orderId 복구: URL 쿼리(?orderId=) 우선 → 없으면 storage.
      URL 우선이라 브라우저/컨텍스트가 갈려 localStorage가 비어도 폴링 가능. */
   var orderId = '';
@@ -52,9 +76,10 @@
   }catch(e){}
   if(!orderId){
     try{
+      var backupRaw = readReportBackup();
       orderId = localStorage.getItem('ansim_pending_order') || '';
       if(!orderId){
-        var raw = sessionStorage.getItem('ansim_report_request') || localStorage.getItem('ansim_report_request_backup');
+        var raw = sessionStorage.getItem('ansim_report_request') || backupRaw;
         if(raw){ var o = JSON.parse(raw); orderId = o.orderId || ''; }
       }
     }catch(e){}
@@ -63,12 +88,12 @@
   if(orderId){
     try{
       localStorage.setItem('ansim_pending_order', orderId);
-      var rb = sessionStorage.getItem('ansim_report_request') || localStorage.getItem('ansim_report_request_backup');
+      var rb = sessionStorage.getItem('ansim_report_request') || readReportBackup();
       var ro = rb ? JSON.parse(rb) : {};
       ro.orderId = orderId;
       var rs = JSON.stringify(ro);
       sessionStorage.setItem('ansim_report_request', rs);
-      localStorage.setItem('ansim_report_request_backup', rs);
+      saveReportBackup(rs);
     }catch(e){}
   }
 
@@ -81,12 +106,12 @@
     /* sessionStorage 복구(모바일 탭 정리 대비) — 토스 원본과 동일하게 deep-survey로 이동 */
     try{
       var reqRaw = sessionStorage.getItem('ansim_report_request');
-      if(!reqRaw){ reqRaw = localStorage.getItem('ansim_report_request_backup'); }
+      if(!reqRaw){ reqRaw = readReportBackup(); }
       var reqObj = reqRaw ? JSON.parse(reqRaw) : {};
       reqObj.orderId = orderId;
       var reqStr = JSON.stringify(reqObj);
       sessionStorage.setItem('ansim_report_request', reqStr);
-      localStorage.setItem('ansim_report_request_backup', reqStr);
+      saveReportBackup(reqStr);
       localStorage.setItem('ansim_pending_order', orderId);
       sessionStorage.setItem('ansim_payment_done', JSON.stringify({ orderId: orderId, paidAt: new Date().toISOString() }));
     }catch(e){}

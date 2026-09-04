@@ -141,6 +141,23 @@ body{font-family:"Pretendard Variable",Pretendard,system-ui,-apple-system,"Apple
 function ge(id){return document.getElementById(id)}
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
 function arr(v){return Array.isArray(v)?v:typeof v==='string'&&v.trim()?[v]:[]}
+var REPORT_BACKUP_TTL = 7 * 24 * 60 * 60 * 1000;
+function clearReportBackup(){
+  try{localStorage.removeItem('ansim_report_request_backup')}catch(e){}
+  try{localStorage.removeItem('ansim_report_request_backup_at')}catch(e){}
+  try{localStorage.removeItem('ansim_pending_order')}catch(e){}
+}
+function readReportBackup(){
+  try{
+    var raw = localStorage.getItem('ansim_report_request_backup');
+    if(!raw) return null;
+    var at = localStorage.getItem('ansim_report_request_backup_at');
+    if(!at){ localStorage.setItem('ansim_report_request_backup_at', String(Date.now())); return raw; }
+    var ts = parseInt(at,10);
+    if(!ts || Date.now() - ts > REPORT_BACKUP_TTL){ clearReportBackup(); return null; }
+    return raw;
+  }catch(e){ return null; }
+}
 
 /* 생성 중 이탈 방지 — 완료/에러 시 해제 */
 function enableLeaveWarning(){
@@ -393,7 +410,7 @@ async function run(){
 
   /* 모바일에서 탭이 kill된 후 돌아온 경우 localStorage 백업에서 복구 */
   if(!raw){
-    try{raw=localStorage.getItem('ansim_report_request_backup')}catch(e){}
+    raw=readReportBackup();
     if(raw){
       try{sessionStorage.setItem('ansim_report_request',raw)}catch(e){}
     }
@@ -425,8 +442,7 @@ async function run(){
                      : (data.surveyInput || req);
     buildWillPlanSeed(seedSource);
     /* 성공 시 localStorage 백업 정리 및 이탈 경고 해제 */
-    try{localStorage.removeItem('ansim_report_request_backup')}catch(e){}
-    try{localStorage.removeItem('ansim_pending_order')}catch(e){}
+    clearReportBackup();
     try{sessionStorage.removeItem('ansim_report_request')}catch(e){}
     if(wakeLock){try{wakeLock.release()}catch(e){}}
     disableLeaveWarning();
