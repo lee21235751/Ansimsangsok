@@ -369,7 +369,11 @@ function buildWillPlanSeed(req){
       || arr(d.grandchildrenNationality).some(function(v){ return v.indexOf('시민권')>=0 || v.indexOf('영주권')>=0; });
 
     /* 전혼/복잡한 관계 신호 — 직접 단어 노출은 도구 화면에서 중립 처리 */
-    var priorMarriage = (a.remarriage && a.remarriage!=='없음' && a.remarriage!=='해당없음')
+    var priorMarriage = (
+        Array.isArray(a.remarriage)
+          ? a.remarriage.some(function(v){ return v && v!=='none'; })
+          : (a.remarriage && a.remarriage!=='없음' && a.remarriage!=='해당없음')
+      )
       || (Array.isArray(d.conflictDetail) && d.conflictDetail.some(function(v){ return v.indexOf('전혼')>=0; }));
 
     var advisory = {

@@ -214,7 +214,20 @@ function renderQ(){
   });
 }
 
+function hasAnswer(q){
+  var a=dans[q.k];
+  if(q.multi){
+    return Array.isArray(a) && a.length>0;
+  }
+  return typeof a==='string' && a.length>0;
+}
+
 ge('NextBtn').onclick=function(){
+  var q=DQ[step];
+  if(!hasAnswer(q)){
+    alert('답변을 하나 선택해주세요.');
+    return;
+  }
   var vs = visibleSteps();
   var posInVs = vs.indexOf(step);
   if(posInVs>=vs.length-1){ submitDeepSurvey(); return; }
