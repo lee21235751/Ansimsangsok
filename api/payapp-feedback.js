@@ -135,6 +135,7 @@ export default async function handler(req, res) {
     }
   } else {
     console.error('[payapp-feedback] CRITICAL Supabase 환경변수 없음 또는 orderId 없음 결제기록불가 orderId=%s txId=%s amount=%s', orderId, txId, parsedPrice);
+    return res.status(200).send('FAIL');
   }
 
   // ── 5. 페이앱에 SUCCESS 응답 ──

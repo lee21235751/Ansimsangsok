@@ -14,6 +14,7 @@ const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 /* 한 요청당 동시에 받을 수 있는 입찰 수 상한. 너무 많으면 고객도 비교 피로감을 느끼고,
    전문가 입장에서도 당첨 확률이 지나치게 낮아져 이탈 요인이 됨. */
 const MAX_BIDS_PER_REQUEST = 8;
+const REQUEST_LIST_FIELDS = 'id,matched_types,situation_summary,preferred_method,region,budget_range,created_at';
 
 /* expert-signup.html의 전문분야 태그(유류분 등)는 한글 짧은 태그인데, 실제 진단 결과의
    matched_types는 generate-report.js의 TYPES 딕셔너리에서 나온 풀어쓴 문장형 라벨임
@@ -98,7 +99,7 @@ async function handleListRequests(req, res) {
     return res.status(200).json({ ok: true, expert, requests: [], notice: '구독이 활성화되지 않아 요청을 볼 수 없습니다. 안심상속에 문의해주세요.' });
   }
 
-  const reqRes = await fetch(`${SUPABASE_URL}/rest/v1/consultation_requests?status=eq.open&select=*&order=created_at.desc`, { headers: sbHeaders() });
+  const reqRes = await fetch(`${SUPABASE_URL}/rest/v1/consultation_requests?status=eq.open&select=${REQUEST_LIST_FIELDS}&order=created_at.desc`, { headers: sbHeaders() });
   const allRequests = await reqRes.json();
 
   /* 요청별 현재 입찰 수를 한 번에 조회해서, 이미 상한(MAX_BIDS_PER_REQUEST)에 도달한 요청은
@@ -121,7 +122,17 @@ async function handleListRequests(req, res) {
     return specialties.some(s => specialtyMatches(s, types, r.situation_summary));
   });
 
-  return res.status(200).json({ ok: true, expert: { id: expert.id, name: expert.name, type: expert.type }, requests: shuffle(matched) });
+  const safeRequests = shuffle(matched).map(r => ({
+    id: r.id,
+    matched_types: r.matched_types,
+    situation_summary: r.situation_summary,
+    preferred_method: r.preferred_method,
+    region: r.region,
+    budget_range: r.budget_range,
+    created_at: r.created_at
+  }));
+
+  return res.status(200).json({ ok: true, expert: { id: expert.id, name: expert.name, type: expert.type }, requests: safeRequests });
 }
 
 async function handleMyBids(req, res) {
@@ -171,6 +182,20 @@ async function handleSubmitBid(req, res) {
   if (!expert) return res.status(404).json({ ok: false, message: '유효하지 않은 접근입니다.' });
   if (expert.subscription_status !== 'active') {
     return res.status(403).json({ ok: false, message: '구독이 활성화되지 않았습니다.' });
+  }
+
+  const requestRes = await fetch(`${SUPABASE_URL}/rest/v1/consultation_requests?id=eq.${request_id}&select=id,status`, { headers: sbHeaders() });
+  if (!requestRes.ok) {
+    console.error('상담 요청 조회 실패:', await requestRes.text());
+    throw new Error('상담 요청 조회 실패');
+  }
+  const requestRows = await requestRes.json();
+  const request = Array.isArray(requestRows) ? requestRows[0] : null;
+  if (!request) {
+    return res.status(404).json({ ok: false, message: '존재하지 않는 상담 요청입니다.' });
+  }
+  if (request.status !== 'open') {
+    return res.status(409).json({ ok: false, message: '이미 마감된 요청입니다.' });
   }
 
   /* 마지막 안전장치: 제출 시점에 이미 상한에 도달했다면 거절(목록 조회 이후 다른 전문가가
